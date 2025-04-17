@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Estimate</title>
+  <link rel="stylesheet" href="estimate_style.css">
+</head>
+<body>
+
+<div class="header-top">
+  <div class="invoice-meta">
+    <h1>Estimate</h1>
+    <p><strong>Estimate number</strong> {{ estimate_number }}</p>
+    <p>Estimate Date: {{ estimate_date }}</p>
+  </div>
+
+  <div class="company-logo">
+    {% if company.logo %}
+    <img src="{{ company.logo }}" alt="" class="logo">
+    {% endif %}
+  </div>
+</div>
+
+<div class="address-section">
+  <div class="company-info">
+    <p><strong>{{ company.name }}</strong></p>
+    <p>{{ company.address }}</p>
+    <p>{{ company.city }}, {{ company.state }} {{ company.zip }}</p>
+    <p>{{ company.phone }}</p>
+    <p>{{ company.email }}</p>
+  </div>
+  <div class="client-info">
+    <p><strong>Estimate for</strong></p>
+    <p>{{ client.name }}</p>
+    <p>{{ client.address }}</p>
+    <p>{{ client.city }}, {{ client.state }} {{ client.zip }}</p>
+    <p>{{ client.phone }}</p>
+  </div>
+</div>
+
+<div class="amount-due">
+  {% if headNote %}<p>{{ headNote }}</p>{% endif %}
+</div>
+
+<div class="line-header">
+  <div class="col-item">Item</div>
+  <div class="col-qty">Qty</div>
+  <div class="col-unit">Unit</div>
+  <div class="col-price">Price</div>
+  <div class="col-total">Total</div>
+</div>
+
+{% for section in serviceSections %}
+  <div class="section-title">{{ section.title }}</div>
+
+  {% for item in section["items"] %}
+  <div class="line-row">
+    <div class="col-item">{{ item.name }}</div>
+    <div class="col-qty">{{ "{:,.2f}".format(item.qty) }}</div>
+    <div class="col-unit">{{ item.unit }}</div>
+    <div class="col-price">${{ "{:,.2f}".format(item.price) }}</div>
+    <div class="col-total">${{ "{:,.2f}".format(item.qty * item.price) }}</div>
+  </div>
+  <div>
+    <div class="col-desc">{{ item.dec }}</div>
+  </div>
+  {% endfor %}
+
+  {% if section.showSubtotal %}
+  <p class="subtotal">Subtotal: ${{ "{:,.2f}".format(section.subtotal) }}</p>
+  {% endif %}
+{% endfor %}
+
+<div class="footer-total">
+  {% if discount %}
+    <p>Discount: -${{ "{:,.2f}".format(discount) }}</p>
+  {% endif %}
+  <p>Total: ${{ "{:,.2f}".format(total) }}</p>
+</div>
+
+{% if note %}
+  <p class="note">{{ note }}</p>
+{% endif %}
+
+{% if disclaimer %}
+  <p class="disclaimer">{{ disclaimer }}</p>
+{% endif %}
+
+</body>
+</html>

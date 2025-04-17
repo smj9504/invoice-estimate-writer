@@ -1,0 +1,203 @@
+{
+  "estimate_number": "",
+  "estimate_date": "2025-04-16",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "",
+    "city": "Centreville",
+    "state": "VA",
+    "zip": "20121",
+    "phone": "703-300-1048",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Mr. Truth",
+    "address": "9707 Rambling Ridge Court",
+    "city": "Fairfax Station",
+    "state": "VA",
+    "zip": "22039",
+    "phone": "703-4513-028"
+  },
+  "note": "This estimate includes removal of existing roofing materials, disposal, installation of new GAF Timberline HD shingles, underlayment, flashing, and necessary accessories. All work to be performed according to local building codes and manufacturer specifications.",
+  "disclaimer": "This is an estimate, not a contract. Final costs may vary based on actual site conditions, material availability, and any changes requested by the client. Any unforeseen structural repairs or code upgrades are not included and may incur additional charges.",
+  "discount": 0.0,
+  "total": 62319.9,
+  "serviceSections": [
+    {
+      "title": "Roofing",
+      "items": [
+        {
+          "name": "Tear off, haul and dispose of wood shakes/shingles",
+          "dec": "",
+          "qty": 36.1,
+          "unit": "SQ",
+          "price": 100.83
+        },
+        {
+          "name": "Remove Hip / Ridge cap - wood shingles",
+          "dec": "",
+          "qty": 144.0,
+          "unit": "LF",
+          "price": 2.8
+        },
+        {
+          "name": "Remove Valley metal",
+          "dec": "",
+          "qty": 73.0,
+          "unit": "LF",
+          "price": 0.63
+        },
+        {
+          "name": "Laminated - comp. shingle rfg. - w/ felt",
+          "dec": "GAF/Timberline High Definition Lifetime Shingles",
+          "qty": 40.8,
+          "unit": "SQ",
+          "price": 464.55
+        },
+        {
+          "name": "Hip / Ridge cap - synthetic composite shingles",
+          "dec": "",
+          "qty": 144.0,
+          "unit": "LF",
+          "price": 20.04
+        },
+        {
+          "name": "Ice & water barrier",
+          "dec": "",
+          "qty": 13.47,
+          "unit": "SF",
+          "price": 1.91
+        },
+        {
+          "name": "Asphalt starter - universal starter course",
+          "dec": "",
+          "qty": 353.0,
+          "unit": "LF",
+          "price": 2.28
+        },
+        {
+          "name": "Drip edge",
+          "dec": "",
+          "qty": 184.0,
+          "unit": "LF",
+          "price": 3.7
+        },
+        {
+          "name": "Drip edge/gutter apron",
+          "dec": "",
+          "qty": 73.0,
+          "unit": "LF",
+          "price": 3.83
+        },
+        {
+          "name": "Flashing - kick-out diverter",
+          "dec": "",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 37.65
+        },
+        {
+          "name": "Aluminum sidewall/endwall flashing - color finish",
+          "dec": "",
+          "qty": 6.0,
+          "unit": "LF",
+          "price": 10.06
+        },
+        {
+          "name": "Step flashing",
+          "dec": "",
+          "qty": 56.0,
+          "unit": "SQ",
+          "price": 149.74
+        },
+        {
+          "name": "Chimney flashing - small (24\" x 24\u201d)",
+          "dec": "",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 400.83
+        },
+        {
+          "name": "exhaust vent / cap - gooseneck 8\"",
+          "dec": "",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 102.7
+        },
+        {
+          "name": "Continuous ridge vent - shingle-over style",
+          "dec": "",
+          "qty": 106.0,
+          "unit": "LF",
+          "price": 12.25
+        },
+        {
+          "name": "Additional charge for steep roof - 7/12 to 9/12 slope",
+          "dec": "",
+          "qty": 14.0,
+          "unit": "SQ",
+          "price": 51.87
+        },
+        {
+          "name": "Additional charge for steep roof - 10/12 - 12/12 slope",
+          "dec": "",
+          "qty": 21.0,
+          "unit": "SQ",
+          "price": 75.73
+        },
+        {
+          "name": "Additional charge for high roof (2 stories or greater)",
+          "dec": "",
+          "qty": 19.25,
+          "unit": "SQ",
+          "price": 32.06
+        },
+        {
+          "name": "Roofing - General Laborer - per hour",
+          "dec": "This item needed to remove small debris from landscaping, walkways and driveways. Also includes using a magnetic device to clear the property of discarded roofing nails. The line item for removal of shingles only includes labor to remove shingles from the roof, not for detailed final cleaning.",
+          "qty": 2.0,
+          "unit": "HR",
+          "price": 55.83
+        }
+      ],
+      "showSubtotal": true,
+      "subtotal": 41125.62
+    },
+    {
+      "title": "Gutter/Downspout",
+      "items": [
+        {
+          "name": "R&R Gutter- aluminum - up to 5\"*",
+          "dec": "",
+          "qty": 169.0,
+          "unit": "LF",
+          "price": 10.01
+        },
+        {
+          "name": "R&R downspout - aluminum - up to 5\"",
+          "dec": "",
+          "qty": 150.0,
+          "unit": "LF",
+          "price": 10.01
+        },
+        {
+          "name": "R&R Gutter guard/screen ",
+          "dec": "",
+          "qty": 169.0,
+          "unit": "LF",
+          "price": 12.18
+        },
+        {
+          "name": "Two ladders with jacks and plank (per day)",
+          "dec": "",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 105.17
+        }
+      ],
+      "showSubtotal": true,
+      "subtotal": 5356.78
+    }
+  ]
+}
