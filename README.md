@@ -7,3 +7,8 @@ venv\Scripts\activate
 ```
 streamlit run app.py
 ```
+
+## .env → secrets.toml 변환 
+```
+python utils/convert_env_to_secrets.py
+```
