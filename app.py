@@ -1,39 +1,17 @@
+# app.py
 import streamlit as st
-import tempfile
-from pathlib import Path
-from pdf_generator import generate_invoice_pdf, generate_estimate_pdf
-import json
 
-from sample_data.company_data import COMPANIES
+st.set_page_config(page_title="Document Builder", page_icon="📄", layout="wide")
+st.title("📂 Document Generator")
 
-st.set_page_config(page_title="Invoice Generator", page_icon="🧾")
-st.title("Invoice Generator")
+st.markdown("견적서 또는 인보이스를 생성하려면 아래에서 선택하세요.")
 
-st.markdown("업로드한 JSON 데이터를 기반으로 견적서 PDF를 생성합니다.")
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("🧾 Create Estimate", use_container_width=True):
+        st.switch_page("pages/build_estimate.py")
 
-# 회사 선택
-company_name = st.selectbox("🏢 사용할 회사 선택", list(COMPANIES.keys()))
-selected_company = COMPANIES[company_name]
-
-# JSON 업로드
-uploaded_file = st.file_uploader("견적서 데이터 JSON 업로드", type=["json"])
-
-if uploaded_file:
-    context = json.load(uploaded_file)
-
-    if "company" not in context:
-        context["company"] = selected_company
-        
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
-        output_path = tmpfile.name
-        #generate_invoice_pdf(context, output_path)
-        generate_estimate_pdf(context, output_path)
-
-        st.success("PDF 생성 완료!")
-        with open(output_path, "rb") as f:
-            st.download_button(
-                label="견적서 PDF 다운로드",
-                data=f,
-                file_name="invoice.pdf",
-                mime="application/pdf"
-            )
+with col2:
+    if st.button("📄 Create Invoice", use_container_width=True):
+        #st.switch_page("pages/build_invoice.py")  
+        st.warning("페이지가 준비중입니다.")

@@ -39,7 +39,7 @@
 </div>
 
 <div class="amount-due">
-  {% if headNote %}<p>{{ headNote }}</p>{% endif %}
+  {% if top_note %}<p>{{ top_note }}</p>{% endif %}
 </div>
 
 <div class="line-header">
@@ -78,8 +78,8 @@
   <p>Total: ${{ "{:,.2f}".format(total) }}</p>
 </div>
 
-{% if note %}
-  <p class="note">{{ note }}</p>
+{% if bottom_note %}
+  <p class="note">{{ bottom_note }}</p>
 {% endif %}
 
 {% if disclaimer %}
