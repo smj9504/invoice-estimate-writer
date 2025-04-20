@@ -1,5 +1,5 @@
 import streamlit as st
-from temp_db.companies import COMPANIES
+from utils.company_service import get_all_companies
 import datetime
 from temp_db.items_catalog import ITEM_CATALOG
 
@@ -7,8 +7,15 @@ from temp_db.items_catalog import ITEM_CATALOG
 st.title("🧾 견적서 생성")
 
 # 1. 회사 선택
-company_name = st.selectbox("🏢 사용할 회사 선택", list(COMPANIES.keys()))
-selected_company = COMPANIES[company_name]
+companies = get_all_companies()
+
+if not companies:
+    st.warning("⛔ 등록된 회사가 없습니다. 먼저 회사 정보를 등록하세요.")
+    st.stop()
+
+company_names = [c["name"] for c in companies]
+company_name = st.selectbox("🏢 사용할 회사 선택", company_names)
+selected_company = next((c for c in companies if c["name"] == company_name), None)
 
 with st.expander("🔍 회사 정보 확인", expanded=False):
     st.json(selected_company)
