@@ -40,13 +40,13 @@
     </div>
 </div>
 <div class="amount-due">
-  <h3>${{ '%.2f' | format(total) }} USD due {{ date_due }}</h3>
-  {% if note %}<p>{{ note }}</p>{% endif %}
+  <h3>${{ "{:,.2f}".format(total) }} USD due {{ date_due }}</h3>
+  {% if top_note %}<p>{{ top_note }}</p>{% endif %}
 </div>
     <div class="line-header">
     <div class="col-item">Item</div>
-    <div class="col-desc">Description</div>
     <div class="col-qty">Qty</div>
+    <div class="col-unit">Unit</div>
     <div class="col-price">Price</div>
     <div class="col-total">Total</div>
   </div>
@@ -57,34 +57,57 @@
     {% for item in section["items"] %}
     <div class="line-row">
       <div class="col-item">{{ item.name }}</div>
-      <div class="col-desc">{{ item.description }}</div>
-      <div class="col-qty">{{ item.qty }}</div>
-      <div class="col-price">${{ '%.2f' | format(item.price) }}</div>
-      <div class="col-total">${{ '%.2f' | format(item.qty * item.price) }}</div>
+
+      {% if item.qty > 0 or item.unit or item.price > 0 %}
+        <div class="col-qty">{{ item.qty }}</div>
+        <div class="col-unit">{{ item.unit }}</div>
+        <div class="col-price">${{ "{:,.2f}".format(item.price) }}</div>
+        <div class="col-total">${{ "{:,.2f}".format(item.qty * item.price) }}</div>
+      {% endif %}
     </div>
-    {% endfor %}
+
+    {% if item.dec %}
+      <div class="col-desc">{{ item.dec.replace('\n', '<br>') | safe }}</div>
+    {% endif %}
+  {% endfor %}
 
     {% if section.showSubtotal %}
-    <p class="subtotal">Subtotal: ${{ '%.2f' | format(section.subtotal) }}</p>
+    <p class="subtotal">Subtotal: ${{ "{:,.2f}".format(section.subtotal) }}</p>
     {% endif %}
   {% endfor %}
 
   <div class="footer-total">
   {% if discount %}
-    <p>Discount: -${{ '%.2f' | format(discount) }}</p>
+    <p>Discount: -${{ "{:,.2f}".format(discount) }}</p>
   {% endif %}
-  <p>Total: ${{ '%.2f' | format(total) }}</p>
+
+  <p>Total: ${{ "{:,.2f}".format(subtotal_total) }}</p>
+
+  {% if payments and payments|length > 0 %}
+    <div class="payments">
+      <p><strong>Payments Received:</strong></p>
+      <ul style="list-style: none; padding-left: 0;">
+        {% for payment in payments %}
+        <li>
+          {% if payment.date %}
+            <span style="color: #888888; font-style: italic;">({{ payment.date }})</span>
+            {% endif %}
+          <strong>-${{ "{:,.2f}".format(payment.amount) }}</strong>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <p><strong>Amount Due: ${{ "{:,.2f}".format(total) }}</strong></p>
 </div>
 
-{% if note %}
-  <p class="note">{{ note }}</p>
+{% if bottom_note %}
+  <p class="note">{{ bottom_note | safe }}</p>
 {% endif %}
 
 {% if disclaimer %}
-  <p class="disclaimer">{{ disclaimer }}</p>
+  <p class="disclaimer">{{ disclaimer | safe }}</p>
 {% endif %}
-  <p class="note">{{ note }}</p>
-  <p class="disclaimer">{{ disclaimer }}</p>
-
 </body>
 </html>
