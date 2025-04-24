@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.estimate_service import (
+from modules.estimate_module import (
     get_all_items, get_item_by_id, insert_item, update_item, delete_item,
     get_descriptions_by_item_name, insert_description, delete_description
 )

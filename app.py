@@ -13,5 +13,5 @@ with col1:
 
 with col2:
     if st.button("📄 Create Invoice", use_container_width=True):
-        #st.switch_page("pages/build_invoice.py")  
-        st.warning("페이지가 준비중입니다.")
+        st.switch_page("pages/build_invoice.py")  
+
