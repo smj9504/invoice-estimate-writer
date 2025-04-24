@@ -3,6 +3,7 @@ import tempfile
 import json
 from pdf_generator import generate_estimate_pdf 
 
+
 st.set_page_config(page_title="Estimate Preview", page_icon="🧾", layout="wide")
 st.title("📄 견적서 미리보기")
 
@@ -110,6 +111,6 @@ if st.button("📄 견적서 PDF 다운로드"):
             st.download_button(
                 label="견적서 PDF 다운로드",
                 data=f,
-                file_name="invoice.pdf",
+                file_name="estimate.pdf",
                 mime="application/pdf"
             )

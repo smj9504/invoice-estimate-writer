@@ -26,6 +26,7 @@ def init_connection():
         print(f"[DB ERROR] Supabase 연결 실패: {e}")
         return None
 
+@st.cache_resource
 def get_connection():
     """
     기존 연결이 있으면 반환하고, 없으면 새 연결을 생성합니다.
