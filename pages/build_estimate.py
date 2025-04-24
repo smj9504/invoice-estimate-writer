@@ -3,6 +3,18 @@ import datetime
 from modules.company_module import get_all_companies
 from modules.estimate_item_module import get_all_items
 
+# Reset session state 
+if st.session_state.get("from_page") != "build_estimate":
+    for key in [
+        "estimate_number", "estimate_date",
+        "client_name", "client_phone", "client_email",
+        "client_street", "client_city", "client_state", "client_zip",
+        "top_note", "bottom_note", "disclaimer", "sections"
+    ]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.session_state.from_page = "build_estimate"
+
 st.set_page_config(page_title="Estimate Builder", page_icon="📟", layout="wide")
 st.title("📟 건적서 생성")
 
@@ -44,7 +56,7 @@ if "sections" not in st.session_state:
 
 # 섹션 추가
 st.subheader("📦 건적서 섹션 추가")
-cols = st.columns([4, 1])
+cols = st.columns([1, 2])
 with cols[0]:
     new_section_title = st.text_input("섹션 이름", key="new_section")
 with cols[1]:
@@ -62,7 +74,16 @@ ALL_ITEMS = get_all_items()
 
 # 건적서 섹션 복잡 생성
 for i, section in enumerate(st.session_state.sections):
-    st.markdown(f"---\n### [ {section['title']} ]")
+    st.markdown(f"---")
+    cols = st.columns([1, 2])
+    with cols[0]:
+        new_title = st.text_input(f"📂 섹션 이름", value=section["title"], key=f"section-title-{i}")
+        section["title"] = new_title
+    with cols[1]:
+        st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+        if st.button("🗑️ 섹션 삭제", key=f"delete-section-{i}"):
+            st.session_state.sections.pop(i)
+
     section_items = [item for item in ALL_ITEMS if item["category"] == section["title"]]
     item_names = [f"{item['code']} - {item['name']}" for item in section_items]
     item_lookup = {f"{item['code']} - {item['name']}": item for item in section_items}

@@ -26,10 +26,6 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
     template = env.get_template(template_path)
     html_content = template.render(**context)
 
-    # 🔍 DEBUG: HTML 내용 확인
-    with open("debug_output.html", "w", encoding="utf-8") as debug_file:
-        debug_file.write(html_content)
-
     # ✅ CSS 경로 확인
     if not css_path.exists():
         raise FileNotFoundError(f"CSS 파일이 존재하지 않음: {css_path}")
