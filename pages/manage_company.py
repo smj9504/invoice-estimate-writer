@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.company_service import (
+from modules.company_module import (
     get_all_companies, get_company_by_id,
     insert_company, update_company, delete_company
 )

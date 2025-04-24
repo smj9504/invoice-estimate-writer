@@ -2,6 +2,7 @@ import streamlit as st
 import tempfile
 import json
 from pdf_generator import generate_invoice_pdf
+from modules.invoice_module import save_invoice
 
 
 st.set_page_config(page_title="Invoice Preview", page_icon="📄", layout="wide")
@@ -94,6 +95,12 @@ st.download_button(
     file_name="invoice.json",
     mime="application/json"
 )
+
+# 작성한 인보이스정보 DB에 저장
+if st.button("💾 인보이스 저장"):
+    response = save_invoice(invoice_data)
+    if response:
+        st.success("✅ 인보이스가 저장되었습니다!")
 
 # PDF 생성 버튼
 if st.button("📄 인보이스 PDF 다운로드"):

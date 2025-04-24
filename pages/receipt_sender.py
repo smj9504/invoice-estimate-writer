@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 import smtplib
 import os
 from dotenv import load_dotenv
-from utils.company_service import get_all_companies
+from modules.company_module import get_all_companies
 from datetime import date
 
 # .env 설정
