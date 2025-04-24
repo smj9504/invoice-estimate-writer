@@ -3,18 +3,32 @@ from uuid import uuid4
 from datetime import datetime
 
 def save_invoice(data: dict) -> bool:
+    from datetime import datetime
+    from uuid import uuid4
+    from utils.db import get_connection
+
     supabase = get_connection()
     now = datetime.now().isoformat()
+
+    client = data.get("client", {})
+    full_address = "{} {}, {} {}".format(
+        client.get("street", ""),
+        client.get("city", ""),
+        client.get("state", ""),
+        client.get("zip", "")
+    ).strip()
 
     invoice_data = {
         "invoice_uid": str(uuid4()),
         "version": 1,
         "is_latest": True,
         "status": "completed",
+        "invoice_number": data.get("invoice_number"),
+        "date_of_issue": data.get("date_of_issue"),
         "company_id": data.get("company", {}).get("id"),
-        "client_name": data["client"]["name"],
-        "client_phone": data["client"]["phone"],
-        "client_address": data["client"]["address"],
+        "client_name": client.get("name"),
+        "client_phone": client.get("phone"),
+        "client_address": full_address,
         "data": data,
         "created_at": now,
         "updated_at": now
