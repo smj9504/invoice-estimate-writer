@@ -1,12 +1,8 @@
-from utils.db import get_connection
+from utils.db import get_connection, with_retries
 from uuid import uuid4
 from datetime import datetime
 
 def save_invoice(data: dict) -> bool:
-    from datetime import datetime
-    from uuid import uuid4
-    from utils.db import get_connection
-
     supabase = get_connection()
     now = datetime.now().isoformat()
 
@@ -35,7 +31,7 @@ def save_invoice(data: dict) -> bool:
     }
 
     try:
-        supabase.table("invoices").insert(invoice_data).execute()
+        with_retries(lambda: supabase.table("invoices").insert(invoice_data).execute())
         return True
     except Exception as e:
         print("[Invoice Save Error]", e)
@@ -44,5 +40,11 @@ def save_invoice(data: dict) -> bool:
 
 def get_latest_invoices() -> list[dict]:
     supabase = get_connection()
-    result = supabase.table("invoices").select("*").eq("is_latest", True).order("created_at", desc=True).execute()
+    result = with_retries(lambda: supabase.table("invoices").select("*").eq("is_latest", True).order("created_at", desc=True).execute())
     return result.data or []
+
+
+def get_invoice_by_id(invoice_id: str) -> dict:
+    supabase = get_connection()
+    result = with_retries(lambda: supabase.table("invoices").select("*").eq("id", invoice_id).single().execute())
+    return result.data
