@@ -14,12 +14,33 @@ def save_invoice(data: dict) -> bool:
         client.get("zip", "")
     ).strip()
 
+    invoice_number = data.get("invoice_number")
+    existing = with_retries(lambda: supabase.table("invoices")
+        .select("version")
+        .eq("invoice_number", invoice_number)
+        .order("version", desc=True)
+        .limit(1)
+        .execute()
+    )
+
+    last_version = existing.data[0]["version"] if existing.data else 0
+    new_version = last_version + 1
+
+    # 기존 레코드 최신값 해제
+    if existing.data:
+        with_retries(lambda: supabase.table("invoices")
+            .update({"is_latest": False})
+            .eq("invoice_number", invoice_number)
+            .eq("is_latest", True)
+            .execute()
+        )
+
     invoice_data = {
         "invoice_uid": str(uuid4()),
-        "version": 1,
+        "version": new_version,
         "is_latest": True,
         "status": "completed",
-        "invoice_number": data.get("invoice_number"),
+        "invoice_number": invoice_number,
         "date_of_issue": data.get("date_of_issue"),
         "company_id": data.get("company", {}).get("id"),
         "client_name": client.get("name"),

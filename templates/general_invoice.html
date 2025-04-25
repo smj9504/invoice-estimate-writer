@@ -58,7 +58,7 @@
     <div class="line-row">
       <div class="col-item">{{ item.name }}</div>
 
-      {% if item.qty > 0 or item.unit or item.price > 0 %}
+      {% if not item.hide_price %}
         <div class="col-qty">{{ item.qty }}</div>
         <div class="col-unit">{{ item.unit }}</div>
         <div class="col-price">${{ "{:,.2f}".format(item.price) }}</div>

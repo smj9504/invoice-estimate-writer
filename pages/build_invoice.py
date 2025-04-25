@@ -164,16 +164,19 @@ for i, section in enumerate(st.session_state.sections):
             })
 
     for j, item in enumerate(section["items"]):
-        cols = st.columns([6.4, 1.3, 1, 1.3, 1])
+        cols = st.columns([1, 5.4, 1.3, 1, 1.3, 1])
         with cols[0]:
-            item["name"] = st.text_input("아이템명", value=item["name"], key=f"name-{i}-{j}")
+            hide_price = st.checkbox("Hide Price", value=item.get("hide_price", False), key=f"hide_price_key-{i}-{j}")
+            item["hide_price"] = hide_price
         with cols[1]:
-            item["qty"] = st.number_input("수량", value=item["qty"], step=1.00, key=f"qty-{i}-{j}")
+            item["name"] = st.text_input("아이템명", value=item["name"], key=f"name-{i}-{j}")
         with cols[2]:
-            item["unit"] = st.text_input("단위", value=item["unit"], key=f"unit-{i}-{j}")
+            item["qty"] = st.number_input("수량", value=item["qty"], step=1.00, key=f"qty-{i}-{j}")
         with cols[3]:
-            item["price"] = st.number_input("단가", value=item["price"], step=0.01, key=f"price-{i}-{j}")
+            item["unit"] = st.text_input("단위", value=item["unit"], key=f"unit-{i}-{j}")
         with cols[4]:
+            item["price"] = st.number_input("단가", value=item["price"], step=0.01, key=f"price-{i}-{j}")
+        with cols[5]:
             st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
             if st.button("🗑️", key=f"delete-{i}-{j}"):
                 section["items"].pop(j)
