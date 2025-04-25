@@ -106,9 +106,14 @@ st.subheader("📦 항목 목록")
 for section in invoice_data["serviceSections"]:
     st.markdown(f"### 🔹 {section['title']}")
     for item in section["items"]:
-        st.markdown(f"- **{item['name']}** | 수량: {item['qty']} {item['unit']} | 단가: ${item['price']:,.2f}")
+        st.markdown(f"- **{item['name']}**")
+        
+        if not item.get("hide_price"):
+            st.markdown(f"  - 수량: {item['qty']} {item['unit']} | 단가: ${item['price']:,.2f}")
+
         if item.get("dec"):
             st.markdown(f"  - _{item['dec']}_")
+            
     st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
 
 # 납부 내역
