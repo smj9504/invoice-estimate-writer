@@ -2,6 +2,8 @@ import os
 from supabase import create_client
 from dotenv import load_dotenv
 import streamlit as st
+import time
+
 
 # # .env 파일 로드
 # load_dotenv()
@@ -53,3 +55,21 @@ def get_supabase_client():
     get_connection()의 별칭으로, 이름이 더 명확합니다.
     """
     return get_connection()
+
+# 공통 Supabase 쿼리 재시도 래퍼 함수
+def with_retries(supabase_call, retries=3, delay=1.0):
+    """
+    Supabase 쿼리를 재시도할 수 있도록 감싸는 함수
+    :param supabase_call: 실행할 supabase 쿼리 함수 (람다 또는 함수 참조)
+    :param retries: 최대 재시도 횟수
+    :param delay: 재시도 간 대기 시간 (초)
+    :return: 쿼리 결과 또는 None
+    """
+    for attempt in range(retries):
+        try:
+            return supabase_call()
+        except Exception as e:
+            print(f"[Supabase Retry] {attempt + 1}/{retries} 실패: {e}")
+            time.sleep(delay)
+    print("❌ Supabase 쿼리 재시도 실패")
+    return None
