@@ -1,20 +1,56 @@
 import streamlit as st
 import tempfile
 import json
+import re
 from pdf_generator import generate_estimate_pdf 
-
+from modules.estimate_module import save_estimate, get_estimate_by_id
 
 st.set_page_config(page_title="Estimate Preview", page_icon="🧾", layout="wide")
 st.title("📄 견적서 미리보기")
 
-if st.button("🔙 돌아가기"):
+# URL 파라미터에서 ID 추출
+query_params = st.query_params
+raw_id = query_params.get("id")
+estimate_id = raw_id[0] if isinstance(raw_id, list) else raw_id
+
+uuid_pattern = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
+if estimate_id and uuid_pattern.match(estimate_id):
+    estimate = get_estimate_by_id(estimate_id)
+    if estimate:
+        data = estimate.get("json_data", {})
+        st.session_state.selected_company = data.get("company", {})
+
+        st.session_state.estimate_number = data.get("estimate_number", "")
+        st.session_state.estimate_date = data.get("estimate_date", "")
+
+        client = data.get("client", {})
+        st.session_state.client_name = client.get("name", "")
+        st.session_state.client_phone = client.get("phone", "")
+        st.session_state.client_email = client.get("email", "")
+        st.session_state.client_street = client.get("address", "")
+        st.session_state.client_city = client.get("city", "")
+        st.session_state.client_state = client.get("state", "")
+        st.session_state.client_zip = client.get("zip", "")
+
+        st.session_state.sections = data.get("serviceSections", [])
+        st.session_state.top_note_preview = data.get("top_note", "")
+        st.session_state.bottom_note_preview = data.get("bottom_note", "")
+        st.session_state.disclaimer_preview = data.get("disclaimer", "")
+    else:
+        st.error("❌ 해당 ID의 견적서를 찾을 수 없습니다.")
+elif estimate_id:
+    st.error("❌ 유효하지 않은 견적서 ID 형식입니다.")
+else:
+    st.info("ℹ️ 견적서 ID가 제공되지 않았습니다.")
+
+if st.button("🔙 수정하기"):
     st.switch_page("pages/build_estimate.py")
 
 # 필수 데이터 확인
 if "sections" not in st.session_state or not st.session_state.sections:
     st.warning("⛔ 먼저 견적서를 작성해 주세요.")
     st.stop()
-
 
 # JSON 데이터 조립
 estimate_data = {
@@ -57,7 +93,7 @@ st.json(client_info)
 st.subheader("견적 정보")
 estimate_info = {
     "견적서 정보": st.session_state.get("estimate_number"),
-    "작성일일": st.session_state.get("estimate_date"),
+    "작성일": st.session_state.get("estimate_date"),
 }
 st.json(estimate_info)
 
@@ -91,6 +127,14 @@ st.download_button(
     file_name="estimate.json",
     mime="application/json"
 )
+
+if st.button("💾 견적서 저장"):
+    success = save_estimate(estimate_data)
+    if success:
+        st.success("✅ 견적서가 저장되었습니다!")
+    else:
+        st.error("❌ 저장 중 오류가 발생했습니다.")
+
 
 if st.button("📄 견적서 PDF 다운로드"):
     # 1. JSON 파일 생성
