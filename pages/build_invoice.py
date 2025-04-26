@@ -7,6 +7,20 @@ from modules.invoice_module import get_invoice_by_id
 
 st.set_page_config(page_title="Invoice Builder", page_icon="📄", layout="wide")
 
+# ✅ 세션 상태 강제 초기화
+for key, default in {
+    "sections": [],
+    "new_section_triggered": False,
+    "new_section_title_cache": "",
+    "item_add_triggered": None,
+    "item_add_cache": [],
+    "item_delete_triggered": None,
+    "manual_add_triggered": None,
+    "from_page": ""
+}.items():
+    if key not in st.session_state:
+        st.session_state[key] = default
+
 # URL 파라미터에서 ID 추출
 query_params = st.query_params
 raw_id = query_params.get("id")
@@ -15,50 +29,60 @@ invoice_id = raw_id[0] if isinstance(raw_id, list) else raw_id
 uuid_pattern = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 if invoice_id and uuid_pattern.match(invoice_id):
-    invoice = get_invoice_by_id(invoice_id)
-    if invoice:
-        st.title("📄 인보이스 수정")
-        data = invoice.get("data", {})
+    if not st.session_state.sections:
+        invoice = get_invoice_by_id(invoice_id)
+        if invoice:
+            st.title("📄 인보이스 수정")
+            data = invoice.get("data", {})
 
-        st.session_state.invoice_number = data.get("invoice_number", "")
-        st.session_state.date_of_issue = data.get("date_of_issue", "")
-        st.session_state.date_due = data.get("date_due", "")
+            st.session_state.invoice_number = data.get("invoice_number", "")
+            st.session_state.date_of_issue = data.get("date_of_issue", "")
+            st.session_state.date_due = data.get("date_due", "")
 
-        client = data.get("client", {})
-        st.session_state.client_name = client.get("name", "")
-        st.session_state.client_phone = client.get("phone", "")
-        st.session_state.client_email = client.get("email", "")
-        st.session_state.client_street = client.get("address", "")
-        st.session_state.client_city = client.get("city", "")
-        st.session_state.client_state = client.get("state", "")
-        st.session_state.client_zip = client.get("zip", "")
+            client = data.get("client", {})
+            st.session_state.client_name = client.get("name", "")
+            st.session_state.client_phone = client.get("phone", "")
+            st.session_state.client_email = client.get("email", "")
+            st.session_state.client_street = client.get("address", "")
+            st.session_state.client_city = client.get("city", "")
+            st.session_state.client_state = client.get("state", "")
+            st.session_state.client_zip = client.get("zip", "")
 
-        st.session_state.top_note = data.get("top_note", "")
-        st.session_state.bottom_note = data.get("bottom_note", "")
-        st.session_state.disclaimer = data.get("disclaimer", "")
-        st.session_state.sections = data.get("serviceSections", [])
-        st.session_state.payments = data.get("payments", [])
-        st.session_state.selected_company = data.get("company", {})
-        st.session_state.from_page = "build_invoice"
-    else:
-        st.error("❌ 해당 ID의 인보이스를 찾을 수 없습니다.")
-        st.stop()
+            st.session_state.top_note = data.get("top_note", "")
+            st.session_state.bottom_note = data.get("bottom_note", "")
+            st.session_state.disclaimer = data.get("disclaimer", "")
+            st.session_state.sections = data.get("serviceSections", [])
+            st.session_state.payments = data.get("payments", [])
+            st.session_state.selected_company = data.get("company", {})
+            st.session_state.from_page = "build_invoice"
+        else:
+            st.error("❌ 해당 ID의 인보이스를 찾을 수 없습니다.")
+            st.stop()
 elif invoice_id:
     st.error("❌ 유효하지 않은 인보이스 ID 형식입니다.")
     st.stop()
 else:
     # 인보이스 ID가 없는 경우, Reset session state 
-    if st.session_state.get("from_page") != "build_invoice":
-        st.title("📄 인보이스 생성")
-        for key in [
-            "invoice_number", "date_of_issue", "date_due",
-            "client_name", "client_phone", "client_email",
-            "client_street", "client_city", "client_state", "client_zip",
-            "top_note", "bottom_note", "disclaimer", "sections",
-            "payments", "selected_company"
-        ]:
-            if key in st.session_state:
-                del st.session_state[key]
+    if not invoice_id:
+        for key, default in {
+            "invoice_number": "",
+            "date_of_issue": datetime.date.today(),
+            "date_due": datetime.date.today(),
+            "client_name": "",
+            "client_phone": "",
+            "client_email": "",
+            "client_street": "",
+            "client_city": "",
+            "client_state": "",
+            "client_zip": "",
+            "top_note": "",
+            "bottom_note": "",
+            "disclaimer": "",
+            "sections": [],
+            "payments": [],
+            "selected_company": {}
+        }.items():
+            st.session_state[key] = default
         st.session_state.from_page = "build_invoice"
 
 # 회사 정보
@@ -99,9 +123,6 @@ with cols[2]:
 st.subheader("📝 인보이스 노트 (상단)")
 top_note = st.text_area("Note 입력", key="top_note")
 
-if "sections" not in st.session_state:
-    st.session_state.sections = []
-
 st.subheader("📦 항목 섹션 추가")
 cols = st.columns([1, 2])
 with cols[0]:
@@ -118,6 +139,26 @@ with cols[1]:
             })
 
 ALL_ITEMS = get_all_invoice_items()
+
+# 삭제 및 수동 추가 트리거 처리
+if trigger := st.session_state.item_delete_triggered:
+    i, j = trigger
+    if 0 <= i < len(st.session_state.sections) and 0 <= j < len(st.session_state.sections[i]["items"]):
+        st.session_state.sections[i]["items"].pop(j)
+    st.session_state.item_delete_triggered = None
+
+if trigger := st.session_state.manual_add_triggered:
+    i = trigger
+    if 0 <= i < len(st.session_state.sections):
+        st.session_state.sections[i]["items"].append({
+            "code": "",
+            "name": "",
+            "unit": "",
+            "price": 0.0,
+            "qty": 1.0,
+            "dec": ""
+        })
+    st.session_state.manual_add_triggered = None
 
 for i, section in enumerate(st.session_state.sections):
     st.markdown(f"---")

@@ -15,6 +15,7 @@ def save_invoice(data: dict) -> bool:
     ).strip()
 
     invoice_number = data.get("invoice_number")
+
     existing = with_retries(lambda: supabase.table("invoices")
         .select("version")
         .eq("invoice_number", invoice_number)
@@ -29,7 +30,7 @@ def save_invoice(data: dict) -> bool:
     # 기존 레코드 최신값 해제
     if existing.data:
         with_retries(lambda: supabase.table("invoices")
-            .update({"is_latest": False})
+            .update({"is_latest": False, "updated_at": now})
             .eq("invoice_number", invoice_number)
             .eq("is_latest", True)
             .execute()
@@ -39,7 +40,7 @@ def save_invoice(data: dict) -> bool:
         "invoice_uid": str(uuid4()),
         "version": new_version,
         "is_latest": True,
-        "status": "completed",
+        "status": "draft",
         "invoice_number": invoice_number,
         "date_of_issue": data.get("date_of_issue"),
         "company_id": data.get("company", {}).get("id"),
