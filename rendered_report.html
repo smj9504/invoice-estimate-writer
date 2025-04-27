@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Plumber Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>@page {
+    margin: 2cm;
+}
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+}
+header.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #434040;
+    padding: 10px 1cm;
+    font-size: 10px;
+}
+main {
+    padding: 0 1cm;
+}
+.two-column {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+.two-column > div {
+    width: 100%;
+}
+h3 {
+    margin-top: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 4px;
+}
+.damage-assessment {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.damage-assessment th, .damage-assessment td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.damage-assessment th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+.damage-assessment input[type="checkbox"] {
+    margin-right: 6px;
+    vertical-align: middle;
+    accent-color: black;
+}
+
+.damage-assessment label {
+    margin-right: 16px;
+    font-size: 13px;
+    vertical-align: middle;
+}
+.repair-details {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.repair-details th, .repair-details td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+}
+.repair-details th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+}
+th {
+    background-color: #f0f0f0;
+}
+input[type="checkbox"] {
+    transform: scale(1.1);
+    margin-right: 6px;
+}
+.invoice-table, .invoice-summary {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.invoice-table th, .invoice-table td {
+    border: none;
+    padding: 10px 12px;
+}
+
+.invoice-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+.invoice-table .left {
+text-align: left;
+}
+
+.invoice-table .right {
+text-align: right;
+}
+
+.invoice-table td {
+    text-align: center;
+}
+
+.invoice-summary td {
+    padding: 6px;
+    border: none;
+}
+
+.invoice-summary td strong {
+    font-size: 14px;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1cm 0 0; /* 오른쪽만 1cm, 왼쪽은 0 */
+  }
+  .footer-left {
+    margin-left: 0; /* 왼쪽 여백 제거 */
+  }
+  .footer-right {
+    margin-right: 0;
+  }
+
+
+    @page {
+    @bottom-left {
+        content: "Generated on April 28, 2025";
+        font-size: 10px;
+    }
+    @bottom-right {
+        content: "Page " counter(page);
+        font-size: 10px;
+    }
+    }
+    </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-left small">
+    <p>JJL Plumbing Services<br>
+    123 Pipe St<br>
+    Flowtown, IL 60123<br>
+    (987) 654-3210<br>
+    info@jjlplumbing.com</p>
+  </div>
+  <div class="header-right small">
+    <p><strong>Report ID:</strong> PLM-0424-001<br>
+    <strong>Report Date:</strong> April 28, 2025</p>
+  </div>
+</header>
+
+<main>
+  <div class="two-column">
+    <div>
+      <h3>Client Information</h3>
+      <p><strong>Client Name</strong><br></p>
+      <p><strong>Client Phone Number</strong><br></p>
+      <p><strong>Client Email Address</strong><br></p>
+      <p><strong>Service Location</strong><br></p>
+    </div>
+    <div>
+      <h3>Plumber Information</h3>
+      <p><strong>Plumber/Representative Name</strong><br></p>
+      <p><strong>Company Name</strong><br></p>
+      <p><strong>Phone Number</strong><br></p>
+      <p><strong>License Number</strong><br></p>
+    </div>
+  </div>
+
+  <h3>Damage Assessment</h3>
+  <table class="damage-assessment">
+    <colgroup>
+      <col style="width: 20%;">
+      <col style="width: 30%;">
+      <col style="width: 20%;">
+      <col style="width: 30%;">
+    </colgroup>
+    <tr>
+      <th>Date of Incident</th>
+      <td>April 28, 2025</td>
+      <th>Affected Area</th>
+      <td>Basement bathroom</td>
+    </tr>
+    <tr>
+      <th>Water Intrusion Category</th>
+      <td>
+        <label><input type="checkbox" checked> Cat 1</label>
+        <label><input type="checkbox" > Cat 2</label>
+        <label><input type="checkbox" > Cat 3</label>
+      </td>
+      <th rowspan="2">Scope of Damage</th>
+      <td rowspan="2">Water-damaged drywall, flooring, insulation</td>
+    </tr>
+    <tr>
+      <th>Cause of Damage</th>
+      <td>Frozen pipe burst</td>
+    </tr>
+  </table>
+
+  <h3>Repair Details</h3>
+  <table class="repair-details">
+    <colgroup>
+      <col style="width: 20%;">
+      <col style="width: 80%;">
+    </colgroup>
+    <tr><th>Service Dates</th><td colspan="3">April 21, 2025 – April 22, 2025</td></tr>
+    <tr><th>Scope of Work Performed</th><td colspan="3">- Replaced 6ft of pipe<br>- Installed insulation</td></tr>
+    <tr><th>Materials Utilized</th><td colspan="3">- PEX pipe, connectors</td></tr>
+    <tr><th>Equipment Used</th><td colspan="3">- Pipe cutter, leak detector</td></tr>
+    <tr><th>Post-Repair Condition</th><td colspan="3">- No leaks, joints sealed, system operational</td></tr>
+  </table>
+
+  <h3 style="display: flex; justify-content: space-between; align-items: center;">
+    <span>Invoice</span>
+    <span style="font-weight: normal;">Invoice No. INV-001</span>
+  </h3>
+  
+  <table class="invoice-table">
+    <colgroup>
+      <col style="width: 65%;"> <!-- Item Description -->
+      <col style="width: 10%;"> <!-- Qty -->
+      <col style="width: 5%;"> <!-- Unit -->
+      <col style="width: 10%;"> <!-- Unit Price -->
+      <col style="width: 10%;"> <!-- Line Total -->
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="left">Item Description</th>
+        <th class="right">Qty</th>
+        <th class="left">Unit</th>
+        <th class="right">Unit Price</th>
+        <th class="right">Line Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+  
+  <hr>
+  
+  <table class="invoice-summary">
+    <tr>
+      <td style="text-align: right;"><strong>Total Charges:</strong> $0.00</td>
+    </tr>
+    
+    <tr>
+      <td style="text-align: right;"><strong>Total Due:</strong> $0.00</td>
+    </tr>
+  </table>
+  
+  <h3>Notes & Recommendations</h3>
+  <p>Should any issues arise...</p>  
+
+</body>
+</html>
