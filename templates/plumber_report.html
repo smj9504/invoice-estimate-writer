@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Plumber Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>{{ css_inline }}</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-left small">
+    <p>{{ company.name }}<br>
+    {{ company.address }}<br>
+    {{ company.city_state_zip }}<br>
+    {{ company.phone }}<br>
+    {{ company.email }}</p>
+  </div>
+  <div class="header-right small">
+    <p><strong>Report ID:</strong> {{ report_id }}<br>
+    <strong>Report Date:</strong> {{ report_date }}</p>
+  </div>
+</header>
+
+<main>
+  <div class="two-column">
+    <div>
+      <h3>Client Information</h3>
+      <p><strong>Client Name</strong><br>{{ client.name }}</p>
+      <p><strong>Client Phone Number</strong><br>{{ client.phone }}</p>
+      <p><strong>Client Email Address</strong><br>{{ client.email }}</p>
+      <p><strong>Service Location</strong><br>{{ client.address }}</p>
+    </div>
+    <div>
+      <h3>Plumber Information</h3>
+      <p><strong>Plumber/Representative Name</strong><br>{{ plumber.name }}</p>
+      <p><strong>Company Name</strong><br>{{ plumber.company }}</p>
+      <p><strong>Phone Number</strong><br>{{ plumber.phone }}</p>
+      <p><strong>License Number</strong><br>{{ plumber.license }}</p>
+    </div>
+  </div>
+
+  <h3>Damage Assessment</h3>
+  <table class="damage-assessment">
+    <colgroup>
+      <col style="width: 20%;">
+      <col style="width: 30%;">
+      <col style="width: 20%;">
+      <col style="width: 30%;">
+    </colgroup>
+    <tr>
+      <th>Date of Incident</th>
+      <td>{{ damage.incident_date }}</td>
+      <th>Affected Area</th>
+      <td>{{ damage.area }}</td>
+    </tr>
+    <tr>
+      <th>Water Intrusion Category</th>
+      <td>
+        <label><input type="checkbox" {% if damage.category == 'Cat 1' %}checked{% endif %}> Cat 1</label>
+        <label><input type="checkbox" {% if damage.category == 'Cat 2' %}checked{% endif %}> Cat 2</label>
+        <label><input type="checkbox" {% if damage.category == 'Cat 3' %}checked{% endif %}> Cat 3</label>
+      </td>
+      <th rowspan="2">Scope of Damage</th>
+      <td rowspan="2">{{ damage.scope }}</td>
+    </tr>
+    <tr>
+      <th>Cause of Damage</th>
+      <td>{{ damage.cause }}</td>
+    </tr>
+  </table>
+
+  <h3>Repair Details</h3>
+  <table class="repair-details">
+    <colgroup>
+      <col style="width: 20%;">
+      <col style="width: 80%;">
+    </colgroup>
+    <tr><th>Service Dates</th><td colspan="3">{{ repair.service_date }}</td></tr>
+    <tr><th>Scope of Work Performed</th><td colspan="3">{{ repair.work }}</td></tr>
+    <tr><th>Materials Utilized</th><td colspan="3">{{ repair.materials }}</td></tr>
+    <tr><th>Equipment Used</th><td colspan="3">{{ repair.equipment }}</td></tr>
+    <tr><th>Post-Repair Condition</th><td colspan="3">{{ repair.result }}</td></tr>
+  </table>
+
+  <h3 style="display: flex; justify-content: space-between; align-items: center;">
+    <span>Invoice</span>
+    <span style="font-weight: normal;">Invoice No. {{ invoice.number }}</span>
+  </h3>
+  
+  <table class="invoice-table">
+    <colgroup>
+      <col style="width: 65%;"> <!-- Item Description -->
+      <col style="width: 10%;"> <!-- Qty -->
+      <col style="width: 5%;"> <!-- Unit -->
+      <col style="width: 10%;"> <!-- Unit Price -->
+      <col style="width: 10%;"> <!-- Line Total -->
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="left">Item Description</th>
+        <th class="right">Qty</th>
+        <th class="left">Unit</th>
+        <th class="right">Unit Price</th>
+        <th class="right">Line Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in invoice["items"] %}
+      <tr>
+        <td class="left">{{ item.description }}</td>
+        <td class="right">{{ item.qty }}</td>
+        <td class="left">{{ item.unit }}</td>
+        <td class="right">{{ item.unit_price }}</td>
+        <td class="right">{{ item.line_total }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <hr>
+  
+  <table class="invoice-summary">
+    <tr>
+      <td style="text-align: right;"><strong>Total Charges:</strong> {{ invoice.subtotal }}</td>
+    </tr>
+    {% for payment in invoice["payments"] %}
+    <tr>
+      <td style="text-align: right;">({{ payment.date }}) Amount Paid: -{{ payment.amount }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td style="text-align: right;"><strong>Total Due:</strong> {{ invoice.total_due }}</td>
+    </tr>
+  </table>
+  
+  <h3>Notes & Recommendations</h3>
+  <p>{{ notes }}</p>  
+
+</body>
+</html>

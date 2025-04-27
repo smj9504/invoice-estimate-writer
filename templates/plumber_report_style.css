@@ -1,0 +1,147 @@
+@page {
+    margin: 2cm;
+}
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+}
+header.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #434040;
+    padding: 10px 1cm;
+    font-size: 10px;
+}
+main {
+    padding: 0 1cm;
+}
+.two-column {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+.two-column > div {
+    width: 100%;
+}
+h3 {
+    margin-top: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 4px;
+}
+.damage-assessment {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.damage-assessment th, .damage-assessment td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.damage-assessment th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+.damage-assessment input[type="checkbox"] {
+    margin-right: 6px;
+    vertical-align: middle;
+    accent-color: black;
+}
+
+.damage-assessment label {
+    margin-right: 16px;
+    font-size: 13px;
+    vertical-align: middle;
+}
+.repair-details {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.repair-details th, .repair-details td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+    vertical-align: top;
+}
+.repair-details th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: left;
+}
+th {
+    background-color: #f0f0f0;
+}
+input[type="checkbox"] {
+    transform: scale(1.1);
+    margin-right: 6px;
+}
+.invoice-table, .invoice-summary {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.invoice-table th, .invoice-table td {
+    border: none;
+    padding: 10px 12px;
+}
+
+.invoice-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+.invoice-table .left {
+text-align: left;
+}
+
+.invoice-table .right {
+text-align: right;
+}
+
+.invoice-table td {
+    text-align: center;
+}
+
+.invoice-summary td {
+    padding: 6px;
+    border: none;
+}
+
+.invoice-summary td strong {
+    font-size: 14px;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1cm 0 0; /* 오른쪽만 1cm, 왼쪽은 0 */
+  }
+  .footer-left {
+    margin-left: 0; /* 왼쪽 여백 제거 */
+  }
+  .footer-right {
+    margin-right: 0;
+  }
