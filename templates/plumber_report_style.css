@@ -1,9 +1,12 @@
 @page {
-    margin: 2cm;
+    margin-top: 2.5cm;
+    margin-bottom: 2.5cm;
+    margin-left: 2.5cm;
+    margin-right: 2cm;
 }
 body {
     font-family: Arial, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     margin: 0;
 }
 header.page-header {
@@ -12,7 +15,7 @@ header.page-header {
     align-items: flex-start;
     border-bottom: 1px solid #434040;
     padding: 10px 1cm;
-    font-size: 10px;
+    font-size: 12px;
 }
 main {
     padding: 0 1cm;
@@ -49,14 +52,14 @@ h3 {
     font-weight: bold;
 }
 .damage-assessment input[type="checkbox"] {
-    margin-right: 6px;
+    margin-right: 5px;
     vertical-align: middle;
     accent-color: black;
 }
 
 .damage-assessment label {
     margin-right: 16px;
-    font-size: 13px;
+    font-size: 14px;
     vertical-align: middle;
 }
 .repair-details {
@@ -133,7 +136,7 @@ footer {
     left: 0;
     right: 0;
     width: 100%;
-    font-size: 10px;
+    font-size: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
