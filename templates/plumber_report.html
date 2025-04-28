@@ -36,7 +36,9 @@
       <p><strong>Plumber/Representative Name</strong><br>{{ plumber.name }}</p>
       <p><strong>Company Name</strong><br>{{ plumber.company }}</p>
       <p><strong>Phone Number</strong><br>{{ plumber.phone }}</p>
-      <p><strong>License Number</strong><br>{{ plumber.license }}</p>
+      {% if plumber.license %}
+        <p><strong>License Number</strong><br>{{ plumber.license }}</p>
+      {% endif %}
     </div>
   </div>
 
@@ -76,7 +78,16 @@
       <col style="width: 20%;">
       <col style="width: 80%;">
     </colgroup>
-    <tr><th>Service Dates</th><td colspan="3">{{ repair.service_date }}</td></tr>
+    <tr>
+      <th>Service Dates</th>
+      <td colspan="3">
+        {% if repair.start_date == repair.end_date %}
+          {{ repair.start_date.strftime("%B %d, %Y") }}
+        {% else %}
+          {{ repair.start_date.strftime("%B %d, %Y") }} – {{ repair.end_date.strftime("%B %d, %Y") }}
+        {% endif %}
+      </td>
+    </tr>
     <tr><th>Scope of Work Performed</th><td colspan="3">{{ repair.work }}</td></tr>
     <tr><th>Materials Utilized</th><td colspan="3">{{ repair.materials }}</td></tr>
     <tr><th>Equipment Used</th><td colspan="3">{{ repair.equipment }}</td></tr>
