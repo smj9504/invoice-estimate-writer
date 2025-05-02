@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
 from pathlib import Path
 import math
+from datetime import datetime
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
 
@@ -26,14 +27,31 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
     template = env.get_template(template_path)
     html_content = template.render(**context)
 
-    # ✅ CSS 경로 확인
+    # CSS 경로 확인
     if not css_path.exists():
         raise FileNotFoundError(f"CSS 파일이 존재하지 않음: {css_path}")
 
     with open(css_path, "r", encoding="utf-8") as css_file:
-        css = CSS(string=css_file.read())
+        base_css = CSS(string=css_file.read())
 
-    HTML(string=html_content).write_pdf(output_path, stylesheets=[css])
+    # 동적 푸터 CSS 생성
+    today_str = datetime.today().strftime("%Y-%m-%d")
+    footer_css = CSS(string=f"""
+        @page {{
+            @bottom-left {{
+                content: "Generated on {today_str}";
+                font-size: 10px;
+                color: #999;
+            }}
+            @bottom-right {{
+                content: "Page " counter(page);
+                font-size: 10px;
+                color: #999;
+            }}
+        }}
+    """)
+
+    HTML(string=html_content).write_pdf(output_path, stylesheets=[base_css, footer_css])
 
 def generate_estimate_pdf(context: dict, output_path: str):
     generate_pdf(context, output_path, doc_type="estimate")
