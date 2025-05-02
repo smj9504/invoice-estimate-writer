@@ -4,22 +4,26 @@ import re
 from modules.company_module import get_all_companies
 from modules.estimate_item_module import get_all_items
 from modules.estimate_module import get_estimate_by_id
+from weasyprint import HTML, CSS
+
 
 st.set_page_config(page_title="Estimate Builder", page_icon="📟", layout="wide")
 
 # ✅ 세션 상태 강제 초기화
-for key, default in {
-    "sections": [],
-    "new_section_triggered": False,
-    "new_section_title_cache": "",
-    "item_add_triggered": None,
-    "item_add_cache": [],
-    "item_delete_triggered": None,
-    "manual_add_triggered": None,
-    "from_page": ""
-}.items():
-    if key not in st.session_state:
-        st.session_state[key] = default
+if "initialized" not in st.session_state:
+    st.session_state["new_section_triggered"] = False
+    st.session_state["new_section_title_cache"] = ""
+    st.session_state["item_add_triggered"] = None
+    st.session_state["item_add_cache"] = []
+    st.session_state["item_delete_triggered"] = None
+    st.session_state["manual_add_triggered"] = None
+    st.session_state["from_page"] = ""
+
+    # sections는 비어있을 때만 초기화
+    if "sections" not in st.session_state:
+        st.session_state["sections"] = []
+
+    st.session_state["initialized"] = True
 
 # URL 파라미터에서 ID 추출
 query_params = st.query_params
@@ -50,6 +54,7 @@ if estimate_id and uuid_pattern.match(estimate_id):
             st.session_state.top_note = data.get("top_note", "")
             st.session_state.bottom_note = data.get("bottom_note", "")
             st.session_state.disclaimer = data.get("disclaimer", "")
+            st.session_state.op_percent = data.get("op_percent", "")
             st.session_state.selected_company = data.get("company", {})
             st.session_state.from_page = "build_estimate"
         else:
@@ -59,24 +64,21 @@ elif estimate_id:
     st.error("❌ 유효하지 않은 ID 형식입니다.")
     st.stop()
 else:
-    if not estimate_id:
-        for key, default in {
-            "estimate_number": "",
-            "estimate_date": datetime.date.today(),
-            "client_name": "",
-            "client_phone": "",
-            "client_email": "",
-            "client_street": "",
-            "client_city": "",
-            "client_state": "",
-            "client_zip": "",
-            "top_note": "",
-            "bottom_note": "",
-            "disclaimer": "",
-            "sections": [],
-            "selected_company": {}
-        }.items():
-            st.session_state[key] = default
+    if not estimate_id and not st.session_state.sections:
+        st.session_state.sections = []
+        st.session_state.estimate_number = ""
+        st.session_state.estimate_date = datetime.date.today()
+        st.session_state.client_name = ""
+        st.session_state.client_phone = ""
+        st.session_state.client_email = ""
+        st.session_state.client_street = ""
+        st.session_state.client_city = ""
+        st.session_state.client_state = ""
+        st.session_state.client_zip = ""
+        st.session_state.top_note = ""
+        st.session_state.bottom_note = ""
+        st.session_state.disclaimer = ""
+        st.session_state.selected_company = {}
         st.session_state.from_page = "build_estimate"
 
 # 회사 목록
@@ -117,16 +119,18 @@ top_note = st.text_area("Note 입력", key="top_note")
 
 # 섹션 추가
 st.subheader("📦 견적서 섹션 추가")
-cols = st.columns([1, 2])
+cols = st.columns([1, 2, 1])
 with cols[0]:
     new_section_title = st.text_input("섹션 이름", key="new_section")
 with cols[1]:
+    show_subtotal = st.checkbox("Subtotal 표시 여부", value=True, key="show_subtotal_checkbox")
+with cols[2]:
     st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
     if st.button("➕ 추가") and new_section_title:
         st.session_state.sections.append({
             "title": new_section_title,
             "items": [],
-            "showSubtotal": True,
+            "showSubtotal": show_subtotal,
             "subtotal": 0.0
         })
 
@@ -155,10 +159,32 @@ if trigger := st.session_state.manual_add_triggered:
 
 # 섹션 반복
 for i, section in enumerate(st.session_state.sections):
-    st.markdown(f"---")
-    st.subheader(f"📦 {section['title']}")
+    st.markdown("---")
+    cols = st.columns([6, 1])
+    with cols[0]:
+        st.subheader(f"📦 {section['title']}")
+    with cols[1]:
+        if st.button("🗑️ 섹션 삭제", key=f"delete-section-{i}"):
+            st.session_state.sections.pop(i)
+            st.rerun()
 
-    section_items = [item for item in ALL_ITEMS if item["category"] == section["title"]]
+    all_categories = sorted(set(item["category"] for item in ALL_ITEMS if item.get("category")))
+
+    # 👉 section 자체에 category 저장 (없으면 기본값으로 초기화)
+    if "selected_category" not in section or section["selected_category"] not in all_categories:
+        section["selected_category"] = all_categories[0] if all_categories else ""
+
+    # 선택 박스 (값은 section 내부의 값을 사용)
+    selected_category = st.selectbox(
+        "카테고리 선택",
+        all_categories,
+        index=all_categories.index(section["selected_category"]),
+        key=f"cat-{i}"
+    )
+    section["selected_category"] = selected_category
+
+    section_items = [item for item in ALL_ITEMS if item.get("category") == section["selected_category"]]
+
     item_names = [f"{item['code']} - {item['name']}" for item in section_items]
     item_lookup = {f"{item['code']} - {item['name']}": item for item in section_items}
 
@@ -185,6 +211,7 @@ for i, section in enumerate(st.session_state.sections):
             st.session_state.manual_add_triggered = i
             st.rerun()
 
+
     for j, item in enumerate(section["items"]):
         cols = st.columns([4, 1, 1, 1, 1])
         with cols[0]:
@@ -203,13 +230,31 @@ for i, section in enumerate(st.session_state.sections):
         desc_key = f"desc-{i}-{j}"
         with st.expander("📝 설명 입력 (선택)", expanded=bool(item.get("dec"))):
             item["dec"] = st.text_area("설명", value=item.get("dec", ""), key=desc_key)
+            if item["dec"]:
+                st.markdown(item["dec"].replace("\n", "<br>"), unsafe_allow_html=True)
 
     section["subtotal"] = round(sum(it["qty"] * it["price"] for it in section["items"]), 2)
     st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
 
-# 총합 출력
-total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
-st.markdown(f"<p style='text-align:right; font-size:25px; font-weight:600;'>Total: ${total:,.2f}</p>", unsafe_allow_html=True)
+# ✅ O&P 퍼센트 입력
+st.subheader("💰 Overhead & Profit (O&P) 설정")
+op_percent = st.number_input("O&P 비율 (%)", min_value=0.0, max_value=100.0, step=1.0, key="op_percent")
+
+# ✅ subtotal 합산
+subtotal_sum = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
+
+# ✅ O&P 금액 계산
+op_amount = round(subtotal_sum * (op_percent / 100), 2)
+
+# ✅ 총합
+total = round(subtotal_sum + op_amount, 2)
+
+# ✅ 표시
+st.markdown(f"""
+<p style='text-align:right; font-weight:bold;'>Subtotal: ${subtotal_sum:,.2f}</p>
+<p style='text-align:right; font-weight:bold;'>O&amp;P ({op_percent:.0f}%): ${op_amount:,.2f}</p>
+<p style='text-align:right; font-size:25px; font-weight:600;'>Total: ${total:,.2f}</p>
+""", unsafe_allow_html=True)
 
 # 하단 노트
 st.subheader("Note 및 Disclaimer")
@@ -231,5 +276,8 @@ if st.button("👁️ 미리보기로 이동"):
     st.session_state.top_note_preview = st.session_state.get("top_note", "")
     st.session_state.bottom_note_preview = st.session_state.get("bottom_note", "")
     st.session_state.disclaimer_preview = st.session_state.get("disclaimer", "")
+    st.session_state.op_percent_preview = op_percent
+    st.session_state.op_amount_preview = op_amount
+    st.session_state.total_preview = total
 
     st.switch_page("pages/preview_estimate.py")

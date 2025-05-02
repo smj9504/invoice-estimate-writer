@@ -37,6 +37,10 @@ if estimate_id and uuid_pattern.match(estimate_id):
         st.session_state.top_note_preview = data.get("top_note", "")
         st.session_state.bottom_note_preview = data.get("bottom_note", "")
         st.session_state.disclaimer_preview = data.get("disclaimer", "")
+        
+        st.session_state.op_percent_preview = data.get("op_percent", "")
+        st.session_state.op_amount_preview = data.get("op_amount", "")
+        st.session_state.total_preview = data.get("toptal", "")
     else:
         st.error("❌ 해당 ID의 견적서를 찾을 수 없습니다.")
 elif estimate_id:
@@ -51,6 +55,16 @@ if st.button("🔙 수정하기"):
 if "sections" not in st.session_state or not st.session_state.sections:
     st.warning("⛔ 먼저 견적서를 작성해 주세요.")
     st.stop()
+
+# O&P 값 가져오기
+op_percent = st.session_state.get("op_percent_preview", 0.0)
+op_amount = st.session_state.get("op_amount_preview", 0.0)
+
+# subtotal 합산
+subtotal = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
+
+# 총합 계산
+total = round(subtotal + op_amount, 2)
 
 # JSON 데이터 조립
 estimate_data = {
@@ -70,7 +84,11 @@ estimate_data = {
     "disclaimer": st.session_state.get("disclaimer_preview", ""),
     "bottom_note": st.session_state.get("bottom_note_preview", ""),
     "serviceSections": st.session_state.sections,
-    "total": round(sum(section["subtotal"] for section in st.session_state.sections), 2),
+
+    "op_percent": op_percent,
+    "op_amount": op_amount,
+    "subtotal": subtotal,
+    "total": total,
     "discount": 0.0  # 추후 지원 가능
 }
 
@@ -112,8 +130,11 @@ for section in st.session_state.sections:
     st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
 
 # 전체 Total
-total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
-st.markdown(f"<h4 style='text-align:right;'>💰 Total: ${total:,.2f}</h4>", unsafe_allow_html=True)
+st.markdown(f"""
+<h4 style='text-align:right;'>Subtotal: ${subtotal:,.2f}</h4>
+<h4 style='text-align:right;'>O&amp;P ({op_percent:.0f}%): ${op_amount:,.2f}</h4>
+<h3 style='text-align:right; font-weight:bold;'>💰 Total: ${total:,.2f}</h3>
+""", unsafe_allow_html=True)
 
 # 하단 note & disclaimer
 st.subheader("📌 하단 Note 및 Disclaimer")

@@ -72,10 +72,14 @@
 {% endfor %}
 
 <div class="footer-total">
+  <p>Subtotal: ${{ "{:,.2f}".format(subtotal) }}</p>
+  {% if op_percent and op_percent > 0 %}
+    <p>O&amp;P ({{ op_percent|round|int }}%): ${{ "{:,.2f}".format(op_amount) }}</p>
+  {% endif %}
   {% if discount %}
     <p>Discount: -${{ "{:,.2f}".format(discount) }}</p>
   {% endif %}
-  <p>Total: ${{ "{:,.2f}".format(total) }}</p>
+  <p><strong>Estimate Total: ${{ "{:,.2f}".format(total) }}</strong></p>
 </div>
 
 {% if bottom_note %}

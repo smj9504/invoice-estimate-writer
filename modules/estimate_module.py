@@ -85,17 +85,21 @@ def get_latest_estimates() -> list[dict]:
     return result.data or []
 
 
-def get_estimate_by_id(estimate_uid: str) -> dict:
+def get_estimate_by_id(estimate_uid: str) -> dict | None:
     supabase = get_connection()
-    result = with_retries(
-        lambda: supabase.table("estimates")
-        .select("*")
-        .eq("estimate_uid", estimate_uid)
-        .eq("is_latest", True)
-        .single()
-        .execute()
-    )
-    return result.data
+    try:
+        result = with_retries(
+            lambda: supabase.table("estimates")
+            .select("*")
+            .eq("estimate_uid", estimate_uid)
+            .eq("is_latest", True)
+            .single()
+            .execute()
+        )
+        return result.data if result and hasattr(result, "data") else None
+    except Exception as e:
+        print("[get_estimate_by_id ERROR]", e)
+        return None
 
 
 # 1. 모든 견적 항목 불러오기
@@ -128,6 +132,19 @@ def update_item(item_id: str, data: dict):
 def delete_item(item_id: str):
     supabase = get_connection()
     return with_retries(lambda: supabase.table("est_items").delete().eq("id", item_id).execute())
+
+def get_item_by_code(code: str):
+    supabase = get_connection()
+    if not supabase:
+        return None
+
+    try:
+        result = supabase.table("est_items").select("*").eq("code", code).maybe_single().execute()
+        return result.data if result and hasattr(result, "data") else None
+    except Exception as e:
+        print("[get_item_by_code ERROR]", e)
+        return None
+
 
 # ======================
 # 설명 관련 기능
