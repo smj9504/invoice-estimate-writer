@@ -1,7 +1,7 @@
 import streamlit as st
 from jinja2 import Environment, FileSystemLoader
 from datetime import date
-from weasyprint import HTML
+# from weasyprint import HTML
 from modules.company_module import get_all_companies
 
 # Set up Jinja2 environment
