@@ -79,7 +79,7 @@
   {% if discount %}
     <p>Discount: -${{ "{:,.2f}".format(discount) }}</p>
   {% endif %}
-  <p><strong>Estimate Total: ${{ "{:,.2f}".format(total) }}</strong></p>
+  <p class="total">Estimate Total: ${{ "{:,.2f}".format(total) }}</p>
 </div>
 
 {% if bottom_note %}
