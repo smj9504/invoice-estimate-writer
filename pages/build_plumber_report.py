@@ -1,6 +1,6 @@
 import streamlit as st
 from jinja2 import Environment, FileSystemLoader
-from datetime import date
+from datetime import date, datetime
 # from weasyprint import HTML
 from modules.company_module import get_all_companies
 
@@ -59,29 +59,54 @@ plumber["phone"] = st.text_input("Plumber Phone", value=selected_company["phone"
 
 
 # --- Damage Assessment ---
+
+def sync_dates_from_incident():
+    new_date = st.session_state["incident_date"]
+    st.session_state["start_date"] = new_date
+    st.session_state["end_date"] = new_date
+    st.session_state["report_date"] = new_date
+
+    for i in range(len(st.session_state.payments)):
+        st.session_state[f"paydate{i}"] = new_date
+        st.session_state.payments[i]["date"] = new_date.strftime("%B %d, %Y")
+
+
 st.subheader("Damage Assessment")
 col1, col2 = st.columns(2)
 with col1:
-    incident_date = st.date_input("Date of Incident", value=date.today())
+    incident_date = st.date_input(
+        "Date of Incident",
+        key="incident_date",
+        on_change=sync_dates_from_incident
+    )
 with col2:
     category = st.radio("Water Intrusion Category", ["Cat 1", "Cat 2", "Cat 3"], horizontal=True, key="damage_category")
 
 damage = {
     "incident_date": incident_date.strftime("%B %d, %Y"),
-    "area": st.text_input("Affected Area"),
+    "area": st.text_area("Affected Area"),
     "category": category,
     "cause": st.text_input("Cause of Damage"),
     "scope": st.text_area("Scope of Damage")
 }
 
+# Sync other dates with incident_date
+if "date_synced" not in st.session_state or st.session_state["date_synced"] is False:
+    st.session_state["start_date"] = incident_date
+    st.session_state["end_date"] = incident_date
+    st.session_state["report_date"] = incident_date
+    # Update all payment dates too
+    for i in range(len(st.session_state.payments)):
+        st.session_state.payments[i]["date"] = incident_date.strftime("%B %d, %Y")
+    st.session_state["date_synced"] = True
+
 # --- Repair Details ---
 st.subheader("Repair Details")
 col1, col2 = st.columns(2)
 with col1:
-    start_date = st.date_input("Start Date", value=date.today(), key="start_date")
+    start_date = st.date_input("Start Date", key="start_date")
 with col2:
-    end_date = st.date_input("End Date", value=date.today(), key="end_date")
-
+    end_date = st.date_input("End Date", key="end_date")
 repair = {
     "start_date": start_date,
     "end_date": end_date,
@@ -110,7 +135,8 @@ for idx, item in enumerate(st.session_state.invoice_items):
         col1, col2, col3, col4, col5 = st.columns([5, 1, 1, 1.5, 1.5])
 
         with col1:
-            item["description"] = st.text_input(f"Description {idx}", value=item["description"], key=f"desc{idx}")
+            raw_desc = st.text_area(f"Description {idx}", value=item["description"], key=f"desc{idx}")
+            item["description"] = raw_desc.replace("\n", "<br>")  # 줄바꿈 변환
         with col2:
             item["qty"] = st.text_input(f"Qty {idx}", value=item["qty"], key=f"qty{idx}")
         with col3:
@@ -124,14 +150,16 @@ for idx, item in enumerate(st.session_state.invoice_items):
             line_total_value = qty_float * unit_price_float
             line_total_str = f"{line_total_value:.2f}"
         except (ValueError, TypeError):
+            line_total_value = 0.0
             line_total_str = ""
 
         with col5:
-            item["line_total"] = st.text_input(f"Line Total {idx}", value=line_total_str, key=f"line_total{idx}")
+            item["line_total"] = line_total_str
+            st.text_input(f"Line Total {idx}", value=line_total_str, key=f"line_total{idx}", disabled=True)
 
         try:
-            total_subtotal += float(item["line_total"])
-        except ValueError:
+            total_subtotal += line_total_value
+        except NameError:
             pass
 
 # --- Payments ---
@@ -149,22 +177,35 @@ for idx, payment in enumerate(st.session_state.payments):
     with st.expander(f"Payment {idx+1}"):
         col1, col2 = st.columns(2)
         with col1:
-            # 날짜 입력을 달력으로
-            selected_date = st.date_input(f"Payment Date {idx}", value=date.today(), key=f"paydate{idx}")
-            # 'April 29, 2025' 포맷으로 변환하여 저장
-            payment["date"] = selected_date.strftime("%B %d, %Y")
+            selected_date = st.date_input(
+                f"Payment Date {idx}",
+                key=f"paydate{idx}"
+            )
+            payment["date"] = st.session_state[f"paydate{idx}"].strftime("%B %d, %Y")
+            payment["date_parsed"] = selected_date
 
         with col2:
             payment["amount"] = st.text_input(f"Payment Amount {idx}", value=payment["amount"], key=f"payamount{idx}")
 
-        try:
-            total_payments += float(payment["amount"])
-        except ValueError:
-            pass
+# --- Calculate total_payments numerically ---
+for payment in st.session_state.payments:
+    try:
+        total_payments += float(payment["amount"])
+    except:
+        pass
+
+# --- Format amounts for HTML display ---
+for payment in st.session_state.payments:
+    try:
+        float_amt = float(payment["amount"])
+        payment["amount_display"] = f"${float_amt:,.2f}"
+    except:
+        payment["amount_display"] = "$0.00"
 
 # --- Subtotal & Total Due Calculation ---
 calculated_subtotal = f"${total_subtotal:,.2f}"
 calculated_due = f"${(total_subtotal - total_payments):,.2f}"
+
 
 st.subheader("Summary")
 col1, col2 = st.columns(2)
@@ -174,9 +215,18 @@ with col2:
     total_due = st.text_input("Total Due", value=calculated_due, key="totaldue", disabled=True)
 
 # --- 기타 입력 ---
+# 오늘 날짜 기준 YYMM 포맷
+today = datetime.today()
+prefix_date = today.strftime("%y%m")  # 예: '2505'
+
+# 기본 ID 구성
+default_report_id = f"PLM-{prefix_date}-001"
+default_invoice_number = f"INV-{prefix_date}-001"
+
 notes = st.text_area("Notes & Recommendations")
-report_id = st.text_input("Report ID", "PLM-0424-001")
-report_date = st.date_input("Report Date", value=date.today()).strftime("%B %d, %Y")
+report_id = st.text_input("Report ID", value=default_report_id)
+invoice_number = st.text_input("Invoice Number", value=default_invoice_number)
+report_date = st.date_input("Report Date", key="report_date").strftime("%B %d, %Y")
 today_str = date.today().strftime("%B %d, %Y")
 
 # --- Generate Report ---
@@ -196,7 +246,7 @@ if st.button("Generate HTML Report"):
     dynamic_footer_css = f"""
     @page {{
         @bottom-left {{
-            content: "Generated on {today_str}";
+            content: "{client['address']}";
             font-size: 10px;
         }}
         @bottom-right {{
@@ -209,7 +259,7 @@ if st.button("Generate HTML Report"):
     final_css = css_content + "\n" + dynamic_footer_css
 
     invoice = {
-        "number": "INV-001",
+        "number": invoice_number,
         "items": st.session_state.invoice_items,
         "payments": st.session_state.payments,
         "subtotal": calculated_subtotal,

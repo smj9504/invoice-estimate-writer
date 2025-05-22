@@ -3,6 +3,7 @@ from weasyprint import HTML, CSS
 from pathlib import Path
 import math
 from datetime import datetime
+import pandas as pd
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
 
@@ -16,6 +17,15 @@ TEMPLATE_MAP = {
         "css": "style.css"
     }
 }
+
+def replace_nan_with_zero(d):
+    if isinstance(d, dict):
+        return {k: replace_nan_with_zero(v) for k, v in d.items()}
+    elif isinstance(d, list):
+        return [replace_nan_with_zero(v) for v in d]
+    elif isinstance(d, float) and (str(d) == "nan" or pd.isna(d)):
+        return 0.0
+    return d
 
 def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
     context = clean_nan(context)
@@ -38,6 +48,8 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
     today_str = datetime.today().strftime("%Y-%m-%d")
     footer_css = CSS(string=f"""
         @page {{
+            margin: 0.4in;
+                     
             @bottom-left {{
                 content: "Generated on {today_str}";
                 font-size: 10px;

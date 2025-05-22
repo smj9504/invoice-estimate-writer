@@ -116,7 +116,8 @@ estimate_info = {
 st.json(estimate_info)
 
 st.subheader("📝 상단 Note")
-st.markdown(st.session_state.get("top_note_preview", "_(작성된 내용 없음)_"))
+top_note = st.session_state.get("top_note_preview", "_(작성된 내용 없음)_").replace("\n", "<br>")
+st.markdown(top_note, unsafe_allow_html=True)
 
 # 섹션별 아이템 및 subtotal
 st.markdown("---")
@@ -138,8 +139,11 @@ st.markdown(f"""
 
 # 하단 note & disclaimer
 st.subheader("📌 하단 Note 및 Disclaimer")
-st.markdown(f"**Note**: {st.session_state.get('bottom_note_preview', '_없음_')}")
-st.markdown(f"**Disclaimer**: {st.session_state.get('disclaimer_preview', '_없음_')}")
+note_text = st.session_state.get("bottom_note_preview", "_없음_").replace("\n", "<br>")
+disclaimer_text = st.session_state.get("disclaimer_preview", "_없음_").replace("\n", "<br>")
+
+st.markdown(f"**Note**:<br>{note_text}", unsafe_allow_html=True)
+st.markdown(f"**Disclaimer**:<br>{disclaimer_text}", unsafe_allow_html=True)
 
 # JSON 파일 다운로드
 st.download_button(

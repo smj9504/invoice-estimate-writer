@@ -7,3 +7,4 @@ __pycache__/
 .env.*
 .idea/
 .vscode/
+__pycache__/pdf_generator.cpython-312.pyc

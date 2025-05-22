@@ -152,13 +152,22 @@ def get_item_by_code(code: str):
 
 # 6. 설명 목록 불러오기
 def get_descriptions_by_item_name(item_name: str):
-    supabase = get_connection()
-    result = with_retries(lambda: supabase.table("est_item_desc")
-        .select("*")
-        .eq("item_name", item_name)
-        .order("sort_order")
-        .execute())
-    return result.data or []
+    try:
+        supabase = get_connection()
+        result = with_retries(lambda: supabase.table("est_item_desc")
+            .select("*")
+            .eq("item_name", item_name)
+            .order("sort_order")
+            .execute())
+        
+        if result is None:
+            return []
+        
+        return getattr(result, 'data', []) or []
+        
+    except Exception as e:
+        print(f"Error in get_descriptions_by_item_name: {e}")
+        return []
 
 # 7. 설명 저장
 def insert_description(data: dict):
