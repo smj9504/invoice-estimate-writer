@@ -232,16 +232,57 @@ for i, section in enumerate(st.session_state.sections):
         section["selected_category"] = all_categories[0] if all_categories else ""
     
     # 카테고리 선택
-    selected_category = st.selectbox(
-        "카테고리 선택",
-        all_categories,
-        index=all_categories.index(section["selected_category"]) if section["selected_category"] in all_categories else 0,
-        key=f"cat-{i}"
-    )
-    section["selected_category"] = selected_category
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        selected_category = st.selectbox(
+            "1️⃣ 카테고리 선택",
+            all_categories,
+            index=all_categories.index(section["selected_category"]) if section["selected_category"] in all_categories else 0,
+            key=f"cat-{i}"
+        )
+        
+        # 카테고리가 변경되면 서브카테고리 선택 초기화
+        if section["selected_category"] != selected_category:
+            section["selected_category"] = selected_category
+            if "selected_subcategory" in section:
+                del section["selected_subcategory"]
 
-    # 해당 카테고리의 항목들
-    section_items = [item for item in ALL_ITEMS if item.get("category") == selected_category]
+    # 선택된 카테고리의 서브카테고리들 추출
+    category_items = [item for item in ALL_ITEMS if item.get("category") == selected_category]
+    all_subcategories = sorted(set(item["subcategory"] for item in category_items if item.get("subcategory")))
+    
+    # 서브카테고리가 있는 경우에만 서브카테고리 선택 표시
+    if all_subcategories:
+        with col2:
+            # 서브카테고리 선택 초기화
+            if "selected_subcategory" not in section:
+                section["selected_subcategory"] = all_subcategories[0] if all_subcategories else ""
+            
+            # 서브카테고리 선택
+            selected_subcategory = st.selectbox(
+                "2️⃣ 서브카테고리 선택",
+                all_subcategories,
+                index=all_subcategories.index(section["selected_subcategory"]) if section["selected_subcategory"] in all_subcategories else 0,
+                key=f"subcat-{i}"
+            )
+            section["selected_subcategory"] = selected_subcategory
+        
+        # 선택된 서브카테고리의 항목들
+        section_items = [item for item in ALL_ITEMS 
+                        if item.get("category") == selected_category 
+                        and item.get("subcategory") == selected_subcategory]
+        
+        # 현재 선택 상태 표시
+        st.info(f"📂 **{selected_category}** > **{selected_subcategory}** ({len(section_items)}개 항목)")
+    else:
+        with col2:
+            st.markdown("*서브카테고리가 없습니다*")
+        
+        # 서브카테고리가 없는 경우 카테고리의 모든 항목
+        section_items = [item for item in ALL_ITEMS if item.get("category") == selected_category]
+        
+        # 현재 선택 상태 표시
+        st.info(f"📂 **{selected_category}** ({len(section_items)}개 항목)")
     item_names = [f"{item['code']} - {item['name']}" for item in section_items]
     item_lookup = {f"{item['code']} - {item['name']}": item for item in section_items}
 
