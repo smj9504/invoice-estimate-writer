@@ -73,6 +73,26 @@ if "delete_item_trigger" in st.session_state:
         st.session_state.sections[section_idx]["items"].pop(item_idx)
     del st.session_state.delete_item_trigger
 
+# 항목 순서 변경 트리거 (위로 이동)
+if "move_item_up_trigger" in st.session_state:
+    section_idx, item_idx = st.session_state.move_item_up_trigger
+    if (0 <= section_idx < len(st.session_state.sections) and 
+        1 <= item_idx < len(st.session_state.sections[section_idx]["items"])):
+        # 현재 항목과 위의 항목 위치 바꾸기
+        items = st.session_state.sections[section_idx]["items"]
+        items[item_idx], items[item_idx-1] = items[item_idx-1], items[item_idx]
+    del st.session_state.move_item_up_trigger
+
+# 항목 순서 변경 트리거 (아래로 이동)
+if "move_item_down_trigger" in st.session_state:
+    section_idx, item_idx = st.session_state.move_item_down_trigger
+    if (0 <= section_idx < len(st.session_state.sections) and 
+        0 <= item_idx < len(st.session_state.sections[section_idx]["items"]) - 1):
+        # 현재 항목과 아래의 항목 위치 바꾸기
+        items = st.session_state.sections[section_idx]["items"]
+        items[item_idx], items[item_idx+1] = items[item_idx+1], items[item_idx]
+    del st.session_state.move_item_down_trigger
+
 # URL 파라미터에서 ID 추출
 query_params = st.query_params
 raw_id = query_params.get("id")
@@ -171,6 +191,15 @@ top_note = st.text_area("Note 입력", value=st.session_state.get("top_note", ""
 
 # 섹션 추가
 st.subheader("📦 견적서 섹션 추가")
+with st.expander("💡 사용법 안내"):
+    st.markdown("""
+    **섹션 및 항목 관리:**
+    - 각 섹션은 카테고리별로 항목을 그룹화합니다
+    - 항목 추가 후 ⬆️⬇️ 버튼으로 순서를 변경할 수 있습니다
+    - 각 항목의 설명은 확장 메뉴에서 입력할 수 있습니다
+    - O&P(Overhead & Profit)는 모든 섹션의 합계에 적용됩니다
+    """)
+
 cols = st.columns([1, 2, 1])
 with cols[0]:
     new_section_title = st.text_input("섹션 이름", key="new_section")
@@ -233,11 +262,28 @@ for i, section in enumerate(st.session_state.sections):
             st.session_state.manual_add_trigger = i
             st.rerun()
 
+    # 항목 헤더 (항목이 있을 때만 표시)
+    if section["items"]:
+        st.markdown("##### 📋 항목 목록")
+        header_cols = st.columns([3, 1, 1, 1, 0.5, 0.5, 0.5])
+        header_cols[0].markdown("**항목명**")
+        header_cols[1].markdown("**수량**")
+        header_cols[2].markdown("**단위**")
+        header_cols[3].markdown("**단가**")
+        header_cols[4].markdown("**⬆️**")
+        header_cols[5].markdown("**⬇️**")
+        header_cols[6].markdown("**🗑️**")
+
     # 항목 표시 및 편집
     for j, item in enumerate(section["items"]):
-        cols = st.columns([4, 1, 1, 1, 1])
+        # 항목 순서 표시를 위한 구분선
+        if j > 0:
+            st.markdown("<hr style='margin: 5px 0; border: 1px solid #e0e0e0;'>", unsafe_allow_html=True)
+        
+        cols = st.columns([3, 1, 1, 1, 0.5, 0.5, 0.5])
         with cols[0]:
-            item["name"] = st.text_input("항목명", value=item.get("name", ""), key=f"name-{i}-{j}")
+            # 순서 번호와 함께 항목명 표시
+            item["name"] = st.text_input(f"항목명 #{j+1}", value=item.get("name", ""), key=f"name-{i}-{j}")
         with cols[1]:
             item["qty"] = st.number_input("수량", value=item.get("qty", 1.0), step=1.0, key=f"qty-{i}-{j}")
         with cols[2]:
@@ -245,7 +291,26 @@ for i, section in enumerate(st.session_state.sections):
         with cols[3]:
             item["price"] = st.number_input("단가", value=item.get("price", 0.0), step=0.01, key=f"price-{i}-{j}")
         with cols[4]:
-            if st.button("🗑️ 삭제", key=f"delete-{i}-{j}"):
+            st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+            # 위로 이동 버튼 (첫 번째 항목이 아닐 때만 활성화)
+            if j > 0:
+                if st.button("⬆️", key=f"up-{i}-{j}", help="위로 이동"):
+                    st.session_state.move_item_up_trigger = (i, j)
+                    st.rerun()
+            else:
+                st.button("⬆️", key=f"up-{i}-{j}", disabled=True, help="첫 번째 항목입니다")
+        with cols[5]:
+            st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+            # 아래로 이동 버튼 (마지막 항목이 아닐 때만 활성화)
+            if j < len(section["items"]) - 1:
+                if st.button("⬇️", key=f"down-{i}-{j}", help="아래로 이동"):
+                    st.session_state.move_item_down_trigger = (i, j)
+                    st.rerun()
+            else:
+                st.button("⬇️", key=f"down-{i}-{j}", disabled=True, help="마지막 항목입니다")
+        with cols[6]:
+            st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+            if st.button("🗑️", key=f"delete-{i}-{j}", help="항목 삭제"):
                 st.session_state.delete_item_trigger = (i, j)
                 st.rerun()
 
