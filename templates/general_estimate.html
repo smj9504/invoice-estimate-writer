@@ -31,16 +31,20 @@
   </div>
   <div class="client-info">
     <p><strong>Estimate for</strong></p>
-    <p>{{ client.name }}</p>
+    {% if client.name %}
+      <p>{{ client.name }}</p>
+    {% endif %}
     <p>{{ client.address }}</p>
     <p>{{ client.city }}, {{ client.state }} {{ client.zip }}</p>
-    <p>{{ client.phone }}</p>
+    {% if client.phone %}
+      <p>{{ client.phone }}</p>
+    {% endif %}
   </div>
 </div>
 
-<div class="amount-due">
-  {% if top_note %}<p>{{ top_note }}</p>{% endif %}
-</div>
+{% if top_note %}
+  <p class="amount-due-note">{{ top_note.replace('\n', '<br>') | safe }}</p>
+{% endif %}
 
 <div class="line-header">
   <div class="col-item">Item</div>
@@ -54,17 +58,21 @@
   <div class="section-title">{{ section.title }}</div>
 
   {% for item in section["items"] %}
-  <div class="line-row">
-    <div class="col-item">{{ item.name }}</div>
-    <div class="col-qty">{{ "{:,.2f}".format(item.qty) }}</div>
-    <div class="col-unit">{{ item.unit }}</div>
-    <div class="col-price">${{ "{:,.2f}".format(item.price) }}</div>
-    <div class="col-total">${{ "{:,.2f}".format(item.qty * item.price) }}</div>
-  </div>
-  <div>
-    <div class="col-desc">{{ item.dec }}</div>
-  </div>
-  {% endfor %}
+    {% if item.name and item.qty and item.unit and item.price %}
+    <div class="line-row">
+      <div class="col-item">{{ loop.index }}. {{ item.name }}</div>
+      <div class="col-qty">{{ "{:,.2f}".format(item.qty | float) }}</div>
+      <div class="col-unit">{{ item.unit }}</div>
+      <div class="col-price">${{ "{:,.2f}".format(item.price | float) }}</div>
+      <div class="col-total">${{ "{:,.2f}".format(item.qty * item.price | float) }}</div>
+    </div>
+    {% if item.dec %}
+    <div>
+      <p class="col-desc">{{ item.dec.replace('\n', '<br>') | safe }}</p>
+    </div>
+    {% endif %}
+    {% endif %}
+  {% endfor %}   
 
   {% if section.showSubtotal %}
   <p class="subtotal">Subtotal: ${{ "{:,.2f}".format(section.subtotal) }}</p>
@@ -83,11 +91,11 @@
 </div>
 
 {% if bottom_note %}
-  <p class="note">{{ bottom_note }}</p>
+  <p class="note">{{ bottom_note.replace('\n', '<br>') | safe }}</p>
 {% endif %}
 
 {% if disclaimer %}
-  <p class="disclaimer">{{ disclaimer }}</p>
+  <p class="disclaimer">{{ disclaimer.replace('\n', '<br>') | safe }}</p>
 {% endif %}
 
 </body>

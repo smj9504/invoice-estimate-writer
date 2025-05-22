@@ -100,9 +100,15 @@ input[type="checkbox"] {
     margin-bottom: 20px;
 }
 
-.invoice-table th, .invoice-table td {
+.invoice-table th {
     border: none;
     padding: 10px 12px;
+    vertical-align: top;
+}
+.invoice-table td {
+    border: none;
+    padding: 10px 12px 0 12px;
+    vertical-align: top;
 }
 
 .invoice-table th {

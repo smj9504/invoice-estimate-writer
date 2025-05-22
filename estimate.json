@@ -1,0 +1,53 @@
+{
+  "estimate_number": "EST-2025-0515",
+  "estimate_date": "2025-05-15",
+  "company": {
+    "name": "MJ Restoration",
+    "address": "1234 Water St",
+    "city": "Falls Church",
+    "state": "VA",
+    "zip": "22043",
+    "phone": "555-1234",
+    "email": "contact@mjrestoration.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "John Smith",
+    "address": "789 Client Rd",
+    "city": "Fairfax",
+    "state": "VA",
+    "zip": "22030",
+    "phone": "555-6789"
+  },
+  "top_note": "This estimate covers only visible water damage.\nPlease review carefully.",
+  "bottom_note": "Payment due within 15 days.",
+  "disclaimer": "This is not an invoice.",
+  "serviceSections": [
+    {
+      "title": "Water Mitigation",
+      "showSubtotal": true,
+      "subtotal": 475.00,
+      "items": [
+        {
+          "name": "Water Extraction",
+          "qty": 1,
+          "unit": "Job",
+          "price": 300.0,
+          "dec": "Includes all equipment and labor..\nPlease review carefully."
+        },
+        {
+          "name": "Dehumidifier Rental",
+          "qty": 2,
+          "unit": "Day",
+          "price": 87.5,
+          "dec": ""
+        }
+      ]
+    }
+  ],
+  "op_percent": 10,
+  "op_amount": 47.5,
+  "subtotal": 475.0,
+  "total": 522.5,
+  "discount": 0.0
+}

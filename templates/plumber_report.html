@@ -26,14 +26,22 @@
   <div class="two-column">
     <div>
       <h3>Client Information</h3>
-      <p><strong>Client Name</strong><br>{{ client.name }}</p>
-      <p><strong>Client Phone Number</strong><br>{{ client.phone }}</p>
-      <p><strong>Client Email Address</strong><br>{{ client.email }}</p>
+      {% if client.name %}
+        <p><strong>Client Name</strong><br>{{ client.name }}</p>
+      {% endif %}
+      {% if client.phone %}
+        <p><strong>Client Phone Number</strong><br>{{ client.phone }}</p>
+      {% endif %}
+      {% if client.phone %}
+        <p><strong>Client Email Address</strong><br>{{ client.email }}</p>
+      {% endif %}
       <p><strong>Service Location</strong><br>{{ client.address }}</p>
     </div>
     <div>
       <h3>Plumber Information</h3>
-      <p><strong>Plumber/Representative Name</strong><br>{{ plumber.name }}</p>
+      {% if plumber.name %}
+        <p><strong>Plumber/Representative Name</strong><br>{{ plumber.name }}</p>
+      {% endif %}
       <p><strong>Company Name</strong><br>{{ plumber.company }}</p>
       <p><strong>Phone Number</strong><br>{{ plumber.phone }}</p>
       {% if plumber.license %}
@@ -96,16 +104,16 @@
 
   <h3 style="display: flex; justify-content: space-between; align-items: center;">
     <span>Invoice</span>
-    <span style="font-weight: normal;">Invoice No. {{ invoice.number }}</span>
+    <span style="font-weight: normal !important;">Invoice No. {{ invoice.number }}</span>
   </h3>
   
   <table class="invoice-table">
     <colgroup>
-      <col style="width: 65%;"> <!-- Item Description -->
+      <col style="width: 55%;"> <!-- Item Description -->
       <col style="width: 10%;"> <!-- Qty -->
       <col style="width: 5%;"> <!-- Unit -->
-      <col style="width: 10%;"> <!-- Unit Price -->
-      <col style="width: 10%;"> <!-- Line Total -->
+      <col style="width: 15%;"> <!-- Unit Price -->
+      <col style="width: 15%;"> <!-- Line Total -->
     </colgroup>
     <thead>
       <tr>
@@ -122,8 +130,8 @@
         <td class="left">{{ item.description }}</td>
         <td class="right">{{ item.qty }}</td>
         <td class="left">{{ item.unit }}</td>
-        <td class="right">{{ item.unit_price }}</td>
-        <td class="right">{{ item.line_total }}</td>
+        <td class="right">${{ "{:,.2f}".format(item.unit_price | float) }}</td>
+        <td class="right">${{ "{:,.2f}".format(item.line_total | float) }}</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -136,9 +144,11 @@
       <td style="text-align: right;"><strong>Total Charges:</strong> {{ invoice.subtotal }}</td>
     </tr>
     {% for payment in invoice["payments"] %}
-    <tr>
-      <td style="text-align: right;">({{ payment.date }}) Amount Paid: -{{ payment.amount }}</td>
-    </tr>
+      {% if payment.amount_display %}
+      <tr>
+        <td style="text-align: right;">({{ payment.date }}) Amount Paid: -{{ payment.amount_display }}</td>
+      </tr>
+      {% endif %}
     {% endfor %}
     <tr>
       <td style="text-align: right;"><strong>Total Due:</strong> {{ invoice.total_due }}</td>
