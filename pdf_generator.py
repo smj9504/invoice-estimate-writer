@@ -46,24 +46,163 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
 
     # 동적 푸터 CSS 생성
     today_str = datetime.today().strftime("%Y-%m-%d")
-    footer_css = CSS(string=f"""
-        @page {{
-            margin: 0.4in;
-                     
+
+    # 회사 정보 문자열 생성 (좌측 헤더)
+    company = context.get('company', {})
+    company_info_lines = []
+    if company.get('name'):
+        company_info_lines.append(company['name'])
+    if company.get('address'):
+        company_info_lines.append(company['address'])
+    
+    # 도시, 주, 우편번호를 한 줄로 결합
+    city_state_zip = []
+    if company.get('city'):
+        city_state_zip.append(company['city'])
+    if company.get('state'):
+        city_state_zip.append(company['state'])
+    if company.get('zip'):
+        city_state_zip.append(company['zip'])
+    if city_state_zip:
+        company_info_lines.append(', '.join(city_state_zip))
+    
+    if company.get('phone'):
+        company_info_lines.append(company['phone'])
+    if company.get('email'):
+        company_info_lines.append(company['email'])
+    
+    # CSS에서 줄바꿈을 위해 \\A 대신 개행 문자 사용
+    company_info_text = '\\A '.join(company_info_lines)
+
+    # 고객 주소 문자열 생성 (우측 헤더) 
+    client = context.get('client', {})
+    client_address_lines = []
+    if client.get('address'):
+        client_address_lines.append(client['address'])
+    
+    # 고객 도시, 주, 우편번호를 한 줄로 결합
+    client_city_state_zip = []
+    if client.get('city'):
+        client_city_state_zip.append(client['city'])
+    if client.get('state'):
+        client_city_state_zip.append(client['state'])
+    if client.get('zip'):
+        client_city_state_zip.append(client['zip'])
+    if client_city_state_zip:
+        client_address_lines.append(', '.join(client_city_state_zip))
+    
+    client_address_text = '\\A '.join(client_address_lines) if client_address_lines else ''
+    # client_address_text = client_address_text.replace('\\A ', '\\00000A ')
+
+    # 동적 헤더 및 푸터 CSS 생성
+    header_footer_css = CSS(string=f"""
+        /* 첫 페이지 설정 */
+        @page :first {{
+            margin: 0.3in 0.4in 0.7in 0.4in;
+            
             @bottom-left {{
                 content: "Generated on {today_str}";
                 font-size: 10px;
                 color: #999;
             }}
+            
             @bottom-right {{
-                content: "Page " counter(page);
+                content: "Page " counter(page) " of " counter(pages);
                 font-size: 10px;
                 color: #999;
             }}
         }}
+        
+        /* 나머지 페이지 설정 */
+        @page {{
+            margin: 1.4in 0.4in 0.7in 0.4in;
+            
+            @top-left {{
+                content: "{company_info_text}";
+                font-size: 11px;
+                color: #333;
+                line-height: 1.3;
+                white-space: pre;
+                vertical-align: top;
+                padding: 30px 0 6px 0;
+                margin-bottom: 18px;
+                width: 100%;
+                border-bottom: 1px solid #ddd;
+            }}
+            
+            @top-right {{
+                content: "{client_address_text}";
+                font-size: 11px;
+                color: #333;
+                line-height: 1.3;
+                white-space: pre;
+                text-align: right;
+                vertical-align: top;
+                padding: 30px 0 6px 0;
+                margin-bottom: 18px;
+                width: 100%;
+                border-bottom: 1px solid #ddd;
+            }}
+            
+            @bottom-left {{
+                content: "Generated on {today_str}";
+                font-size: 10px;
+                color: #999;
+            }}
+            
+            @bottom-right {{
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 10px;
+                color: #999;
+            }}
+        }}
+        
+        /* 첫 페이지 헤더 영역만 헤더 숨기기 */
+        @page :first {{
+            @top-left {{ content: none; }}
+            @top-right {{ content: none; }}
+        }}
+        
+        /* 콘텐츠가 페이지를 넘어갈 때 적절한 여백 확보 */
+        .line-header {{
+            margin-top: 20px;
+            page-break-before: auto;
+        }}
+        
+        /* 섹션 제목이 페이지 상단에 올 때 여백 추가 */
+        .section-title {{
+            margin-top: 15px;
+            page-break-after: avoid;
+        }}
+        
+        /* 행이 페이지를 넘어가지 않도록 */
+        .line-row {{
+            page-break-inside: avoid;
+        }}
+        
+        /* 총계 부분이 페이지를 넘어가지 않도록 */
+        .footer-total {{
+            page-break-inside: avoid;
+            margin-top: 30px;
+        }}
+        
+        /* 주요 요소들이 혼자 페이지에 남지 않도록 */
+        .address-section {{
+            page-break-after: avoid;
+        }}
+        
+        .header-top {{
+            page-break-after: avoid;
+        }}
+        
+        /* 본문 전체 여백 최적화 */
+        body {{
+            margin: 0;
+            padding: 0;
+        }}
     """)
 
-    HTML(string=html_content).write_pdf(output_path, stylesheets=[base_css, footer_css])
+    HTML(string=html_content).write_pdf(output_path, stylesheets=[base_css, header_footer_css])
 
 def generate_estimate_pdf(context: dict, output_path: str):
     generate_pdf(context, output_path, doc_type="estimate")
