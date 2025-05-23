@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: update-requirements-pipreqs
+        name: Update requirements.txt with pipreqs
+        entry: bash -c 'pip install pipreqs && pipreqs . --force'
+        language: system
+        always_run: true
+        pass_filenames: false
+      - id: add-requirements
+        name: Add requirements.txt to commit
+        entry: git add requirements.txt
+        language: system
+        always_run: true
+        pass_filenames: false
