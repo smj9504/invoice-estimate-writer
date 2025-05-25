@@ -12,3 +12,8 @@ streamlit run app.py
 ```
 python utils/convert_env_to_secrets.py
 ```
+
+### requirements.txt 
+```
+pip freeze > requirements.txt
+```

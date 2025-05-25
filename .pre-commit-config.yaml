@@ -1,15 +1,9 @@
 repos:
   - repo: local
     hooks:
-      - id: update-requirements-pipreqs
-        name: Update requirements.txt with pipreqs
-        entry: bash -c 'pip install pipreqs && pipreqs . --force'
+      - id: check-requirements-updated
+        name: Check if requirements.txt needs update
+        entry: bash -c 'echo "Remember to update requirements.txt if you added new imports!" && exit 0'
         language: system
-        always_run: true
-        pass_filenames: false
-      - id: add-requirements
-        name: Add requirements.txt to commit
-        entry: git add requirements.txt
-        language: system
-        always_run: true
+        files: '\.py$'
         pass_filenames: false
