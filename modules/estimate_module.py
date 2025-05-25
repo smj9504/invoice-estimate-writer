@@ -102,6 +102,10 @@ def get_estimate_by_id(estimate_uid: str) -> dict | None:
         return None
 
 
+# ======================
+# 견적 항목 관리
+# ======================
+
 # 1. 모든 견적 항목 불러오기
 def get_all_items():
     supabase = get_connection()
@@ -131,6 +135,9 @@ def update_item(item_id: str, data: dict):
 # 5. 아이템 삭제
 def delete_item(item_id: str):
     supabase = get_connection()
+    # 먼저 관련된 descriptions 삭제
+    with_retries(lambda: supabase.table("est_item_descriptions").delete().eq("item_id", item_id).execute())
+    # 그 다음 item 삭제
     return with_retries(lambda: supabase.table("est_items").delete().eq("id", item_id).execute())
 
 def get_item_by_code(code: str):
@@ -150,13 +157,13 @@ def get_item_by_code(code: str):
 # 설명 관련 기능
 # ======================
 
-# 6. 설명 목록 불러오기
-def get_descriptions_by_item_name(item_name: str):
+# 6. 설명 목록 불러오기 (item_id 기준)
+def get_descriptions_by_item_id(item_id: str):
     try:
         supabase = get_connection()
-        result = with_retries(lambda: supabase.table("est_item_desc")
+        result = with_retries(lambda: supabase.table("est_item_descriptions")
             .select("*")
-            .eq("item_name", item_name)
+            .eq("item_id", item_id)
             .order("sort_order")
             .execute())
         
@@ -166,15 +173,90 @@ def get_descriptions_by_item_name(item_name: str):
         return getattr(result, 'data', []) or []
         
     except Exception as e:
+        print(f"Error in get_descriptions_by_item_id: {e}")
+        return []
+
+# 7. 설명 목록 불러오기 (item_name 기준) - 하위 호환성을 위해 유지
+def get_descriptions_by_item_name(item_name: str):
+    try:
+        supabase = get_connection()
+        # item_name으로 item_id를 먼저 찾아야 함
+        item_result = with_retries(lambda: supabase.table("est_items")
+            .select("id")
+            .eq("name", item_name)
+            .execute())
+        
+        if not item_result or not item_result.data:
+            return []
+        
+        item_id = item_result.data[0]["id"]
+        return get_descriptions_by_item_id(item_id)
+        
+    except Exception as e:
         print(f"Error in get_descriptions_by_item_name: {e}")
         return []
 
-# 7. 설명 저장
+# 8. 설명 저장
 def insert_description(data: dict):
     supabase = get_connection()
-    return with_retries(lambda: supabase.table("est_item_desc").insert(data).execute())
+    return with_retries(lambda: supabase.table("est_item_descriptions").insert(data).execute())
 
-# 8. 설명 삭제
+# 9. 설명 수정
+def update_description(desc_id: str, data: dict):
+    supabase = get_connection()
+    data["updated_at"] = datetime.now().isoformat()
+    return with_retries(lambda: supabase.table("est_item_descriptions").update(data).eq("id", desc_id).execute())
+
+# 10. 설명 삭제
 def delete_description(desc_id: str):
     supabase = get_connection()
-    return with_retries(lambda: supabase.table("est_item_desc").delete().eq("id", desc_id).execute())
+    return with_retries(lambda: supabase.table("est_item_descriptions").delete().eq("id", desc_id).execute())
+
+# 11. 여러 설명 한번에 저장
+def insert_multiple_descriptions(item_id: str, descriptions: list):
+    """
+    여러 설명을 한번에 저장
+    descriptions: [{"description": str, "tag": str, "sort_order": int}, ...]
+    """
+    try:
+        supabase = get_connection()
+        now = datetime.now().isoformat()
+        
+        desc_data = []
+        for desc in descriptions:
+            desc_data.append({
+                "item_id": item_id,
+                "description": desc.get("description", ""),
+                "tag": desc.get("tag", ""),
+                "sort_order": desc.get("sort_order", 1),
+                "created_at": now,
+                "updated_at": now
+            })
+        
+        if desc_data:
+            return with_retries(lambda: supabase.table("est_item_descriptions").insert(desc_data).execute())
+        return None
+        
+    except Exception as e:
+        print(f"Error in insert_multiple_descriptions: {e}")
+        return None
+
+# 12. 항목의 모든 설명 삭제 후 새로 저장
+def replace_item_descriptions(item_id: str, descriptions: list):
+    """
+    기존 설명들을 모두 삭제하고 새 설명들로 교체
+    """
+    try:
+        supabase = get_connection()
+        
+        # 기존 설명들 삭제
+        with_retries(lambda: supabase.table("est_item_descriptions").delete().eq("item_id", item_id).execute())
+        
+        # 새 설명들 저장
+        if descriptions:
+            return insert_multiple_descriptions(item_id, descriptions)
+        return None
+        
+    except Exception as e:
+        print(f"Error in replace_item_descriptions: {e}")
+        return None

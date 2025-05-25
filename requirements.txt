@@ -2,5 +2,5 @@ Jinja2==3.1.2
 pandas==2.0.3
 python-dotenv==1.1.0
 streamlit==1.44.1
-supabase==2.15.1
+supabase==2.15.2
 weasyprint==65.1
