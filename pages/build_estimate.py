@@ -34,6 +34,24 @@ if "delete_section_trigger" in st.session_state:
         st.session_state.sections.pop(section_idx)
     del st.session_state.delete_section_trigger
 
+# 섹션 순서 변경 트리거 (위로 이동)
+if "move_section_up_trigger" in st.session_state:
+    section_idx = st.session_state.move_section_up_trigger
+    if 1 <= section_idx < len(st.session_state.sections):
+        # 현재 섹션과 위 섹션 위치 바꾸기
+        sections = st.session_state.sections
+        sections[section_idx], sections[section_idx-1] = sections[section_idx-1], sections[section_idx]
+    del st.session_state.move_section_up_trigger
+
+# 섹션 순서 변경 트리거 (아래로 이동)
+if "move_section_down_trigger" in st.session_state:
+    section_idx = st.session_state.move_section_down_trigger
+    if 0 <= section_idx < len(st.session_state.sections) - 1:
+        # 현재 섹션과 아래 섹션 위치 바꾸기
+        sections = st.session_state.sections
+        sections[section_idx], sections[section_idx+1] = sections[section_idx+1], sections[section_idx]
+    del st.session_state.move_section_down_trigger
+
 # 섹션 이름 업데이트 트리거
 if "update_section_title_trigger" in st.session_state:
     section_idx, new_title = st.session_state.update_section_title_trigger
@@ -247,7 +265,7 @@ with st.expander("💡 사용법 안내"):
     **섹션 및 항목 관리:**
     - 각 섹션은 카테고리별로 항목을 그룹화합니다
     - 섹션 이름은 언제든지 편집할 수 있습니다
-    - 항목 추가 후 ⬆️⬇️ 버튼으로 순서를 변경할 수 있습니다
+    - 섹션과 항목 모두 ⬆️⬇️ 버튼으로 순서를 변경할 수 있습니다
     - 각 항목의 설명은 확장 메뉴에서 저장된 설명을 선택하거나 직접 입력할 수 있습니다
     - 카테고리/서브카테고리를 "모든 카테고리"/"모든 서브카테고리"로 설정하면 전체 목록을 볼 수 있습니다
     - O&P(Overhead & Profit)는 모든 섹션의 합계에 적용됩니다
@@ -288,10 +306,16 @@ def update_item_description(section_idx, item_idx):
     # 최종 설명 텍스트 생성
     item["dec"] = "\n".join(all_descriptions)
 
+def has_description(item):
+    """항목에 설명이 있는지 확인하는 함수"""
+    return (item.get("dec", "").strip() or 
+            item.get("available_descriptions", []) or 
+            item.get("manual_description", "").strip())
+
 # 섹션 표시
 for i, section in enumerate(st.session_state.sections):
     st.markdown("---")
-    cols = st.columns([4, 2, 1])
+    cols = st.columns([3, 1, 1, 0.5, 0.5, 1])
     with cols[0]:
         # 섹션 이름 편집 가능하게 변경
         new_section_title = st.text_input(
@@ -311,7 +335,25 @@ for i, section in enumerate(st.session_state.sections):
         st.markdown(f"**{len(section['items'])}개 항목**")
     with cols[2]:
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
-        if st.button("🗑️ 섹션 삭제", key=f"delete-section-{i}"):
+        # 섹션 위로 이동 버튼 (첫 번째 섹션이 아닐 때만 활성화)
+        if i > 0:
+            if st.button("⬆️", key=f"section-up-{i}", help="섹션 위로 이동"):
+                st.session_state.move_section_up_trigger = i
+                st.rerun()
+        else:
+            st.button("⬆️", key=f"section-up-{i}", disabled=True, help="첫 번째 섹션입니다")
+    with cols[3]:
+        st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+        # 섹션 아래로 이동 버튼 (마지막 섹션이 아닐 때만 활성화)
+        if i < len(st.session_state.sections) - 1:
+            if st.button("⬇️", key=f"section-down-{i}", help="섹션 아래로 이동"):
+                st.session_state.move_section_down_trigger = i
+                st.rerun()
+        else:
+            st.button("⬇️", key=f"section-down-{i}", disabled=True, help="마지막 섹션입니다")
+    with cols[4]:
+        st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+        if st.button("🗑️", key=f"delete-section-{i}", help="섹션 삭제"):
             st.session_state.delete_section_trigger = i
             st.rerun()
 
@@ -367,8 +409,11 @@ for i, section in enumerate(st.session_state.sections):
                     st.session_state.delete_item_trigger = (i, j)
                     st.rerun()
 
-            # 설명 관리 섹션
-            with st.expander("📝 설명 관리", expanded=bool(item.get("dec") or item.get("available_descriptions"))):
+            # 설명 관리 섹션 - 항상 닫혀있지만 설명 유무 표시
+            description_status = has_description(item)
+            description_indicator = " 📝" if description_status else ""
+            
+            with st.expander(f"📝 설명 관리{description_indicator}", expanded=False):
                 # 저장된 설명들이 있는 경우
                 if item.get("available_descriptions"):
                     st.markdown("**💾 저장된 설명 선택:**")
