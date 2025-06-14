@@ -99,7 +99,7 @@ if invoice_id and uuid_pattern.match(invoice_id):
 
             st.session_state.invoice_number = data.get("invoice_number", "")
             st.session_state.date_of_issue = data.get("date_of_issue", datetime.date.today())
-            st.session_state.date_due = data.get("date_due", datetime.date.today())
+            st.session_state.date_due = data.get("date_due", datetime.date.today() + datetime.timedelta(days=7))
 
             client = data.get("client", {})
             st.session_state.client_name = client.get("name", "")
@@ -109,6 +109,7 @@ if invoice_id and uuid_pattern.match(invoice_id):
             st.session_state.client_city = client.get("city", "")
             st.session_state.client_state = client.get("state", "")
             st.session_state.client_zip = client.get("zip", "")
+            st.session_state.client_type = data.get("client_type", "individual")  # 기본값을 개인으로 설정
 
             st.session_state.top_note = data.get("top_note", "")
             st.session_state.bottom_note = data.get("bottom_note", "")
@@ -129,7 +130,7 @@ else:
     if "new_invoice_initialized" not in st.session_state:
         st.session_state.invoice_number = "INV-001"
         st.session_state.date_of_issue = datetime.date.today()
-        st.session_state.date_due = datetime.date.today()
+        st.session_state.date_due = datetime.date.today() + datetime.timedelta(days=7)
         st.session_state.client_name = ""
         st.session_state.client_phone = ""
         st.session_state.client_email = ""
@@ -137,6 +138,7 @@ else:
         st.session_state.client_city = ""
         st.session_state.client_state = ""
         st.session_state.client_zip = ""
+        st.session_state.client_type = "individual"  # 기본값을 개인으로 설정
         st.session_state.top_note = ""
         st.session_state.bottom_note = ""
         st.session_state.disclaimer = ""
@@ -162,11 +164,76 @@ selected_company = next((c for c in companies if c["name"] == company_name), Non
 # 인보이스 정보 
 invoice_number = st.text_input("Invoice 번호", value=st.session_state.get("invoice_number", "INV-001"))
 date_of_issue = st.date_input("날짜 (Date of Issue)", value=st.session_state.get("date_of_issue", datetime.date.today()))
-date_due = st.date_input("납기일 (Date Due)", value=st.session_state.get("date_due", datetime.date.today()))
+date_due = st.date_input("납기일 (Date Due)", value=st.session_state.get("date_due", datetime.date.today() + datetime.timedelta(days=7)))
 
 # 고객 정보
 st.subheader("👤 고객 정보")
-client_name = st.text_input("고객명", value=st.session_state.get("client_name", ""))
+
+# 현재 세션에서 클라이언트 타입 가져오기 (기본값: individual)
+current_client_type = st.session_state.get("client_type", "individual")
+
+# 고객 유형 선택
+client_type = st.radio(
+    "고객 유형을 선택하세요:", 
+    options=["individual", "company"],
+    format_func=lambda x: "🧑 개인 고객" if x == "individual" else "🏢 회사 고객",
+    horizontal=True,
+    index=0 if current_client_type == "individual" else 1,
+    key="client_type_radio"
+)
+
+# 선택된 고객 유형을 세션 상태에 저장
+st.session_state.client_type = client_type
+
+# 고객 정보 입력 필드들을 위한 변수 초기화
+client_name = ""
+client_phone = ""
+client_email = ""
+client_street = ""
+client_city = ""
+client_state = ""
+client_zip = ""
+
+if client_type == "company":
+    # 회사 고객인 경우 - 회사 선택 드롭다운 추가
+    cols = st.columns([3, 1])
+    with cols[0]:
+        # "직접 입력" 옵션을 포함한 회사 목록 생성
+        company_options = ["직접 입력"] + company_names
+        
+        # 현재 선택된 고객 회사 찾기
+        current_client_company = st.session_state.get("selected_client_company", "직접 입력")
+        try:
+            client_company_index = company_options.index(current_client_company)
+        except ValueError:
+            client_company_index = 0
+            
+        selected_client_company = st.selectbox(
+            "🏢 고객 회사 선택",
+            company_options,
+            index=client_company_index,
+            key="client_company_select"
+        )
+    
+    with cols[1]:
+        st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+        if st.button("🔄 회사 정보 적용", key="apply_company_info"):
+            if selected_client_company != "직접 입력":
+                selected_client_company_info = next((c for c in companies if c["name"] == selected_client_company), None)
+                if selected_client_company_info:
+                    # 세션 상태에 회사 정보 저장
+                    st.session_state.client_name = selected_client_company_info.get("name", "")
+                    st.session_state.client_phone = selected_client_company_info.get("phone", "")
+                    st.session_state.client_email = selected_client_company_info.get("email", "")
+                    st.session_state.client_street = selected_client_company_info.get("address", "")
+                    st.session_state.client_city = selected_client_company_info.get("city", "")
+                    st.session_state.client_state = selected_client_company_info.get("state", "")
+                    st.session_state.client_zip = selected_client_company_info.get("zip", "")
+                    st.session_state.selected_client_company = selected_client_company
+                    st.rerun()
+
+# 고객 정보 입력 필드들
+client_name = st.text_input("고객명/회사명", value=st.session_state.get("client_name", ""))
 client_phone = st.text_input("전화번호", value=st.session_state.get("client_phone", ""))
 client_email = st.text_input("이메일", value=st.session_state.get("client_email", ""))
 client_street = st.text_input("Street Address", value=st.session_state.get("client_street", ""))
@@ -289,7 +356,8 @@ if st.session_state.payments:
     for i, payment in enumerate(st.session_state.payments):
         cols = st.columns([6, 1])
         with cols[0]:
-            st.markdown(f"- {payment['date']} — ${payment['amount']:,.2f}")
+            payment_amount = float(payment['amount']) if payment['amount'] else 0.0
+            st.markdown(f"- {payment['date']} — ${payment_amount:,.2f}")
         with cols[1]:
             if st.button("🗑️ 삭제", key=f"delete-payment-{i}"):
                 st.session_state.delete_payment_trigger = i
@@ -297,7 +365,7 @@ if st.session_state.payments:
 
 # 총계 계산
 subtotal_total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
-paid_total = round(sum(p["amount"] for p in st.session_state.payments), 2)
+paid_total = round(sum(float(p["amount"]) if p["amount"] else 0.0 for p in st.session_state.payments), 2)
 total = round(subtotal_total - paid_total, 2)
 
 st.markdown(f"<p style='text-align:right;'>Total Paid Amount: ${paid_total:,.2f}</p>", unsafe_allow_html=True)
@@ -321,6 +389,7 @@ if st.button("👁️ 미리보기로 이동"):
     st.session_state.client_city = client_city
     st.session_state.client_state = client_state
     st.session_state.client_zip = client_zip
+    st.session_state.client_type = client_type  # 고객 유형 저장
     st.session_state.top_note_preview = top_note
     st.session_state.bottom_note_preview = bottom_note
     st.session_state.disclaimer_preview = disclaimer

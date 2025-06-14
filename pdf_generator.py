@@ -51,25 +51,25 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
     company = context.get('company', {})
     company_info_lines = []
     if company.get('name'):
-        company_info_lines.append(company['name'])
+        company_info_lines.append(str(company['name']))
     if company.get('address'):
-        company_info_lines.append(company['address'])
+        company_info_lines.append(str(company['address']))
     
-    # 도시, 주, 우편번호를 한 줄로 결합
+    # 도시, 주, 우편번호를 한 줄로 결합 (모든 값을 문자열로 변환)
     city_state_zip = []
     if company.get('city'):
-        city_state_zip.append(company['city'])
+        city_state_zip.append(str(company['city']))
     if company.get('state'):
-        city_state_zip.append(company['state'])
+        city_state_zip.append(str(company['state']))
     if company.get('zip'):
-        city_state_zip.append(company['zip'])
+        city_state_zip.append(str(company['zip']))
     if city_state_zip:
         company_info_lines.append(', '.join(city_state_zip))
     
     if company.get('phone'):
-        company_info_lines.append(company['phone'])
+        company_info_lines.append(str(company['phone']))
     if company.get('email'):
-        company_info_lines.append(company['email'])
+        company_info_lines.append(str(company['email']))
     
     # CSS에서 줄바꿈을 위해 \\A 대신 개행 문자 사용
     company_info_text = '\\A '.join(company_info_lines)
@@ -78,16 +78,16 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
     client = context.get('client', {})
     client_address_lines = []
     if client.get('address'):
-        client_address_lines.append(client['address'])
+        client_address_lines.append(str(client['address']))
     
-    # 고객 도시, 주, 우편번호를 한 줄로 결합
+    # 고객 도시, 주, 우편번호를 한 줄로 결합 (모든 값을 문자열로 변환)
     client_city_state_zip = []
     if client.get('city'):
-        client_city_state_zip.append(client['city'])
+        client_city_state_zip.append(str(client['city']))
     if client.get('state'):
-        client_city_state_zip.append(client['state'])
+        client_city_state_zip.append(str(client['state']))
     if client.get('zip'):
-        client_city_state_zip.append(client['zip'])
+        client_city_state_zip.append(str(client['zip']))
     if client_city_state_zip:
         client_address_lines.append(', '.join(client_city_state_zip))
     

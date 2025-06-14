@@ -6,76 +6,91 @@ from pathlib import Path
 def excel_to_estimate_json(excel_path: str, output_dir: str = ".", filename_by_address: bool = True) -> str:
     df_info = pd.read_excel(excel_path, sheet_name="Estimate_Info", engine="openpyxl")
     df_items = pd.read_excel(excel_path, sheet_name="Service_Items", engine="openpyxl")
-
+    
     info = pd.Series(df_info.Value.values, index=df_info.Field).to_dict()
-
+    
     company_fields = ["name", "address", "city", "state", "zip", "phone", "email", "logo"]
-    client_fields = ["name", "address", "city", "state", "zip", "phone"]
-
-    company = {field: info.get(f"company.{field}", "") for field in company_fields}
-    client = {field: info.get(f"client.{field}", "") for field in client_fields}
-
+    client_fields = ["name", "address", "city", "state", "zip", "phone", "email"]
+    
+    def safe_string(val):
+        """안전한 문자열 변환 함수"""
+        if pd.isna(val) or val is None:
+            return ""
+        return str(val).strip()
+    
     def safe_float(val):
         try:
+            if pd.isna(val):
+                return 0.0
             return float(val)
         except (ValueError, TypeError):
             return 0.0
-
+    
+    # 회사 정보와 고객 정보에 safe_string 적용
+    company = {field: safe_string(info.get(f"company.{field}", "")) for field in company_fields}
+    client = {field: safe_string(info.get(f"client.{field}", "")) for field in client_fields}
+    
     estimate_data = {
-        "estimate_number": info.get("estimate_number", ""),
-        "estimate_date": str(info.get("estimate_date", "")),
+        "estimate_number": safe_string(info.get("estimate_number", "")),
+        "estimate_date": safe_string(info.get("estimate_date", "")),
         "company": company,
         "client": client,
-        "top_note": info.get("top_note", ""),
-        "bottom_note": info.get("bottom_note", ""),
-        "disclaimer": info.get("disclaimer", ""),
+        "top_note": safe_string(info.get("top_note", "")),
+        "bottom_note": safe_string(info.get("bottom_note", "")),
+        "disclaimer": safe_string(info.get("disclaimer", "")),
         "op_percent": safe_float(info.get("op_percent", 0)),
         "discount": safe_float(info.get("discount", 0))
     }
-
+    
     sections = []
     for section_title in df_items["section_title"].dropna().unique():
         section_df = df_items[df_items["section_title"] == section_title]
         show_subtotal = bool(section_df["show_subtotal"].iloc[0]) if "show_subtotal" in section_df else True
-
+        
         items = []
         for _, row in section_df.iterrows():
             qty = safe_float(row.get("qty", 0))
             price = safe_float(row.get("price", 0))
             items.append({
-                "name": row.get("item_name", ""),
+                "name": safe_string(row.get("item_name", "")),
                 "qty": qty,
-                "unit": row.get("unit", ""),
+                "unit": safe_string(row.get("unit", "")),
                 "price": price,
-                "dec": row.get("description", "")
+                "dec": safe_string(row.get("description", ""))
             })
-
+        
         subtotal = round(sum(item["qty"] * item["price"] for item in items), 2)
         sections.append({
-            "title": section_title,
+            "title": safe_string(section_title),
             "showSubtotal": show_subtotal,
             "items": items,
             "subtotal": subtotal
         })
-
+    
     estimate_data["serviceSections"] = sections
-
+    
     valid_subtotals = [s["subtotal"] for s in sections if isinstance(s["subtotal"], (int, float)) and not math.isnan(s["subtotal"])]
     subtotal_sum = round(sum(valid_subtotals), 2)
     op_amount = round(subtotal_sum * (estimate_data["op_percent"] / 100), 2)
     total = round(subtotal_sum + op_amount - estimate_data["discount"], 2)
-
+    
     estimate_data["subtotal"] = subtotal_sum
     estimate_data["op_amount"] = op_amount
     estimate_data["total"] = total
-
-    address_part = client.get("address", "estimate").strip().replace(" ", "_")
+    
+    # 주소를 안전하게 처리
+    address_value = client.get("address", "estimate")
+    if address_value and address_value != "":
+        address_part = address_value.replace(" ", "_")
+    else:
+        address_part = "estimate"
+    
     filename = f"{address_part}.json" if filename_by_address else "estimate.json"
     output_path = Path(output_dir) / filename
-
+    
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(estimate_data, f, indent=2, ensure_ascii=False)
-
+    
     return str(output_path)
 
 # 예시 실행
