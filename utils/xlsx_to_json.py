@@ -41,6 +41,8 @@ def excel_to_estimate_json(excel_path: str, output_dir: str = ".", filename_by_a
         "op_percent": safe_float(info.get("op_percent", 0)),
         "discount": safe_float(info.get("discount", 0))
     }
+
+    tax_rate = safe_float(info.get("tax_rate", 0))
     
     sections = []
     for section_title in df_items["section_title"].dropna().unique():
@@ -72,10 +74,17 @@ def excel_to_estimate_json(excel_path: str, output_dir: str = ".", filename_by_a
     valid_subtotals = [s["subtotal"] for s in sections if isinstance(s["subtotal"], (int, float)) and not math.isnan(s["subtotal"])]
     subtotal_sum = round(sum(valid_subtotals), 2)
     op_amount = round(subtotal_sum * (estimate_data["op_percent"] / 100), 2)
-    total = round(subtotal_sum + op_amount - estimate_data["discount"], 2)
+
+    taxable_amount = subtotal_sum + op_amount - estimate_data["discount"]
+    sales_tax = round(taxable_amount * (tax_rate / 100), 2) if tax_rate > 0 else 0
+
+    total = round(taxable_amount + sales_tax, 2)
     
+    estimate_data["serviceSections"] = sections
     estimate_data["subtotal"] = subtotal_sum
     estimate_data["op_amount"] = op_amount
+    estimate_data["sales_tax"] = sales_tax
+    estimate_data["tax_rate"] = tax_rate
     estimate_data["total"] = total
     
     # 주소를 안전하게 처리

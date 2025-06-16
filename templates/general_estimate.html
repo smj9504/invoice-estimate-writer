@@ -87,8 +87,11 @@
   {% if op_percent and op_percent > 0 %}
     <p>O&amp;P ({{ op_percent|round|int }}%): ${{ "{:,.2f}".format(op_amount) }}</p>
   {% endif %}
-  {% if discount %}
+  {% if discount and discount > 0 %}
     <p>Discount: -${{ "{:,.2f}".format(discount) }}</p>
+  {% endif %}
+  {% if sales_tax and sales_tax > 0 %}
+    <p>{{ client.state|default("") }} Sales Tax ({{ tax_rate|default("0") }}%): ${{ "{:,.2f}".format(sales_tax) }}</p>
   {% endif %}
   <p class="total">Estimate Total: ${{ "{:,.2f}".format(total) }}</p>
 </div>
