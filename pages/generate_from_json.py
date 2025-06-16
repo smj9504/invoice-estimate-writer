@@ -101,7 +101,7 @@ if json_file:
             st.stop()
         
         # PDF 생성 전에 수치 필드 강제 변환
-        numeric_fields = ["subtotal", "op_amount", "total", "discount", "op_percent"]
+        numeric_fields = ["subtotal", "op_amount", "total", "discount", "op_percent", "sales_tax"]
         for key in numeric_fields:
             try:
                 value = estimate_data.get(key, 0)
