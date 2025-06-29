@@ -1,0 +1,224 @@
+body {
+  font-family: 'Arial', sans-serif;
+  font-size: 12px;
+  color: #000;
+  margin: 10px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.company-logo {
+  text-align: right;
+}
+
+.logo {
+  max-height: 60px;
+  max-width: 150px;
+}
+
+.invoice-meta {
+  line-height: 1.3;
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+.invoice-meta p {
+  margin: 2px 0;
+}
+
+.address-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.address-section p {
+  margin: 2px 0;
+}
+
+.company-info, .client-info {
+  width: 45%;
+}
+
+/* Insurance Information Section */
+.insurance-section {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.insurance-info p {
+  margin: 2px 0;
+  font-size: 11px;
+}
+
+.insurance-info p:first-child {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.amount-due {
+  margin-top: 30px;
+  font-weight: bold;
+}
+
+/* Updated line header for simplified construction layout */
+.line-header {
+  font-weight: bold;
+  border-bottom: 1px solid #000;
+  margin-top: 30px;
+  padding-bottom: 6px;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.line-row {
+  display: flex;
+  padding: 4px 0;
+  align-items: flex-start;
+  font-weight: normal;  /* 아이템들은 bold 제거 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Updated column widths for construction invoice */
+.col-item { 
+  width: 65%; 
+  padding-right: 20px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+.col-total { 
+  width: 35%; 
+  text-align: right;
+  padding-right: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+  overflow: hidden;  /* 넘치는 텍스트 숨기기 */
+  word-wrap: break-word;
+}
+
+/* Section header with title and amount */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  padding-right: 20px;
+}
+
+.section-amount {
+  font-weight: bold;
+  font-size: 13px;
+  color: #333;
+  white-space: nowrap;
+  text-align: right;
+  width: 35%;  /* Amount 컬럼과 동일한 너비 */
+  box-sizing: border-box;
+}
+
+/* Item description styling */
+.item-description {
+  margin-top: 5px;
+  margin-left: 15px;
+}
+
+.desc-line {
+  font-style: italic;
+  font-size: 11px;
+  color: #555;
+  margin: 2px 0;
+  line-height: 1.3;
+}
+
+/* 아이템 이름 스타일링 - bold 제거 */
+.line-row .col-item {
+  font-weight: normal;
+}
+
+.line-row .col-item strong {
+  font-weight: normal;  /* strong 태그도 normal로 설정 */
+}
+
+.subtotal {
+  text-align: right;
+  font-weight: bold;
+  padding-top: 7px;
+  border-top: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.footer-total {
+  text-align: right;
+  font-size: 14px;
+  margin-top: 30px;
+}
+
+.payments {
+  margin-top: 10px;
+}
+
+.payments ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.payments li {
+  margin: 3px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.note, .disclaimer {
+  font-size: 11px;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media print {
+  body {
+    margin: 0;
+  }
+  
+  .insurance-section {
+    background-color: transparent;
+  }
+}
+
+/* Additional styling for better readability */
+.line-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.line-row:hover {
+  background-color: #f0f0f0;
+}

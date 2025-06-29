@@ -60,20 +60,26 @@
 {% for section in serviceSections %}
   <div class="section-title">{{ section.title }}</div>
 
+  {% set item_counter = namespace(value=0) %}
   {% for item in section["items"] %}
     {% if item.name and item.qty and item.unit and item.price %}
-    <div class="line-row">
-      <div class="col-item">{{ loop.index }}. {{ item.name }}</div>
-      <div class="col-qty">{{ "{:,.2f}".format(item.qty | float) }}</div>
-      <div class="col-unit">{{ item.unit }}</div>
-      <div class="col-price">${{ "{:,.2f}".format(item.price | float) }}</div>
-      <div class="col-total">${{ "{:,.2f}".format(item.qty * item.price | float) }}</div>
-    </div>
-    {% if item.dec %}
-    <div>
-      <p class="col-desc">{{ item.dec.replace('\n', '<br>') | safe }}</p>
-    </div>
-    {% endif %}
+      {% set item_counter.value = item_counter.value + 1 %}
+      <div class="line-row">
+        <div class="col-item">{{ item_counter.value }}. {{ item.name }}</div>
+        <div class="col-qty">{{ "{:,.2f}".format(item.qty | float) }}</div>
+        <div class="col-unit">{{ item.unit }}</div>
+        <div class="col-price">${{ "{:,.2f}".format(item.price | float) }}</div>
+        <div class="col-total">${{ "{:,.2f}".format(item.qty * item.price | float) }}</div>
+      </div>
+      {% if item.dec %}
+      <div>
+        <p class="col-desc">{{ item.dec.replace('\n', '<br>') | safe }}</p>
+      </div>
+      {% endif %}
+    {% elif item.dec %}
+      <div>
+        <p class="col-desc">{{ item.dec.replace('\n', '<br>') | safe }}</p>
+      </div>
     {% endif %}
   {% endfor %}   
 

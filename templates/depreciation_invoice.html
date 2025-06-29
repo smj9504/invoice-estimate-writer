@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header-top">
+  <div class="invoice-meta">
+    <h1>Invoice</h1>
+    <p><strong>Invoice number</strong> {{ invoice_number }}</p>
+    <p>Date of issue: {{ date_of_issue }}</p>
+  </div>
+  <div class="company-logo">
+    <!-- Optional logo image -->
+    {% if company.logo %}
+    <img src="{{ company.logo }}" alt="" class="logo">
+    {% endif %}
+  </div>
+</div>
+
+<div class="address-section">
+  <div class="company-info">
+    <p><strong>{{ company.name }}</strong></p>
+    <p>{{ company.address }}</p>
+    <p>{{ company.city }}, {{ company.state }} {{ company.zip }}</p>
+    <p>{{ company.phone }}</p>
+    <p>{{ company.email }}</p>
+  </div>
+  <div class="client-info">
+    <p><strong>Bill to</strong></p>
+    <p>{{ client.name }}</p>
+    <p>{{ client.address }}</p>
+    <p>{{ client.city }}, {{ client.state }} {{ client.zip }}</p>
+    <p>{{ client.phone }}</p>
+  </div>
+</div>
+
+<!-- Insurance Information Section -->
+{% if insurance %}
+<div class="insurance-section">
+  <div class="insurance-info">
+    <p><strong>Insurance Information</strong></p>
+    <p>Insurance Company: {{ insurance.company }}</p>
+    <p>Policy Number: {{ insurance.policy_number }}</p>
+    <p>Claim Number: {{ insurance.claim_number }}</p>
+  </div>
+</div>
+{% endif %}
+
+<div class="amount-due">
+  {% if amount_due_text %}
+    <h3>{{ amount_due_text }}</h3>
+  {% else %}
+    <h3>${{ "{:,.2f}".format(total) }} USD due {{ date_due }}</h3>
+  {% endif %}
+  {% if top_note %}<p>{{ top_note.replace('\n', '<br>') | safe }}</p>{% endif %}
+</div>
+
+<!-- Simplified header for construction invoices -->
+<div class="line-header">
+  <div class="col-item">Work Description</div>
+  <div class="col-total">Amount</div>
+</div>
+
+{% for section in serviceSections %}
+  <div class="section-header">
+    <div class="section-title">{{ section.title }}</div>
+    {% if section.amount %}
+      <div class="section-amount">${{ "{:,.2f}".format(section.amount) }}</div>
+    {% endif %}
+  </div>
+  
+  {% for item in section["items"] %}
+    <div class="line-row">
+      <div class="col-item">
+        {{ item.name }}
+        {% if item.description %}
+          <div class="item-description">
+            {% for desc_line in item.description %}
+              <div class="desc-line">- {{ desc_line }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="col-total">
+        {% if item.amount %}
+          ${{ "{:,.2f}".format(item.amount) }}
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+  
+  {% if section.showSubtotal %}
+    <p class="subtotal">Subtotal: ${{ "{:,.2f}".format(section.subtotal) }}</p>
+  {% endif %}
+{% endfor %}
+
+<div class="footer-total">
+  {% if line_item_total %}
+    <p>Line Item Total: ${{ "{:,.2f}".format(line_item_total) }}</p>
+  {% endif %}
+  
+  {% if material_sales_tax %}
+    <p>Material Sales Tax: ${{ "{:,.2f}".format(material_sales_tax) }}</p>
+  {% endif %}
+  
+  <p>Total: ${{ "{:,.2f}".format(subtotal_total) }}</p>
+  
+  {% if payments and payments|length > 0 %}
+    <div class="payments">
+      <p><strong>Payments Received:</strong></p>
+      <ul style="list-style: none; padding-left: 0;">
+        {% for payment in payments %}
+        <li>
+          {% if payment.name %}
+            <span>{{ payment.name }}</span>
+          {% endif %}
+          {% if payment.date %}
+            <span style="color: #888888; font-style: italic;">({{ payment.date }})</span>
+          {% endif %}
+          <strong>-${{ "{:,.2f}".format(payment.amount) }}</strong>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  
+  <p><strong>Amount Due: ${{ "{:,.2f}".format(total) }}</strong></p>
+</div>
+
+{% if bottom_note %}
+  <p class="note">{{ bottom_note.replace('\n', '<br>') | safe }}</p>
+{% endif %}
+
+{% if disclaimer %}
+  <p class="disclaimer">{{ disclaimer.replace('\n', '<br>') | safe }}</p>
+{% endif %}
+
+</body>
+</html>
