@@ -14,7 +14,7 @@ from utils.intake_utils import (
     validate_room_data, export_to_json, import_from_json, generate_filename,
     generate_auto_justifications
 )
-from utils.ai_utils import init_openai_client, EnhancedAIImageAnalyzer
+from utils.ai_utils import init_openai_client, ImprovedAIImageAnalyzer
 
 # Page configuration
 st.set_page_config(
@@ -34,7 +34,7 @@ def initialize_session_state():
     if "ai_analyzer" not in st.session_state:
         openai_client = init_openai_client()
         if openai_client:
-            st.session_state.ai_analyzer = EnhancedAIImageAnalyzer(openai_client)
+            st.session_state.ai_analyzer = ImprovedAIImageAnalyzer(openai_client)
         else:
             st.session_state.ai_analyzer = None
 
@@ -828,14 +828,56 @@ def room_data_entry_page():
                             st.write(f"  • ... and {len(wall_segments) - 3} more walls")
                     
                     else:
-                        # Use openings summary
+                        # Use openings summary with enhanced display
+                        total_doors = openings_summary.get("total_doors", 0)
                         interior_doors = openings_summary.get("total_interior_doors", 0)
                         exterior_doors = openings_summary.get("total_exterior_doors", 0)
                         windows = openings_summary.get("total_windows", 0)
+                        open_areas = openings_summary.get("total_open_areas", 0)
                         
-                        st.write(f"• **Interior Doors**: {interior_doors}")
-                        st.write(f"• **Exterior Doors**: {exterior_doors}")
-                        st.write(f"• **Windows**: {windows}")
+                        # Display door information
+                        if total_doors > 0:
+                            st.write(f"• **Total Doors**: {total_doors}")
+                            if interior_doors > 0:
+                                st.write(f"  - Interior Doors: {interior_doors}")
+                            if exterior_doors > 0:
+                                st.write(f"  - Exterior Doors: {exterior_doors}")
+                        else:
+                            st.write(f"• **Doors**: None")
+                        
+                        # Display window information
+                        if windows > 0:
+                            st.write(f"• **Windows**: {windows}")
+                            window_area = openings_summary.get("window_area_total_sf", 0)
+                            if window_area > 0:
+                                st.write(f"  - Total Window Area: {window_area:.1f} SF")
+                        else:
+                            st.write(f"• **Windows**: None")
+                        
+                        # Display open areas information
+                        if open_areas > 0:
+                            st.write(f"• **Open Areas**: {open_areas}")
+                            open_width = openings_summary.get("open_area_width_total_ft", 0)
+                            if open_width > 0:
+                                st.write(f"  - Total Open Width: {open_width:.1f} ft")
+                        else:
+                            st.write(f"• **Open Areas**: None")
+                        
+                        # Display door dimensions if available
+                        door_width_total = openings_summary.get("door_width_total_ft", 0)
+                        if door_width_total > 0:
+                            st.write(f"• **Total Door Width**: {door_width_total:.1f} ft")
+                        
+                        # Show material impact summary
+                        if door_width_total > 0 or open_areas > 0:
+                            st.write("**📏 Material Impact:**")
+                            baseboard_deduction = door_width_total + openings_summary.get("open_area_width_total_ft", 0)
+                            if baseboard_deduction > 0:
+                                st.write(f"  - Baseboard Reduction: {baseboard_deduction:.1f} ft")
+                            
+                            open_width_only = openings_summary.get("open_area_width_total_ft", 0)
+                            if open_width_only > 0:
+                                st.write(f"  - Crown Molding Reduction: {open_width_only:.1f} ft")
                 
                 # Show detailed analysis in expandable sections
                 if "wall_segments" in results and results["wall_segments"]:
@@ -1213,6 +1255,7 @@ def room_data_entry_page():
     show_manual_measurements = (
         current_room["input_method"] in ["simple_rectangular", "standard_template"] or
         (current_room["input_method"] == "ai_image_analysis" and 
+         not current_room["ai_analysis"].get("extracted_results") and
          not current_room["ai_analysis"].get("user_confirmed"))
     )
     
@@ -1221,9 +1264,8 @@ def room_data_entry_page():
         
         # Show AI override info if AI was used but not confirmed
         if (current_room["input_method"] == "ai_image_analysis" and 
-            current_room["ai_analysis"].get("extracted_results") and
-            not current_room["ai_analysis"].get("user_confirmed")):
-            st.info("💡 AI analysis completed. Click 'Confirm and Apply' above to auto-populate these fields, or enter measurements manually to override.")
+            not current_room["ai_analysis"].get("extracted_results")):
+            st.info("💡 Upload an image above for AI analysis, or enter measurements manually.")
         
         col1, col2, col3 = st.columns(3)
         
@@ -1292,39 +1334,78 @@ def room_data_entry_page():
             st.warning("⚠️ **Incomplete measurements** - Enter both length and width to see calculated areas")
     
     # AI Confirmed measurements display - Show this for confirmed AI analysis
-    elif (current_room["input_method"] == "ai_image_analysis" and 
-          current_room["ai_analysis"].get("user_confirmed")):
+        elif (current_room["input_method"] == "ai_image_analysis" and current_room["ai_analysis"].get("user_confirmed")):
         
-        st.subheader("🤖 AI-Extracted Measurements (Applied)")
-        
-        # Display the confirmed measurements in read-only format
-        length = current_room["dimensions"].get("length", 0.0)
-        width = current_room["dimensions"].get("width", 0.0) 
-        height = current_room["dimensions"].get("height", 8.0)
-        floor_area = current_room["dimensions"].get("floor_area", 0.0)
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.metric("Length", f"{length:.1f} ft")
-        with col2:
-            st.metric("Width", f"{width:.1f} ft") 
-        with col3:
-            st.metric("Height", f"{height:.1f} ft")
-        
-        if floor_area > 0:
-            if length > 0 and width > 0:
-                perimeter = 2 * (length + width)
-                wall_area = perimeter * height
-                st.success(f"✅ **AI Measurements Applied:** Floor: {floor_area:.1f} SF | Perimeter: {perimeter:.1f} LF | Wall Area: {wall_area:.1f} SF")
+            st.subheader("🤖 AI-Extracted Measurements (Applied)")
+            
+            # Get AI analysis results to check room shape
+            ai_results = current_room["ai_analysis"].get("extracted_results", {})
+            room_shape = ai_results.get("room_identification", {}).get("room_shape", "rectangular")
+            
+            # Display the confirmed measurements based on room shape
+            length = current_room["dimensions"].get("length", 0.0)
+            width = current_room["dimensions"].get("width", 0.0) 
+            height = current_room["dimensions"].get("height", 8.0)
+            floor_area = current_room["dimensions"].get("floor_area", 0.0)
+            
+            # Only show Length/Width for rectangular rooms
+            if room_shape == "rectangular" and length > 0 and width > 0:
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("Length", f"{length:.1f} ft")
+                with col2:
+                    st.metric("Width", f"{width:.1f} ft") 
+                with col3:
+                    st.metric("Height", f"{height:.1f} ft")
+                
+                # Show calculated areas for rectangular rooms
+                if floor_area > 0:
+                    perimeter = 2 * (length + width)
+                    wall_area = perimeter * height
+                    st.success(f"✅ **AI Measurements Applied:** Floor: {floor_area:.1f} SF | Perimeter: {perimeter:.1f} LF | Wall Area: {wall_area:.1f} SF")
+            
             else:
-                st.success(f"✅ **AI Area Applied:** Floor: {floor_area:.1f} SF")
-        
-        # Option to edit/override
-        if st.button("✏️ Edit Measurements", key=f"edit_measurements_{selected_room_index}"):
-            current_room["ai_analysis"]["user_confirmed"] = False
-            st.info("💡 You can now edit measurements manually.")
-            st.rerun()
+                # For non-rectangular rooms, only show area-based measurements
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.metric("Height", f"{height:.1f} ft")
+                    if floor_area > 0:
+                        st.metric("Floor Area", f"{floor_area:.1f} SF")
+                
+                with col2:
+                    # Get additional AI-extracted measurements
+                    extracted_dims = ai_results.get("extracted_dimensions", {})
+                    wall_area = extracted_dims.get("wall_area_sf", 0)
+                    perimeter = extracted_dims.get("perimeter_lf", 0)
+                    ceiling_area = extracted_dims.get("ceiling_area_sf", 0)
+                    
+                    if wall_area > 0:
+                        st.metric("Wall Area", f"{wall_area:.1f} SF")
+                    if perimeter > 0:
+                        st.metric("Perimeter", f"{perimeter:.1f} LF")
+                
+                # Show room shape warning and measurements summary
+                shape_display = room_shape.replace("_", "-").title()
+                st.warning(f"⚠️ **{shape_display} Room** - Length/Width not applicable for complex shapes")
+                
+                if floor_area > 0:
+                    measurements_summary = [f"Floor: {floor_area:.1f} SF"]
+                    if wall_area > 0:
+                        measurements_summary.append(f"Wall: {wall_area:.1f} SF")
+                    if perimeter > 0:
+                        measurements_summary.append(f"Perimeter: {perimeter:.1f} LF")
+                    
+                    st.success(f"✅ **AI Measurements Applied:** {' | '.join(measurements_summary)}")
+                else:
+                    st.info("📐 **AI Analysis Applied** - Complex room geometry detected")
+            
+            # Option to edit/override
+            if st.button("✏️ Edit Measurements", key=f"edit_measurements_{selected_room_index}"):
+                current_room["ai_analysis"]["user_confirmed"] = False
+                st.info("💡 You can now edit measurements manually.")
+                st.rerun()
     
     # Openings section (for non-AI confirmed methods)
     if (current_room["input_method"] in ["simple_rectangular", "standard_template"] and 
