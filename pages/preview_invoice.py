@@ -2,10 +2,107 @@ import streamlit as st
 import tempfile
 import json
 import re
-from pdf_generator import generate_invoice_pdf
 from modules.invoice_module import save_invoice, get_invoice_by_id
 
 st.set_page_config(page_title="Invoice Preview", page_icon="📄", layout="wide")
+
+# JSON 업로드 및 직접 PDF 생성 기능
+st.sidebar.header("📂 JSON 업로드")
+uploaded_file = st.sidebar.file_uploader("JSON 파일 업로드", type=['json'])
+
+if uploaded_file is not None:
+    try:
+        # 파일 내용을 문자열로 읽기
+        uploaded_file.seek(0)  # 파일 포인터를 처음으로 리셋
+        file_content = uploaded_file.read().decode('utf-8')
+        json_data = json.loads(file_content)
+        
+        st.sidebar.markdown("**업로드된 파일:** " + uploaded_file.name)
+        st.sidebar.markdown(f"**인보이스 번호:** {json_data.get('invoice_number', 'N/A')}")
+        
+        if st.sidebar.button("📄 바로 PDF 생성 및 다운로드"):
+            # JSON 데이터로 직접 PDF 생성
+            try:
+                from pdf_generator import generate_invoice_pdf
+                
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+                    generate_invoice_pdf(json_data, tmpfile.name)
+                    st.sidebar.success("📄 PDF 생성 완료!")
+                    
+                    with open(tmpfile.name, "rb") as f:
+                        st.sidebar.download_button(
+                            label="📥 PDF 다운로드",
+                            data=f,
+                            file_name=f"{json_data.get('invoice_number', 'invoice')}.pdf",
+                            mime="application/pdf"
+                        )
+            except Exception as e:
+                st.sidebar.error(f"❌ PDF 생성 실패: {e}")
+                st.sidebar.error("🔧 해결방법:")
+                st.sidebar.error("1. Streamlit을 종료하세요 (Ctrl+C)")
+                st.sidebar.error("2. run_app.bat을 실행하세요")
+                st.sidebar.error("3. 또는 CMD에서:")
+                st.sidebar.code('set "PATH=C:\\Program Files\\GTK3-Runtime Win64\\bin;%PATH%" && streamlit run app.py')
+    except Exception as e:
+        st.sidebar.error(f"❌ JSON 파일 처리 오류: {e}")
+
+# 직접 PDF 모드 처리 (build_invoice.py에서 넘어온 경우)
+if st.session_state.get("direct_pdf_mode", False):
+    # 직접 PDF 생성 모드
+    st.title("📄 JSON에서 PDF 생성")
+    
+    # 세션 상태에서 JSON 데이터 복원
+    invoice_data = {}
+    for key in st.session_state.keys():
+        if key.startswith("direct_"):
+            real_key = key.replace("direct_", "")
+            invoice_data[real_key] = st.session_state[key]
+    
+    if invoice_data:
+        st.subheader("📋 업로드된 인보이스 정보")
+        st.json({
+            "Invoice No.": invoice_data.get("invoice_number", ""),
+            "Date of Issue": invoice_data.get("date_of_issue", ""),
+            "Date Due": invoice_data.get("date_due", ""),
+            "Client": invoice_data.get("client", {}).get("name", ""),
+            "Total": invoice_data.get("total", 0),
+            "Tax Type": invoice_data.get("tax_type", "none"),
+            "Tax Amount": invoice_data.get("tax_calculated", 0)
+        })
+        
+        if st.button("📄 PDF 생성 및 다운로드"):
+            try:
+                from pdf_generator import generate_invoice_pdf
+                
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+                    generate_invoice_pdf(invoice_data, tmpfile.name)
+                    st.success("📄 PDF 생성 완료!")
+                    
+                    with open(tmpfile.name, "rb") as f:
+                        st.download_button(
+                            label="📥 PDF 다운로드",
+                            data=f,
+                            file_name=f"{invoice_data.get('invoice_number', 'invoice')}.pdf",
+                            mime="application/pdf"
+                        )
+            except Exception as e:
+                st.error(f"❌ PDF 생성 실패: {e}")
+                st.error("🔧 해결방법:")
+                st.error("1. Streamlit을 종료하세요 (Ctrl+C)")
+                st.error("2. run_app.bat을 실행하세요")
+                st.error("3. 또는 CMD에서:")
+                st.code('set "PATH=C:\\Program Files\\GTK3-Runtime Win64\\bin;%PATH%" && streamlit run app.py')
+                    
+        if st.button("🔙 인보이스 빌더로 돌아가기"):
+            # 직접 PDF 모드 관련 세션 상태 정리
+            for key in list(st.session_state.keys()):
+                if key.startswith("direct_") or key == "direct_pdf_mode":
+                    del st.session_state[key]
+            st.switch_page("pages/build_invoice.py")
+    else:
+        st.error("❌ JSON 데이터를 찾을 수 없습니다.")
+    
+    st.stop()  # 일반 미리보기 로직 실행 방지
 
 # URL 파라미터에서 ID 추출
 query_params = st.query_params
@@ -38,6 +135,11 @@ if invoice_id and uuid_pattern.match(invoice_id):
         st.session_state.sections = data.get("serviceSections", [])
         st.session_state.payments = data.get("payments", [])
         st.session_state.selected_company = data.get("company", {})
+        
+        # 세금 정보 로드
+        st.session_state.tax_type = data.get("tax_type", "none")
+        st.session_state.tax_rate = data.get("tax_rate", 0.0)
+        st.session_state.tax_amount = data.get("tax_amount", 0.0)
     else:
         st.error("❌ 해당 ID의 인보이스를 찾을 수 없습니다.")
 elif invoice_id:
@@ -56,8 +158,21 @@ if "sections" not in st.session_state or not st.session_state.sections:
     st.stop()
 
 subtotal_total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
+
+# 세금 계산
+tax_calculated = 0.0
+tax_type = st.session_state.get("tax_type_preview", st.session_state.get("tax_type", "none"))
+tax_rate = st.session_state.get("tax_rate_preview", st.session_state.get("tax_rate", 0.0))
+tax_amount = st.session_state.get("tax_amount_preview", st.session_state.get("tax_amount", 0.0))
+
+if tax_type == "percentage" and tax_rate > 0:
+    tax_calculated = round((subtotal_total * tax_rate / 100), 2)
+elif tax_type == "fixed" and tax_amount > 0:
+    tax_calculated = tax_amount
+
+total_with_tax = round(subtotal_total + tax_calculated, 2)
 paid_total = round(sum(p["amount"] for p in st.session_state.get("payments", [])), 2)
-total_due = round(subtotal_total - paid_total, 2)
+total_due = round(total_with_tax - paid_total, 2)
 
 # JSON 데이터 조립
 invoice_data = {
@@ -81,7 +196,12 @@ invoice_data = {
     "total": total_due,
     "subtotal_total": subtotal_total,
     "payments": st.session_state.get("payments", []),
-    "discount": 0.0
+    "discount": 0.0,
+    "tax_type": tax_type,
+    "tax_rate": tax_rate,
+    "tax_amount": tax_amount,
+    "tax_calculated": tax_calculated,
+    "total_with_tax": total_with_tax
 }
 
 # ✅ UI 표시
@@ -124,8 +244,16 @@ for p in invoice_data["payments"]:  # 기존: st.session_state.payments
     else:
         st.markdown(f"- <strong>${p['amount']:,.2f}</strong>", unsafe_allow_html=True)
 
+# 세금 정보 표시
+if invoice_data['tax_calculated'] > 0:
+    st.subheader("💸 세금 정보")
+    if invoice_data['tax_type'] == "percentage":
+        st.markdown(f"**세금율**: {invoice_data['tax_rate']}%")
+    st.markdown(f"**세금**: ${invoice_data['tax_calculated']:,.2f}")
+    st.markdown(f"**Total with Tax**: ${invoice_data['total_with_tax']:,.2f}")
+
 # Total
-st.markdown(f"<h4 style='text-align:right;'>💰 Total: ${invoice_data['total']:,.2f}</h4>", unsafe_allow_html=True)
+st.markdown(f"<h4 style='text-align:right;'>💰 Total Due: ${invoice_data['total']:,.2f}</h4>", unsafe_allow_html=True)
 
 # 하단
 st.subheader("📌 하단 Note 및 고지사항")
@@ -148,15 +276,25 @@ if st.button("💾 인보이스 저장"):
 
 # PDF 생성 버튼
 if st.button("📄 인보이스 PDF 다운로드"):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
-        generate_invoice_pdf(invoice_data, tmpfile.name)
-        st.success("📄 PDF 생성 완료!")
-        with open(tmpfile.name, "rb") as f:
-            st.download_button(
-                label="📥 PDF 다운로드",
-                data=f,
-                file_name=f"{invoice_data['invoice_number']}.pdf",
-                mime="application/pdf"
-            )
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
+    try:
+        from pdf_generator import generate_invoice_pdf
+        
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+            generate_invoice_pdf(invoice_data, tmpfile.name)
+            st.success("📄 PDF 생성 완료!")
+            with open(tmpfile.name, "rb") as f:
+                st.download_button(
+                    label="📥 PDF 다운로드",
+                    data=f,
+                    file_name=f"{invoice_data['invoice_number']}.pdf",
+                    mime="application/pdf"
+                )
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+    except Exception as e:
+        st.error(f"❌ PDF 생성 실패: {e}")
+        st.error("🔧 해결방법:")
+        st.error("1. Streamlit을 종료하세요 (Ctrl+C)")
+        st.error("2. run_app.bat을 실행하세요")
+        st.error("3. 또는 CMD에서:")
+        st.code('set "PATH=C:\\Program Files\\GTK3-Runtime Win64\\bin;%PATH%" && streamlit run app.py')
