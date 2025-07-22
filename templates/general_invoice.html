@@ -81,7 +81,18 @@
     <p>Discount: -${{ "{:,.2f}".format(discount) }}</p>
   {% endif %}
 
-  <p>Total: ${{ "{:,.2f}".format(subtotal_total) }}</p>
+  <p>Subtotal: ${{ "{:,.2f}".format(subtotal_total) }}</p>
+  
+  {% if tax_calculated and tax_calculated > 0 %}
+    {% if tax_type == "percentage" %}
+      <p>Tax ({{ tax_rate }}%): ${{ "{:,.2f}".format(tax_calculated) }}</p>
+    {% else %}
+      <p>Tax: ${{ "{:,.2f}".format(tax_calculated) }}</p>
+    {% endif %}
+    <p><strong>Total with Tax: ${{ "{:,.2f}".format(total_with_tax) }}</strong></p>
+  {% else %}
+    <p><strong>Total: ${{ "{:,.2f}".format(subtotal_total) }}</strong></p>
+  {% endif %}
 
   {% if payments and payments|length > 0 %}
     <div class="payments">

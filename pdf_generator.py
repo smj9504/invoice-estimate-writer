@@ -1,9 +1,36 @@
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML, CSS
 from pathlib import Path
 import math
 from datetime import datetime
 import pandas as pd
+
+# Add GTK+ path if available, then import WeasyPrint
+import os
+import sys
+
+# Force add GTK+ to PATH before any imports
+gtk_path = r"C:\Program Files\GTK3-Runtime Win64\bin"
+if os.path.exists(gtk_path):
+    # Add to both os.environ and sys.path for immediate effect
+    current_path = os.environ.get('PATH', '')
+    os.environ['PATH'] = f"{gtk_path};{current_path}"
+    
+    # Also add to Windows DLL search path if on Windows
+    if hasattr(os, 'add_dll_directory'):
+        try:
+            os.add_dll_directory(gtk_path)
+        except:
+            pass
+
+try:
+    from weasyprint import HTML, CSS
+    WEASYPRINT_AVAILABLE = True
+except Exception as e:
+    print(f"WeasyPrint not available: {e}")
+    print("Try running with run_app.bat to set the correct PATH")
+    WEASYPRINT_AVAILABLE = False
+    HTML = None
+    CSS = None
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
 
@@ -28,6 +55,9 @@ def replace_nan_with_zero(d):
     return d
 
 def generate_pdf(context: dict, output_path: str, doc_type: str = "estimate"):
+    if not WEASYPRINT_AVAILABLE:
+        raise RuntimeError("WeasyPrint is not available.")
+    
     context = clean_nan(context)
     config = TEMPLATE_MAP[doc_type]
     template_path = config["template"]
