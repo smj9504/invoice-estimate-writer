@@ -1,53 +1,920 @@
 {
-  "estimate_number": "EST-2025-0515",
-  "estimate_date": "2025-05-15",
+  "estimate_number": "EST-202507-4338",
+  "estimate_date": "2025-07-16",
   "company": {
-    "name": "MJ Restoration",
-    "address": "1234 Water St",
-    "city": "Falls Church",
-    "state": "VA",
-    "zip": "22043",
-    "phone": "555-1234",
-    "email": "contact@mjrestoration.com",
-    "logo": ""
+    "name": "",
+    "address": "",
+    "city": "",
+    "state": "",
+    "zip": "",
+    "phone": "",
+    "email": ""
   },
   "client": {
-    "name": "John Smith",
-    "address": "789 Client Rd",
-    "city": "Fairfax",
+    "name": "",
+    "address": "43383 Stukely Dr",
+    "city": "Sterling",
     "state": "VA",
-    "zip": "22030",
-    "phone": "555-6789"
+    "zip": "20166"
   },
-  "top_note": "This estimate covers only visible water damage.\nPlease review carefully.",
-  "bottom_note": "Payment due within 15 days.",
-  "disclaimer": "This is not an invoice.",
-  "serviceSections": [
+  "top_note": "This comprehensive restoration estimate reflects restoration to pre-loss condition using Like Kind and Quality materials.",
+  "trades": [
     {
-      "title": "Water Mitigation",
-      "showSubtotal": true,
-      "subtotal": 475.00,
-      "items": [
+      "name": "Interior Reconstruction",
+      "note": "Interior restoration of Back Double Door Bedroom, Closet Two, Recreation Room, Recreation Room Closet, Sump Room, Stairs, Under Stairs, Work Room to pre-loss condition",
+      "locations": [
         {
-          "name": "Water Extraction",
-          "qty": 1,
-          "unit": "Job",
-          "price": 300.0,
-          "dec": "Includes all equipment and labor..\nPlease review carefully."
+          "name": "Back Double Door Bedroom",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 210.94 SF<br>- Material Notes: Flooring: Carpet, carpet pad; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 4993.92,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Dust containment system",
+                  "qty": 1.0,
+                  "unit": "Room",
+                  "price": 155.0,
+                  "description": "Installation of dust barriers and containment"
+                },
+                {
+                  "name": "Floor protection (existing surfaces)",
+                  "qty": 210.94,
+                  "unit": "SF",
+                  "price": 0.29,
+                  "description": "Protection of existing finishes in access routes"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install 1/2\" wall drywall",
+                  "qty": 115.43,
+                  "unit": "SF",
+                  "price": 5.25,
+                  "description": "Includes hanging, taping, floating, seamless integration"
+                },
+                {
+                  "name": "Install wall insulation (R-13 Batt)",
+                  "qty": 27.38,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation - 4\" - R13 - paper / foil faced"
+                },
+                {
+                  "name": "Install carpet",
+                  "qty": 232.03,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Standard carpet installation"
+                },
+                {
+                  "name": "Install carpet pad",
+                  "qty": 232.03,
+                  "unit": "SF",
+                  "price": 1.3,
+                  "description": "Standard carpet pad installation"
+                },
+                {
+                  "name": "Install baseboard (medium 9\")",
+                  "qty": 51.12,
+                  "unit": "LF",
+                  "price": 6.25,
+                  "description": "Installation of medium (9\") painted wood baseboard"
+                },
+                {
+                  "name": "Detach & Reset Outlets",
+                  "qty": 4.0,
+                  "unit": "EA",
+                  "price": 15.0,
+                  "description": ""
+                },
+                {
+                  "name": "Prime walls (drywall primer)",
+                  "qty": 104.94,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Drywall primer on new/repaired areas"
+                },
+                {
+                  "name": "Paint walls (1 coat)",
+                  "qty": 416.96,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete surface for uniform appearance"
+                },
+                {
+                  "name": "Paint ceiling (1 coat)",
+                  "qty": 210.94,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete ceiling coverage"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 210.94,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 210.94 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
         },
         {
-          "name": "Dehumidifier Rental",
-          "qty": 2,
-          "unit": "Day",
-          "price": 87.5,
-          "dec": ""
+          "name": "Closet Two",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 11.33 SF<br>- Material Notes: Flooring: Carpet, carpet pad; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 403.42,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Remove carpet and pad",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 2.15,
+                  "description": "Demolition of existing flooring materials"
+                },
+                {
+                  "name": "Remove baseboard",
+                  "qty": 4.1,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Demolition of existing baseboard trim"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install carpet",
+                  "qty": 12.46,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Standard carpet installation"
+                },
+                {
+                  "name": "Install carpet pad",
+                  "qty": 12.46,
+                  "unit": "SF",
+                  "price": 1.3,
+                  "description": "Standard carpet pad installation"
+                },
+                {
+                  "name": "Install baseboard (medium 9\")",
+                  "qty": 4.51,
+                  "unit": "LF",
+                  "price": 6.25,
+                  "description": "Installation of medium (9\") painted wood baseboard"
+                },
+                {
+                  "name": "Paint walls (1 coat)",
+                  "qty": 29.75,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete surface for uniform appearance"
+                },
+                {
+                  "name": "Paint ceiling (1 coat)",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete ceiling coverage"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 11.33 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Recreation Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 1331.92 SF<br>- Material Notes: Flooring: Carpet, carpet pad; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 23035.11,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Dust containment system",
+                  "qty": 1.0,
+                  "unit": "Room",
+                  "price": 155.0,
+                  "description": "Installation of dust barriers and containment"
+                },
+                {
+                  "name": "Floor protection (existing surfaces)",
+                  "qty": 1331.92,
+                  "unit": "SF",
+                  "price": 0.29,
+                  "description": "Protection of existing finishes in access routes"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install 1/2\" wall drywall",
+                  "qty": 343.2,
+                  "unit": "SF",
+                  "price": 5.25,
+                  "description": "Includes hanging, taping, floating, seamless integration"
+                },
+                {
+                  "name": "Install 1/2\" ceiling drywall",
+                  "qty": 412.5,
+                  "unit": "SF",
+                  "price": 6.5,
+                  "description": "Includes hanging, taping, floating, seamless integration (overhead complexity included)"
+                },
+                {
+                  "name": "Install wall insulation (R-13 Batt)",
+                  "qty": 234.15,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation - 4\" - R13 - paper / foil faced"
+                },
+                {
+                  "name": "Install carpet",
+                  "qty": 1465.11,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Standard carpet installation"
+                },
+                {
+                  "name": "Install carpet pad",
+                  "qty": 1465.11,
+                  "unit": "SF",
+                  "price": 1.3,
+                  "description": "Standard carpet pad installation"
+                },
+                {
+                  "name": "Install baseboard (medium 9\")",
+                  "qty": 129.31,
+                  "unit": "LF",
+                  "price": 6.25,
+                  "description": "Installation of medium (9\") painted wood baseboard"
+                },
+                {
+                  "name": "Detach & Reset Outlets",
+                  "qty": 10.0,
+                  "unit": "EA",
+                  "price": 15.0,
+                  "description": ""
+                },
+                {
+                  "name": "Protection recessed LED panel light",
+                  "qty": 8.0,
+                  "unit": "EA",
+                  "price": 10.0,
+                  "description": ""
+                },
+                {
+                  "name": "Prime walls (drywall primer)",
+                  "qty": 312.0,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Drywall primer on new/repaired areas"
+                },
+                {
+                  "name": "Paint walls (1 coat)",
+                  "qty": 1055.92,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete surface for uniform appearance"
+                },
+                {
+                  "name": "Paint ceiling (1 coat)",
+                  "qty": 1134.88,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete ceiling coverage"
+                },
+                {
+                  "name": "Paint trim (door/window opening, 2 coats)",
+                  "qty": 10.0,
+                  "unit": "EA",
+                  "price": 55.0,
+                  "description": "Field painting of interior door/window trim"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 1331.92,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 1331.92 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Recreation Room Closet",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 333.67 SF<br>- Material Notes: Flooring: Carpet, carpet pad; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 3997.55,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Remove carpet and pad",
+                  "qty": 333.67,
+                  "unit": "SF",
+                  "price": 2.15,
+                  "description": "Demolition of existing flooring materials"
+                },
+                {
+                  "name": "Remove baseboard",
+                  "qty": 29.53,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Demolition of existing baseboard trim"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install carpet",
+                  "qty": 367.04,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Standard carpet installation"
+                },
+                {
+                  "name": "Install carpet pad",
+                  "qty": 367.04,
+                  "unit": "SF",
+                  "price": 1.3,
+                  "description": "Standard carpet pad installation"
+                },
+                {
+                  "name": "Install baseboard (medium 9\")",
+                  "qty": 32.48,
+                  "unit": "LF",
+                  "price": 6.25,
+                  "description": "Installation of medium (9\") painted wood baseboard"
+                },
+                {
+                  "name": "Paint walls (1 coat)",
+                  "qty": 264.74,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete surface for uniform appearance"
+                },
+                {
+                  "name": "Paint ceiling (1 coat)",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete ceiling coverage"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 333.67,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 333.67 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sump Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 7.19 SF<br>- Material Notes: Flooring: Finish not required; Wall Finish: Painted drywall; Ceiling Finish: unfinished ceiling; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 717.44,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install 1/2\" wall drywall",
+                  "qty": 59.81,
+                  "unit": "SF",
+                  "price": 5.25,
+                  "description": "Includes hanging, taping, floating, seamless integration"
+                },
+                {
+                  "name": "Install wall insulation (R-13 Batt)",
+                  "qty": 28.35,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation - 4\" - R13 - paper / foil faced"
+                },
+                {
+                  "name": "Install door trim set",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 75.0,
+                  "description": "Installation of a standard door trim set around an opening."
+                },
+                {
+                  "name": "Prime walls (drywall primer)",
+                  "qty": 54.37,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Drywall primer on new/repaired areas"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 7.19,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 7.19 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Stairs",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 78.73 SF<br>- Material Notes: Flooring: Carpet, carpet pad; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 1141.79,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor protection (existing surfaces)",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 0.29,
+                  "description": "Protection of existing finishes in access routes"
+                },
+                {
+                  "name": "Remove carpet and pad",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 2.15,
+                  "description": "Demolition of existing flooring materials"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install carpet",
+                  "qty": 86.6,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Standard carpet installation"
+                },
+                {
+                  "name": "Install carpet pad",
+                  "qty": 86.6,
+                  "unit": "SF",
+                  "price": 1.3,
+                  "description": "Standard carpet pad installation"
+                },
+                {
+                  "name": "Stair charge (basement access)",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 300.0,
+                  "description": "Additional labor for material transport via stairs to basement."
+                },
+                {
+                  "name": "Paint skirtboard (1 coat)",
+                  "qty": 19.24,
+                  "unit": "LF",
+                  "price": 2.75,
+                  "description": "Field painting of skirtboard"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 78.73 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Under Stairs",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 373.24 SF<br>- Material Notes: Flooring: Carpet, carpet pad; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 7008.09,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Remove carpet and pad",
+                  "qty": 373.24,
+                  "unit": "SF",
+                  "price": 2.15,
+                  "description": "Demolition of existing flooring materials"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install 1/2\" wall drywall",
+                  "qty": 220.0,
+                  "unit": "SF",
+                  "price": 5.25,
+                  "description": "Includes hanging, taping, floating, seamless integration"
+                },
+                {
+                  "name": "Install wall insulation (R-13 Batt)",
+                  "qty": 210.0,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation - 4\" - R13 - paper / foil faced"
+                },
+                {
+                  "name": "Install carpet",
+                  "qty": 410.56,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Standard carpet installation"
+                },
+                {
+                  "name": "Install carpet pad",
+                  "qty": 410.56,
+                  "unit": "SF",
+                  "price": 1.3,
+                  "description": "Standard carpet pad installation"
+                },
+                {
+                  "name": "Install baseboard (medium 9\")",
+                  "qty": 51.69,
+                  "unit": "LF",
+                  "price": 6.25,
+                  "description": "Installation of medium (9\") painted wood baseboard"
+                },
+                {
+                  "name": "Prime walls (drywall primer)",
+                  "qty": 200.0,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Drywall primer on new/repaired areas"
+                },
+                {
+                  "name": "Paint walls (1 coat)",
+                  "qty": 349.24,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete surface for uniform appearance"
+                },
+                {
+                  "name": "Paint ceiling (1 coat)",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete ceiling coverage"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 373.24,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 373.24 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Work Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 716.42 SF<br>- Material Notes: Flooring: tile; Wall Finish: Painted drywall; Ceiling Finish: Painted drywall; Baseboard: Medium (9”); Baseboard Material: Painted wood<br><br>",
+          "showSubtotal": true,
+          "subtotal": 9855.3,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Dust containment system",
+                  "qty": 1.0,
+                  "unit": "Room",
+                  "price": 155.0,
+                  "description": "Installation of dust barriers and containment"
+                },
+                {
+                  "name": "Remove baseboard",
+                  "qty": 47.2,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Demolition of existing baseboard trim"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Install 1/2\" wall drywall",
+                  "qty": 324.5,
+                  "unit": "SF",
+                  "price": 5.25,
+                  "description": "Includes hanging, taping, floating, seamless integration"
+                },
+                {
+                  "name": "Install 1/2\" ceiling drywall",
+                  "qty": 140.8,
+                  "unit": "SF",
+                  "price": 6.5,
+                  "description": "Includes hanging, taping, floating, seamless integration (overhead complexity included)"
+                },
+                {
+                  "name": "Install wall insulation (R-13 Batt)",
+                  "qty": 134.4,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation - 4\" - R13 - paper / foil faced"
+                },
+                {
+                  "name": "Install baseboard (medium 9\")",
+                  "qty": 90.42,
+                  "unit": "LF",
+                  "price": 6.25,
+                  "description": "Installation of medium (9\") painted wood baseboard"
+                },
+                {
+                  "name": "Remove & Replace interior door unit",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 450.0,
+                  "description": ""
+                },
+                {
+                  "name": "Detach & Reset recessed LED panel light",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 45.0,
+                  "description": ""
+                },
+                {
+                  "name": "Detach & Reset Window blind",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 25.0,
+                  "description": ""
+                },
+                {
+                  "name": "Detach & Reset Door knob/lockset",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 30.0,
+                  "description": ""
+                },
+                {
+                  "name": "Detach & Reset Outlets",
+                  "qty": 7.0,
+                  "unit": "EA",
+                  "price": 15.0,
+                  "description": ""
+                },
+                {
+                  "name": "Protection recessed LED panel light",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 10.0,
+                  "description": ""
+                },
+                {
+                  "name": "Contents manipulation/protection (Work Room)",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 350.0,
+                  "description": "Protection for remaining contents in the Work Room (multiple 나무 책장 with important docs) during painting."
+                },
+                {
+                  "name": "Prime walls (drywall primer)",
+                  "qty": 295.0,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Drywall primer on new/repaired areas"
+                },
+                {
+                  "name": "Paint walls (1 coat)",
+                  "qty": 692.42,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete surface for uniform appearance"
+                },
+                {
+                  "name": "Paint ceiling (1 coat)",
+                  "qty": 384.58,
+                  "unit": "SF",
+                  "price": 3.25,
+                  "description": "Complete ceiling coverage"
+                },
+                {
+                  "name": "Paint door slabs (2 coats)",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 75.0,
+                  "description": "Field painting of door slabs"
+                },
+                {
+                  "name": "Paint trim (door/window opening, 2 coats)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 55.0,
+                  "description": "Field painting of interior door/window trim"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily cleanup",
+                  "qty": 716.42,
+                  "unit": "SF",
+                  "price": 0.12,
+                  "description": "Daily site cleanup and organization during work activities. Covers 716.42 SF."
+                },
+                {
+                  "name": "Room debris removal (localized)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 75.0,
+                  "description": "Localized debris removal and bagging from room-specific work areas."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Project Cleanup & Debris Disposal",
+      "note": "Comprehensive project cleanup and debris disposal from painting, installation, protection, contents, electrical, demolition, cleanup, access, hardware, miscellaneous, flooring work across all project areas",
+      "locations": [
+        {
+          "name": "Entire Property",
+          "note": "",
+          "showSubtotal": true,
+          "subtotal": 2725.94,
+          "categories": [
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Project final cleaning",
+                  "qty": 3009.51,
+                  "unit": "SF",
+                  "price": 0.24,
+                  "description": "Final construction cleaning required due to drywall dust, debris tracking, and material transport throughout 3009.51 SF of work area.<br><br>Cleaning includes dust removal from surfaces, fixtures, and HVAC systems affected by painting, installation, protection, contents, electrical, demolition, cleanup, access, hardware, miscellaneous, flooring work."
+                },
+                {
+                  "name": "Dumpster rental (15-yard, 2 weeks)",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 900.0,
+                  "description": "15-yard dumpster rental for 2 weeks.<br>Includes rental fees ($900.00), delivery/pickup service ($150.00), and landfill tipping fees ($30.80) for 0.88 tons of debris."
+                },
+                {
+                  "name": "Dumpster delivery/pickup service",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 150.0,
+                  "description": "Service charge for dumpster logistics (delivery and final pickup)."
+                },
+                {
+                  "name": "Landfill/Disposal (Tipping) Fees",
+                  "qty": 0.88,
+                  "unit": "Tons",
+                  "price": 35.0,
+                  "description": "Landfill/recycling facility fees for 0.88 tons debris ($30.80)."
+                },
+                {
+                  "name": "Debris hauling labor (on-site)",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 922.86,
+                  "description": "On-site labor for debris hauling and loading (0.88 tons). Includes base hauling cost and multi-story/basement access surcharge."
+                }
+              ]
+            }
+          ]
         }
       ]
     }
   ],
-  "op_percent": 10,
-  "op_amount": 47.5,
-  "subtotal": 475.0,
-  "total": 522.5,
-  "discount": 0.0
+  "subtotal": 52055.65,
+  "overhead": {
+    "rate": 10,
+    "amount": 5205.57
+  },
+  "profit": {
+    "rate": 4,
+    "amount": 2082.23
+  },
+  "overhead_rate": 10,
+  "profit_rate": 4,
+  "total": 59343.45,
+  "bottom_note": "<strong>OVERHEAD(10%):</strong><br><strong>Project Management:</strong> complex interior project requiring significant trade coordination complexity interior restoration requiring coordination of 11 trades across 8 rooms spanning 3009.51 SF.<br><strong>Administrative Costs:</strong> Include project documentation, permitting, scheduling, material procurement, and quality control oversight for high coordination requirements.<br><strong>Insurance & Bonding:</strong> General liability, workers' compensation, and performance bonding based on project scope and risk assessment.<br><strong>Equipment & Infrastructure:</strong> Tools, equipment rental, vehicle costs, and job site utilities necessary for project completion over 33.5 days timeline.<br><strong>Special Conditions:</strong> Additional overhead required for difficult access which increases project management complexity.<br><br><strong>PROFIT(4%):</strong><br><strong>Market Rate:</strong> 4% reflects current market standards for professional restoration contractors performing interior restoration work in VA region.<br><strong>Risk Management:</strong> Compensation for financial investment, project risk, performance guarantee, and business sustainability for complex interior project requiring significant trade coordination complexity projects.<br><strong>Value Creation:</strong> Professional expertise, warranty coverage, industry knowledge, and quality assurance that ensures successful project completion to pre-loss condition.<br><br>This rate structure ensures proper resource allocation, professional execution, and successful project completion while maintaining industry standards for quality and reliability.",
+  "disclaimer": "This estimate reflects restoration to pre-loss condition using Like Kind and Quality materials. Overhead and Profit rates reflect industry standards for the determined complexity level."
 }

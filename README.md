@@ -6,6 +6,7 @@ venv\Scripts\activate
 ## 서버 실행 
 ```
 streamlit run app.py
+python -m streamlit run app.py
 ```
 
 ## .env → secrets.toml 변환 

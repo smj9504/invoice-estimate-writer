@@ -1692,6 +1692,7 @@ def calculate_net_wall_area(current_room):
     
     return max(0, wall_area_gross - total_opening_area)
 
+
 def calculate_net_floor_perimeter(current_room):
     """Calculate net floor perimeter by subtracting door/opening widths"""
     floor_perimeter_gross = current_room["dimensions"].get("floor_perimeter", 0)
@@ -1741,6 +1742,7 @@ def calculate_net_ceiling_perimeter(current_room):
     
     return max(0, ceiling_perimeter_gross - total_width_reduction)
 
+
 def calculate_net_ceiling_area(current_room):
     """Calculate net ceiling area by subtracting skylight areas"""
     ceiling_area_gross = current_room["dimensions"].get("ceiling_area_gross", 0)
@@ -1752,6 +1754,7 @@ def calculate_net_ceiling_area(current_room):
     total_skylight_area = openings.get("skylights", 0) * skylight_area
     
     return max(0, ceiling_area_gross - total_skylight_area)
+
 
 def room_measurements_page():
     """Room Measurements page - ENHANCED WITH BATCH IMAGE UPLOAD"""
@@ -1836,6 +1839,8 @@ def render_batch_image_upload_ui(rooms):
                         detected_name = result.get("room_identification", {}).get("detected_room_name", "")
                         if detected_name and detected_name != "Unknown":
                             st.session_state.batch_room_names[file_id] = detected_name
+                        elif:
+                            st.session_state.batch_room_names[file_id] = uploaded_file.name.rsplit('.', 1)[0]
                         else:
                             st.session_state.batch_room_names[file_id] = default_room_name
                 
@@ -2044,6 +2049,7 @@ def render_batch_image_upload_ui(rooms):
     else:
         st.info("📸 Select multiple floor plan images to analyze them in batch")
 
+
 def render_image_reference_panel(current_room, selected_room_index):
     """Helper function to display reference image in any measurement mode"""
     # Check if room has stored image data
@@ -2093,6 +2099,7 @@ def render_image_reference_panel(current_room, selected_room_index):
             st.image(st.session_state[f"uploaded_image_{selected_room_index}"], 
                     caption="Current Upload", 
                     use_container_width=True)
+
 
 def render_single_room_measurement_ui(rooms):
     """Render single room measurement UI (existing functionality)"""
@@ -2271,18 +2278,47 @@ def render_single_room_measurement_ui(rooms):
     # Measurement Summary
     render_measurement_summary_stable(current_room, rooms)
 
+
 def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
-    """Render AI Manual Edit Mode with Image Reference"""
+    """Render AI Manual Edit Mode with Image Reference and Calculation Mode Selection"""
     st.success("🎯 **AI Manual Edit Mode Active**")
     st.info("🤖 **Started with AI values** - Now you can adjust all measurements and openings")
     
-    # DISPLAY REFERENCE IMAGE - NEW ADDITION
+    # DISPLAY REFERENCE IMAGE
     render_image_reference_panel(current_room, selected_room_index)
+    
+    # CALCULATION MODE SELECTION
+    st.subheader("⚙️ Calculation Mode")
+    
+    # Initialize calculation mode if not exists
+    if "calculation_mode" not in current_room:
+        current_room["calculation_mode"] = "auto_calculate"
+    
+    calculation_mode = st.radio(
+        "Choose calculation approach:",
+        options=["auto_calculate", "direct_input"],
+        format_func=lambda x: {
+            "auto_calculate": "🔄 Auto Calculate (Gross areas minus openings)",
+            "direct_input": "✏️ Use Final Values (AI extracted or pre-calculated net values)"
+        }[x],
+        index=0 if current_room["calculation_mode"] == "auto_calculate" else 1,
+        key=f"calc_mode_{selected_room_index}",
+        help="Choose 'Use Final Values' if AI extracted values or your image already shows net areas after opening deductions"
+    )
+    
+    current_room["calculation_mode"] = calculation_mode
+    
+    if calculation_mode == "auto_calculate":
+        st.info("🔄 **Auto Calculate Mode**: Net areas will be calculated by subtracting openings from gross areas")
+    else:
+        st.info("✏️ **Use Final Values Mode**: Use AI-extracted values or pre-calculated net areas directly (no opening calculations)")
+    
+    st.markdown("---")
     
     # Ensure all required data structures exist
     initialize_room_data_structures(current_room)
     
-    # Manual dimension editing - REPLACED WITH ROOM DIMENSIONS EDITING
+    # Manual dimension editing
     st.subheader("📐 Room Dimensions Editing")
     st.info("🤖 **Edit the AI-detected room measurements directly**")
     
@@ -2311,7 +2347,6 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
         if all_ai_data.get("ceiling_perimeter_lf"):
             current_room["dimensions"]["ceiling_perimeter"] = float(all_ai_data.get("ceiling_perimeter_lf", 0))
         else:
-            # Use floor perimeter as default for ceiling perimeter
             current_room["dimensions"]["ceiling_perimeter"] = current_room["dimensions"].get("floor_perimeter", 40.0)
         if all_ai_data.get("ceiling_height_ft"):
             current_room["dimensions"]["height"] = float(all_ai_data.get("ceiling_height_ft", 8.0))
@@ -2364,6 +2399,25 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
         )
         current_room["dimensions"]["ceiling_area_gross"] = new_ceiling_area_gross
         
+        # CONDITIONAL: Direct input for ceiling area net
+        if calculation_mode == "direct_input":
+            new_ceiling_area_net = st.number_input(
+                "Ceiling Area (Net) (SF)",
+                min_value=0.0,
+                max_value=10000.0,
+                value=float(current_room["dimensions"].get("ceiling_area", new_ceiling_area_gross)),
+                step=0.1,
+                key=f"ai_ceiling_area_net_{selected_room_index}",
+                help="Ceiling area after skylight deductions (AI extracted or manually calculated)"
+            )
+            current_room["dimensions"]["ceiling_area"] = new_ceiling_area_net
+        else:
+            # Auto-calculate ceiling net area
+            calculated_ceiling_net = calculate_net_ceiling_area(current_room)
+            current_room["dimensions"]["ceiling_area"] = calculated_ceiling_net
+            st.metric("Ceiling Area (Net)", f"{calculated_ceiling_net:.1f} SF", 
+                     help="Gross ceiling area minus skylights (auto-calculated)")
+        
         new_height = st.number_input(
             "Room Height (ft)",
             min_value=7.0,
@@ -2389,12 +2443,24 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
         )
         current_room["dimensions"]["wall_area_gross"] = new_wall_area_gross
         
-        # Wall area net will be calculated automatically based on openings
-        calculated_wall_net = calculate_net_wall_area(current_room)
-        current_room["dimensions"]["wall_area"] = calculated_wall_net
-        
-        st.metric("Wall Area (Net)", f"{calculated_wall_net:.1f} SF", 
-                 help="Gross wall area minus doors, windows, and openings")
+        # CONDITIONAL: Direct input vs auto-calculate for wall area net
+        if calculation_mode == "direct_input":
+            new_wall_area_net = st.number_input(
+                "Wall Area (Net) (SF)",
+                min_value=0.0,
+                max_value=10000.0,
+                value=float(current_room["dimensions"].get("wall_area", new_wall_area_gross)),
+                step=0.1,
+                key=f"ai_wall_area_net_{selected_room_index}",
+                help="Wall area after door/window deductions (AI extracted or manually calculated)"
+            )
+            current_room["dimensions"]["wall_area"] = new_wall_area_net
+        else:
+            # Auto-calculate wall net area
+            calculated_wall_net = calculate_net_wall_area(current_room)
+            current_room["dimensions"]["wall_area"] = calculated_wall_net
+            st.metric("Wall Area (Net)", f"{calculated_wall_net:.1f} SF", 
+                     help="Gross wall area minus doors, windows, and openings (auto-calculated)")
     
     with col3:
         st.write("**Perimeters**")
@@ -2412,7 +2478,7 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
         current_room["dimensions"]["perimeter_gross"] = new_floor_perimeter  # Keep compatibility
         
         new_ceiling_perimeter = st.number_input(
-            "Ceiling Perimeter (LF)",
+            "Ceiling Perimeter (Gross) (LF)",
             min_value=0.0,
             max_value=1000.0,
             value=float(current_room["dimensions"].get("ceiling_perimeter", new_floor_perimeter)),
@@ -2422,416 +2488,111 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
         )
         current_room["dimensions"]["ceiling_perimeter"] = new_ceiling_perimeter
         
-        # Net perimeters will be calculated automatically
-        calculated_floor_net = calculate_net_floor_perimeter(current_room)
-        calculated_ceiling_net = calculate_net_ceiling_perimeter(current_room)
-        
-        current_room["dimensions"]["floor_perimeter_net"] = calculated_floor_net
-        current_room["dimensions"]["ceiling_perimeter_net"] = calculated_ceiling_net
-        current_room["dimensions"]["perimeter_net"] = calculated_floor_net  # Keep compatibility
-        
-        st.metric("Floor Perimeter (Net)", f"{calculated_floor_net:.1f} LF",
-                 help="Gross floor perimeter minus door and opening widths")
-        st.metric("Ceiling Perimeter (Net)", f"{calculated_ceiling_net:.1f} LF",
-                 help="Ceiling perimeter minus full-height openings")
+        # CONDITIONAL: Direct input vs auto-calculate for net perimeters
+        if calculation_mode == "direct_input":
+            new_floor_perimeter_net = st.number_input(
+                "Floor Perimeter (Net) (LF)",
+                min_value=0.0,
+                max_value=1000.0,
+                value=float(current_room["dimensions"].get("floor_perimeter_net", new_floor_perimeter)),
+                step=0.1,
+                key=f"ai_floor_perimeter_net_{selected_room_index}",
+                help="Floor perimeter after door/opening deductions (AI extracted or manually calculated)"
+            )
+            current_room["dimensions"]["floor_perimeter_net"] = new_floor_perimeter_net
+            current_room["dimensions"]["perimeter_net"] = new_floor_perimeter_net  # Keep compatibility
+            
+            new_ceiling_perimeter_net = st.number_input(
+                "Ceiling Perimeter (Net) (LF)",
+                min_value=0.0,
+                max_value=1000.0,
+                value=float(current_room["dimensions"].get("ceiling_perimeter_net", new_ceiling_perimeter)),
+                step=0.1,
+                key=f"ai_ceiling_perimeter_net_{selected_room_index}",
+                help="Ceiling perimeter after full-height opening deductions (AI extracted or manually calculated)"
+            )
+            current_room["dimensions"]["ceiling_perimeter_net"] = new_ceiling_perimeter_net
+        else:
+            # Auto-calculate net perimeters
+            calculated_floor_net = calculate_net_floor_perimeter(current_room)
+            calculated_ceiling_net = calculate_net_ceiling_perimeter(current_room)
+            
+            current_room["dimensions"]["floor_perimeter_net"] = calculated_floor_net
+            current_room["dimensions"]["ceiling_perimeter_net"] = calculated_ceiling_net
+            current_room["dimensions"]["perimeter_net"] = calculated_floor_net  # Keep compatibility
+            
+            st.metric("Floor Perimeter (Net)", f"{calculated_floor_net:.1f} LF",
+                     help="Gross floor perimeter minus door and opening widths (auto-calculated)")
+            st.metric("Ceiling Perimeter (Net)", f"{calculated_ceiling_net:.1f} LF",
+                     help="Ceiling perimeter minus full-height openings (auto-calculated)")
     
-    # Manual openings editing - ENHANCED WITH AI CONTEXT
+    # Manual openings editing
     st.subheader("🚪 Openings & Features Editing")
     
-    # Show AI analysis context if available
-    ai_results = current_room.get("ai_analysis", {}).get("extracted_results", {})
-    if ai_results:
-        with st.expander("🤖 AI Analysis Reference"):
-            openings_summary = ai_results.get("openings_summary", {})
-            detailed_openings = ai_results.get("detailed_openings", [])
-            
-            if openings_summary:
-                st.write("**AI Detected Openings:**")
-                for key, value in openings_summary.items():
-                    if value > 0:
-                        formatted_key = key.replace("total_", "").replace("_", " ").title()
-                        st.write(f"• {formatted_key}: {value}")
-            
-            if detailed_openings:
-                st.write("**Detailed Openings:**")
-                for i, opening in enumerate(detailed_openings):
-                    opening_type = opening.get("type", "Unknown")
-                    width = opening.get("width_ft", 0)
-                    height = opening.get("height_ft", 0)
-                    st.write(f"• {opening_type}: {width:.1f}' × {height:.1f}'")
+    if calculation_mode == "direct_input":
+        st.info("ℹ️ **Use Final Values Mode**: Opening details are optional since you're using final net areas (AI extracted or pre-calculated)")
+        
+        # Collapsible openings section for direct input mode
+        with st.expander("🔧 Optional: Opening Details (for reference/documentation)", expanded=False):
+            render_openings_input_ui(current_room, selected_room_index)
+    else:
+        st.info("🔄 **Auto Calculate Mode**: Opening details are required for net area calculations")
+        render_openings_input_ui(current_room, selected_room_index)
     
-    col1, col2 = st.columns(2)
+    # Enhanced Opening Sizes Section - only show if auto_calculate mode
+    if calculation_mode == "auto_calculate":
+        render_opening_sizes_section(current_room, selected_room_index)
     
-    with col1:
-        st.write("**🚪 Standard Openings**")
-        
-        current_room["openings"]["interior_doors"] = st.number_input(
-            "Interior Doors",
-            min_value=0,
-            value=current_room["openings"].get("interior_doors", 1),
-            key=f"ai_manual_int_doors_{selected_room_index}",
-            help="Doors connecting to other interior rooms"
-        )
-        
-        current_room["openings"]["exterior_doors"] = st.number_input(
-            "Exterior Doors",
-            min_value=0,
-            value=current_room["openings"].get("exterior_doors", 0),
-            key=f"ai_manual_ext_doors_{selected_room_index}",
-            help="Doors leading outside"
-        )
-        
-        current_room["openings"]["windows"] = st.number_input(
-            "Windows",
-            min_value=0,
-            value=current_room["openings"].get("windows", 1),
-            key=f"ai_manual_windows_{selected_room_index}",
-            help="Wall-mounted windows"
-        )
-        
-        # Advanced door types
-        with st.expander("🔧 Advanced Door Types"):
-            current_room["openings"]["pocket_doors"] = st.number_input(
-                "Pocket Doors",
-                min_value=0,
-                value=current_room["openings"].get("pocket_doors", 0),
-                key=f"ai_manual_pocket_doors_{selected_room_index}",
-                help="Sliding pocket doors"
-            )
-            
-            current_room["openings"]["bifold_doors"] = st.number_input(
-                "Bifold Doors",
-                min_value=0,
-                value=current_room["openings"].get("bifold_doors", 0),
-                key=f"ai_manual_bifold_doors_{selected_room_index}",
-                help="Folding closet doors"
-            )
-    
-    with col2:
-        st.write("**🏠 Special Openings**")
-        
-        current_room["openings"]["open_areas"] = st.number_input(
-            "Open Areas (to other rooms)",
-            min_value=0,
-            value=current_room["openings"].get("open_areas", 0),
-            key=f"ai_manual_open_areas_{selected_room_index}",
-            help="Openings without doors/windows (e.g., pass-through to kitchen)"
-        )
-        
-        current_room["openings"]["skylights"] = st.number_input(
-            "Skylights (Ceiling Windows)",
-            min_value=0,
-            value=current_room["openings"].get("skylights", 0),
-            key=f"ai_manual_skylights_{selected_room_index}",
-            help="Windows in the ceiling"
-        )
-        
-        # Built-in features
-        current_room["openings"]["built_in_cabinets"] = st.number_input(
-            "Built-in Cabinets/Shelving",
-            min_value=0,
-            value=current_room["openings"].get("built_in_cabinets", 0),
-            key=f"ai_manual_built_ins_{selected_room_index}",
-            help="Built-in storage features"
-        )
-        
-        # Specialty openings
-        with st.expander("🔧 Specialty Openings"):
-            current_room["openings"]["archways"] = st.number_input(
-                "Archways",
-                min_value=0,
-                value=current_room["openings"].get("archways", 0),
-                key=f"ai_manual_archways_{selected_room_index}",
-                help="Decorative arched openings"
-            )
-            
-            current_room["openings"]["pass_throughs"] = st.number_input(
-                "Pass-Through Windows",
-                min_value=0,
-                value=current_room["openings"].get("pass_throughs", 0),
-                key=f"ai_manual_pass_throughs_{selected_room_index}",
-                help="Kitchen pass-through windows"
-            )
-        
-        # Calculate and show total openings
-        total_openings = (
-            current_room["openings"].get("interior_doors", 0) + 
-            current_room["openings"].get("exterior_doors", 0) + 
-            current_room["openings"].get("windows", 0) + 
-            current_room["openings"].get("open_areas", 0) + 
-            current_room["openings"].get("skylights", 0) +
-            current_room["openings"].get("pocket_doors", 0) +
-            current_room["openings"].get("bifold_doors", 0) +
-            current_room["openings"].get("built_in_cabinets", 0) +
-            current_room["openings"].get("archways", 0) +
-            current_room["openings"].get("pass_throughs", 0)
-        )
-        st.metric("Total Openings", total_openings)
-    
-    # Enhanced Opening Sizes Section
-    st.write("**📐 Opening Sizes (for area calculations)**")
-    st.info("📏 Customize the size of each opening type for accurate area calculations")
-    
-    # Initialize opening sizes with more categories
-    if "opening_sizes" not in current_room:
-        current_room["opening_sizes"] = {}
-    
-    opening_sizes = current_room["opening_sizes"]
-    
-    # Set defaults for all opening types
-    size_defaults = {
-        "door_width_ft": 3.0, "door_height_ft": 8.0,
-        "window_width_ft": 3.0, "window_height_ft": 4.0,
-        "open_area_width_ft": 6.0, "open_area_height_ft": 8.0,
-        "skylight_width_ft": 2.0, "skylight_length_ft": 4.0,
-        "pocket_door_width_ft": 3.0, "pocket_door_height_ft": 8.0,
-        "bifold_door_width_ft": 4.0, "bifold_door_height_ft": 8.0,
-        "built_in_width_ft": 3.0, "built_in_height_ft": 8.0,
-        "archway_width_ft": 4.0, "archway_height_ft": 8.0,
-        "pass_through_width_ft": 3.0, "pass_through_height_ft": 2.0
-    }
-    
-    # Apply defaults for missing keys
-    for key, default_value in size_defaults.items():
-        if key not in opening_sizes:
-            opening_sizes[key] = default_value
-    
-    # Tabbed interface for opening sizes
-    tab1, tab2, tab3 = st.tabs(["🚪 Doors & Windows", "🏠 Special Features", "📊 Size Summary"])
-    
-    with tab1:
-        col_a, col_b = st.columns(2)
-        
-        with col_a:
-            st.write("**🚪 Door Sizes**")
-            opening_sizes["door_width_ft"] = st.number_input(
-                "Standard Door Width (ft)",
-                min_value=1.0,
-                max_value=10.0,
-                value=float(opening_sizes.get("door_width_ft", 3.0)),
-                step=0.1,
-                key=f"ai_door_width_{selected_room_index}"
-            )
-            
-            opening_sizes["door_height_ft"] = st.number_input(
-                "Standard Door Height (ft)",
-                min_value=6.0,
-                max_value=12.0,
-                value=float(opening_sizes.get("door_height_ft", 8.0)),
-                step=0.1,
-                key=f"ai_door_height_{selected_room_index}"
-            )
-            
-            opening_sizes["pocket_door_width_ft"] = st.number_input(
-                "Pocket Door Width (ft)",
-                min_value=1.0,
-                max_value=10.0,
-                value=float(opening_sizes.get("pocket_door_width_ft", 3.0)),
-                step=0.1,
-                key=f"ai_pocket_door_width_{selected_room_index}"
-            )
-            
-            opening_sizes["bifold_door_width_ft"] = st.number_input(
-                "Bifold Door Width (ft)",
-                min_value=2.0,
-                max_value=12.0,
-                value=float(opening_sizes.get("bifold_door_width_ft", 4.0)),
-                step=0.1,
-                key=f"ai_bifold_door_width_{selected_room_index}"
-            )
-        
-        with col_b:
-            st.write("**🪟 Window Sizes**")
-            opening_sizes["window_width_ft"] = st.number_input(
-                "Window Width (ft)",
-                min_value=1.0,
-                max_value=15.0,
-                value=float(opening_sizes.get("window_width_ft", 3.0)),
-                step=0.1,
-                key=f"ai_window_width_{selected_room_index}"
-            )
-            
-            opening_sizes["window_height_ft"] = st.number_input(
-                "Window Height (ft)",
-                min_value=1.0,
-                max_value=10.0,
-                value=float(opening_sizes.get("window_height_ft", 4.0)),
-                step=0.1,
-                key=f"ai_window_height_{selected_room_index}"
-            )
-            
-            opening_sizes["skylight_width_ft"] = st.number_input(
-                "Skylight Width (ft)",
-                min_value=1.0,
-                max_value=8.0,
-                value=float(opening_sizes.get("skylight_width_ft", 2.0)),
-                step=0.1,
-                key=f"ai_skylight_width_{selected_room_index}"
-            )
-            
-            opening_sizes["skylight_length_ft"] = st.number_input(
-                "Skylight Length (ft)",
-                min_value=1.0,
-                max_value=10.0,
-                value=float(opening_sizes.get("skylight_length_ft", 4.0)),
-                step=0.1,
-                key=f"ai_skylight_length_{selected_room_index}"
-            )
-    
-    with tab2:
-        col_a, col_b = st.columns(2)
-        
-        with col_a:
-            st.write("**🏠 Open Areas**")
-            opening_sizes["open_area_width_ft"] = st.number_input(
-                "Open Area Width (ft)",
-                min_value=1.0,
-                max_value=20.0,
-                value=float(opening_sizes.get("open_area_width_ft", 6.0)),
-                step=0.1,
-                key=f"ai_open_area_width_{selected_room_index}"
-            )
-            
-            opening_sizes["open_area_height_ft"] = st.number_input(
-                "Open Area Height (ft)",
-                min_value=6.0,
-                max_value=12.0,
-                value=float(opening_sizes.get("open_area_height_ft", 8.0)),
-                step=0.1,
-                key=f"ai_open_area_height_{selected_room_index}"
-            )
-            
-            opening_sizes["archway_width_ft"] = st.number_input(
-                "Archway Width (ft)",
-                min_value=2.0,
-                max_value=15.0,
-                value=float(opening_sizes.get("archway_width_ft", 4.0)),
-                step=0.1,
-                key=f"ai_archway_width_{selected_room_index}"
-            )
-            
-            opening_sizes["archway_height_ft"] = st.number_input(
-                "Archway Height (ft)",
-                min_value=6.0,
-                max_value=12.0,
-                value=float(opening_sizes.get("archway_height_ft", 8.0)),
-                step=0.1,
-                key=f"ai_archway_height_{selected_room_index}"
-            )
-        
-        with col_b:
-            st.write("**🔧 Built-ins & Features**")
-            opening_sizes["built_in_width_ft"] = st.number_input(
-                "Built-in Width (ft)",
-                min_value=1.0,
-                max_value=12.0,
-                value=float(opening_sizes.get("built_in_width_ft", 3.0)),
-                step=0.1,
-                key=f"ai_built_in_width_{selected_room_index}"
-            )
-            
-            opening_sizes["built_in_height_ft"] = st.number_input(
-                "Built-in Height (ft)",
-                min_value=2.0,
-                max_value=10.0,
-                value=float(opening_sizes.get("built_in_height_ft", 8.0)),
-                step=0.1,
-                key=f"ai_built_in_height_{selected_room_index}"
-            )
-            
-            opening_sizes["pass_through_width_ft"] = st.number_input(
-                "Pass-Through Width (ft)",
-                min_value=1.0,
-                max_value=8.0,
-                value=float(opening_sizes.get("pass_through_width_ft", 3.0)),
-                step=0.1,
-                key=f"ai_pass_through_width_{selected_room_index}"
-            )
-            
-            opening_sizes["pass_through_height_ft"] = st.number_input(
-                "Pass-Through Height (ft)",
-                min_value=1.0,
-                max_value=6.0,
-                value=float(opening_sizes.get("pass_through_height_ft", 2.0)),
-                step=0.1,
-                key=f"ai_pass_through_height_{selected_room_index}"
-            )
-    
-    with tab3:
-        st.write("**📊 Opening Areas Summary**")
-        
-        # Calculate total areas for each opening type
-        opening_areas = {}
-        opening_areas["standard_doors"] = (
-            (current_room["openings"].get("interior_doors", 0) + 
-             current_room["openings"].get("exterior_doors", 0)) *
-            opening_sizes["door_width_ft"] * opening_sizes["door_height_ft"]
-        )
-        
-        opening_areas["windows"] = (
-            current_room["openings"].get("windows", 0) *
-            opening_sizes["window_width_ft"] * opening_sizes["window_height_ft"]
-        )
-        
-        opening_areas["open_areas"] = (
-            current_room["openings"].get("open_areas", 0) *
-            opening_sizes["open_area_width_ft"] * opening_sizes["open_area_height_ft"]
-        )
-        
-        opening_areas["skylights"] = (
-            current_room["openings"].get("skylights", 0) *
-            opening_sizes["skylight_width_ft"] * opening_sizes["skylight_length_ft"]
-        )
-        
-        opening_areas["pocket_doors"] = (
-            current_room["openings"].get("pocket_doors", 0) *
-            opening_sizes["pocket_door_width_ft"] * opening_sizes["door_height_ft"]
-        )
-        
-        opening_areas["bifold_doors"] = (
-            current_room["openings"].get("bifold_doors", 0) *
-            opening_sizes["bifold_door_width_ft"] * opening_sizes["door_height_ft"]
-        )
-        
-        # Display areas in columns
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            for key, area in opening_areas.items():
-                if area > 0:
-                    display_name = key.replace("_", " ").title()
-                    st.metric(f"{display_name} Area", f"{area:.1f} SF")
-        
-        with col2:
-            total_opening_area = sum(opening_areas.values())
-            st.metric("Total Opening Area", f"{total_opening_area:.1f} SF")
-            
-            # Store calculated areas for use in calculations
-            current_room["calculated_opening_areas"] = opening_areas
-    
-    # Control buttons - UPDATED FOR ROOM DIMENSIONS
+    # Control buttons
     st.subheader("🔧 Manual Edit Controls")
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("🔄 Recalculate All Areas", key=f"recalc_all_areas_{selected_room_index}"):
-            # Force recalculation of all net values
-            current_room["dimensions"]["wall_area"] = calculate_net_wall_area(current_room)
-            current_room["dimensions"]["ceiling_area"] = calculate_net_ceiling_area(current_room)
-            current_room["dimensions"]["floor_perimeter_net"] = calculate_net_floor_perimeter(current_room)
-            current_room["dimensions"]["ceiling_perimeter_net"] = calculate_net_ceiling_perimeter(current_room)
-            current_room["dimensions"]["perimeter_net"] = current_room["dimensions"]["floor_perimeter_net"]
-            
-            # Force save to session state
-            st.session_state.project_data["rooms"][selected_room_index] = current_room
-            st.success("✅ All areas and perimeters recalculated!")
-            st.rerun()
+        if calculation_mode == "auto_calculate":
+            if st.button("🔄 Recalculate All Areas", key=f"recalc_all_areas_{selected_room_index}"):
+                # Force recalculation of all net values
+                current_room["dimensions"]["wall_area"] = calculate_net_wall_area(current_room)
+                current_room["dimensions"]["ceiling_area"] = calculate_net_ceiling_area(current_room)
+                current_room["dimensions"]["floor_perimeter_net"] = calculate_net_floor_perimeter(current_room)
+                current_room["dimensions"]["ceiling_perimeter_net"] = calculate_net_ceiling_perimeter(current_room)
+                current_room["dimensions"]["perimeter_net"] = current_room["dimensions"]["floor_perimeter_net"]
+                
+                # Force save to session state
+                st.session_state.project_data["rooms"][selected_room_index] = current_room
+                st.success("✅ All areas and perimeters recalculated!")
+                st.rerun()
+        else:
+            if st.button("✅ Validate Input Values", key=f"validate_direct_input_{selected_room_index}"):
+                # Validate that net values are not larger than gross values
+                wall_gross = current_room["dimensions"].get("wall_area_gross", 0)
+                wall_net = current_room["dimensions"].get("wall_area", 0)
+                floor_gross = current_room["dimensions"].get("floor_perimeter", 0)
+                floor_net = current_room["dimensions"].get("floor_perimeter_net", 0)
+                ceiling_gross = current_room["dimensions"].get("ceiling_area_gross", 0)
+                ceiling_net = current_room["dimensions"].get("ceiling_area", 0)
+                
+                validation_errors = []
+                if wall_net > wall_gross:
+                    validation_errors.append(f"Wall Net ({wall_net:.1f}) > Wall Gross ({wall_gross:.1f})")
+                if floor_net > floor_gross:
+                    validation_errors.append(f"Floor Perimeter Net ({floor_net:.1f}) > Floor Perimeter Gross ({floor_gross:.1f})")
+                if ceiling_net > ceiling_gross:
+                    validation_errors.append(f"Ceiling Net ({ceiling_net:.1f}) > Ceiling Gross ({ceiling_gross:.1f})")
+                
+                if validation_errors:
+                    st.error("❌ Validation errors found:")
+                    for error in validation_errors:
+                        st.write(f"• {error}")
+                else:
+                    st.success("✅ All input values are valid!")
     
     with col2:
         if st.button("🤖 Back to AI Mode", key=f"back_to_ai_{selected_room_index}"):
             current_room["input_method"] = "ai_image_analysis"
             if "ai_analysis" in current_room:
                 current_room["ai_analysis"]["manual_editing"] = False
+            if "calculation_mode" in current_room:
+                del current_room["calculation_mode"]  # Reset calculation mode
             st.success("✅ Switched back to AI analysis mode")
             st.rerun()
     
@@ -2842,13 +2603,15 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             current_room["ai_analysis"]["manual_editing"] = False
             current_room["ai_analysis"]["user_confirmed"] = True
             current_room["ai_analysis"]["manually_edited"] = True
+            current_room["ai_analysis"]["calculation_mode_used"] = calculation_mode
             
-            # Final calculation and save
-            current_room["dimensions"]["wall_area"] = calculate_net_wall_area(current_room)
-            current_room["dimensions"]["ceiling_area"] = calculate_net_ceiling_area(current_room)
-            current_room["dimensions"]["floor_perimeter_net"] = calculate_net_floor_perimeter(current_room)
-            current_room["dimensions"]["ceiling_perimeter_net"] = calculate_net_ceiling_perimeter(current_room)
-            current_room["dimensions"]["perimeter_net"] = current_room["dimensions"]["floor_perimeter_net"]
+            # Final calculation and save only if auto_calculate mode
+            if calculation_mode == "auto_calculate":
+                current_room["dimensions"]["wall_area"] = calculate_net_wall_area(current_room)
+                current_room["dimensions"]["ceiling_area"] = calculate_net_ceiling_area(current_room)
+                current_room["dimensions"]["floor_perimeter_net"] = calculate_net_floor_perimeter(current_room)
+                current_room["dimensions"]["ceiling_perimeter_net"] = calculate_net_ceiling_perimeter(current_room)
+                current_room["dimensions"]["perimeter_net"] = current_room["dimensions"]["floor_perimeter_net"]
             
             # Save the final dimensions to session state
             st.session_state.project_data["rooms"][selected_room_index] = current_room
@@ -2856,9 +2619,15 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             st.success("✅ Manual changes confirmed and saved!")
             st.rerun()
     
-    # Show current measurements - ENHANCED FOR NEW STRUCTURE
+    # Show current measurements
     if current_room["dimensions"].get("floor_area", 0) > 0:
         st.subheader("📊 Current Room Measurements")
+        
+        # Show calculation mode indicator
+        if calculation_mode == "direct_input":
+            st.info("✏️ **Use Final Values Mode**: Showing AI-extracted or manually entered net values")
+        else:
+            st.info("🔄 **Auto Calculate Mode**: Showing gross values and calculated net values")
         
         # Basic info row
         col1, col2, col3 = st.columns(3)
@@ -2875,6 +2644,13 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             height = current_room["dimensions"].get("height", 8.0)
             st.metric("Room Height", f"{height:.1f} ft")
             
+            # Calculation mode indicator
+            if calculation_mode == "direct_input":
+                st.success("✏️ Final Values")
+            else:
+                st.success("🔄 Auto Calculate")
+        
+        with col3:
             # Total openings
             total_openings = (
                 current_room["openings"].get("interior_doors", 0) + 
@@ -2889,8 +2665,7 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
                 current_room["openings"].get("pass_throughs", 0)
             )
             st.metric("Total Openings", total_openings)
-        
-        with col3:
+            
             # Show confidence level if available
             ai_results = current_room.get("ai_analysis", {}).get("extracted_results", {})
             confidence = ai_results.get("confidence_level", "unknown")
@@ -2902,7 +2677,7 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
                 else:
                     st.error(f"❌ **Confidence**: {confidence.title()}")
         
-        # Detailed measurements
+        # Detailed measurements - Enhanced with calculation mode context
         st.write("**📏 Detailed Measurements:**")
         
         col1, col2 = st.columns(2)
@@ -2914,8 +2689,13 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             
             if wall_area_gross > 0:
                 st.metric("Wall Area (Gross)", f"{wall_area_gross:.1f} SF")
-                st.metric("Wall Area (Net)", f"{wall_area_net:.1f} SF", 
-                         f"-{wall_area_gross - wall_area_net:.1f} SF from openings")
+                
+                if calculation_mode == "direct_input":
+                    st.metric("Wall Area (Net)", f"{wall_area_net:.1f} SF", 
+                             "✏️ AI/User Value")
+                else:
+                    st.metric("Wall Area (Net)", f"{wall_area_net:.1f} SF", 
+                             f"🔄 -{wall_area_gross - wall_area_net:.1f} SF from openings")
             
             st.write("**Floor Perimeter**")
             floor_perimeter_gross = current_room["dimensions"].get("floor_perimeter", 0)
@@ -2923,8 +2703,13 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             
             if floor_perimeter_gross > 0:
                 st.metric("Floor Perimeter (Gross)", f"{floor_perimeter_gross:.1f} LF")
-                st.metric("Floor Perimeter (Net)", f"{floor_perimeter_net:.1f} LF",
-                         f"-{floor_perimeter_gross - floor_perimeter_net:.1f} LF from doors/openings")
+                
+                if calculation_mode == "direct_input":
+                    st.metric("Floor Perimeter (Net)", f"{floor_perimeter_net:.1f} LF",
+                             "✏️ AI/User Value")
+                else:
+                    st.metric("Floor Perimeter (Net)", f"{floor_perimeter_net:.1f} LF",
+                             f"🔄 -{floor_perimeter_gross - floor_perimeter_net:.1f} LF from doors/openings")
         
         with col2:
             st.write("**Ceiling Information**")
@@ -2933,8 +2718,18 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             
             if ceiling_area_gross > 0:
                 st.metric("Ceiling Area (Gross)", f"{ceiling_area_gross:.1f} SF")
-                st.metric("Ceiling Area (Net)", f"{ceiling_area_net:.1f} SF",
-                         f"-{ceiling_area_gross - ceiling_area_net:.1f} SF from skylights" if ceiling_area_gross != ceiling_area_net else None)
+                
+                if calculation_mode == "direct_input":
+                    st.metric("Ceiling Area (Net)", f"{ceiling_area_net:.1f} SF",
+                             "✏️ AI/User Value")
+                else:
+                    skylight_deduction = ceiling_area_gross - ceiling_area_net
+                    if skylight_deduction > 0:
+                        st.metric("Ceiling Area (Net)", f"{ceiling_area_net:.1f} SF",
+                                 f"🔄 -{skylight_deduction:.1f} SF from skylights")
+                    else:
+                        st.metric("Ceiling Area (Net)", f"{ceiling_area_net:.1f} SF",
+                                 "🔄 No skylights")
             
             st.write("**Ceiling Perimeter**")
             ceiling_perimeter_gross = current_room["dimensions"].get("ceiling_perimeter", 0)
@@ -2942,10 +2737,24 @@ def render_ai_manual_edit_mode_stable(current_room, selected_room_index):
             
             if ceiling_perimeter_gross > 0:
                 st.metric("Ceiling Perimeter (Gross)", f"{ceiling_perimeter_gross:.1f} LF")
-                st.metric("Ceiling Perimeter (Net)", f"{ceiling_perimeter_net:.1f} LF",
-                         f"-{ceiling_perimeter_gross - ceiling_perimeter_net:.1f} LF from full-height openings" if ceiling_perimeter_gross != ceiling_perimeter_net else None)
+                
+                if calculation_mode == "direct_input":
+                    st.metric("Ceiling Perimeter (Net)", f"{ceiling_perimeter_net:.1f} LF",
+                             "✏️ AI/User Value")
+                else:
+                    opening_deduction = ceiling_perimeter_gross - ceiling_perimeter_net
+                    if opening_deduction > 0:
+                        st.metric("Ceiling Perimeter (Net)", f"{ceiling_perimeter_net:.1f} LF",
+                                 f"🔄 -{opening_deduction:.1f} LF from full-height openings")
+                    else:
+                        st.metric("Ceiling Perimeter (Net)", f"{ceiling_perimeter_net:.1f} LF",
+                                 "🔄 No full-height openings")
         
-        st.success("✅ Room measurements complete with real-time calculations!")
+        # Calculation mode summary
+        if calculation_mode == "direct_input":
+            st.success("✅ Room measurements complete using final values (AI extracted or pre-calculated)!")
+        else:
+            st.success("✅ Room measurements complete with real-time calculations!")
 
 def render_ai_image_analysis_mode_stable(current_room, selected_room_index):
     """Render AI Image Analysis Mode - ENHANCED WITH PERSISTENT IMAGE"""
@@ -3317,7 +3126,7 @@ def render_ai_image_analysis_mode_stable(current_room, selected_room_index):
                         else:
                             st.write(f"  • {features}")
         
-        # Confirmation buttons - SESSION STATE APPROACH
+        # Confirmation buttons - ENHANCED WITH CALCULATION MODE SELECTION
         col1, col2 = st.columns(2)
         with col1:
             if st.button("✅ Confirm and Apply", key=f"confirm_ai_{selected_room_index}"):
@@ -3327,7 +3136,7 @@ def render_ai_image_analysis_mode_stable(current_room, selected_room_index):
                 # NO st.rerun() - let natural rerun handle it
         
         with col2:
-            # SESSION STATE APPROACH - CLEAN RERUN
+            # ENHANCED EDIT MANUALLY BUTTON - WITH CALCULATION MODE LOGIC
             if st.button("✏️ Edit Manually", key=f"override_ai_{selected_room_index}"):
                 # Set session state flag for mode change
                 edit_mode_key = f"switch_to_manual_edit_{selected_room_index}"
@@ -3335,6 +3144,19 @@ def render_ai_image_analysis_mode_stable(current_room, selected_room_index):
                 
                 # Apply AI data as starting values
                 apply_ai_data_to_room_stable(current_room, all_data, openings_summary)
+                
+                # Determine appropriate calculation mode based on AI results
+                confidence = results.get("confidence_level", "medium")
+                analysis_notes = results.get("analysis_notes", "")
+                
+                # If AI confidence is high and analysis suggests net values, use direct input mode
+                if (confidence == "high" and 
+                    ("net" in analysis_notes.lower() or "final" in analysis_notes.lower() or 
+                     "calculated" in analysis_notes.lower())):
+                    current_room["calculation_mode"] = "direct_input"
+                else:
+                    # Default to auto_calculate for gross values or uncertain cases
+                    current_room["calculation_mode"] = "auto_calculate"
                 
                 # Now rerun to trigger the mode change
                 st.rerun()
@@ -3668,6 +3490,382 @@ def render_standard_template_mode_stable(current_room, selected_room_index):
             st.write(f"• Floor Area: {template['length'] * template['width']:.1f} SF")
             st.write(f"• Doors: {template['doors']} | Windows: {template['windows']}")
 
+def render_openings_input_ui(current_room, selected_room_index):
+    """Render the openings input UI - cleaned up version"""
+    # Show AI analysis context if available
+    ai_results = current_room.get("ai_analysis", {}).get("extracted_results", {})
+    if ai_results:
+        # 중첩된 expander 제거하고 st.info로 대체
+        st.info("🤖 AI Analysis Reference")
+        openings_summary = ai_results.get("openings_summary", {})
+        detailed_openings = ai_results.get("detailed_openings", [])
+        
+        if openings_summary:
+            st.write("**AI Detected Openings:**")
+            for key, value in openings_summary.items():
+                if value > 0:
+                    formatted_key = key.replace("total_", "").replace("_", " ").title()
+                    st.write(f"• {formatted_key}: {value}")
+        
+        if detailed_openings:
+            st.write("**Detailed Openings:**")
+            for i, opening in enumerate(detailed_openings):
+                opening_type = opening.get("type", "Unknown")
+                width = opening.get("width_ft", 0)
+                height = opening.get("height_ft", 0)
+                st.write(f"• {opening_type}: {width:.1f}' × {height:.1f}'")
+        
+        st.divider()  # 구분선 추가
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("**🚪 Standard Openings**")
+        
+        current_room["openings"]["interior_doors"] = st.number_input(
+            "Interior Doors",
+            min_value=0,
+            value=current_room["openings"].get("interior_doors", 1),
+            key=f"ai_manual_int_doors_{selected_room_index}",
+            help="Doors connecting to other interior rooms"
+        )
+        
+        current_room["openings"]["exterior_doors"] = st.number_input(
+            "Exterior Doors",
+            min_value=0,
+            value=current_room["openings"].get("exterior_doors", 0),
+            key=f"ai_manual_ext_doors_{selected_room_index}",
+            help="Doors leading outside"
+        )
+        
+        current_room["openings"]["windows"] = st.number_input(
+            "Windows",
+            min_value=0,
+            value=current_room["openings"].get("windows", 1),
+            key=f"ai_manual_windows_{selected_room_index}",
+            help="Wall-mounted windows"
+        )
+        
+        # Advanced door types - expander 대신 st.write로 변경
+        st.write("**🔧 Advanced Door Types**")
+        current_room["openings"]["pocket_doors"] = st.number_input(
+            "Pocket Doors",
+            min_value=0,
+            value=current_room["openings"].get("pocket_doors", 0),
+            key=f"ai_manual_pocket_doors_{selected_room_index}",
+            help="Sliding pocket doors"
+        )
+        
+        current_room["openings"]["bifold_doors"] = st.number_input(
+            "Bifold Doors",
+            min_value=0,
+            value=current_room["openings"].get("bifold_doors", 0),
+            key=f"ai_manual_bifold_doors_{selected_room_index}",
+            help="Folding closet doors"
+        )
+    
+    with col2:
+        st.write("**🏠 Special Openings**")
+        
+        current_room["openings"]["open_areas"] = st.number_input(
+            "Open Areas (to other rooms)",
+            min_value=0,
+            value=current_room["openings"].get("open_areas", 0),
+            key=f"ai_manual_open_areas_{selected_room_index}",
+            help="Openings without doors/windows (e.g., pass-through to kitchen)"
+        )
+        
+        current_room["openings"]["skylights"] = st.number_input(
+            "Skylights (Ceiling Windows)",
+            min_value=0,
+            value=current_room["openings"].get("skylights", 0),
+            key=f"ai_manual_skylights_{selected_room_index}",
+            help="Windows in the ceiling"
+        )
+        
+        # Built-in features
+        current_room["openings"]["built_in_cabinets"] = st.number_input(
+            "Built-in Cabinets/Shelving",
+            min_value=0,
+            value=current_room["openings"].get("built_in_cabinets", 0),
+            key=f"ai_manual_built_ins_{selected_room_index}",
+            help="Built-in storage features"
+        )
+        
+        # Specialty openings - expander 대신 st.write로 변경
+        st.write("**🔧 Specialty Openings**")
+        current_room["openings"]["archways"] = st.number_input(
+            "Archways",
+            min_value=0,
+            value=current_room["openings"].get("archways", 0),
+            key=f"ai_manual_archways_{selected_room_index}",
+            help="Decorative arched openings"
+        )
+        
+        current_room["openings"]["pass_throughs"] = st.number_input(
+            "Pass-Through Windows",
+            min_value=0,
+            value=current_room["openings"].get("pass_throughs", 0),
+            key=f"ai_manual_pass_throughs_{selected_room_index}",
+            help="Kitchen pass-through windows"
+        )
+        
+        # Calculate and show total openings
+        total_openings = (
+            current_room["openings"].get("interior_doors", 0) + 
+            current_room["openings"].get("exterior_doors", 0) + 
+            current_room["openings"].get("windows", 0) + 
+            current_room["openings"].get("open_areas", 0) + 
+            current_room["openings"].get("skylights", 0) +
+            current_room["openings"].get("pocket_doors", 0) +
+            current_room["openings"].get("bifold_doors", 0) +
+            current_room["openings"].get("built_in_cabinets", 0) +
+            current_room["openings"].get("archways", 0) +
+            current_room["openings"].get("pass_throughs", 0)
+        )
+        st.metric("Total Openings", total_openings)
+
+def render_opening_sizes_section(current_room, selected_room_index):
+    """Render the opening sizes section for auto-calculation mode"""
+    st.write("**📐 Opening Sizes (for area calculations)**")
+    st.info("📏 Customize the size of each opening type for accurate area calculations")
+    
+    # Initialize opening sizes with more categories
+    if "opening_sizes" not in current_room:
+        current_room["opening_sizes"] = {}
+    
+    opening_sizes = current_room["opening_sizes"]
+    
+    # Set defaults for all opening types
+    size_defaults = {
+        "door_width_ft": 3.0, "door_height_ft": 8.0,
+        "window_width_ft": 3.0, "window_height_ft": 4.0,
+        "open_area_width_ft": 6.0, "open_area_height_ft": 8.0,
+        "skylight_width_ft": 2.0, "skylight_length_ft": 4.0,
+        "pocket_door_width_ft": 3.0, "pocket_door_height_ft": 8.0,
+        "bifold_door_width_ft": 4.0, "bifold_door_height_ft": 8.0,
+        "built_in_width_ft": 3.0, "built_in_height_ft": 8.0,
+        "archway_width_ft": 4.0, "archway_height_ft": 8.0,
+        "pass_through_width_ft": 3.0, "pass_through_height_ft": 2.0
+    }
+    
+    # Apply defaults for missing keys
+    for key, default_value in size_defaults.items():
+        if key not in opening_sizes:
+            opening_sizes[key] = default_value
+    
+    # Tabbed interface for opening sizes
+    tab1, tab2, tab3 = st.tabs(["🚪 Doors & Windows", "🏠 Special Features", "📊 Size Summary"])
+    
+    with tab1:
+        col_a, col_b = st.columns(2)
+        
+        with col_a:
+            st.write("**🚪 Door Sizes**")
+            opening_sizes["door_width_ft"] = st.number_input(
+                "Standard Door Width (ft)",
+                min_value=1.0,
+                max_value=10.0,
+                value=float(opening_sizes.get("door_width_ft", 3.0)),
+                step=0.1,
+                key=f"ai_door_width_{selected_room_index}"
+            )
+            
+            opening_sizes["door_height_ft"] = st.number_input(
+                "Standard Door Height (ft)",
+                min_value=6.0,
+                max_value=12.0,
+                value=float(opening_sizes.get("door_height_ft", 8.0)),
+                step=0.1,
+                key=f"ai_door_height_{selected_room_index}"
+            )
+            
+            opening_sizes["pocket_door_width_ft"] = st.number_input(
+                "Pocket Door Width (ft)",
+                min_value=1.0,
+                max_value=10.0,
+                value=float(opening_sizes.get("pocket_door_width_ft", 3.0)),
+                step=0.1,
+                key=f"ai_pocket_door_width_{selected_room_index}"
+            )
+            
+            opening_sizes["bifold_door_width_ft"] = st.number_input(
+                "Bifold Door Width (ft)",
+                min_value=2.0,
+                max_value=12.0,
+                value=float(opening_sizes.get("bifold_door_width_ft", 4.0)),
+                step=0.1,
+                key=f"ai_bifold_door_width_{selected_room_index}"
+            )
+        
+        with col_b:
+            st.write("**🪟 Window Sizes**")
+            opening_sizes["window_width_ft"] = st.number_input(
+                "Window Width (ft)",
+                min_value=1.0,
+                max_value=15.0,
+                value=float(opening_sizes.get("window_width_ft", 3.0)),
+                step=0.1,
+                key=f"ai_window_width_{selected_room_index}"
+            )
+            
+            opening_sizes["window_height_ft"] = st.number_input(
+                "Window Height (ft)",
+                min_value=1.0,
+                max_value=10.0,
+                value=float(opening_sizes.get("window_height_ft", 4.0)),
+                step=0.1,
+                key=f"ai_window_height_{selected_room_index}"
+            )
+            
+            opening_sizes["skylight_width_ft"] = st.number_input(
+                "Skylight Width (ft)",
+                min_value=1.0,
+                max_value=8.0,
+                value=float(opening_sizes.get("skylight_width_ft", 2.0)),
+                step=0.1,
+                key=f"ai_skylight_width_{selected_room_index}"
+            )
+            
+            opening_sizes["skylight_length_ft"] = st.number_input(
+                "Skylight Length (ft)",
+                min_value=1.0,
+                max_value=10.0,
+                value=float(opening_sizes.get("skylight_length_ft", 4.0)),
+                step=0.1,
+                key=f"ai_skylight_length_{selected_room_index}"
+            )
+    
+    with tab2:
+        col_a, col_b = st.columns(2)
+        
+        with col_a:
+            st.write("**🏠 Open Areas**")
+            opening_sizes["open_area_width_ft"] = st.number_input(
+                "Open Area Width (ft)",
+                min_value=1.0,
+                max_value=20.0,
+                value=float(opening_sizes.get("open_area_width_ft", 6.0)),
+                step=0.1,
+                key=f"ai_open_area_width_{selected_room_index}"
+            )
+            
+            opening_sizes["open_area_height_ft"] = st.number_input(
+                "Open Area Height (ft)",
+                min_value=6.0,
+                max_value=12.0,
+                value=float(opening_sizes.get("open_area_height_ft", 8.0)),
+                step=0.1,
+                key=f"ai_open_area_height_{selected_room_index}"
+            )
+            
+            opening_sizes["archway_width_ft"] = st.number_input(
+                "Archway Width (ft)",
+                min_value=2.0,
+                max_value=15.0,
+                value=float(opening_sizes.get("archway_width_ft", 4.0)),
+                step=0.1,
+                key=f"ai_archway_width_{selected_room_index}"
+            )
+            
+            opening_sizes["archway_height_ft"] = st.number_input(
+                "Archway Height (ft)",
+                min_value=6.0,
+                max_value=12.0,
+                value=float(opening_sizes.get("archway_height_ft", 8.0)),
+                step=0.1,
+                key=f"ai_archway_height_{selected_room_index}"
+            )
+        
+        with col_b:
+            st.write("**🔧 Built-ins & Features**")
+            opening_sizes["built_in_width_ft"] = st.number_input(
+                "Built-in Width (ft)",
+                min_value=1.0,
+                max_value=12.0,
+                value=float(opening_sizes.get("built_in_width_ft", 3.0)),
+                step=0.1,
+                key=f"ai_built_in_width_{selected_room_index}"
+            )
+            
+            opening_sizes["built_in_height_ft"] = st.number_input(
+                "Built-in Height (ft)",
+                min_value=2.0,
+                max_value=10.0,
+                value=float(opening_sizes.get("built_in_height_ft", 8.0)),
+                step=0.1,
+                key=f"ai_built_in_height_{selected_room_index}"
+            )
+            
+            opening_sizes["pass_through_width_ft"] = st.number_input(
+                "Pass-Through Width (ft)",
+                min_value=1.0,
+                max_value=8.0,
+                value=float(opening_sizes.get("pass_through_width_ft", 3.0)),
+                step=0.1,
+                key=f"ai_pass_through_width_{selected_room_index}"
+            )
+            
+            opening_sizes["pass_through_height_ft"] = st.number_input(
+                "Pass-Through Height (ft)",
+                min_value=1.0,
+                max_value=6.0,
+                value=float(opening_sizes.get("pass_through_height_ft", 2.0)),
+                step=0.1,
+                key=f"ai_pass_through_height_{selected_room_index}"
+            )
+    
+    with tab3:
+        st.write("**📊 Opening Areas Summary**")
+        
+        # Calculate total areas for each opening type
+        opening_areas = {}
+        opening_areas["standard_doors"] = (
+            (current_room["openings"].get("interior_doors", 0) + 
+             current_room["openings"].get("exterior_doors", 0)) *
+            opening_sizes["door_width_ft"] * opening_sizes["door_height_ft"]
+        )
+        
+        opening_areas["windows"] = (
+            current_room["openings"].get("windows", 0) *
+            opening_sizes["window_width_ft"] * opening_sizes["window_height_ft"]
+        )
+        
+        opening_areas["open_areas"] = (
+            current_room["openings"].get("open_areas", 0) *
+            opening_sizes["open_area_width_ft"] * opening_sizes["open_area_height_ft"]
+        )
+        
+        opening_areas["skylights"] = (
+            current_room["openings"].get("skylights", 0) *
+            opening_sizes["skylight_width_ft"] * opening_sizes["skylight_length_ft"]
+        )
+        
+        opening_areas["pocket_doors"] = (
+            current_room["openings"].get("pocket_doors", 0) *
+            opening_sizes["pocket_door_width_ft"] * opening_sizes["door_height_ft"]
+        )
+        
+        opening_areas["bifold_doors"] = (
+            current_room["openings"].get("bifold_doors", 0) *
+            opening_sizes["bifold_door_width_ft"] * opening_sizes["door_height_ft"]
+        )
+        
+        # Display areas in columns
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            for key, area in opening_areas.items():
+                if area > 0:
+                    display_name = key.replace("_", " ").title()
+                    st.metric(f"{display_name} Area", f"{area:.1f} SF")
+        
+        with col2:
+            total_opening_area = sum(opening_areas.values())
+            st.metric("Total Opening Area", f"{total_opening_area:.1f} SF")
+            
+            # Store calculated areas for use in calculations
+            current_room["calculated_opening_areas"] = opening_areas
 
 def render_measurement_summary_stable(current_room, rooms):
     """Render measurement summary - STABLE VERSION"""

@@ -1,10 +1,110 @@
+# Environment variables
 .env
+.env.*
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.log
-.env.*
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+virtualenv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Package files
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.whl
+
+# IDE
 .idea/
 .vscode/
-__pycache__/pdf_generator.cpython-312.pyc
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+~*
+*~
+
+# Test files
+test_*.py
+test_*.svg
+test_*.html
+test_*.pdf
+test_*.json
+debug_*.html
+
+# Data folders (if needed, uncomment)
+# data/
+# measurements/
+
+# Project specific
+nul
+rendered_report.html

@@ -156,12 +156,12 @@ def initialize_room_data_structures(current_room):
             "ceiling_area_gross": 0.0,
             "perimeter_gross": 0.0,  # Compatibility
             "perimeter_net": 0.0,    # Compatibility
-            "floor_perimeter": 0.0,  # NEW: Floor perimeter
-            "floor_perimeter_net": 0.0,  # NEW: Net floor perimeter
-            "ceiling_perimeter": 0.0,  # NEW: Ceiling perimeter
-            "ceiling_perimeter_net": 0.0,  # NEW: Net ceiling perimeter
-            "room_type": "Unknown",  # NEW: Room type from AI
-            "room_shape": "rectangular",  # NEW: Room shape from AI
+            "floor_perimeter": 0.0,  # Floor perimeter
+            "floor_perimeter_net": 0.0,  # Net floor perimeter
+            "ceiling_perimeter": 0.0,  # Ceiling perimeter
+            "ceiling_perimeter_net": 0.0,  # Net ceiling perimeter
+            "room_type": "Unknown",  # Room type from AI
+            "room_shape": "rectangular",  # Room shape from AI
             "ai_initialized": False  # NEW: Track if AI data has been applied
         }
     
@@ -181,6 +181,10 @@ def initialize_room_data_structures(current_room):
     for field, default_value in required_dimension_fields.items():
         if field not in current_room["dimensions"]:
             current_room["dimensions"][field] = default_value
+
+    # Initialize calculation_mode if not exists (for AI Manual Edit Mode)
+    if "calculation_mode" not in current_room:
+        current_room["calculation_mode"] = "auto_calculate"
     
     if "openings" not in current_room:
         current_room["openings"] = {
@@ -892,10 +896,9 @@ def filter_work_zones_for_export(work_zones: Dict[str, Any]) -> Dict[str, Any]:
     
     return filtered_zones
 
-
 def clean_room_data_for_export_enhanced(room_data: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Enhanced room data cleaning that handles ALL new data structures including demolition_status
+    Enhanced room data cleaning - UPDATED TO HANDLE CALCULATION_MODE
     """
     cleaned_room = {}
     
@@ -920,6 +923,9 @@ def clean_room_data_for_export_enhanced(room_data: Dict[str, Any]) -> Dict[str, 
             essential_ai_data["manually_edited"] = True
         if ai_analysis.get("confidence_level") and ai_analysis["confidence_level"] != "":
             essential_ai_data["confidence_level"] = ai_analysis["confidence_level"]
+        # Include calculation mode used if it exists and is not default
+        if ai_analysis.get("calculation_mode_used") and ai_analysis["calculation_mode_used"] != "auto_calculate":
+            essential_ai_data["calculation_mode_used"] = ai_analysis["calculation_mode_used"]
         
         # Include applied_data if it exists and has meaningful content
         if ai_analysis.get("applied_data"):
@@ -968,6 +974,9 @@ def clean_room_data_for_export_enhanced(room_data: Dict[str, Any]) -> Dict[str, 
         
         if filtered_dimensions:
             cleaned_room["dimensions"] = filtered_dimensions
+    
+    # NOTE: calculation_mode is intentionally NOT exported as it's a temporary UI state
+    # It gets saved in ai_analysis.calculation_mode_used when confirmed
     
     # Filter openings - only include non-zero openings
     if room_data.get("openings"):
@@ -1043,7 +1052,6 @@ def clean_room_data_for_export_enhanced(room_data: Dict[str, Any]) -> Dict[str, 
             cleaned_room["validation_status"] = filtered_validation
     
     return cleaned_room
-
 
 def export_to_json_clean_enhanced(project_data: Dict[str, Any]) -> str:
     """

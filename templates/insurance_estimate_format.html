@@ -67,86 +67,99 @@
   <p class="amount-due-note">{{ top_note|replace('\n', '<br>') | safe }}</p>
 {% endif %}
 
-<div class="line-header">
-  <div class="col-item">Item</div>
-  <div class="col-qty">Qty</div>
-  <div class="col-unit">Unit</div>
-  <div class="col-price">Unit Price</div>
-  <div class="col-desc">Description</div>
-</div>
-
 {% set global_item_counter = namespace(value=0) %}
 
 {% if trades %}
   {% for trade in trades %}
-    <div class="trade-title">{{ trade.name or 'Trade' }}</div>
-    
-    {% if trade.note and trade.note != '' %}
-      <div class="trade-note">{{ trade.note|replace('\n', '<br>') | safe }}</div>
-    {% endif %}
-    
-    {% if trade.locations %}
-      {% for location in trade.locations %}
-        {% if location.name %}
-          <div class="location-title">{{ location.name }}</div>
-        {% endif %}
-        
-        {% if location.note and location.note != '' %}
-          <div class="location-note">{{ location.note|replace('\n', '<br>') | safe }}</div>
-        {% endif %}
-        
-        {% if location.categories %}
-          {% for category in location.categories %}
-            {% if category.name %}
-              <div class="category-title">{{ category.name }}</div>
+    <div class="trade-section">
+      <div class="trade-title">{{ trade.name or 'Trade' }}</div>
+      
+      {% if trade.note and trade.note != '' %}
+        <div class="trade-note">{{ trade.note|replace('\n', '<br>') | safe }}</div>
+      {% endif %}
+      
+      {% if trade.locations %}
+        {% for location in trade.locations %}
+          <div class="location-section">
+            {% if location.name %}
+              <div class="location-title">{{ location.name }}</div>
             {% endif %}
             
-            {% if category.items and category.items is iterable and category.items is not string %}
-            {% for item in category.items %}
-                {% if item and item is mapping and item.name and item.name != '' %}
-                {% set global_item_counter.value = global_item_counter.value + 1 %}
-                <div class="line-row">
-                    <div class="col-item">{{ global_item_counter.value }}. {{ item.name }}</div>
-                    <div class="col-qty">
-                    {% if item.qty is defined and item.qty != '' and item.qty != none %}
-                        {{ "{:,.2f}".format(item.qty | float) }}
-                    {% else %}
-                        0.00
-                    {% endif %}
-                    </div>
-                    <div class="col-unit">{{ item.unit or '' }}</div>
-                    <div class="col-price">
-                    {% if item.price is defined and item.price != '' and item.price != none %}
-                        ${{ "{:,.2f}".format(item.price | float) }}
-                    {% else %}
-                        $0.00
-                    {% endif %}
-                    </div>
-                    <div class="col-desc">
-                    {% if item.description and item.description != '' %}
-                        {{ item.description|replace('\n', '<br>') | safe }}
-                    {% endif %}
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
-            {% else %}
-
-            <div class="line-row" style="color: #999; font-style: italic;">
-                <div class="col-item" style="grid-column: 1 / -1;">
-                No valid items in category "{{ category.name or 'Unnamed' }}"
-                </div>
-            </div>
+            {% if location.note and location.note != '' %}
+              <div class="location-note">{{ location.note|replace('\n', '<br>') | safe }}</div>
             {% endif %}
-
-          {% endfor %}
-        {% endif %}
-        
-        {% if location.showSubtotal and location.subtotal is defined %}
-          <p class="subtotal">{{ location.name or 'Location' }} Subtotal: ${{ "{:,.2f}".format(location.subtotal | float) }}</p>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
+            
+            {% if location.categories %}
+              {% for category in location.categories %}
+                <div class="category-section">
+                  {% if category.name %}
+                    <div class="category-title">{{ category.name }}</div>
+                  {% endif %}
+                  
+                  <div class="line-header">
+                    <div class="col-item">Item</div>
+                    <div class="col-qty">Qty</div>
+                    <div class="col-unit">Unit</div>
+                    <div class="col-price">Unit Price</div>
+                    <div class="col-total">Total Price</div>
+                  </div>
+                  
+                  {% set items_list = category.get('items', []) %}
+                  {% if items_list and items_list|length > 0 %}
+                      {% for item in items_list %}
+                          {% if item and item.name %}
+                          {% set global_item_counter.value = global_item_counter.value + 1 %}
+                          {% set item_qty = item.qty | float if item.qty is defined and item.qty != '' and item.qty != none else 0 %}
+                          {% set item_price = item.price | float if item.price is defined and item.price != '' and item.price != none else 0 %}
+                          {% set item_total = item_qty * item_price %}
+                          <div class="line-item-group">
+                            <div class="line-row">
+                                <div class="col-item">{{ global_item_counter.value }}. {{ item.name }}</div>
+                                <div class="col-qty">
+                                {% if item.qty is defined and item.qty != '' and item.qty != none %}
+                                    {{ "{:,.2f}".format(item.qty | float) }}
+                                {% else %}
+                                    0.00
+                                {% endif %}
+                                </div>
+                                <div class="col-unit">{{ item.unit or '' }}</div>
+                                <div class="col-price">
+                                {% if item.price is defined and item.price != '' and item.price != none %}
+                                    ${{ "{:,.2f}".format(item.price | float) }}
+                                {% else %}
+                                    $0.00
+                                {% endif %}
+                                </div>
+                                <div class="col-total">
+                                    ${{ "{:,.2f}".format(item_total) }}
+                                </div>
+                            </div>
+                            {% if item.description and item.description != '' %}
+                            <div class="line-description">
+                                {{ item.description|replace('\n', '<br>') | safe }}
+                            </div>
+                            {% endif %}
+                          </div>
+                          {% endif %}
+                      {% endfor %}
+                  {% else %}
+                      <div class="line-row" style="color: #999; font-style: italic;">
+                          <div class="col-item" style="grid-column: 1 / -1;">
+                          No valid items in category "{{ category.name or 'Unnamed' }}"
+                          </div>
+                      </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if location.showSubtotal and location.subtotal is defined %}
+              <p class="subtotal">{{ location.name or 'Location' }} Subtotal: ${{ "{:,.2f}".format(location.subtotal | float) }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
   {% endfor %}
 {% else %}
   <div class="line-row">
@@ -158,12 +171,25 @@
 
 <div class="footer-total">
   <p>Subtotal: ${{ "{:,.2f}".format(subtotal | float) if subtotal is defined and subtotal != '' else '0.00' }}</p>
+  
+  {% if overhead_rate is defined and overhead_rate != '' and (overhead_rate | float) > 0 %}
+    <p>Overhead ({{ overhead_rate | float if overhead_rate is defined else 0 }}%): ${{ "{:,.2f}".format(overhead_amount | float) if overhead_amount is defined else '0.00' }}</p>
+  {% endif %}
+  
+  {% if profit_rate is defined and profit_rate != '' and (profit_rate | float) > 0 %}
+    <p>Profit ({{ profit_rate | float if profit_rate is defined else 0 }}%): ${{ "{:,.2f}".format(profit_amount | float) if profit_amount is defined else '0.00' }}</p>
+  {% endif %}
+  
+  {% if sales_tax_amount is defined and sales_tax_amount != '' and (sales_tax_amount | float) > 0 %}
+      <p>{{ (client.state if client else '') or '' }} Sales Tax: ${{ "{:,.2f}".format(sales_tax_amount | float) }}</p>
+  {% elif sales_tax is defined and sales_tax.amount is defined and (sales_tax.amount | float) > 0 %}
+      <p>{{ (client.state if client else '') or '' }} Sales Tax: ${{ "{:,.2f}".format(sales_tax.amount | float) }}</p>
+  {% endif %}
+  
   {% if discount is defined and discount != '' and (discount | float) > 0 %}
     <p>Discount: -${{ "{:,.2f}".format(discount | float) }}</p>
   {% endif %}
-  {% if sales_tax is defined and sales_tax != '' and (sales_tax | float) > 0 %}
-    <p>{{ (client.state if client else '') or '' }} Sales Tax ({{ tax_rate | float if tax_rate is defined else 0 }}%): ${{ "{:,.2f}".format(sales_tax | float) }}</p>
-  {% endif %}
+  
   <p class="total">Estimate Total: ${{ "{:,.2f}".format(total | float) if total is defined and total != '' else '0.00' }}</p>
 </div>
 
@@ -172,7 +198,11 @@
 {% endif %}
 
 {% if disclaimer and disclaimer != '' %}
-  <p class="disclaimer">{{ disclaimer|replace('\n', '<br>') | safe }}</p>
+    {% if '<ul>' in disclaimer %}
+        <div class="disclaimer">{{ disclaimer | safe }}</div>
+    {% else %}
+        <p class="disclaimer">{{ disclaimer|replace('\n', '<br>') | safe }}</p>
+    {% endif %}
 {% endif %}
 
 </body>

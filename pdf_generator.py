@@ -1,10 +1,38 @@
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML, CSS
 from pathlib import Path
 import math
 from datetime import datetime
 import pandas as pd
 import json
+import re
+
+# Add GTK+ path if available, then import WeasyPrint
+import os
+import sys
+
+# Force add GTK+ to PATH before any imports
+gtk_path = r"C:\Program Files\GTK3-Runtime Win64\bin"
+if os.path.exists(gtk_path):
+    # Add to both os.environ and sys.path for immediate effect
+    current_path = os.environ.get('PATH', '')
+    os.environ['PATH'] = f"{gtk_path};{current_path}"
+    
+    # Also add to Windows DLL search path if on Windows
+    if hasattr(os, 'add_dll_directory'):
+        try:
+            os.add_dll_directory(gtk_path)
+        except:
+            pass
+
+try:
+    from weasyprint import HTML, CSS
+    WEASYPRINT_AVAILABLE = True
+except Exception as e:
+    print(f"WeasyPrint not available: {e}")
+    print("Try running with run_app.bat to set the correct PATH")
+    WEASYPRINT_AVAILABLE = False
+    HTML = None
+    CSS = None
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
 
@@ -67,14 +95,47 @@ def clean_nan(obj):
     return obj
 
 def safe_float_conversion(value, default=0.0):
-    """안전한 float 변환"""
+    """
+    Safely convert value to float, handling:
+    - Empty strings and None
+    - Dollar signs ($)
+    - Commas (,)
+    - Percentage signs (%)
+    - Various string formats
+    """
     if value is None or value == '' or value == 'None':
         return default
+    
     try:
-        if isinstance(value, str) and value.lower() == 'nan':
+        # Convert to string first
+        str_value = str(value).strip()
+        
+        # Handle empty string
+        if not str_value:
             return default
-        return float(value)
-    except (ValueError, TypeError):
+        
+        # Handle special cases
+        if str_value.lower() in ['nan', 'none', 'null']:
+            return default
+        
+        # Remove dollar signs, commas, and spaces
+        cleaned_value = re.sub(r'[$,\s]', '', str_value)
+        
+        # Handle percentage - remove % but keep the number as-is
+        # e.g., "10%" → 10.0, not 0.1
+        if '%' in cleaned_value:
+            cleaned_value = cleaned_value.replace('%', '')
+            # Don't divide by 100 here - the calculation will handle it later
+            return float(cleaned_value)
+        
+        # Handle empty string after cleaning
+        if not cleaned_value:
+            return default
+        
+        # Convert to float
+        return float(cleaned_value)
+        
+    except (ValueError, TypeError, AttributeError):
         return default
 
 def safe_note_processing(note_value):
@@ -97,11 +158,16 @@ def safe_note_processing(note_value):
         return note_str
     except:
         return ""
-
+    
 def validate_estimate_data(context):
-    """견적서 데이터 유효성 검사 및 기본값 설정"""
-    print(f"DEBUG: validate_estimate_data called")
+    """견적서 데이터 유효성 검사 및 기본값 설정 - 보험 견적서 형식 지원 + categories 없는 경우 처리"""
+    import copy
+    
+    print(f"DEBUG: validate_estimate_data called with enhanced parsing")
     print(f"DEBUG: Input context keys: {list(context.keys())}")
+    
+    # 깊은 복사를 사용하여 원본 데이터 보호
+    context = copy.deepcopy(context)
 
     if 'company' not in context:
         context['company'] = {}
@@ -119,11 +185,53 @@ def validate_estimate_data(context):
     if not context.get('estimate_date'):
         context['estimate_date'] = get_default_estimate_date()
 
-    context.setdefault('subtotal', 0.0)
-    context.setdefault('discount', 0.0)
-    context.setdefault('tax_rate', 0.0)
-    context.setdefault('sales_tax', 0.0)
-    context.setdefault('total', 0.0)
+    # 보험 견적서 관련 필드 초기화 (enhanced parsing 적용)
+    context['subtotal'] = safe_float_conversion(context.get('subtotal', 0.0))
+    context['discount'] = safe_float_conversion(context.get('discount', 0.0))
+    context['tax_rate'] = safe_float_conversion(context.get('tax_rate', 0.0))
+    context['sales_tax'] = safe_float_conversion(context.get('sales_tax', 0.0))
+    context['overhead_rate'] = safe_float_conversion(context.get('overhead_rate', 0.0))
+    context['overhead_amount'] = safe_float_conversion(context.get('overhead_amount', 0.0))
+    context['profit_rate'] = safe_float_conversion(context.get('profit_rate', 0.0))
+    context['profit_amount'] = safe_float_conversion(context.get('profit_amount', 0.0))
+    context['sales_tax_amount'] = safe_float_conversion(context.get('sales_tax_amount', 0.0))
+    context['total'] = safe_float_conversion(context.get('total', 0.0))
+    
+    # 중첩 객체 구조 지원 (enhanced parsing 적용)
+    if 'overhead' not in context:
+        context['overhead'] = {
+            'rate': context.get('overhead_rate', 0.0),
+            'amount': context.get('overhead_amount', 0.0)
+        }
+    else:
+        if isinstance(context['overhead'], dict):
+            # Convert rate from decimal to percentage if needed (0.10 -> 10)
+            overhead_rate = safe_float_conversion(context['overhead'].get('rate', 0.0))
+            if overhead_rate > 0 and overhead_rate <= 1:
+                overhead_rate = overhead_rate * 100
+            context['overhead']['rate'] = overhead_rate
+            context['overhead']['amount'] = safe_float_conversion(context['overhead'].get('amount', 0.0))
+    
+    if 'profit' not in context:
+        context['profit'] = {
+            'rate': context.get('profit_rate', 0.0),
+            'amount': context.get('profit_amount', 0.0)
+        }
+    else:
+        if isinstance(context['profit'], dict):
+            # Convert rate from decimal to percentage if needed (0.05 -> 5)
+            profit_rate = safe_float_conversion(context['profit'].get('rate', 0.0))
+            if profit_rate > 0 and profit_rate <= 1:
+                profit_rate = profit_rate * 100
+            context['profit']['rate'] = profit_rate
+            context['profit']['amount'] = safe_float_conversion(context['profit'].get('amount', 0.0))
+    
+    if 'sales_tax' not in context or not isinstance(context['sales_tax'], dict):
+        context['sales_tax'] = {
+            'amount': context.get('sales_tax_amount', context.get('sales_tax', 0.0))
+        }
+    else:
+        context['sales_tax']['amount'] = safe_float_conversion(context['sales_tax'].get('amount', 0.0))
 
     context['top_note'] = safe_note_processing(context.get('top_note', ''))
     context['bottom_note'] = safe_note_processing(context.get('bottom_note', ''))
@@ -143,60 +251,81 @@ def validate_estimate_data(context):
     for key, default in client_defaults.items():
         context['client'].setdefault(key, default)
 
-    for i, trade in enumerate(context['trades']):
-        trade['name'] = safe_note_processing(trade.get('name', f'Trade {i+1}'))
-        trade['note'] = safe_note_processing(trade.get('note', ''))
+    # trades 처리 - enhanced parsing + categories 없는 경우 처리
+    new_trades = []
+    for i, trade in enumerate(context.get('trades', [])):
+        new_trade = {
+            'name': safe_note_processing(trade.get('name', f'Trade {i+1}')),
+            'note': safe_note_processing(trade.get('note', '')),
+            'locations': []
+        }
 
-        trade.setdefault('locations', [])
+        for j, location in enumerate(trade.get('locations', [])):
+            # Enhanced parsing for location subtotal
+            location_subtotal = safe_float_conversion(location.get('subtotal', 0.0))
+            
+            new_location = {
+                'name': safe_note_processing(location.get('name', f'Location {j+1}')),
+                'note': safe_note_processing(location.get('note', '')),
+                'showSubtotal': location.get('showSubtotal', True),
+                'subtotal': location_subtotal,
+                'categories': []
+            }
 
-        for j, location in enumerate(trade['locations']):
-            location['name'] = safe_note_processing(location.get('name', f'Location {j+1}'))
-            location['note'] = safe_note_processing(location.get('note', ''))
+            # categories 처리 - 없는 경우도 안전하게 처리
+            categories = location.get('categories', [])
+            if not categories:
+                print(f"DEBUG: No categories found for location '{new_location['name']}', using stored subtotal: ${location_subtotal}")
+                # categories가 없어도 location 자체는 유지
+                new_location['categories'] = []
+            else:
+                # categories가 있는 경우 정상 처리
+                for k, category in enumerate(categories):
+                    new_category = {
+                        'name': safe_note_processing(category.get('name', f'Category {k+1}')),
+                        'items': []
+                    }
 
-            location.setdefault('showSubtotal', True)
-            location.setdefault('subtotal', 0.0)
-            location.setdefault('categories', [])
+                    # items 처리 (enhanced parsing 적용)
+                    items = category.get('items', [])
+                    if isinstance(items, list):
+                        for l, item in enumerate(items):
+                            if isinstance(item, dict):
+                                new_item = {
+                                    'name': safe_note_processing(item.get('name', '')),
+                                    'qty': safe_float_conversion(item.get('qty', 0)),
+                                    'unit': str(item.get('unit', 'ea')),
+                                    'price': safe_float_conversion(item.get('price', 0)),
+                                    'description': safe_note_processing(item.get('description', ''))
+                                }
+                                # name이 비어있지 않은 경우만 추가
+                                if new_item['name']:
+                                    new_category['items'].append(new_item)
+                                    print(f"DEBUG: Added item '{new_item['name']}' (qty: {new_item['qty']}, price: ${new_item['price']}) to category '{new_category['name']}'")
 
-            for k, category in enumerate(location['categories']):
-                category['name'] = safe_note_processing(category.get('name', f'Category {k+1}'))
-                category.setdefault('items', [])
+                    new_location['categories'].append(new_category)
+                    print(f"DEBUG: Category '{new_category['name']}' has {len(new_category['items'])} items")
 
-                print(f"DEBUG_ITEM_ISSUE: Category '{category.get('name')}' items BEFORE iteration:")
-                print(f"DEBUG_ITEM_ISSUE: Type of category['items']: {type(category['items'])}")
-                if isinstance(category['items'], list):
-                    print(f"DEBUG_ITEM_ISSUE: Length of category['items']: {len(category['items'])}")
-                    for idx, item_data in enumerate(category['items']):
-                        print(f"DEBUG_ITEM_ISSUE: Item {idx} data: {item_data}")
-                        print(f"DEBUG_ITEM_ISSUE: Type of item {idx} data: {type(item_data)}")
-                else:
-                    print(f"DEBUG_ITEM_ISSUE: category['items'] is NOT a list!")
-                    print(f"DEBUG_ITEM_ISSUE: Value of category['items']: {category['items']}")
+            new_trade['locations'].append(new_location)
+            print(f"DEBUG: Location '{new_location['name']}' has {len(new_location['categories'])} categories, subtotal: ${new_location['subtotal']}")
 
-                # --- THIS IS THE CRUCIAL PART TO ENSURE IS PRESENT AND ACTIVE ---
-                # Force category['items'] to be a plain list, just in case
-                if not isinstance(category['items'], list):
-                    # This branch should ideally not be taken based on your debug output
-                    print(f"WARNING: category['items'] is not a list. Attempting conversion.")
-                    category['items'] = list(category['items'])
-                else:
-                    # This branch should be taken. Create a new list from the existing one.
-                    category['items'] = list(category['items']) # Explicitly re-create as a generic list object.
-                # --- END OF CRUCIAL PART ---
+        new_trades.append(new_trade)
 
-                print(f"DEBUG: Category {k} has {len(category.get('items', []))} items")
-
-                for l, item in enumerate(category['items']):
-                    item['name'] = safe_note_processing(item.get('name', f'Item {l+1}'))
-                    item.setdefault('unit', 'ea')
-
-                    item['qty'] = safe_float_conversion(item.get('qty', 0))
-                    item['price'] = safe_float_conversion(item.get('price', 0))
-
-                    item['description'] = safe_note_processing(item.get('description', ''))
+    context['trades'] = new_trades
+    
+    # 최종 확인
+    print(f"DEBUG: Final validation - trades count: {len(context['trades'])}")
+    for trade in context['trades']:
+        print(f"DEBUG: Trade '{trade['name']}' has {len(trade['locations'])} locations")
+        for location in trade['locations']:
+            print(f"  Location '{location['name']}' has {len(location['categories'])} categories, subtotal: ${location['subtotal']}")
+            for category in location['categories']:
+                print(f"    Category '{category['name']}' has {len(category['items'])} items")
 
     return context
 
 def debug_template_content(html_content, context):
+    """템플릿 렌더링 디버깅 - categories 없는 경우 확인"""
     print(f"DEBUG: ========== TEMPLATE RENDERING DEBUG ==========")
     print(f"DEBUG: HTML content length: {len(html_content)}")
 
@@ -214,20 +343,37 @@ def debug_template_content(html_content, context):
 
     trades = context.get('trades', [])
     if trades:
+        # categories 없는 location 확인
+        locations_without_categories = []
+        locations_with_stored_subtotal = []
         first_item_name = None
+        
         for trade in trades:
             for location in trade.get('locations', []):
-                for category in location.get('categories', []):
-                    for item in category.get('items', []):
-                        if item.get('name'):
-                            first_item_name = item['name']
+                categories = location.get('categories', [])
+                stored_subtotal = safe_float_conversion(location.get('subtotal', 0))
+                
+                if not categories:
+                    locations_without_categories.append(f"{trade.get('name', 'Unknown Trade')} > {location.get('name', 'Unknown Location')}")
+                    if stored_subtotal > 0:
+                        locations_with_stored_subtotal.append(f"{location.get('name', 'Unknown Location')}: ${stored_subtotal}")
+                else:
+                    for category in categories:
+                        for item in category.get('items', []):
+                            if item.get('name') and not first_item_name:
+                                first_item_name = item['name']
+                                break
+                        if first_item_name:
                             break
-                    if first_item_name:
-                        break
                 if first_item_name:
                     break
-            if first_item_name:
-                break
+        
+        if locations_without_categories:
+            print(f"DEBUG: ⚠️ Locations without categories: {locations_without_categories}")
+            if locations_with_stored_subtotal:
+                print(f"DEBUG: ✓ Locations with stored subtotals: {locations_with_stored_subtotal}")
+        else:
+            print(f"DEBUG: ✓ All locations have categories")
 
         if first_item_name:
             if first_item_name in html_content:
@@ -403,6 +549,9 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
     - 작업 내역 세부 표시
     - Payment 이름 지원
     """
+    if not WEASYPRINT_AVAILABLE:
+        raise RuntimeError("WeasyPrint is not available.")
+    
     print(f"DEBUG: ========== DEPRECIATION INVOICE PDF GENERATION START ==========")
     print(f"DEBUG: Output path: {output_path}")
     print(f"DEBUG: Template directory: {TEMPLATE_DIR}")
@@ -514,7 +663,7 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
 
         header_footer_css = CSS(string=f"""
             @page :first {{
-                margin: 0.3in 0.4in 0.7in 0.4in;
+                margin: 0.3in 0.4in 0.5in 0.4in;
                 @bottom-left {{
                     content: "Generated on {today_str}";
                     font-size: 10px;
@@ -528,7 +677,7 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
             }}
 
             @page {{
-                margin: 1.4in 0.4in 0.7in 0.4in;
+                margin: 1.2in 0.4in 0.7in 0.4in;
                 @top-left {{
                     content: "{company_info_text}";
                     font-size: 11px;
@@ -536,8 +685,8 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
                     line-height: 1.3;
                     white-space: pre;
                     vertical-align: top;
-                    padding: 30px 0 6px 0;
-                    margin-bottom: 18px;
+                    padding: 20px 0 6px 0;
+                    margin-bottom: 15px;
                     width: 100%;
                     border-bottom: 1px solid #ddd;
                 }}
@@ -549,7 +698,7 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
                     white-space: pre;
                     text-align: right;
                     vertical-align: top;
-                    padding: 30px 0 6px 0;
+                    padding: 20px 0 6px 0;
                     margin-bottom: 18px;
                     width: 100%;
                     border-bottom: 1px solid #ddd;
@@ -569,37 +718,6 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
             @page :first {{
                 @top-left {{ content: none; }}
                 @top-right {{ content: none; }}
-            }}
-
-            .line-header {{
-                margin-top: 20px;
-                page-break-before: auto;
-            }}
-
-            .section-header {{
-                margin-top: 15px;
-                page-break-after: avoid;
-            }}
-
-            .line-row {{
-                page-break-inside: avoid;
-            }}
-
-            .footer-total {{
-                page-break-inside: avoid;
-                margin-top: 30px;
-            }}
-
-            .address-section {{
-                page-break-after: avoid;
-            }}
-
-            .insurance-section {{
-                page-break-after: avoid;
-            }}
-
-            .header-top {{
-                page-break-after: avoid;
             }}
 
             body {{
@@ -625,8 +743,10 @@ def generate_depreciation_invoice_pdf(context: dict, output_path: str):
 
     print(f"DEBUG: ========== DEPRECIATION INVOICE PDF GENERATION END ==========")
 
-
 def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_estimate"):
+    if not WEASYPRINT_AVAILABLE:
+        raise RuntimeError("WeasyPrint is not available.")
+    
     print(f"DEBUG: ========== PDF GENERATION START ==========")
     print(f"DEBUG: Document type: {doc_type}")
     print(f"DEBUG: Output path: {output_path}")
@@ -649,7 +769,6 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
         }, indent=2))
     except Exception as e:
         print(f"DEBUG: Error logging context structure: {e}")
-
     context = clean_nan(context)
 
     if doc_type == "insurance_estimate":
@@ -662,16 +781,35 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
 
     print(f"DEBUG: Using template: {template_path}")
     print(f"DEBUG: Using CSS: {css_path}")
-    print(f"DEBUG: CSS file exists: {css_path.exists()}")
 
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
-    # --- THIS IS THE KEY ADDITION ---
-    # Explicitly register built-in functions as filters to avoid 'builtin_function_or_method' object is not iterable error
-    # This helps Jinja2 correctly interpret |float and |replace.
-    env.filters['float'] = float
-    env.filters['replace'] = lambda s, old, new: s.replace(old, new)
-    # --- END OF KEY ADDITION ---
+    # Enhanced 필터 등록
+    def safe_float_filter(value):
+        """안전한 float 변환 필터 (enhanced parsing)"""
+        return safe_float_conversion(value, 0.0)
+    
+    def safe_replace(text, old, new):
+        """안전한 문자열 치환 필터"""
+        if text is None:
+            return ''
+        try:
+            return str(text).replace(str(old), str(new))
+        except Exception:
+            return str(text)
+    
+    def format_number(value, decimal_places=2):
+        """숫자 포맷팅 필터 (enhanced parsing)"""
+        try:
+            num = safe_float_conversion(value, 0.0)
+            return f"{num:,.{decimal_places}f}"
+        except:
+            return "0.00"
+    
+    # 필터 등록
+    env.filters['float'] = safe_float_filter
+    env.filters['replace'] = safe_replace
+    env.filters['format_number'] = format_number
 
     template_file_path = TEMPLATE_DIR / template_path
     if not template_file_path.exists():
@@ -680,8 +818,25 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
 
     template = env.get_template(template_path)
 
-    print(f"DEBUG: Rendering template...")
-    html_content = template.render(**context)
+    print(f"DEBUG: Rendering template with enhanced parsing...")
+    
+    # 템플릿 렌더링 전에 컨텍스트 검증
+    print(f"DEBUG: Context validation before rendering:")
+    if 'trades' in context:
+        for i, trade in enumerate(context['trades']):
+            print(f"  Trade {i}: {trade.get('name', 'unnamed')}")
+            for j, location in enumerate(trade.get('locations', [])):
+                subtotal = location.get('subtotal', 0)
+                categories_count = len(location.get('categories', []))
+                print(f"    Location {j}: {location.get('name', 'unnamed')} - Subtotal: ${subtotal}, Categories: {categories_count}")
+    
+    try:
+        html_content = template.render(**context)
+    except Exception as e:
+        print(f"ERROR: Template rendering failed: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
     debug_template_content(html_content, context)
 
@@ -690,19 +845,19 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
         f.write(html_content)
     print(f"DEBUG: HTML saved for debugging at: {debug_html_path}")
 
+    # PDF 생성...
     if not css_path.exists():
         print(f"WARNING: CSS file not found: {css_path}")
-        print(f"DEBUG: Generating PDF without custom CSS...")
         HTML(string=html_content).write_pdf(output_path)
         print(f"DEBUG: PDF generated successfully at: {output_path}")
         return
 
     with open(css_path, "r", encoding="utf-8") as css_file:
         base_css = CSS(string=css_file.read())
-        print(f"DEBUG: CSS loaded successfully")
 
+    # 헤더/푸터 생성...
     today_str = datetime.today().strftime("%Y-%m-%d")
-
+    
     company = context.get('company', {})
     company_info_lines = []
     if company.get('name'):
@@ -760,7 +915,7 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
         }}
 
         @page {{
-            margin: 1.4in 0.4in 0.7in 0.4in;
+            margin: 1.4in 0.4in 0.7in 0.4in;  
             @top-left {{
                 content: "{company_info_text}";
                 font-size: 11px;
@@ -768,8 +923,8 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
                 line-height: 1.3;
                 white-space: pre;
                 vertical-align: top;
-                padding: 30px 0 6px 0;
-                margin-bottom: 18px;
+                padding: 40px 0 6px 0;  
+                margin-bottom: 15px;   
                 width: 100%;
                 border-bottom: 1px solid #ddd;
             }}
@@ -781,8 +936,8 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
                 white-space: pre;
                 text-align: right;
                 vertical-align: top;
-                padding: 30px 0 6px 0;
-                margin-bottom: 18px;
+                padding: 40px 0 6px 0;  
+                margin-bottom: 15px;     
                 width: 100%;
                 border-bottom: 1px solid #ddd;
             }}
@@ -802,54 +957,34 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
             @top-left {{ content: none; }}
             @top-right {{ content: none; }}
         }}
-
-        .line-header {{
-            margin-top: 20px;
-            page-break-before: auto;
-        }}
-
-        .section-title {{
-            margin-top: 15px;
-            page-break-after: avoid;
-        }}
-
-        .line-row {{
-            page-break-inside: avoid;
-        }}
-
-        .footer-total {{
-            page-break-inside: avoid;
-            margin-top: 30px;
-        }}
-
-        .address-section {{
-            page-break-after: avoid;
-        }}
-
-        .header-top {{
-            page-break-after: avoid;
-        }}
-
-        body {{
-            margin: 0;
-            padding: 0;
-        }}
     """)
 
-    print(f"DEBUG: Generating PDF with base CSS and header/footer CSS...")
+    print(f"DEBUG: Generating PDF with enhanced parsing...")
     try:
         HTML(string=html_content).write_pdf(output_path, stylesheets=[base_css, header_footer_css])
         print(f"DEBUG: PDF generated successfully at: {output_path}")
     except Exception as e:
         print(f"ERROR: PDF generation failed: {e}")
-        print(f"DEBUG: Trying to generate PDF without custom CSS...")
         HTML(string=html_content).write_pdf(output_path)
         print(f"DEBUG: PDF generated successfully (without custom CSS) at: {output_path}")
 
     print(f"DEBUG: ========== PDF GENERATION END ==========")
 
 def generate_insurance_estimate_pdf(context: dict, output_path: str):
-    generate_pdf(context, output_path, doc_type="insurance_estimate")
+    """보험 견적서 PDF 생성 - 향상된 디버깅 및 계산 검증 포함"""
+    import copy
+    
+    print(f"DEBUG: generate_insurance_estimate_pdf called")
+    print(f"DEBUG: Output path: {output_path}")
+    
+    # 깊은 복사로 원본 보호
+    context_copy = copy.deepcopy(context)
+    
+    # PDF 생성 전 컨텍스트 디버깅
+    debug_pdf_context_before_generation(context_copy)
+    
+    # PDF 생성
+    generate_pdf(context_copy, output_path, doc_type="insurance_estimate")
 
 def generate_estimate_pdf(context: dict, output_path: str):
     generate_pdf(context, output_path, doc_type="estimate")
@@ -862,19 +997,63 @@ def calculate_item_total(qty, price):
     return safe_float_conversion(qty) * safe_float_conversion(price)
 
 def calculate_location_subtotal(location):
-    """Location별 소계 계산"""
+    """Location별 소계 계산 - categories 없는 경우 stored subtotal 우선 사용"""
+    # 먼저 stored subtotal 확인
+    stored_subtotal = safe_float_conversion(location.get('subtotal', 0))
+    
+    if stored_subtotal > 0:
+        print(f"DEBUG: Using stored subtotal for location '{location.get('name', 'Unknown')}': ${stored_subtotal}")
+        return stored_subtotal
+    
+    # stored subtotal이 없으면 categories로 계산
+    categories = location.get('categories', [])
+    if not categories:
+        print(f"DEBUG: No categories and no stored subtotal for location '{location.get('name', 'Unknown')}', returning 0")
+        return 0.0
+    
     total = 0.0
-    for category in location.get('categories', []):
-        for item in category.get('items', []):
+    for category in categories:
+        items = category.get('items', [])
+        for item in items:
             if 'qty' in item and 'price' in item:
                 total += calculate_item_total(item['qty'], item['price'])
+    
+    print(f"DEBUG: Calculated subtotal for location '{location.get('name', 'Unknown')}': ${total}")
     return total
 
 def calculate_estimate_totals(data):
-    """견적서 전체 계산 수행"""
-    print(f"DEBUG: calculate_estimate_totals called")
+    """
+    견적서 전체 계산 수행 - 보험 견적서 형식 지원 (Overhead & Profit 포함)
+    Enhanced parsing + categories 없는 경우 stored subtotal 우선 사용
+    수정: overhead_rate와 profit_rate가 이미 소수점 형태로 들어오는 경우 처리
+    """
+    print(f"DEBUG: calculate_estimate_totals called with enhanced parsing (fixed percentage handling)")
+    
+    # 기존 계산된 값이 있는지 확인 (enhanced parsing 적용)
+    existing_subtotal = safe_float_conversion(data.get('subtotal', 0))
+    existing_total = safe_float_conversion(data.get('total', 0))
+    existing_overhead = safe_float_conversion(data.get('overhead_amount', 0))
+    existing_profit = safe_float_conversion(data.get('profit_amount', 0))
+    
+    # 만약 이미 정확한 계산이 되어있다면 그대로 사용
+    if existing_total > 0 and existing_subtotal > 0:
+        # 검증: 기존 값들이 일치하는지 확인
+        manual_total = (
+            existing_subtotal + 
+            existing_overhead + 
+            existing_profit + 
+            safe_float_conversion(data.get('sales_tax_amount', data.get('sales_tax', {}).get('amount', 0))) - 
+            safe_float_conversion(data.get('discount', 0))
+        )
+        
+        if abs(manual_total - existing_total) < 0.01:
+            print(f"DEBUG: Using existing calculated values - Subtotal: ${existing_subtotal}, Total: ${existing_total}")
+            return data
+    
+    # 새로 계산 수행
     subtotal = 0.0
 
+    # Location별 subtotal 계산 (stored subtotal 우선)
     for trade in data.get('trades', []):
         for location in trade.get('locations', []):
             location_subtotal = calculate_location_subtotal(location)
@@ -882,17 +1061,124 @@ def calculate_estimate_totals(data):
             subtotal += location_subtotal
 
     data['subtotal'] = subtotal
+    print(f"DEBUG: Calculated total subtotal: ${subtotal}")
 
+    # Overhead & Profit 계산 (FIXED: 퍼센트/소수점 형태 자동 감지)
+    overhead_rate = safe_float_conversion(data.get('overhead_rate', 0))
+    profit_rate = safe_float_conversion(data.get('profit_rate', 0))
+    
+    print(f"DEBUG: Original overhead_rate: {overhead_rate}, profit_rate: {profit_rate}")
+    
+    # 만약 overhead_amount, profit_amount가 이미 있으면 사용
+    overhead_amount = safe_float_conversion(data.get('overhead_amount', 0))
+    profit_amount = safe_float_conversion(data.get('profit_amount', 0))
+    
+    if overhead_amount <= 0 and overhead_rate > 0:
+        # 퍼센트 vs 소수점 형태 자동 감지
+        if overhead_rate <= 1:
+            # 이미 소수점 형태 (0.04 for 4%)
+            overhead_amount = subtotal * overhead_rate
+            print(f"DEBUG: Using decimal form overhead_rate: {overhead_rate}")
+        else:
+            # 퍼센트 형태 (4 for 4%)
+            overhead_amount = subtotal * (overhead_rate / 100)
+            print(f"DEBUG: Using percentage form overhead_rate: {overhead_rate}")
+        data['overhead_amount'] = overhead_amount
+    
+    if profit_amount <= 0 and profit_rate > 0:
+        # 퍼센트 vs 소수점 형태 자동 감지
+        if profit_rate <= 1:
+            # 이미 소수점 형태 (0.1 for 10%)
+            profit_amount = subtotal * profit_rate
+            print(f"DEBUG: Using decimal form profit_rate: {profit_rate}")
+        else:
+            # 퍼센트 형태 (10 for 10%)
+            profit_amount = subtotal * (profit_rate / 100)
+            print(f"DEBUG: Using percentage form profit_rate: {profit_rate}")
+        data['profit_amount'] = profit_amount
+    
+    print(f"DEBUG: Calculated Overhead: ${overhead_amount}, Profit: ${profit_amount}")
+
+    # Sales Tax is a fixed amount (not calculated from rate)
+    sales_tax_amount = 0.0
+    
+    # 1. 직접 입력된 sales_tax_amount 사용
+    if 'sales_tax_amount' in data:
+        sales_tax_amount = safe_float_conversion(data['sales_tax_amount'])
+    # 2. 중첩 객체에서 가져오기
+    elif isinstance(data.get('sales_tax'), dict):
+        sales_tax_amount = safe_float_conversion(data['sales_tax'].get('amount', 0))
+    # 3. 기존 sales_tax 필드 (하위 호환성)
+    elif 'sales_tax' in data and not isinstance(data.get('sales_tax'), dict):
+        sales_tax_amount = safe_float_conversion(data['sales_tax'])
+    
+    # Note: We do NOT calculate from rate - sales tax is always a fixed amount
+    data['sales_tax_amount'] = sales_tax_amount
+    print(f"DEBUG: Sales Tax (fixed amount): ${sales_tax_amount}")
+
+    # 최종 total 계산
     discount = safe_float_conversion(data.get('discount', 0))
-    after_discount = subtotal - discount
-
-    tax_rate = safe_float_conversion(data.get('tax_rate', 0))
-    sales_tax = after_discount * (tax_rate / 100)
-    data['sales_tax'] = sales_tax
-
-    total = after_discount + sales_tax
+    total = subtotal + overhead_amount + profit_amount + sales_tax_amount - discount
     data['total'] = total
 
-    print(f"DEBUG: Final calculations - Subtotal: {subtotal}, Discount: {discount}, Tax: {sales_tax}, Total: {total}")
+    print(f"DEBUG: Final calculations - Subtotal: ${subtotal}, Overhead: ${overhead_amount}, Profit: ${profit_amount}, Sales Tax: ${sales_tax_amount}, Discount: ${discount}, Total: ${total}")
+
+    # 중첩 객체 구조 업데이트 (rate를 다시 소수점 형태로 저장)
+    # Display용으로는 퍼센트로 변환되어 사용되지만, 저장은 소수점 형태로
+    data['overhead'] = {
+        'rate': overhead_rate if overhead_rate > 1 else overhead_rate,  # Keep as-is
+        'amount': overhead_amount
+    }
+    data['profit'] = {
+        'rate': profit_rate if profit_rate > 1 else profit_rate,  # Keep as-is
+        'amount': profit_amount
+    }
+    data['sales_tax'] = {
+        'amount': sales_tax_amount
+    }
 
     return data
+
+def debug_pdf_context_before_generation(context):
+    """PDF 생성 전 컨텍스트 디버깅"""
+    print(f"DEBUG: ========== PDF CONTEXT DEBUG ==========")
+    print(f"DEBUG: Key financial values:")
+    print(f"  subtotal: {context.get('subtotal', 'NOT_FOUND')} (type: {type(context.get('subtotal', 'NOT_FOUND'))})")
+    print(f"  overhead_amount: {context.get('overhead_amount', 'NOT_FOUND')}")
+    print(f"  profit_amount: {context.get('profit_amount', 'NOT_FOUND')}")
+    print(f"  sales_tax_amount: {context.get('sales_tax_amount', 'NOT_FOUND')}")
+    print(f"  discount: {context.get('discount', 'NOT_FOUND')}")
+    print(f"  total: {context.get('total', 'NOT_FOUND')}")
+    
+    print(f"DEBUG: Location subtotals:")
+    for trade in context.get('trades', []):
+        for location in trade.get('locations', []):
+            subtotal = location.get('subtotal', 0)
+            categories_count = len(location.get('categories', []))
+            print(f"  {location.get('name', 'Unknown')}: ${subtotal} (categories: {categories_count})")
+
+    # 중첩 객체 확인
+    if 'sales_tax' in context:
+        print(f"  sales_tax object: {context['sales_tax']}")
+    if 'overhead' in context:
+        print(f"  overhead object: {context['overhead']}")
+    if 'profit' in context:
+        print(f"  profit object: {context['profit']}")
+    
+    # 수동 계산 검증
+    try:
+        manual_total = (
+            safe_float_conversion(context.get('subtotal', 0)) +
+            safe_float_conversion(context.get('overhead_amount', 0)) +
+            safe_float_conversion(context.get('profit_amount', 0)) +
+            safe_float_conversion(context.get('sales_tax_amount', 0)) -
+            safe_float_conversion(context.get('discount', 0))
+        )
+        stored_total = safe_float_conversion(context.get('total', 0))
+        print(f"  Manual calculation: {manual_total}")
+        print(f"  Stored total: {stored_total}")
+        print(f"  Difference: {abs(manual_total - stored_total)}")
+    except Exception as e:
+        print(f"  Error in manual calculation: {e}")
+    
+    print(f"DEBUG: =====================================")

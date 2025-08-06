@@ -1,11 +1,91 @@
 import streamlit as st
 import datetime
 import re
+import json
 from modules.company_module import get_all_companies
 from modules.invoice_item_module import get_all_invoice_items
 from modules.invoice_module import get_invoice_by_id
 
 st.set_page_config(page_title="Invoice Builder", page_icon="📄", layout="wide")
+
+# JSON 업로드 기능
+st.sidebar.header("📂 JSON 업로드")
+uploaded_file = st.sidebar.file_uploader("JSON 파일 업로드", type=['json'])
+
+# JSON 데이터를 한 번만 읽어서 저장
+if uploaded_file is not None:
+    try:
+        # 파일 내용을 문자열로 읽기
+        uploaded_file.seek(0)  # 파일 포인터를 처음으로 리셋
+        file_content = uploaded_file.read().decode('utf-8')
+        json_data = json.loads(file_content)
+        
+        st.sidebar.markdown(f"**업로드된 파일:** {uploaded_file.name}")
+        st.sidebar.markdown(f"**인보이스 번호:** {json_data.get('invoice_number', 'N/A')}")
+        
+        if st.sidebar.button("📥 JSON 데이터 로드"):
+            # JSON 데이터를 세션 상태로 로드
+            st.session_state.invoice_number = json_data.get("invoice_number", "INV-001")
+            st.session_state.date_of_issue = json_data.get("date_of_issue", datetime.date.today())
+            st.session_state.date_due = json_data.get("date_due", datetime.date.today() + datetime.timedelta(days=7))
+            
+            # 날짜 문자열을 date 객체로 변환
+            if isinstance(st.session_state.date_of_issue, str):
+                try:
+                    st.session_state.date_of_issue = datetime.datetime.strptime(st.session_state.date_of_issue, "%Y-%m-%d").date()
+                except:
+                    st.session_state.date_of_issue = datetime.date.today()
+            
+            if isinstance(st.session_state.date_due, str):
+                try:
+                    st.session_state.date_due = datetime.datetime.strptime(st.session_state.date_due, "%Y-%m-%d").date()
+                except:
+                    st.session_state.date_due = datetime.date.today() + datetime.timedelta(days=7)
+            
+            # 클라이언트 정보
+            client = json_data.get("client", {})
+            st.session_state.client_name = client.get("name", "")
+            st.session_state.client_phone = client.get("phone", "")
+            st.session_state.client_email = client.get("email", "")
+            st.session_state.client_street = client.get("address", "")
+            st.session_state.client_city = client.get("city", "")
+            st.session_state.client_state = client.get("state", "")
+            st.session_state.client_zip = client.get("zip", "")
+            st.session_state.client_type = json_data.get("client_type", "individual")
+            
+            # 노트
+            st.session_state.top_note = json_data.get("top_note", "")
+            st.session_state.bottom_note = json_data.get("bottom_note", "")
+            st.session_state.disclaimer = json_data.get("disclaimer", "")
+            
+            # 섹션 및 결제 정보
+            st.session_state.sections = json_data.get("serviceSections", [])
+            st.session_state.payments = json_data.get("payments", [])
+            st.session_state.selected_company = json_data.get("company", {})
+            
+            # 세금 정보
+            st.session_state.tax_type = json_data.get("tax_type", "none")
+            st.session_state.tax_rate = json_data.get("tax_rate", 0.0)
+            st.session_state.tax_amount = json_data.get("tax_amount", 0.0)
+            
+            st.sidebar.success("✅ JSON 데이터가 로드되었습니다!")
+            st.rerun()
+
+        # JSON 직접 PDF 생성 기능
+        st.sidebar.markdown("---")
+        st.sidebar.header("🚀 바로 PDF 생성")
+        if st.sidebar.button("📄 JSON에서 바로 PDF 생성"):
+            try:
+                # 이미 읽은 json_data 사용
+                for key, value in json_data.items():
+                    st.session_state[f"direct_{key}"] = value
+                st.session_state.direct_pdf_mode = True
+                st.switch_page("pages/preview_invoice.py")
+            except Exception as e:
+                st.sidebar.error(f"❌ PDF 생성 오류: {e}")
+                
+    except Exception as e:
+        st.sidebar.error(f"❌ JSON 파일 읽기 오류: {e}")
 
 # 세션 상태 초기화
 if "sections" not in st.session_state:
@@ -117,6 +197,11 @@ if invoice_id and uuid_pattern.match(invoice_id):
             st.session_state.sections = data.get("serviceSections", [])
             st.session_state.payments = data.get("payments", [])
             st.session_state.selected_company = data.get("company", {})
+            
+            # 세금 정보 로드
+            st.session_state.tax_type = data.get("tax_type", "none")
+            st.session_state.tax_rate = data.get("tax_rate", 0.0)
+            st.session_state.tax_amount = data.get("tax_amount", 0.0)
             st.session_state.from_page = "build_invoice"
             st.session_state.invoice_loaded = True
         else:
@@ -144,6 +229,12 @@ else:
         st.session_state.disclaimer = ""
         st.session_state.selected_company = {}
         st.session_state.from_page = "build_invoice"
+        
+        # 세금 정보 초기화
+        st.session_state.tax_type = "none"
+        st.session_state.tax_rate = 0.0
+        st.session_state.tax_amount = 0.0
+        
         st.session_state.new_invoice_initialized = True
 
 # 회사 정보
@@ -363,13 +454,56 @@ if st.session_state.payments:
                 st.session_state.delete_payment_trigger = i
                 st.rerun()
 
-# 총계 계산
-subtotal_total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
-paid_total = round(sum(float(p["amount"]) if p["amount"] else 0.0 for p in st.session_state.payments), 2)
-total = round(subtotal_total - paid_total, 2)
+# 세금 섹션
+st.subheader("💸 세금")
 
+cols = st.columns([1, 1, 1])
+with cols[0]:
+    tax_type = st.radio(
+        "세금 타입",
+        options=["none", "percentage", "fixed"],
+        format_func=lambda x: "세금 없음" if x == "none" else "퍼센트 (%)" if x == "percentage" else "고정 금액 ($)",
+        index=["none", "percentage", "fixed"].index(st.session_state.get("tax_type", "none"))
+    )
+    st.session_state.tax_type = tax_type
+
+with cols[1]:
+    if tax_type == "percentage":
+        tax_rate = st.number_input("세금율 (%)", value=st.session_state.get("tax_rate", 0.0), step=0.1, min_value=0.0, max_value=100.0)
+        st.session_state.tax_rate = tax_rate
+    else:
+        st.session_state.tax_rate = 0.0
+        
+with cols[2]:
+    if tax_type == "fixed":
+        tax_amount = st.number_input("세금 금액 ($)", value=st.session_state.get("tax_amount", 0.0), step=1.0, min_value=0.0)
+        st.session_state.tax_amount = tax_amount
+    else:
+        st.session_state.tax_amount = 0.0
+
+# 총계 계산 (세금 포함)
+subtotal_total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
+
+# 세금 계산
+tax_calculated = 0.0
+if tax_type == "percentage" and tax_rate > 0:
+    tax_calculated = round((subtotal_total * tax_rate / 100), 2)
+elif tax_type == "fixed" and tax_amount > 0:
+    tax_calculated = tax_amount
+
+total_with_tax = round(subtotal_total + tax_calculated, 2)
+paid_total = round(sum(float(p["amount"]) if p["amount"] else 0.0 for p in st.session_state.payments), 2)
+total_due = round(total_with_tax - paid_total, 2)
+
+st.markdown(f"<p style='text-align:right;'>Subtotal: ${subtotal_total:,.2f}</p>", unsafe_allow_html=True)
+if tax_calculated > 0:
+    if tax_type == "percentage":
+        st.markdown(f"<p style='text-align:right;'>Tax ({tax_rate}%): ${tax_calculated:,.2f}</p>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<p style='text-align:right;'>Tax: ${tax_calculated:,.2f}</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:right;'>Total with Tax: ${total_with_tax:,.2f}</p>", unsafe_allow_html=True)
 st.markdown(f"<p style='text-align:right;'>Total Paid Amount: ${paid_total:,.2f}</p>", unsafe_allow_html=True)
-st.markdown(f"<h4 style='text-align:right;'>💰 Total Due: ${total:,.2f}</h4>", unsafe_allow_html=True)
+st.markdown(f"<h4 style='text-align:right;'>💰 Total Due: ${total_due:,.2f}</h4>", unsafe_allow_html=True)
 
 # 하단 Note / Disclaimer
 st.subheader("📌 인보이스 하단 노트 및 고지사항")
@@ -393,5 +527,10 @@ if st.button("👁️ 미리보기로 이동"):
     st.session_state.top_note_preview = top_note
     st.session_state.bottom_note_preview = bottom_note
     st.session_state.disclaimer_preview = disclaimer
+    
+    # 세금 정보 저장
+    st.session_state.tax_type_preview = tax_type
+    st.session_state.tax_rate_preview = tax_rate if tax_type == "percentage" else 0.0
+    st.session_state.tax_amount_preview = tax_amount if tax_type == "fixed" else 0.0
 
     st.switch_page("pages/preview_invoice.py")

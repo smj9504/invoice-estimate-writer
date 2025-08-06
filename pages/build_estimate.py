@@ -4,7 +4,6 @@ import re
 from modules.company_module import get_all_companies  
 from modules.estimate_item_module import get_all_items
 from modules.estimate_module import get_estimate_by_id, get_descriptions_by_item_id
-from weasyprint import HTML, CSS
 
 st.set_page_config(page_title="Estimate Builder", page_icon="📟", layout="wide")
 
