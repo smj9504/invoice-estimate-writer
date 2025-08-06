@@ -2,6 +2,10 @@
 .env
 .env.*
 
+# Streamlit secrets
+.streamlit/secrets.toml
+.streamlit/*.toml
+
 # Python
 __pycache__/
 *.pyc
