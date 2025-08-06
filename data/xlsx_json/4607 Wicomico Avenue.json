@@ -1,0 +1,1323 @@
+{
+  "estimate_number": "7008953048-1",
+  "estimate_date": "July 8, 2025",
+  "company": {
+    "name": "DMV Professional Restoration Services",
+    "address": "1234 Construction Way",
+    "city": "Beltsville",
+    "state": "MD",
+    "zip": "20705",
+    "phone": "(301) 555-0123",
+    "email": "estimates@dmvrestoration.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Property Owner",
+    "address": "4607 Wicomico Avenue",
+    "city": "Beltsville",
+    "state": "MD",
+    "zip": "20705",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This comprehensive water damage restoration estimate reflects minimum code-compliant restoration to pre-loss condition. Project timeline: 5-6 weeks total (3 weeks kitchen + 3 weeks interior work).",
+  
+  "trades": [
+    {
+      "name": "Kitchen Cabinet Specialist",
+      "note": "All cabinets feature soft-close hardware, dovetail construction, and water-resistant coating for Like Kind and Quality compliance.",
+      "locations": [
+        {
+          "name": "Kitchen (17' x 9'8\")",
+          "note": "Kitchen work requires precision measurement and template creation for granite countertops.",
+          "showSubtotal": true,
+          "subtotal": "24807.50",
+          "categories": [
+            {
+              "name": "Content Manipulation Services",
+              "items": [
+                {
+                  "name": "Kitchen Content Manipulation",
+                  "qty": 2.5,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Professional relocation of remaining kitchen contents during cabinet work"
+                },
+                {
+                  "name": "Kitchen Appliance Disconnect/Reconnect",
+                  "qty": 5,
+                  "unit": "EA",
+                  "price": 75.00,
+                  "description": "Safe disconnection and reconnection of kitchen appliances"
+                }
+              ]
+            },
+            {
+              "name": "Pre-Construction Phase",
+              "items": [
+                {
+                  "name": "Initial Site Survey & Precise Measurement",
+                  "qty": 1,
+                  "unit": "SV",
+                  "price": 285.00,
+                  "description": "Required for Like Kind and Quality compliance"
+                },
+                {
+                  "name": "Material Analysis & Specification Matching",
+                  "qty": 1,
+                  "unit": "SV",
+                  "price": 225.00,
+                  "description": "Professional assessment of existing finishes for exact replication"
+                },
+                {
+                  "name": "Template Creation & Field Verification",
+                  "qty": 1,
+                  "unit": "SV",
+                  "price": 185.00,
+                  "description": "Countertop template creation with precision field measurement"
+                }
+              ]
+            },
+            {
+              "name": "Site Protection Setup",
+              "items": [
+                {
+                  "name": "Comprehensive Surface Protection",
+                  "qty": 280,
+                  "unit": "SF",
+                  "price": 1.25,
+                  "description": "Floor protection wall covering appliance masking per OSHA standards"
+                },
+                {
+                  "name": "Dust Containment System",
+                  "qty": 1,
+                  "unit": "SV",
+                  "price": 275.00,
+                  "description": "Required for work in occupied finished kitchen space"
+                }
+              ]
+            },
+            {
+              "name": "Demolition Phase",
+              "items": [
+                {
+                  "name": "Remove Base Cabinets",
+                  "qty": 16,
+                  "unit": "LF",
+                  "price": 25.00,
+                  "description": "Careful removal to prevent damage to surrounding finished surfaces"
+                },
+                {
+                  "name": "Remove Wall Cabinets",
+                  "qty": 14,
+                  "unit": "LF",
+                  "price": 22.00,
+                  "description": "Professional removal with safety protocols for overhead work"
+                },
+                {
+                  "name": "Remove Countertop (Granite)",
+                  "qty": 20,
+                  "unit": "LF",
+                  "price": 18.00,
+                  "description": "Precision removal of granite countertop"
+                },
+                {
+                  "name": "Remove Backsplash Tile",
+                  "qty": 35,
+                  "unit": "SF",
+                  "price": 6.50,
+                  "description": "Careful removal of ceramic tile backsplash"
+                }
+              ]
+            },
+            {
+              "name": "Base Cabinet Installation",
+              "items": [
+                {
+                  "name": "36\" W Sink Base Cabinet - Full Extension Drawers",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 685.00,
+                  "description": "Construction with soft-close hardware and water-resistant coating"
+                },
+                {
+                  "name": "30\" W Base Cabinet - 3 Drawers",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 595.00,
+                  "description": "Full overlay design with dovetail construction"
+                },
+                {
+                  "name": "24\" W Standard Base Cabinet - 3 Drawers",
+                  "qty": 3,
+                  "unit": "EA",
+                  "price": 545.00,
+                  "description": "Full overlay design with dovetail construction"
+                },
+                {
+                  "name": "18\" W Base Cabinet - Single Door",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 385.00,
+                  "description": "Matching construction and finish to existing specifications"
+                },
+                {
+                  "name": "15\" W Base Cabinet - Single Door",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 345.00,
+                  "description": "Custom sizing for precise fit"
+                },
+                {
+                  "name": "36\" W Corner Base Cabinet - Lazy Susan",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 785.00,
+                  "description": "Corner unit with rotating shelving system"
+                }
+              ]
+            },
+            {
+              "name": "Wall Cabinet Installation",
+              "items": [
+                {
+                  "name": "36\" W Wall Cabinet - Double Door",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 525.00,
+                  "description": "Standard double door cabinets per photo layout"
+                },
+                {
+                  "name": "30\" W Wall Cabinet - Single Door (Wide)",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 425.00,
+                  "description": "Large single door design for easy access"
+                },
+                {
+                  "name": "30\" W Over-Range Microwave Cabinet - Double Door",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 535.00,
+                  "description": "Special cabinet for microwave installation with ventilation"
+                },
+                {
+                  "name": "18\" W Wall Cabinet - Single Door",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 345.00,
+                  "description": "Custom sizing for tight spaces"
+                },
+                {
+                  "name": "36\" W Corner Wall Cabinet - Single Door",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 585.00,
+                  "description": "Corner unit matching existing layout"
+                },
+                {
+                  "name": "30\" W Glass Door Wall Cabinet - Double Door",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 625.00,
+                  "description": "Frosted glass doors for display storage"
+                },
+                {
+                  "name": "Toe Kick Installation",
+                  "qty": 20,
+                  "unit": "LF",
+                  "price": 12.00,
+                  "description": "Matching finish with proper ventilation considerations"
+                },
+                {
+                  "name": "Cabinet Installation Labor - Professional",
+                  "qty": 36,
+                  "unit": "LF",
+                  "price": 145.00,
+                  "description": "Kitchen size 17' x 9'8\" requires precision measurement and installation"
+                }
+              ]
+            },
+            {
+              "name": "Countertop Installation",
+              "items": [
+                {
+                  "name": "Granite Countertop - Level 3",
+                  "qty": 24,
+                  "unit": "LF",
+                  "price": 165.00,
+                  "description": "Template creation precision cutting edge work fabrication sealing"
+                },
+                {
+                  "name": "Sink Cutout & Installation",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 285.00,
+                  "description": "Precision cutting and sink mounting with proper sealing"
+                }
+              ]
+            },
+            {
+              "name": "Backsplash Installation",
+              "items": [
+                {
+                  "name": "Ceramic Tile Backsplash",
+                  "qty": 42,
+                  "unit": "SF",
+                  "price": 18.50,
+                  "description": "Installation includes tile grout sealant and trim pieces"
+                },
+                {
+                  "name": "Tile Trim & Edging",
+                  "qty": 36,
+                  "unit": "LF",
+                  "price": 8.75,
+                  "description": "Bullnose and trim pieces for professional finish"
+                }
+              ]
+            },
+            {
+              "name": "Final Phase",
+              "items": [
+                {
+                  "name": "Final Cleanup & Inspection",
+                  "qty": 1,
+                  "unit": "SV",
+                  "price": 225.00,
+                  "description": "Comprehensive cleanup and quality inspection"
+                },
+                {
+                  "name": "Site Restoration",
+                  "qty": 1,
+                  "unit": "SV",
+                  "price": 185.00,
+                  "description": "Removal of protection systems and final detailing"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Interior Restoration Contractor",
+      "note": "All work performed in accordance with IRC, IBC, and OSHA standards with proper surface preparation and color matching.",
+      "locations": [
+        {
+          "name": "2nd Floor - Hallway",
+          "showSubtotal": true,
+          "subtotal": "1237.70",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Hallway Items",
+                  "qty": 0.5,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Temporary relocation of remaining hallway contents during work"
+                },
+                {
+                  "name": "Install Drywall (1/2\")",
+                  "qty": 72,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "10% waste factor for proper installation per IRC R702.3"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Seam Connection",
+                  "qty": 35,
+                  "unit": "LF",
+                  "price": 1.54,
+                  "description": "Connecting new to existing drywall per IRC R702.3.8"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 9,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Full perimeter baseboard installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 9,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation for proper paint adhesion"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 9,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish application"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 198,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation for all wall and ceiling areas"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 198,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 40,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection of existing finishes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hallway Bathroom",
+          "showSubtotal": true,
+          "subtotal": "3071.92",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Bathroom Items",
+                  "qty": 1.0,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": ""
+                },
+                {
+                  "name": "Install Drywall (1/2\") Walls",
+                  "qty": 196,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": ""
+                },
+                {
+                  "name": "Install Drywall (1/2\") Ceiling",
+                  "qty": 48,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Ceiling installation complexity"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Full Surface",
+                  "qty": 45,
+                  "unit": "LF",
+                  "price": 7.50,
+                  "description": "Seam connection between existing and new drywall"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 25,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": ""
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 25,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 25,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": ""
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 268,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 268,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Install New Toilet",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 245.00,
+                  "description": "New toilet installation with wax ring and supply line"
+                },
+                {
+                  "name": "Install New Sink (Single)",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 185.00,
+                  "description": "New sink installation with supply lines and drain connection"
+                },
+                {
+                  "name": "Install New Vanity",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 285.00,
+                  "description": "New vanity installation with proper mounting"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 48,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Kitchen/Dining Room",
+          "showSubtotal": true,
+          "subtotal": "12218.95",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Living Area Items",
+                  "qty": 1.5,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Professional relocation and protection of remaining dining and living area contents"
+                },
+                {
+                  "name": "Install Drywall (1/2\") Walls",
+                  "qty": 170,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Professional installation with waste factor - demolished area only"
+                },
+                {
+                  "name": "Install Drywall (5/8\") Special Area",
+                  "qty": 48,
+                  "unit": "SF",
+                  "price": 3.65,
+                  "description": "Enhanced fire rating in kitchen area"
+                },
+                {
+                  "name": "Install Drywall (1/2\") Ceiling",
+                  "qty": 279,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Ceiling installation complexity"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Full Surface",
+                  "qty": 85,
+                  "unit": "LF",
+                  "price": 7.50,
+                  "description": "Seam connection between existing and new drywall"
+                },
+                {
+                  "name": "Remove Existing Hardwood Flooring (LKQ)",
+                  "qty": 280,
+                  "unit": "SF",
+                  "price": 2.25,
+                  "description": "Full removal for Like Kind and Quality matching"
+                },
+                {
+                  "name": "Install Hardwood Flooring",
+                  "qty": 280,
+                  "unit": "SF",
+                  "price": 15.95,
+                  "description": "10% waste factor IRC R503.1 proper board layout"
+                },
+                {
+                  "name": "Remove Existing Baseboard (LKQ)",
+                  "qty": 66,
+                  "unit": "LF",
+                  "price": 1.85,
+                  "description": "Full removal for flooring installation"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 66,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Professional trim installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 66,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 66,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Remove Existing Quarter Round (LKQ)",
+                  "qty": 66,
+                  "unit": "LF",
+                  "price": 1.25,
+                  "description": "Removal for new flooring"
+                },
+                {
+                  "name": "Install Quarter Round - Wood Flooring",
+                  "qty": 66,
+                  "unit": "LF",
+                  "price": 3.87,
+                  "description": "10% waste factor for proper installation"
+                },
+                {
+                  "name": "Install Crown Molding (4-1/4\")",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 13.75,
+                  "description": "10% waste factor precision installation"
+                },
+                {
+                  "name": "Prime Crown Molding",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 3.03,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Crown Molding (2 Coats)",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 4.68,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 843,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation for all wall and ceiling areas"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 843,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 280,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "1st Floor Bathroom",
+          "showSubtotal": true,
+          "subtotal": "3434.97",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Bathroom Items",
+                  "qty": 1.0,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Professional protection and temporary relocation of remaining bathroom contents"
+                },
+                {
+                  "name": "Install Drywall (1/2\") Walls",
+                  "qty": 173,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": ""
+                },
+                {
+                  "name": "Install Drywall (1/2\") Ceiling",
+                  "qty": 27,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Ceiling installation complexity"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Full Surface",
+                  "qty": 42,
+                  "unit": "LF",
+                  "price": 7.50,
+                  "description": "Seam connection between existing and new drywall"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Professional trim installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Install Crown Molding",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 13.75,
+                  "description": "Professional installation"
+                },
+                {
+                  "name": "Prime Crown Molding",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 3.03,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Crown Molding (2 Coats)",
+                  "qty": 22,
+                  "unit": "LF",
+                  "price": 4.68,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 200,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 200,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Paint Door/Window Trim & Jamb (2 Coats)",
+                  "qty": 7,
+                  "unit": "EA",
+                  "price": 55.00,
+                  "description": "Proper trim finishing required for complete restoration"
+                },
+                {
+                  "name": "Install New Toilet",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 245.00,
+                  "description": "New toilet installation"
+                },
+                {
+                  "name": "Install New Sink (Single)",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 185.00,
+                  "description": "New sink installation"
+                },
+                {
+                  "name": "Install New Vanity",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 285.00,
+                  "description": "New vanity installation"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 27,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "1st Floor Hallway",
+          "showSubtotal": true,
+          "subtotal": "2036.44",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Hallway Items",
+                  "qty": 0.5,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Temporary relocation of remaining hallway contents during work"
+                },
+                {
+                  "name": "Install Drywall (1/2\")",
+                  "qty": 88,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Professional installation"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Seam Connection",
+                  "qty": 35,
+                  "unit": "LF",
+                  "price": 1.54,
+                  "description": "Seam connection work"
+                },
+                {
+                  "name": "Remove Existing Hardwood Flooring (LKQ)",
+                  "qty": 38,
+                  "unit": "SF",
+                  "price": 2.25,
+                  "description": "Full removal for Like Kind and Quality matching"
+                },
+                {
+                  "name": "Install Hardwood Flooring",
+                  "qty": 38,
+                  "unit": "SF",
+                  "price": 15.95,
+                  "description": ""
+                },
+                {
+                  "name": "Remove Existing Baseboard (LKQ)",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 1.85,
+                  "description": "Full removal for flooring installation"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Professional trim installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Remove Existing Quarter Round (LKQ)",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 1.25,
+                  "description": "Removal for new flooring"
+                },
+                {
+                  "name": "Install Quarter Round - Wood Flooring",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 3.87,
+                  "description": "For new hardwood flooring"
+                },
+                {
+                  "name": "Paint Crown Molding (1 Coat)",
+                  "qty": 29,
+                  "unit": "LF",
+                  "price": 2.85,
+                  "description": "Existing crown touch-up"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 184,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 184,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 38,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "1st Floor - Laundry Machine Closet",
+          "showSubtotal": true,
+          "subtotal": "1045.14",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Laundry Equipment",
+                  "qty": 0.5,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Professional disconnection and protection of washer/dryer (post-mitigation)"
+                },
+                {
+                  "name": "Install Drywall (1/2\")",
+                  "qty": 88,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Professional installation"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Seam Connection",
+                  "qty": 20,
+                  "unit": "LF",
+                  "price": 1.54,
+                  "description": "Seam connection work"
+                },
+                {
+                  "name": "Remove Existing Hardwood Flooring (LKQ)",
+                  "qty": 9,
+                  "unit": "SF",
+                  "price": 2.25,
+                  "description": "Full removal for Like Kind and Quality matching"
+                },
+                {
+                  "name": "Install Hardwood Flooring",
+                  "qty": 9,
+                  "unit": "SF",
+                  "price": 15.95,
+                  "description": "Professional hardwood installation"
+                },
+                {
+                  "name": "Remove Existing Baseboard (LKQ)",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 1.85,
+                  "description": "Full removal for flooring installation"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Professional trim installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Remove Existing Quarter Round (LKQ)",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 1.25,
+                  "description": "Removal for new flooring"
+                },
+                {
+                  "name": "Install Quarter Round - Wood Flooring",
+                  "qty": 7,
+                  "unit": "LF",
+                  "price": 3.87,
+                  "description": "For new hardwood flooring"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 88,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 88,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 9,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "1st Floor - Laundry Room",
+          "showSubtotal": true,
+          "subtotal": "2065.52",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Laundry Room Items",
+                  "qty": 0.5,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Temporary relocation of remaining laundry room contents during work"
+                },
+                {
+                  "name": "Remove Existing Hardwood Flooring (LKQ)",
+                  "qty": 35,
+                  "unit": "SF",
+                  "price": 2.25,
+                  "description": "Full removal for Like Kind and Quality matching"
+                },
+                {
+                  "name": "Install Hardwood Flooring",
+                  "qty": 35,
+                  "unit": "SF",
+                  "price": 15.95,
+                  "description": "Professional hardwood installation"
+                },
+                {
+                  "name": "Remove Existing Baseboard (LKQ)",
+                  "qty": 1,
+                  "unit": "LF",
+                  "price": 1.85,
+                  "description": "Full removal for flooring installation"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 1,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Professional trim installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 1,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 1,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Remove Existing Quarter Round (LKQ)",
+                  "qty": 1,
+                  "unit": "LF",
+                  "price": 1.25,
+                  "description": "Removal for new flooring"
+                },
+                {
+                  "name": "Install Quarter Round - Wood Flooring",
+                  "qty": 1,
+                  "unit": "LF",
+                  "price": 3.87,
+                  "description": "For new hardwood flooring"
+                },
+                {
+                  "name": "Door Opening Installation (32\"-36\" wide)",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 285.00,
+                  "description": "Professional door installation"
+                },
+                {
+                  "name": "Paint Door/Window Trim & Jamb (2 Coats)",
+                  "qty": 4,
+                  "unit": "EA",
+                  "price": 55.00,
+                  "description": "Trim finishing"
+                },
+                {
+                  "name": "Paint Full Bifold Door Set (1 Coat)",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 95.00,
+                  "description": "Door finishing"
+                },
+                {
+                  "name": "Paint Single Bifold Door (1 Coat)",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 75.00,
+                  "description": "Door finishing"
+                },
+                {
+                  "name": "Paint Door Slab (2 Coats per side)",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 65.00,
+                  "description": "Door finishing"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 145,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 145,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 35,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Front Entry",
+          "showSubtotal": true,
+          "subtotal": "11010.14",
+          "categories": [
+            {
+              "name": "Restoration Work",
+              "items": [
+                {
+                  "name": "Content Manipulation - Entry Area Items",
+                  "qty": 1.0,
+                  "unit": "HR",
+                  "price": 135.00,
+                  "description": "Professional relocation and protection of remaining front entry contents"
+                },
+                {
+                  "name": "Install Drywall (1/2\")",
+                  "qty": 72,
+                  "unit": "SF",
+                  "price": 3.55,
+                  "description": "Professional installation"
+                },
+                {
+                  "name": "Drywall Tape and Blend - Seam Connection",
+                  "qty": 35,
+                  "unit": "LF",
+                  "price": 1.54,
+                  "description": "Seam connection work"
+                },
+                {
+                  "name": "Remove Existing Hardwood Flooring (LKQ)",
+                  "qty": 332,
+                  "unit": "SF",
+                  "price": 2.25,
+                  "description": "Full removal for Like Kind and Quality matching"
+                },
+                {
+                  "name": "Install Hardwood Flooring",
+                  "qty": 332,
+                  "unit": "SF",
+                  "price": 15.95,
+                  "description": "Professional hardwood installation"
+                },
+                {
+                  "name": "Remove Existing Baseboard (LKQ)",
+                  "qty": 55,
+                  "unit": "LF",
+                  "price": 1.85,
+                  "description": "Full removal for flooring installation"
+                },
+                {
+                  "name": "Install Baseboard (5-1/4\")",
+                  "qty": 55,
+                  "unit": "LF",
+                  "price": 9.35,
+                  "description": "Professional trim installation"
+                },
+                {
+                  "name": "Prime Baseboard",
+                  "qty": 55,
+                  "unit": "LF",
+                  "price": 2.48,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Baseboard (2 Coats)",
+                  "qty": 55,
+                  "unit": "LF",
+                  "price": 3.47,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Remove Existing Quarter Round (LKQ)",
+                  "qty": 55,
+                  "unit": "LF",
+                  "price": 1.25,
+                  "description": "Removal for new flooring"
+                },
+                {
+                  "name": "Install Quarter Round - Wood Flooring",
+                  "qty": 55,
+                  "unit": "LF",
+                  "price": 3.87,
+                  "description": "For new hardwood flooring"
+                },
+                {
+                  "name": "Install Crown Molding (4-1/4\")",
+                  "qty": 9,
+                  "unit": "LF",
+                  "price": 13.75,
+                  "description": "Professional installation"
+                },
+                {
+                  "name": "Prime Crown Molding",
+                  "qty": 9,
+                  "unit": "LF",
+                  "price": 3.03,
+                  "description": "Surface preparation"
+                },
+                {
+                  "name": "Paint Crown Molding (2 Coats)",
+                  "qty": 9,
+                  "unit": "LF",
+                  "price": 4.68,
+                  "description": "Professional finish"
+                },
+                {
+                  "name": "Prime Walls and Ceiling",
+                  "qty": 806,
+                  "unit": "SF",
+                  "price": 1.95,
+                  "description": "Surface preparation for all wall and ceiling areas"
+                },
+                {
+                  "name": "Paint Walls and Ceiling (1 Coat)",
+                  "qty": 806,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Color matching for existing surfaces"
+                },
+                {
+                  "name": "Construction Protection",
+                  "qty": 332,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "OSHA standards protection"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Combined Debris Removal & Disposal",
+      "note": "Debris removal adjusted for construction waste only since demolition previously completed during mitigation phase.",
+      "locations": [
+        {
+          "name": "Project-Wide Debris Management",
+          "showSubtotal": true,
+          "subtotal": "3428.60",
+          "categories": [
+            {
+              "name": "Debris Removal Services",
+              "items": [
+                {
+                  "name": "10-Yard Dumpster Rental (Kitchen - 20 days)",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 350.00,
+                  "description": "Kitchen cabinet removal and installation debris"
+                },
+                {
+                  "name": "Kitchen Debris Removal Labor",
+                  "qty": 3200,
+                  "unit": "LB",
+                  "price": 0.18,
+                  "description": "Ground level hauling to dumpster"
+                },
+                {
+                  "name": "Construction Debris Removal (Interior)",
+                  "qty": 1361,
+                  "unit": "SF",
+                  "price": 0.35,
+                  "description": "General construction debris from new installation work"
+                },
+                {
+                  "name": "Daily Construction Cleanup",
+                  "qty": 1361,
+                  "unit": "SF",
+                  "price": 0.50,
+                  "description": "Daily cleanup throughout project per OSHA standards"
+                },
+                {
+                  "name": "Final Detail Cleaning",
+                  "qty": 1361,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Post-construction comprehensive cleaning"
+                },
+                {
+                  "name": "Fixture and Finish Cleaning",
+                  "qty": 1,
+                  "unit": "LS",
+                  "price": 325.00,
+                  "description": "Detailed cleaning of installed fixtures and surfaces"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  
+  "subtotal": "64025.77",
+  "discount": "0.00",
+  "overhead_profit": "12805.15",
+  "overhead_profit_rate": "20.00",
+  "tax_rate": "0.00",
+  "sales_tax": "0.00",
+  "total": "76830.92",
+  
+  "bottom_note": "Industry standard and legal precedent establish that overhead and profit is owed when multiple trades are reasonably required for proper restoration. The 20% overhead and profit rate reflects standard industry practices for projects of this complexity and scope.",
+  "disclaimer": "All pricing reflects competitive DMV market rates with supporting documentation available upon request. Construction services typically tax-exempt for insurance claims. Project management services are essential for multi-trade coordination, quality control, and regulatory compliance per OSHA standards."
+}

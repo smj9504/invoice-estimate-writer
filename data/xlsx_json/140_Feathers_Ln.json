@@ -1,0 +1,238 @@
+{
+  "estimate_number": "MOV-202507-140",
+  "estimate_date": "2025-07-01",
+  "company": {
+    "name": "H.K Junk Removal Service LLC",
+    "address": "14013 Tanners House Way",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 723-0446",
+    "email": "info@junk8282.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Suh, Moon",
+    "address": "140 Feathers Ln",
+    "city": "Linden",
+    "state": "VA",
+    "zip": "22642-6639",
+    "phone": "",
+    "email": "publicadjuster.kim@gmail.com"
+  },
+  "top_note": "This comprehensive estimate covers complete pack-out 3-month climate-controlled storage and pack-in services for all basement and kitchen contents at 140 Feathers Lane Linden VA with delivery to Centreville VA destination using current DMV area professional service rates.",
+  "bottom_note": "ACCESS AND LOGISTICS:\nBasement access through narrow passages and stairs requires specialized handling equipment and additional crew coordination\nBackyard gate access considerations for larger furniture pieces including china cabinet leather sofas dining tables\nDriveway positioning coordination for efficient loading of glass-top tables appliances and heavy furniture pieces\nProperty access management for safe movement of fragile items and specialized equipment\n\nSPECIAL HANDLING REQUIREMENTS:\nRound glass-top dining table and glass-top coffee tables require custom padding extra care protection and specialized transport\nLive potted plants excluded from standard packing service requiring customer coordination for separate relocation\nChina cabinet contents including dishes glassware individually packed in dish pack boxes with professional dividers\nPing pong table professional disassembly for transport and reassembly at destination included in setup services\nLeather furniture protected with specialized covers and blankets during extended storage period\n\nSTORAGE AND TIMELINE:\nExtended 3-month storage period in climate-controlled warehouse facility with consistent temperature and humidity control\nProfessional inventory documentation provided for insurance claim purposes with detailed item tracking\nContents organized in warehouse sections for efficient retrieval including basement furniture kitchen appliances dishware\nStorage facility features 24/7 security monitoring access control systems and professional warehouse management\n\nCREW AND EQUIPMENT:\nAll crew members licensed insured and background checked for residential contents manipulation services\nSpecialized equipment included for challenging basement access stairs navigation and glass furniture handling\nProfessional moving equipment dollies furniture straps protective padding and stair climbing equipment provided\nFour-person crew sizing ensures efficient safe handling of heavy appliances furniture and fragile glass items\n\nQUALITY ASSURANCE:\nCustomer walkthrough and satisfaction confirmation required upon completion of all pack-in services\nPost-delivery cleanup and debris removal included in final placement and positioning services\nProfessional setup includes complete unpacking placement and reassembly per customer specifications\nFinal invoice may vary based on actual field conditions access challenges and additional services required",
+  "disclaimer": "",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "PACK-OUT SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Kitchen Contents: Upright freezer chest freezer mini fridge black LG refrigerator-freezer round glass-top dining table rectangular plant table 6 dining chairs 2 plant table chairs 10 live potted plants 60 mugs cups glasses 70 plates bowls 50 flatware utensils 15 pots pans 35 tupperware containers microwave coffee maker toaster blender rice cooker air fryer cleaning supplies office supplies\n\nBasement Contents: Queen bed full bed single bed with brass headboard twin beds with bedding 2 metal nightstands brown leather 3-seat sofa brown leather 2-seat loveseat white antique sofa 2 glass-top coffee tables wooden round dining table 6 wooden dining chairs china cabinet standing lamp office desk maroon chair mirror oil heater stereo cabinet 2 barstools ping pong table playpen garment rack dark leather armchair loveseat"
+        },
+        {
+          "name": "Trip Fee - Pack Out",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 155.0,
+          "dec": "Round trip from Centreville to Linden VA including fuel and equipment transport"
+        },
+        {
+          "name": "Professional Pack-Out Labor - Day 1",
+          "qty": 8.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "4-person crew basement contents removal including queen full single twin beds leather sofas dining furniture"
+        },
+        {
+          "name": "Professional Pack-Out Labor - Day 2",
+          "qty": 8.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "4-person crew kitchen contents removal including refrigerators freezers glass dining table appliances dishware"
+        },
+        {
+          "name": "Standard Item Packing",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 20.0,
+          "dec": "Basic protection for dining chairs nightstands lamps office supplies cleaning supplies towels clothing"
+        },
+        {
+          "name": "Fragile Item Packing",
+          "qty": 25.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Enhanced protection for glass-top tables coffee tables mirrors electronics stereo equipment delicate items"
+        },
+        {
+          "name": "Premium Item Packing",
+          "qty": 15.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Specialized blanket wrapping for china cabinet antique white sofa valuable furniture leather pieces"
+        },
+        {
+          "name": "Box Packing - Standard",
+          "qty": 25.0,
+          "unit": "EA",
+          "price": 55.0,
+          "dec": "Standard boxes for clothing books office supplies cleaning supplies plastic bins general items"
+        },
+        {
+          "name": "Box Packing - Premium Protection",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 135.0,
+          "dec": "Dish pack boxes with dividers for 60 mugs cups glasses 70 plates bowls flatware tupperware containers"
+        },
+        {
+          "name": "Heavy Appliance Handling",
+          "qty": 7.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Upright freezer chest freezer mini fridge refrigerator-freezer air fryer microwave coffee maker"
+        },
+        {
+          "name": "Heavy Furniture Handling",
+          "qty": 18.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Queen full single twin beds with frames round glass dining table wooden dining table china cabinet leather sofas loveseats"
+        },
+        {
+          "name": "Mattress Protection Covers",
+          "qty": 5.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Professional grade covers for queen full single twin mattresses during transport and storage"
+        },
+        {
+          "name": "Stairs Carry Fee - Basement Items",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 15.0,
+          "dec": "Additional handling for basement contents through narrow passages stairs and challenging access"
+        },
+        {
+          "name": "Professional Moving Blankets",
+          "qty": 40.0,
+          "unit": "EA",
+          "price": 8.0,
+          "dec": "Furniture protection blankets for leather furniture glass tables wooden pieces and delicate items"
+        }
+      ],
+      "subtotal": 14790.0
+    },
+    {
+      "title": "STORAGE SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Climate Controlled Storage - Month 1",
+          "qty": 485.0,
+          "unit": "CF",
+          "price": 2.25,
+          "dec": "Professional warehouse facility with security monitoring for all basement and kitchen contents"
+        },
+        {
+          "name": "Climate Controlled Storage - Month 2",
+          "qty": 485.0,
+          "unit": "CF",
+          "price": 2.25,
+          "dec": "Continued secure storage second month"
+        },
+        {
+          "name": "Climate Controlled Storage - Month 3",
+          "qty": 485.0,
+          "unit": "CF",
+          "price": 2.25,
+          "dec": "Extended storage third month per project timeline"
+        }
+      ],
+      "subtotal": 3273.75
+    },
+    {
+      "title": "PACK-IN SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Trip Fee - Pack In",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 155.0,
+          "dec": "Delivery trip from storage facility to destination address including fuel and final positioning"
+        },
+        {
+          "name": "Professional Delivery Labor - Day 1",
+          "qty": 6.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "4-person crew delivery and placement of basement contents including beds sofas dining furniture ping pong table"
+        },
+        {
+          "name": "Professional Delivery Labor - Day 2",
+          "qty": 6.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "4-person crew kitchen contents delivery including appliances glass dining table chairs dishware setup"
+        },
+        {
+          "name": "Standard Item Unpacking",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 18.0,
+          "dec": "Professional unpacking of dining chairs nightstands lamps office items clothing and general household goods"
+        },
+        {
+          "name": "Fragile Item Unpacking",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 38.0,
+          "dec": "Careful unpacking of 60 mugs cups glasses 70 plates bowls glass tables mirrors electronics stereo equipment"
+        },
+        {
+          "name": "Heavy Appliance Setup",
+          "qty": 7.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Professional positioning and reconnection of refrigerators freezers microwave coffee maker air fryer appliances"
+        },
+        {
+          "name": "Heavy Furniture Setup",
+          "qty": 18.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Reassembly and positioning of beds with frames dining tables china cabinet leather sofas loveseats"
+        },
+        {
+          "name": "Stairs Carry Fee - Basement Placement",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 15.0,
+          "dec": "Basement delivery through narrow passages stairs and challenging access points"
+        },
+        {
+          "name": "Final Placement and Walkthrough",
+          "qty": 3.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "Final positioning of all items per customer specifications and project completion review"
+        }
+      ],
+      "subtotal": 6885.0
+    }
+  ],
+  "subtotal": 24948.75,
+  "op_amount": 0.0,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 24948.75
+}

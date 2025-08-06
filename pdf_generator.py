@@ -49,6 +49,10 @@ TEMPLATE_MAP = {
         "template": "insurance_estimate_format.html",
         "css": "insurance_estimate_style.css"
     },
+    "insurance_estimate_with_plans": {
+        "template": "insurance_estimate_with_plans.html",
+        "css": "insurance_estimate_style.css"
+    },
 }
 
 def generate_estimate_number(client_address=""):
@@ -330,16 +334,16 @@ def debug_template_content(html_content, context):
     print(f"DEBUG: HTML content length: {len(html_content)}")
 
     if 'trades' in html_content.lower():
-        print("DEBUG: ✓ 'trades' found in HTML content")
+        print("DEBUG: OK 'trades' found in HTML content")
     else:
-        print("DEBUG: ✗ 'trades' NOT found in HTML content")
+        print("DEBUG: X 'trades' NOT found in HTML content")
 
     note_elements = ['trade-note', 'location-note', 'amount-due-note']
     for element in note_elements:
         if element in html_content:
-            print(f"DEBUG: ✓ '{element}' found in HTML content")
+            print(f"DEBUG: OK '{element}' found in HTML content")
         else:
-            print(f"DEBUG: ✗ '{element}' NOT found in HTML content")
+            print(f"DEBUG: X '{element}' NOT found in HTML content")
 
     trades = context.get('trades', [])
     if trades:
@@ -371,15 +375,15 @@ def debug_template_content(html_content, context):
         if locations_without_categories:
             print(f"DEBUG: ⚠️ Locations without categories: {locations_without_categories}")
             if locations_with_stored_subtotal:
-                print(f"DEBUG: ✓ Locations with stored subtotals: {locations_with_stored_subtotal}")
+                print(f"DEBUG: OK Locations with stored subtotals: {locations_with_stored_subtotal}")
         else:
-            print(f"DEBUG: ✓ All locations have categories")
+            print(f"DEBUG: OK All locations have categories")
 
         if first_item_name:
             if first_item_name in html_content:
-                print(f"DEBUG: ✓ First item '{first_item_name}' found in HTML")
+                print(f"DEBUG: OK First item '{first_item_name}' found in HTML")
             else:
-                print(f"DEBUG: ✗ First item '{first_item_name}' NOT found in HTML")
+                print(f"DEBUG: X First item '{first_item_name}' NOT found in HTML")
 
     preview_length = 1000
     print(f"DEBUG: HTML preview (first {preview_length} chars):")
@@ -969,6 +973,45 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
         print(f"DEBUG: PDF generated successfully (without custom CSS) at: {output_path}")
 
     print(f"DEBUG: ========== PDF GENERATION END ==========")
+
+def generate_insurance_estimate_pdf_with_plans(context: dict, output_path: str):
+    """보험 견적서 PDF 생성 with Floor Plans"""
+    import copy
+    
+    print(f"DEBUG: generate_insurance_estimate_pdf_with_plans called")
+    print(f"DEBUG: Output path: {output_path}")
+    
+    # 깊은 복사로 원본 보호
+    context_copy = copy.deepcopy(context)
+    
+    try:
+        from floor_plan_generator import FloorPlanGenerator
+        
+        # Generate floor plans if data is available
+        if 'floor_plans' in context_copy and 'rooms' in context_copy['floor_plans']:
+            print(f"DEBUG: Generating floor plans for {len(context_copy['floor_plans']['rooms'])} rooms")
+            generator = FloorPlanGenerator()
+            
+            for room in context_copy['floor_plans']['rooms']:
+                # Generate SVG floor plan
+                if 'coordinates' in room and room['coordinates']:
+                    room['svg_plan'] = generator.generate_complex_room_svg(room)
+                else:
+                    room['svg_plan'] = generator.generate_room_svg(room)
+                
+                # Generate measurement table
+                room['measurement_table'] = generator.generate_measurement_table_html(room)
+                print(f"DEBUG: Generated floor plan for room: {room.get('name', 'Unknown')}")
+        
+        # PDF 생성 전 컨텍스트 디버깅
+        debug_pdf_context_before_generation(context_copy)
+        
+        # PDF 생성 with floor plans template
+        generate_pdf(context_copy, output_path, doc_type="insurance_estimate_with_plans")
+        
+    except ImportError as e:
+        print(f"Floor plan generator not available: {e}, generating standard estimate")
+        generate_insurance_estimate_pdf(context_copy, output_path)
 
 def generate_insurance_estimate_pdf(context: dict, output_path: str):
     """보험 견적서 PDF 생성 - 향상된 디버깅 및 계산 검증 포함"""

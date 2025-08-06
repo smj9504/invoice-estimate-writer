@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moving Estimate Intake Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #333;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .form-content {
+            padding: 15px;
+        }
+
+        .form-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-row-triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-row-quad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+            color: #bbb;
+        }
+
+        input::-moz-placeholder, textarea::-moz-placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+            color: #bbb;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 4px;
+            margin-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .inventory-section {
+            border: 1px solid #ccc;
+            padding: 6px;
+            margin-bottom: 6px;
+        }
+
+        .inventory-header {
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+        }
+
+        .submit-section {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .submit-btn {
+            background: #333;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #555;
+        }
+
+        .note {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row, .form-row-triple {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-content {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .submit-section {
+                display: none;
+            }
+            .container {
+                border: none;
+                box-shadow: none;
+            }
+            .header {
+                padding: 10px;
+            }
+            .form-content {
+                padding: 10px;
+            }
+            .form-section {
+                margin-bottom: 8px;
+                padding: 6px;
+                page-break-inside: avoid;
+            }
+            .inventory-section {
+                padding: 4px;
+                margin-bottom: 4px;
+            }
+            textarea {
+                min-height: 30px;
+            }
+            .checkbox-group {
+                gap: 2px;
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .checkbox-item {
+                padding: 1px;
+                font-size: 0.75rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            /* Page footer for print */
+            @page {
+                margin: 1in 0.75in 1.5in 0.75in;
+                @bottom-left {
+                    content: "Page " counter(page) " of " counter(pages);
+                    font-size: 10px;
+                    font-family: Arial, sans-serif;
+                }
+                @bottom-right {
+                    content: "Moving Estimate Intake Form";
+                    font-size: 10px;
+                    font-family: Arial, sans-serif;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Moving Estimate Intake Form</h1>
+        </div>
+
+        <form class="form-content" id="intakeForm">
+            <!-- Contact Information -->
+            <div class="form-section">
+                <h2 class="section-title">Contact Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" name="companyName" placeholder="Contracting company">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyAddress">Company Address</label>
+                        <input type="text" id="companyAddress" name="companyAddress" placeholder="Contracting company Address">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Information -->
+            <div class="form-section">
+                <h2 class="section-title">Project Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectDuration">Project Duration/Timeline <span class="required">*</span></label>
+                        <input type="text" id="projectDuration" name="projectDuration" placeholder="e.g., 2-3 weeks, 30 days storage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="workLocation">Work Location <span class="required">*</span></label>
+                        <input type="text" id="workLocation" name="workLocation" placeholder="e.g., Basement only, Entire house, 2nd floor" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Information -->
+            <div class="form-section">
+                <h2 class="section-title">Property Information</h2>
+                <div class="form-group">
+                    <label for="propertyAddress">Property Address <span class="required">*</span></label>
+                    <textarea id="propertyAddress" name="propertyAddress" placeholder="Full property address including city, state, zip code" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="storageType">Storage Location Type <span class="required">*</span></label>
+                    <div class="checkbox-group" style="grid-template-columns: 1fr 1fr;">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="offSiteStorage" name="storageType[]" value="off-site" onchange="updateStorageType('off-site')">
+                            <label for="offSiteStorage">Off-Site Storage Facility</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="temporaryStaging" name="storageType[]" value="temporary-staging" onchange="updateStorageType('temporary-staging')">
+                            <label for="temporaryStaging">Temporary Staging on Property</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="storageLocationGroup">
+                    <label for="storageLocation">Storage Location Address</label>
+                    <textarea id="storageLocation" name="storageLocation" placeholder="Storage facility address or temporary staging location details"></textarea>
+                </div>
+            </div>
+
+            <!-- Contents Inventory -->
+            <div class="form-section">
+                <h2 class="section-title">Contents Inventory <span class="required">*</span></h2>
+                
+                <div class="form-row">
+                    <div class="inventory-section">
+                        <div class="inventory-header">Basement</div>
+                        <div class="form-group">
+                            <label for="basementRooms">Rooms</label>
+                            <input type="text" id="basementRooms" name="basementRooms" placeholder="Family Room, Storage, Utility">
+                        </div>
+                        <div class="form-group">
+                            <label for="basementContents">Contents</label>
+                            <textarea id="basementContents" name="basementContents" placeholder="List basement items"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="inventory-section">
+                        <div class="inventory-header">1st Floor</div>
+                        <div class="form-group">
+                            <label for="firstFloorRooms">Rooms</label>
+                            <input type="text" id="firstFloorRooms" name="firstFloorRooms" placeholder="Living, Kitchen, Dining, Office">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstFloorContents">Contents</label>
+                            <textarea id="firstFloorContents" name="firstFloorContents" placeholder="List 1st floor items"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="inventory-section">
+                        <div class="inventory-header">2nd Floor</div>
+                        <div class="form-group">
+                            <label for="secondFloorRooms">Rooms</label>
+                            <input type="text" id="secondFloorRooms" name="secondFloorRooms" placeholder="Master BR, Guest BR, Bath">
+                        </div>
+                        <div class="form-group">
+                            <label for="secondFloorContents">Contents</label>
+                            <textarea id="secondFloorContents" name="secondFloorContents" placeholder="List 2nd floor items"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="inventory-section">
+                        <div class="inventory-header">3rd Floor/Attic</div>
+                        <div class="form-group">
+                            <label for="thirdFloorRooms">Areas</label>
+                            <input type="text" id="thirdFloorRooms" name="thirdFloorRooms" placeholder="Attic, Storage, Bedroom">
+                        </div>
+                        <div class="form-group">
+                            <label for="thirdFloorContents">Contents</label>
+                            <textarea id="thirdFloorContents" name="thirdFloorContents" placeholder="List 3rd floor/attic items"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inventory-section">
+                    <div class="inventory-header">Garage/Outdoor</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="garageRooms">Areas</label>
+                            <input type="text" id="garageRooms" name="garageRooms" placeholder="Garage, Shed, Patio, Deck">
+                        </div>
+                        <div class="form-group">
+                            <label for="garageContents">Contents</label>
+                            <textarea id="garageContents" name="garageContents" placeholder="List garage/outdoor items"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debris/Junk Inventory -->
+            <div class="form-section">
+                <h2 class="section-title">Debris/Junk Inventory</h2>
+                <div class="form-group">
+                    <label for="debrisInventory">Items Requiring Removal/Disposal</label>
+                    <textarea id="debrisInventory" name="debrisInventory" placeholder="Furniture, appliances, construction debris, yard waste, etc."></textarea>
+                </div>
+            </div>
+
+            <!-- Disposal Requirements -->
+            <div class="form-section">
+                <h2 class="section-title">Disposal Requirements</h2>
+                <div class="form-group">
+                    <label>Special Disposal Needs</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hazardous" name="disposal[]" value="hazardous">
+                            <label for="hazardous">Hazardous Materials</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="electronics" name="disposal[]" value="electronics">
+                            <label for="electronics">Electronics</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="appliances" name="disposal[]" value="appliances">
+                            <label for="appliances">Appliances</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="construction" name="disposal[]" value="construction">
+                            <label for="construction">Construction Waste</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="bulk" name="disposal[]" value="bulk">
+                            <label for="bulk">Bulk Items</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="yard" name="disposal[]" value="yard">
+                            <label for="yard">Yard Waste</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation -->
+            <div class="form-section">
+                <h2 class="section-title">Photo Documentation Requirements</h2>
+                
+                <div class="form-group">
+                    <label><strong>Required Photo Documentation Instructions</strong></label>
+                    <div style="background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin-top: 5px;">
+                        <p><strong>Please provide photos organized by the following categories:</strong></p>
+                        
+                        <p><strong>1. BEFORE PACKING PHOTOS (by floor/area):</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>Basement - all rooms and storage areas</li>
+                            <li>1st Floor - each room (living room, kitchen, dining room, etc.)</li>
+                            <li>2nd Floor - each room (bedrooms, bathrooms, etc.)</li>
+                            <li>3rd Floor/Attic - all accessible areas</li>
+                            <li>Garage/Outdoor - garage, shed, patio, deck areas</li>
+                        </ul>
+                        
+                        <p><strong>2. AFTER PACKING PHOTOS (by floor/area):</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>Same floor/room breakdown as above</li>
+                            <li>Show packed boxes and remaining items</li>
+                            <li>Document any items left behind</li>
+                        </ul>
+                        
+                        <p><strong>Photo Organization:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>Take multiple angles of each room</li>
+                            <li>Include close-ups of valuable or fragile items</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="photoSubmissionMethod">Photo Submission Method</label>
+                    <textarea id="photoSubmissionMethod" name="photoSubmissionMethod" placeholder="How will photos be submitted? (Google Drive link, email, USB drive, etc.)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="photoNotes">Photo Documentation Notes</label>
+                    <textarea id="photoNotes" name="photoNotes" placeholder="Any special photo requirements, timing considerations, or access limitations for documentation"></textarea>
+                </div>
+            </div>
+
+            <!-- Special Requirements -->
+            <div class="form-section">
+                <h2 class="section-title">Special Requirements</h2>
+                <div class="form-group">
+                    <label>Special Requirements</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="stairs" name="special[]" value="stairs">
+                            <label for="stairs">Stairs</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="elevators" name="special[]" value="elevators">
+                            <label for="elevators">Elevators</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="longCarry" name="special[]" value="longCarry">
+                            <label for="longCarry">Long Carry</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fragile" name="special[]" value="fragile">
+                            <label for="fragile">Fragile Items</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="heavyLifting" name="special[]" value="heavyLifting">
+                            <label for="heavyLifting">Heavy Lifting Equipment</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="demolition" name="special[]" value="demolition">
+                            <label for="demolition">Demolition Needs</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialDetails">Special Requirements Details</label>
+                    <textarea id="specialDetails" name="specialDetails" placeholder="Provide specific details about special requirements or challenges"></textarea>
+                </div>
+            </div>
+
+            <!-- Access Considerations -->
+            <div class="form-section">
+                <h2 class="section-title">Access Considerations</h2>
+                <div class="form-group">
+                    <label>Access Considerations</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="backyardGate" name="access[]" value="backyardGate">
+                            <label for="backyardGate">Backyard Gate</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="narrowPassages" name="access[]" value="narrowPassages">
+                            <label for="narrowPassages">Narrow Passages</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="basementEgress" name="access[]" value="basementEgress">
+                            <label for="basementEgress">Basement Egress</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="drivewayAccess" name="access[]" value="drivewayAccess">
+                            <label for="drivewayAccess">Driveway Access</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="hoaRestrictions" name="access[]" value="hoaRestrictions">
+                            <label for="hoaRestrictions">HOA Restrictions</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="limitedParking" name="access[]" value="limitedParking">
+                            <label for="limitedParking">Limited Parking</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="accessDetails">Access Details</label>
+                    <textarea id="accessDetails" name="accessDetails" placeholder="Describe any access challenges or restrictions"></textarea>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="form-section">
+                <h2 class="section-title">Additional Information</h2>
+                <div class="form-group">
+                    <label for="additionalNotes">Additional Notes/Comments</label>
+                    <textarea id="additionalNotes" name="additionalNotes" placeholder="Any additional information or special circumstances"></textarea>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('intakeForm');
+            
+            // Basic validation
+            const requiredFields = form.querySelectorAll('[required]');
+            let allValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'red';
+                    allValid = false;
+                } else {
+                    field.style.borderColor = '#ccc';
+                }
+            });
+            
+            if (!allValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            alert('Thank you! Your intake form has been submitted successfully. We will contact you within 24 hours to discuss your project and provide a detailed estimate.');
+        }
+
+        function updateStorageType(selectedType) {
+            const offSiteCheckbox = document.getElementById('offSiteStorage');
+            const temporaryCheckbox = document.getElementById('temporaryStaging');
+            const storageLocationField = document.getElementById('storageLocation');
+            const label = document.querySelector('label[for="storageLocation"]');
+            
+            // Allow only one selection
+            if (selectedType === 'off-site') {
+                temporaryCheckbox.checked = false;
+            } else if (selectedType === 'temporary-staging') {
+                offSiteCheckbox.checked = false;
+            }
+            
+            if (offSiteCheckbox.checked) {
+                label.innerHTML = 'Storage Facility Address <span class="required">*</span>';
+                storageLocationField.placeholder = 'Storage facility address';
+                storageLocationField.value = '14013 Tanners House Way Centreville, VA 20121';
+                storageLocationField.required = true;
+            } else if (temporaryCheckbox.checked) {
+                label.innerHTML = 'Temporary Staging Location Details';
+                storageLocationField.placeholder = 'Describe temporary staging area on property (garage, driveway, designated room, etc.)';
+                storageLocationField.value = '';
+                storageLocationField.required = false;
+            } else {
+                label.innerHTML = 'Storage Location Address';
+                storageLocationField.placeholder = 'Storage facility address or temporary staging location details';
+                storageLocationField.value = '14013 Tanners House Way Centreville, VA 20121';
+                storageLocationField.required = false;
+            }
+        }
+    </script>
+</body>
+</html>

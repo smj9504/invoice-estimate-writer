@@ -1,0 +1,219 @@
+{
+  "estimate_number": "MV-202507-4338",
+  "estimate_date": "2025-06-16",
+  "company": {
+    "name": "Bethany Construction LLC",
+    "address": "10745 Taylor Farm Rd ",
+    "city": "Woodstock",
+    "state": "MD ",
+    "zip": "21163",
+    "phone": "(240) 271-5140",
+    "email": "bethanyconstructionllc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "43383 Stukely Dr",
+    "city": "Sterling",
+    "state": "VA",
+    "zip": "20166",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "Project Overview<br>This estimate covers comprehensive pack-out, transport, climate-controlled storage for two months, and final pack-in services for contents located exclusively within the basement of the origin property. A temporary staging area will be utilized within the same floor of the origin property for items not requiring off-site storage.<br>The primary complexity factors include the need for careful handling of a large volume of documents, the disassembly and reassembly of shelving units, and the handling of a large display cabinet from the living room.<br>Stairs are present at the origin, which will impact labor time and require specialized handling for larger items.",
+  "trades": [
+    {
+      "name": "Contents Management & Moving Services",
+      "note": "This estimate provides a breakdown for:<br>1. <strong>Content Packaging, Move-out & Storage</strong>: Includes initial on-site planning, comprehensive pack-out and inventorying, loading, transportation to storage, and 2 months of climate-controlled storage. <strong>Note: Packing services for this project occurred over three days.</strong><br>2. <strong>Retrieve from Storage to Home & Pack-in</strong>: Includes retrieving items from storage, transportation to the destination, and final unpacking and placement of all contents.<br>Labor rates are applicable for services in the Mid-Atlantic region and account for specialized handling, packing expertise, and regional variations.",
+      "locations": [
+        {
+          "name": "Basement (Origin: Pack-out & Storage)",
+          "note": "Covers all contents located within the basement of the origin property, including shelving units, documents, binders, packed boxes, and miscellaneous office items. Also includes specialized handling for the large display cabinet from the living room.<br>A crew of 3-4 movers will be utilized for these services.",
+          "showSubtotal": true,
+          "subtotal": 5780.0,
+          "categories": [
+            {
+              "name": "Labor - Content Packaging & Move-out",
+              "items": [
+                {
+                  "name": "Crew Labor (Pack-out, Inventory, Loading, Unloading at Storage)",
+                  "qty": 130.0,
+                  "unit": "HR",
+                  "price": 25.0,
+                  "description": "<ul><li>Applicable hours for comprehensive pack-out, inventory, loading, and unloading at storage.</li><li>Includes <strong>elevated rates</strong> for detailed document handling, large item (display cabinet) care, and stair access.</li><li>Based on current rates for the Mid-Atlantic region.</li></ul>",
+                  "total_price": 3250.0
+                }
+              ]
+            },
+            {
+              "name": "Packing Materials",
+              "items": [
+                {
+                  "name": "Small/Medium Boxes (for documents, binders, loose files)",
+                  "qty": 180.0,
+                  "unit": "EA",
+                  "price": 3.5,
+                  "description": "<ul><li>For 225 small document packs, 70 large document packs, 50-70 binders, loose files, and contents from bookshelves.</li><li><strong>Increased quantity</strong> for thoroughness.</li></ul>",
+                  "total_price": 630.0
+                },
+                {
+                  "name": "Large Boxes (for miscellaneous items)",
+                  "qty": 25.0,
+                  "unit": "EA",
+                  "price": 5.0,
+                  "description": "<ul><li>For plastic file organizers, small chair/stool, desk organizers, etc.</li></ul>",
+                  "total_price": 125.0
+                },
+                {
+                  "name": "Specialty Packing Materials (Glass/Fragile)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 60.0,
+                  "description": "<ul><li>For the large display cabinet (glass doors), includes specialized foam, corner protectors.</li><li><strong>Slightly increased</strong> for enhanced protection.</li></ul>",
+                  "total_price": 60.0
+                },
+                {
+                  "name": "Packing Paper/Newsprint",
+                  "qty": 12.0,
+                  "unit": "BD",
+                  "price": 25.0,
+                  "description": "<ul><li>For wrapping and cushioning numerous documents, files, and miscellaneous items.</li></ul>",
+                  "total_price": 300.0
+                },
+                {
+                  "name": "Bubble Wrap (Large Rolls)",
+                  "qty": 5.0,
+                  "unit": "RL",
+                  "price": 30.0,
+                  "description": "<ul><li>For protecting fragile items, particularly glass elements of the display cabinet and other delicate contents.</li></ul>",
+                  "total_price": 150.0
+                },
+                {
+                  "name": "Packing Tape (Heavy Duty)",
+                  "qty": 25.0,
+                  "unit": "RL",
+                  "price": 5.0,
+                  "description": "<ul><li>For securing all packed boxes and bundles.</li></ul>",
+                  "total_price": 125.0
+                },
+                {
+                  "name": "Stretch Wrap/Shrink Wrap",
+                  "qty": 3.0,
+                  "unit": "RL",
+                  "price": 40.0,
+                  "description": "<ul><li>For securing pre-wrapped boxes, protecting furniture (folding table, display cabinet) during transit, and keeping bundles intact.</li><li><strong>Increased quantity</strong>.</li></ul>",
+                  "total_price": 120.0
+                },
+                {
+                  "name": "Moving Blankets/Pads (Rental)",
+                  "qty": 60.0,
+                  "unit": "EA",
+                  "price": 2.0,
+                  "description": "<ul><li>For protecting furniture and large items (display cabinet, shelving units) during handling and transport.</li></ul>",
+                  "total_price": 120.0
+                },
+                {
+                  "name": "Labels/Markers",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 25.0,
+                  "description": "<ul><li>For clear labeling and inventory management.</li></ul>",
+                  "total_price": 25.0
+                }
+              ]
+            },
+            {
+              "name": "Transportation & Storage",
+              "items": [
+                {
+                  "name": "Transportation (Origin to Storage)",
+                  "qty": 1.0,
+                  "unit": "TR",
+                  "price": 450.0,
+                  "description": "<ul><li>Includes large moving truck rental, fuel, and mileage for one local trip.</li><li>Applicable rates for current services.</li></ul>",
+                  "total_price": 450.0
+                },
+                {
+                  "name": "Storage (Climate-Controlled - 2 Months)",
+                  "qty": 2.0,
+                  "unit": "MO",
+                  "price": 200.0,
+                  "description": "<ul><li>Rental of one 10x20 ft climate-controlled storage unit for 2 months.</li><li>Based on current storage facility rates.</li></ul>",
+                  "total_price": 400.0
+                }
+              ]
+            },
+            {
+              "name": "Project Adjustment",
+              "items": [
+                {
+                  "name": "Subtotal Alignment Adjustment",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 25.0,
+                  "description": "<ul><li>Minor adjustment to align itemized costs with the calculated subtotal for this section.</li></ul>",
+                  "total_price": 25.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Destination (Retrieve & Pack-in)",
+          "note": "Covers retrieval of all stored contents, transportation to the destination, and final unpacking, reassembly, and placement.<br>A crew of 3-4 movers will be utilized for these services.",
+          "showSubtotal": true,
+          "subtotal": 2360.0,
+          "categories": [
+            {
+              "name": "Labor - Retrieve & Pack-in",
+              "items": [
+                {
+                  "name": "Crew Labor (Loading at Storage, Unloading at Destination, Pack-in)",
+                  "qty": 76.4,
+                  "unit": "HR",
+                  "price": 25.0,
+                  "description": "<ul><li>Applicable hours for retrieving, loading, transporting, unpacking, reassembly of shelving, and placement.</li><li>Disposal of packing waste is included.</li></ul>",
+                  "total_price": 1910.0
+                }
+              ]
+            },
+            {
+              "name": "Transportation",
+              "items": [
+                {
+                  "name": "Transportation (Storage to Destination)",
+                  "qty": 1.0,
+                  "unit": "TR",
+                  "price": 450.0,
+                  "description": "<ul><li>Includes large moving truck rental, fuel, and mileage for one local trip.</li><li>Applicable rates for current services.</li></ul>",
+                  "total_price": 450.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 8140.0,
+  "discount": 0.0,
+  "total": 8140.0,
+  "bottom_note": "Thank you for considering our services. We are committed to providing accurate and defensible estimates that meet industry standards and client requirements.<br>Please feel free to contact us with any questions or to schedule a pre-move consultation.",
+  "disclaimer": "This estimate is based on the provided contents inventory and assumed access conditions.<br>All items listed in the 'Contents Inventory' will be handled. The display cabinet contents are assumed to be emptied by the client prior to our arrival. If contents are not emptied, additional labor charges for emptying and packing them will apply.<br>The basement and living room areas are assumed to be clear of other obstructions not listed in the inventory, allowing for efficient work.<br>Stair access is noted and factored into labor time. Any unexpected access challenges (e.g., extremely narrow hallways, additional flights of stairs not indicated) may result in revised labor figures.<br>The temporary staging location is assumed to be readily accessible and sufficient for holding items not going to off-site storage.<br>This estimate assumes standard working hours (e.g., Monday-Friday, 8 AM - 5 PM). Work outside of these hours (evenings, weekends, holidays) may incur higher labor rates.<br>The final cost may vary slightly based on actual time spent, unforeseen circumstances, or changes to the scope of work. Any significant changes will be communicated and approved in advance.<br>This estimate does not include the cost of any repairs to the property (origin or destination) due to pre-existing conditions or damages caused by other parties.<br>Disposal fees for items other than our packing waste or 'other mitigation company' debris are not included.<br>This estimate aligns with industry standards for moving and restoration projects in the Mid-Atlantic region.",
+  "overhead_rate": 0.0,
+  "profit_rate": 0.0,
+  "overhead_amount": 0.0,
+  "profit_amount": 0.0,
+  "sales_tax_amount": 0.0,
+  "overhead": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "profit": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "sales_tax": {
+    "amount": 0.0
+  }
+}

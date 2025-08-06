@@ -1,0 +1,133 @@
+{
+  "estimate_number": "EST-202506-8740",
+  "estimate_date": "2025-06-16",
+  "company": {
+    "name": "H.K Junk Removal Service LLC",
+    "address": "14013 Tanners House Way",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 723-0446",
+    "email": "info@junk8282.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Xiaoyu Wu",
+    "address": "8740 Manahan Dr",
+    "city": "Ellicott City",
+    "state": "MD",
+    "zip": "21043",
+    "phone": "443-998-1488",
+    "email": "publicadjuster.kim@gmail.com"
+  },
+  "top_note": "PRE-MITIGATION CONTENT REMOVAL ONLY\n- This estimate is strictly for the packaging and temporary relocation of contents to allow for mitigation work to begin.\n- Contents temporarily relocated for mitigation/restoration access\n- All items will remain on-property in two designated staging areas as requested.\"",
+  "bottom_note": "\"NO UNPACKING OR RESET SERVICES INCLUDED\n- This scope does NOT include moving contents back unpacking\n- Post-restoration content return requires separate estimate\n- A new, separate estimate is required for any services needed after restoration work is complete.\"",
+  "disclaimer": "",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "CONTENT PACKAGING",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "testdescription\ntestdescriptiontestdescriptiontestdescriptiontestdescriptiontestdescription\ntestdescriptiontestdescriptiontestdescriptiontestdescription"
+        },
+        {
+          "name": "Box Handling - Medium Boxes",
+          "qty": 15.0,
+          "unit": "EA",
+          "price": 8.0,
+          "dec": "Existing packed boxes relocated with protection"
+        },
+        {
+          "name": "Box Handling - Large Boxes",
+          "qty": 13.0,
+          "unit": "EA",
+          "price": 12.0,
+          "dec": "Heavy box contents relocated to staging areas"
+        },
+        {
+          "name": "Furniture Protection - Standard Items",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 18.0,
+          "dec": "General furniture cloth covering for temporary storage"
+        },
+        {
+          "name": "Sofa Protection and Moving",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Upholstered furniture wrapping and careful handling"
+        },
+        {
+          "name": "Piano Moving Preparation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Professional piano padding and protection setup"
+        },
+        {
+          "name": "Miscellaneous Items Protection",
+          "qty": 1.0,
+          "unit": "LT",
+          "price": 185.0,
+          "dec": "Various household items packaging per photos"
+        }
+      ],
+      "subtotal": 613.0
+    },
+    {
+      "title": "CONTENT RELOCATION",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Multi-Day Content Manipulation",
+          "qty": 18.0,
+          "unit": "HR",
+          "price": 185.0,
+          "dec": "3-person crew over 3-day period with coordination"
+        },
+        {
+          "name": "Piano Moving - Basement to Staging",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 245.0,
+          "dec": "4-person crew with specialized equipment and sliding door access"
+        },
+        {
+          "name": "Indoor Staging Setup",
+          "qty": 1.0,
+          "unit": "SV",
+          "price": 125.0,
+          "dec": "Bedroom staging area organization and protection"
+        },
+        {
+          "name": "Outdoor Staging Setup",
+          "qty": 1.0,
+          "unit": "SV",
+          "price": 145.0,
+          "dec": "Backyard staging with weather protection and covering"
+        },
+        {
+          "name": "Sliding Door Access Coordination",
+          "qty": 3.0,
+          "unit": "SV",
+          "price": 75.0,
+          "dec": "Special access logistics due to sliding door constraint"
+        }
+      ],
+      "subtotal": 4070.0
+    }
+  ],
+  "subtotal": 4683.0,
+  "op_amount": 0.0,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 4683.0
+}

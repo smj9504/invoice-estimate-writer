@@ -1,0 +1,532 @@
+{
+  "estimate_number": "EST-202506-9450",
+  "estimate_date": "2025-06-28",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Yong Ha Hwang",
+    "address": "9450 Onion Patch Drive",
+    "city": "Burke",
+    "state": "VA",
+    "zip": "22015",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This comprehensive restoration estimate addresses water damage affecting multiple areas of your property, including basement recreation areas, source room, bathroom, utility room, and associated closet space.\n\nProject Scope: Multi-room interior restoration including drywall replacement, flooring installation, trim work, painting, and specialty fixture work across 5 primary locations.",
+  "bottom_note": "",
+  "disclaimer": "OVERHEAD:\nProfessional overhead costs represent the essential business expenses required to deliver quality restoration services, including comprehensive project insurance and bonding coverage, specialized equipment and tool transportation to job sites, regulatory compliance and permit coordination, skilled workforce supervision and quality control oversight, material delivery logistics and inventory management, plus ongoing business operations that ensure reliable service delivery and customer protection throughout the restoration process.\n\nCONTRACTOR PROFIT:\nContractor profit reflects the professional expertise and specialized knowledge required for complex restoration work, assumption of project risks and comprehensive warranty obligations, plus the professional service delivery standards that ensure proper restoration to pre-loss condition with guaranteed workmanship and customer satisfaction.",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "Rec Room",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Complete restoration of water-damaged basement recreation areas including drywall installation in affected zones, vinyl plank flooring replacement, comprehensive trim and baseboard installation, plus full painting restoration"
+        },
+        {
+          "name": "Construction Protection",
+          "qty": 450.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Comprehensive protection measures per OSHA standards to prevent damage to existing finishes and maintain safe work environment"
+        },
+        {
+          "name": "Install 1/2\" Drywall - 2' Height",
+          "qty": 99.5,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R702.3 installation requirements with cutting allowance for proper joint placement and breakage prevention. Includes 10% waste factor."
+        },
+        {
+          "name": "Install 1/2\" Drywall - 4' Height",
+          "qty": 28.24,
+          "unit": "LF",
+          "price": 17.0,
+          "dec": "IRC R702.3 installation requirements for 4-foot height areas with 10% waste factor for proper installation"
+        },
+        {
+          "name": "Drywall Tape and Blend - Seam Connection",
+          "qty": 128.08,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Proper seam treatment for new-to-existing drywall connections per IRC R702.3.8. Includes 10% waste factor."
+        },
+        {
+          "name": "Batt Insulation Installation",
+          "qty": 369.0,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Wall insulation replacement with 5% waste factor for cutting and fitting around framing members and utilities"
+        },
+        {
+          "name": "Vinyl plank flooring installation",
+          "qty": 494.76,
+          "unit": "SF",
+          "price": 8.75,
+          "dec": "Industry standard 10% waste factor for proper plank layout and cutting requirements"
+        },
+        {
+          "name": "Install 3-1/4\" Baseboard",
+          "qty": 127.79,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": "Baseboard installation with 10% waste factor for proper fitting and cutting allowance"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 127.79,
+          "unit": "LF",
+          "price": 3.75,
+          "dec": "Quarter round installation with 10% waste factor for proper joint connections"
+        },
+        {
+          "name": "Door Casing R&R",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": "Water damage to door casing requires replacement for proper moisture seal and code compliance"
+        },
+        {
+          "name": "Recessed Light Detach & Reset",
+          "qty": 6.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Required electrical work to safely disconnect and reconnect electrical fixtures per NEC standards"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 1412.0,
+          "unit": "SF",
+          "price": 1.35,
+          "dec": "Surface preparation and priming with 5% waste factor for proper paint adhesion per IRC R702.3.8"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 1412.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Two-coat paint application with 5% waste factor for uniform coverage and finish quality"
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 255.57,
+          "unit": "LF",
+          "price": 2.75,
+          "dec": "Trim painting with 10% waste factor for proper coverage and finish matching"
+        },
+        {
+          "name": "Stair Wall Painting - 1st Floor to Basement",
+          "qty": 85.0,
+          "unit": "SF",
+          "price": 4.25,
+          "dec": "Water damage restoration of stair wall surfaces connecting 1st floor to basement including proper surface preparation priming and two coats of paint to match existing finish"
+        }
+      ],
+      "subtotal": 14729.38
+    },
+    {
+      "title": "Source Room",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Complete drywall and ceiling replacement, insulation installation, vinyl plank flooring, three door casing replacements, and comprehensive painting restoration"
+        },
+        {
+          "name": "Construction Protection",
+          "qty": 104.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Job-site protection measures to prevent damage during construction activities"
+        },
+        {
+          "name": "Install 1/2\" Drywall - Walls",
+          "qty": 197.22,
+          "unit": "SF",
+          "price": 3.75,
+          "dec": "IRC R702.3 installation for previously demolished areas requiring full restoration. Includes 10% waste factor."
+        },
+        {
+          "name": "Install 1/2\" Drywall - Ceiling",
+          "qty": 114.1,
+          "unit": "SF",
+          "price": 4.25,
+          "dec": "IRC R702.3 ceiling installation for previously demolished areas. Includes 10% waste factor."
+        },
+        {
+          "name": "Drywall Tape and Blend - Full Surface",
+          "qty": 342.32,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Complete surface finishing with 10% waste factor for proper joint treatment"
+        },
+        {
+          "name": "Wall Insulation",
+          "qty": 110.25,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Batt insulation with 5% waste factor for cutting and fitting requirements"
+        },
+        {
+          "name": "Vinyl plank flooring installation",
+          "qty": 114.1,
+          "unit": "SF",
+          "price": 8.75,
+          "dec": "Luxury vinyl plank installation with 10% waste factor"
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 41.71,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": "Baseboard installation with 10% waste factor"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 41.71,
+          "unit": "LF",
+          "price": 3.75,
+          "dec": "Quarter round installation with 10% waste factor"
+        },
+        {
+          "name": "Double Door Casing R&R",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 385.0,
+          "dec": "Water damage requires casing replacement for proper seal and code compliance"
+        },
+        {
+          "name": "Single Door to Bathroom R&R",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": "Water damage requires casing replacement for proper seal and code compliance"
+        },
+        {
+          "name": "Single Door to Closet R&R",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": "Water damage requires casing replacement for proper seal and code compliance"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 414.83,
+          "unit": "SF",
+          "price": 1.35,
+          "dec": "Surface preparation and priming with 5% waste factor"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 414.83,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Two-coat paint application with 5% waste factor"
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 83.42,
+          "unit": "LF",
+          "price": 2.75,
+          "dec": "Trim painting with 10% waste factor"
+        }
+      ],
+      "subtotal": 6100.17
+    },
+    {
+      "title": "Closet",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Ceiling repair connections and wall restoration coordinated with Source Room scope, including door access accommodation"
+        },
+        {
+          "name": "Interior Door Detach & Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Temporary door removal required for wall restoration access"
+        },
+        {
+          "name": "Drywall Tape and Blend - Seam Connection",
+          "qty": 25.3,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Ceiling repair connections required due to scope limitations in source room. Includes 10% waste factor."
+        },
+        {
+          "name": "Wall Restoration Work",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 185.0,
+          "dec": "Complementary wall restoration to match source room scope"
+        }
+      ],
+      "subtotal": 366.93
+    },
+    {
+      "title": "Bathroom",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Partial drywall replacement behind vanity, vanity and toilet replacement/reset, mirror replacement, and door casing replacements"
+        },
+        {
+          "name": "Construction Protection",
+          "qty": 17.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Job-site protection measures during restoration work"
+        },
+        {
+          "name": "Install 1/2\" Drywall - Behind Vanity",
+          "qty": 27.02,
+          "unit": "SF",
+          "price": 3.75,
+          "dec": "IRC R702.3 installation for water-damaged areas behind vanity. Includes 10% waste factor."
+        },
+        {
+          "name": "Drywall Tape and Blend - Seam Connection",
+          "qty": 27.5,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "New to existing drywall connections with 10% waste factor"
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 16.5,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": "Baseboard installation excluding tub/vanity areas with 10% waste factor"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 16.5,
+          "unit": "LF",
+          "price": 3.75,
+          "dec": "Quarter round installation with 10% waste factor"
+        },
+        {
+          "name": "R&R Standard Grade Vanity",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 1250.0,
+          "dec": "Water damage to vanity requires replacement per restoration standards"
+        },
+        {
+          "name": "Vanity Top Detach & Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": "Vanity top reinstallation for proper fit and function"
+        },
+        {
+          "name": "Toilet Detach & Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 385.0,
+          "dec": "Toilet reset required for drywall restoration behind fixture. Reset is more cost-effective than replacement while ensuring proper seal and function"
+        },
+        {
+          "name": "Toilet Paper Holder Detach & Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 65.0,
+          "dec": "Accessory reinstallation for proper mounting and function"
+        },
+        {
+          "name": "Mirror Replacement",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": "Water damage to mirror requires replacement for proper restoration"
+        },
+        {
+          "name": "Door Casing R&R",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": "Two door casings require replacement due to water damage"
+        },
+        {
+          "name": "Prime Repaired Areas",
+          "qty": 118.42,
+          "unit": "SF",
+          "price": 1.35,
+          "dec": "Surface preparation and priming with 5% waste factor"
+        },
+        {
+          "name": "Paint Walls (2 Coats)",
+          "qty": 118.42,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Two-coat paint application with 5% waste factor"
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 33.0,
+          "unit": "LF",
+          "price": 2.75,
+          "dec": "Trim painting with 10% waste factor"
+        }
+      ],
+      "subtotal": 3550.64
+    },
+    {
+      "title": "Utility Room",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Partial drywall installation, vinyl plank flooring, trim installation, and complete wall/ceiling painting"
+        },
+        {
+          "name": "Install 1/2\" Drywall - 2' Height",
+          "qty": 22.46,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Drywall installation for 2-foot height areas with waste factor allowance"
+        },
+        {
+          "name": "Wall Insulation",
+          "qty": 37.8,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Batt insulation with 5% waste factor for proper installation"
+        },
+        {
+          "name": "Vinyl plank flooring installation",
+          "qty": 58.53,
+          "unit": "SF",
+          "price": 8.75,
+          "dec": "Luxury vinyl plank installation with 10% waste factor"
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 23.93,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": "Baseboard installation with 10% waste factor"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 23.93,
+          "unit": "LF",
+          "price": 3.75,
+          "dec": "Quarter round installation with 10% waste factor"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 236.44,
+          "unit": "SF",
+          "price": 1.35,
+          "dec": "Surface preparation and priming with 5% waste factor"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 236.44,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Two-coat paint application with 5% waste factor"
+        }
+      ],
+      "subtotal": 1780.23
+    },
+    {
+      "title": "PROJECT-WIDE",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Project Debris Summary:\n- Total estimated construction debris: 1,465 pounds (0.73 tons)\n- Recommended container: 10-yard dumpster\n- Project duration: 12 working days with 15-day rental period"
+        },
+        {
+          "name": "Ground Level Hauling",
+          "qty": 1465.0,
+          "unit": "LB",
+          "price": 0.35,
+          "dec": "Debris hauling labor for construction waste removal"
+        },
+        {
+          "name": "Stair Surcharge",
+          "qty": 1465.0,
+          "unit": "LB",
+          "price": 0.25,
+          "dec": "Additional labor cost for basement debris removal via stairs"
+        },
+        {
+          "name": "10-yard Dumpster Rental",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 350.0,
+          "dec": "Dumpster rental for 15-day period accommodating 0.73 tons of debris"
+        },
+        {
+          "name": "Disposal Fees",
+          "qty": 0.73,
+          "unit": "TON",
+          "price": 65.0,
+          "dec": "Landfill disposal fees based on estimated debris weight"
+        },
+        {
+          "name": "Daily Construction Cleanup",
+          "qty": 631.0,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Daily cleanup of work areas to maintain safe working conditions per OSHA standards"
+        },
+        {
+          "name": "Final Detail Cleaning",
+          "qty": 631.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Comprehensive post-construction cleaning including dust removal and surface preparation for occupancy"
+        },
+        {
+          "name": "Fixture and Finish Cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": "Detailed cleaning of all installed fixtures trim and surfaces to remove construction residue"
+        }
+      ],
+      "subtotal": 2350.2
+    }
+  ],
+  "subtotal": 28877.55,
+  "op_amount": 5775.51,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 34653.06
+}

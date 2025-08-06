@@ -1,0 +1,823 @@
+{
+  "estimate_number": "EST-202507-4338",
+  "estimate_date": "2025-07-16",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "43383 Stukely Dr",
+    "city": "Sterling",
+    "state": "VA",
+    "zip": "20166",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This comprehensive restoration estimate reflects restoration to pre-loss condition using Like Kind and Quality materials.",
+  "trades": [
+    {
+      "name": "Interior Reconstruction",
+      "note": "Complete restoration of 8 rooms including Work Room, Recreation Room, Recreation Room Closet, Back Double Door Bedroom, Sump Room, Closet Two, Stair, and Under Stairs areas with drywall installation, insulation, flooring, painting, and associated reconstruction work.",
+      "locations": [
+        {
+          "name": "Work Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 384.58 SF<br>- Height: 8.58 FT<br>- Wall Area: 692.42 SF<br>- Ceiling Area: 384.58 SF<br>- Baseboard Length: 82.20 LF",
+          "showSubtotal": true,
+          "subtotal": 9628.8,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Contents Manipulation/Protection",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 500.0,
+                  "description": "Protection and manipulation of contents during construction activities"
+                },
+                {
+                  "name": "Baseboard Removal",
+                  "qty": 47.2,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Baseboard removal and disposal preparation"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 324.5,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "1/2\" drywall installation on wall surfaces up to 8.58 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 140.8,
+                  "unit": "SF",
+                  "price": 6.0,
+                  "description": "1/2\" drywall installation on ceiling surfaces up to 8.58 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 134.4,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation installation on wall surfaces up to 8.58 FT height - 4\" R13 paper/foil faced. Includes 5% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 90.42,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Baseboard installation with professional finish - Medium (9\") painted wood. Includes 10% waste allowance for cuts and joints"
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 295.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 692.42,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Wall painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 128.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new ceiling drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 384.58,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Ceiling painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 82.2,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Baseboard painting (1 coat) for uniform finish"
+                },
+                {
+                  "name": "Door Paint",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 100.0,
+                  "description": "Door painting (2 coats per side) for professional finish"
+                },
+                {
+                  "name": "Trim Paint",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 80.0,
+                  "description": "Door/window opening trim painting (2 coats per side) for professional finish"
+                },
+                {
+                  "name": "Interior Door Unit",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 250.0,
+                  "description": "Interior door unit removal and replacement with like kind and quality"
+                },
+                {
+                  "name": "Recessed LED Panel Light (Detach & Reset)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 50.0,
+                  "description": "Recessed LED panel light detachment and reset during construction"
+                },
+                {
+                  "name": "Window Blind (Detach & Reset)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 40.0,
+                  "description": "Window blind detachment and reset during construction"
+                },
+                {
+                  "name": "Door Knob/Lockset (Detach & Reset)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 30.0,
+                  "description": "Door knob/lockset detachment and reset during construction"
+                },
+                {
+                  "name": "Outlets (Detach & Reset)",
+                  "qty": 7.0,
+                  "unit": "EA",
+                  "price": 35.0,
+                  "description": "Electrical outlet detachment and reset during construction"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Recreation Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 1134.88 SF<br>- Height: 8.58 FT<br>- Wall Area: 1055.92 SF<br>- Ceiling Area: 1134.88 SF<br>- Baseboard Length: 117.55 LF",
+          "showSubtotal": true,
+          "subtotal": 22165.31,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 343.2,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "1/2\" drywall installation on wall surfaces up to 8.58 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 412.5,
+                  "unit": "SF",
+                  "price": 6.0,
+                  "description": "1/2\" drywall installation on ceiling surfaces up to 8.58 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 234.15,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation installation on wall surfaces up to 8.58 FT height. Includes 5% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 1305.11,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Carpet installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 1305.11,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Carpet pad installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 129.31,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Baseboard installation with professional finish - Medium (9\") painted wood. Includes 10% waste allowance for cuts and joints"
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 312.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 1055.92,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Wall painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 375.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new ceiling drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 1134.88,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Ceiling painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 117.55,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Baseboard painting (1 coat) for uniform finish"
+                },
+                {
+                  "name": "Trim Paint",
+                  "qty": 10.0,
+                  "unit": "EA",
+                  "price": 80.0,
+                  "description": "Door/window opening trim painting (2 coats per side) for professional finish"
+                },
+                {
+                  "name": "Outlets (Detach & Reset)",
+                  "qty": 10.0,
+                  "unit": "EA",
+                  "price": 35.0,
+                  "description": "Electrical outlet detachment and reset during construction"
+                },
+                {
+                  "name": "Recessed LED Panel Light (Protection)",
+                  "qty": 8.0,
+                  "unit": "EA",
+                  "price": 20.0,
+                  "description": "Recessed LED panel light protection during construction activities"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Recreation Room Closet",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 44.93 SF<br>- Height: 8.58 FT<br>- Wall Area: 264.74 SF<br>- Ceiling Area: 44.93 SF<br>- Baseboard Length: 29.53 LF",
+          "showSubtotal": true,
+          "subtotal": 1638.34,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation"
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation"
+                },
+                {
+                  "name": "Baseboard Removal",
+                  "qty": 29.53,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Baseboard removal and disposal preparation"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 51.67,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Carpet installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 51.67,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Carpet pad installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 32.48,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Baseboard installation with professional finish - Medium (9\") painted wood. Includes 10% waste allowance for cuts and joints"
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 264.74,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Wall painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Ceiling painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 29.53,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Baseboard painting (1 coat) for uniform finish"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Back Double Door Bedroom",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 210.94 SF<br>- Height: 8.58 FT<br>- Wall Area: 416.96 SF<br>- Ceiling Area: 210.94 SF<br>- Baseboard Length: 46.47 LF",
+          "showSubtotal": true,
+          "subtotal": 4618.54,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 115.43,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "1/2\" drywall installation on wall surfaces up to 8.58 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 27.38,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation installation on wall surfaces up to 8.58 FT height. Includes 5% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 242.58,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Carpet installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 242.58,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Carpet pad installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 51.12,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Baseboard installation with professional finish - Medium (9\") painted wood. Includes 10% waste allowance for cuts and joints"
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 104.94,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 416.96,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Wall painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 210.94,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Ceiling painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 46.47,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Baseboard painting (1 coat) for uniform finish"
+                },
+                {
+                  "name": "Outlets (Detach & Reset)",
+                  "qty": 4.0,
+                  "unit": "EA",
+                  "price": 35.0,
+                  "description": "Electrical outlet detachment and reset during construction"
+                },
+                {
+                  "name": "Recessed LED Panel Light (Protection)",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 20.0,
+                  "description": "Recessed LED panel light protection during construction activities"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sump Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 7.19 SF<br>- Height: 8.58 FT<br>- Wall Area: 54.37 SF<br>- Ceiling Area: 7.19 SF<br>- Baseboard Length: 7.77 LF",
+          "showSubtotal": true,
+          "subtotal": 686.64,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 59.81,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "1/2\" drywall installation on wall surfaces up to 8.58 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 28.35,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Batt insulation installation on wall surfaces up to 8.58 FT height. Includes 5% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 54.37,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Door Trim Install",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 150.0,
+                  "description": "Door trim installation with professional finish"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Closet Two",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 11.33 SF<br>- Height: 7.42 FT<br>- Wall Area: 29.75 SF<br>- Ceiling Area: 11.33 SF<br>- Baseboard Length: 4.10 LF",
+          "showSubtotal": true,
+          "subtotal": 271.01,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation"
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation"
+                },
+                {
+                  "name": "Baseboard Removal",
+                  "qty": 4.1,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Baseboard removal and disposal preparation"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 13.03,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Carpet installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 13.03,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Carpet pad installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 4.51,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Baseboard installation with professional finish - Medium (9\") painted wood. Includes 10% waste allowance for cuts and joints"
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 29.75,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Wall painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Ceiling painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 4.1,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Baseboard painting (1 coat) for uniform finish"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Stair",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 78.73 SF<br>- Height: 17.33 FT<br>- Wall Area: 391.49 SF<br>- Ceiling Area: 48.00 SF<br>- Baseboard Length: 0.00 LF",
+          "showSubtotal": true,
+          "subtotal": 1124.82,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation"
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 90.54,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Carpet installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 90.54,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Carpet pad installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Skirtboard Paint",
+                  "qty": 25.24,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Skirtboard painting (1 coat) for uniform finish"
+                },
+                {
+                  "name": "Stair Charge",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 300.0,
+                  "description": "Stair access charge for multi-story construction complexity"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Under Stairs",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 45.05 SF<br>- Height: 7.42 FT<br>- Wall Area: 349.24 SF<br>- Ceiling Area: 45.05 SF<br>- Baseboard Length: 46.99 LF",
+          "showSubtotal": true,
+          "subtotal": 3720.53,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation"
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 220.0,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "1/2\" drywall installation on wall surfaces up to 7.42 FT height, hung, taped, floated, seamlessly integrated with existing. Includes 10% waste allowance for cuts and fitting"
+                },
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 51.81,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Carpet installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 51.81,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Carpet pad installation per manufacturer guidelines. Includes 15% waste allowance for cuts and seams"
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 51.69,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Baseboard installation with professional finish - Medium (9\") painted wood. Includes 10% waste allowance for cuts and joints"
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 200.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Primer application on new drywall surfaces for optimal paint adhesion"
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 349.24,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Wall painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Ceiling painting (1 coat) for uniform finish and seamless appearance"
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 46.99,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Baseboard painting (1 coat) for uniform finish"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Project Common Areas",
+          "note": "Daily cleanup during construction and final cleanup post-construction with debris disposal services",
+          "showSubtotal": true,
+          "subtotal": 5752.64,
+          "categories": [
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Daily Cleanup",
+                  "qty": 2265.14,
+                  "unit": "Job",
+                  "price": 1.0,
+                  "description": "Daily construction cleanup - 1887.62 SF × $0.15/SF × 8 days for dust control and debris management"
+                },
+                {
+                  "name": "Final Cleanup",
+                  "qty": 275.0,
+                  "unit": "Job",
+                  "price": 1.0,
+                  "description": "Final construction cleanup - 200 SF common areas × $0.85/SF minimum applied"
+                },
+                {
+                  "name": "Dumpster Rental",
+                  "qty": 1250.0,
+                  "unit": "Job",
+                  "price": 1.0,
+                  "description": "Dumpster rental - 10 days × $125/day for debris disposal"
+                },
+                {
+                  "name": "Hauling Labor",
+                  "qty": 1750.0,
+                  "unit": "Job",
+                  "price": 1.0,
+                  "description": "Debris hauling labor - 5000 lbs × $0.35/lb including multi-story and distance surcharges"
+                },
+                {
+                  "name": "Disposal Fees",
+                  "qty": 212.5,
+                  "unit": "Job",
+                  "price": 1.0,
+                  "description": "Landfill disposal fees - 2.5 tons × $85/ton"
+                },
+                {
+                  "name": "Delivery/Pickup",
+                  "qty": 250.0,
+                  "unit": "Job",
+                  "price": 1.0,
+                  "description": "Dumpster delivery and pickup service with Sterling, VA premium"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "financial_breakdown": {
+    "construction_subtotal": "$46,703.87",
+    "overhead": {
+      "rate": "10%",
+      "amount": "$4,670.39"
+    },
+    "profit": {
+      "rate": "4%",
+      "amount": "$1,868.15"
+    },
+    "subtotal_before_tax": "$53,242.41",
+    "sales_tax": {
+      "rate": "6%",
+      "taxable_amount": "$19,554.15",
+      "amount": "$1,173.25"
+    },
+    "final_total": "$54,415.66"
+  },
+  "subtotal": 49606.63,
+  "overhead": {
+    "rate": 10.0,
+    "amount": 4960.66
+  },
+  "profit": {
+    "rate": 4.0,
+    "amount": 1984.27
+  },
+  "sales_tax": {
+    "amount": 1173.25
+  },
+  "overhead_rate": 10.0,
+  "profit_rate": 4.0,
+  "sales_tax_rate": "6%",
+  "total": 57724.81,
+  "bottom_note": "<strong>OVERHEAD (10%)</strong><br>Overhead covers essential project management costs including coordination of 5 trades across 8 rooms spanning 1887.62 SF. This includes administrative expenses such as project documentation, scheduling, material procurement, and quality control oversight for standard coordination requirements. Additionally covers operational costs including equipment rental, vehicle expenses, job site utilities, and business infrastructure necessary for project completion over a 10-day timeline. General liability coverage, workers' compensation, and performance bonding are also included based on project scope and risk assessment. Special conditions such as multi-story basement access require additional overhead allocation for increased project management complexity.<br><br><strong>PROFIT (4%)</strong><br>Profit margin reflects current market standards for professional restoration contractors performing interior restoration work in the VA region. This rate provides appropriate compensation for financial investment, project risk assumption, and performance guarantee while ensuring business sustainability for standard complexity projects. The profit component covers the value of professional expertise, comprehensive warranty coverage, industry knowledge, and quality assurance that ensures successful project completion to pre-loss condition. This rate structure maintains competitive positioning while providing the resources necessary for excellence in execution and customer satisfaction.<br><br><strong>SALES TAX (6%)</strong><br>Applied to materials ($19,554.15) as required by VA jurisdiction. Tax calculation based on subtotal plus overhead and profit amounts per local regulations.",
+  "disclaimer": "This estimate reflects restoration to pre-loss condition using Like Kind and Quality materials. Overhead and Profit rates reflect professional standards for the determined complexity level.",
+  "overhead_amount": 4960.66,
+  "profit_amount": 1984.27,
+  "sales_tax_amount": 1173.25,
+  "discount": 0.0
+}

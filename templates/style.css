@@ -1,5 +1,5 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family: Arial, sans-serif;
   font-size: 12px;
   color: #000;
   margin: 10px;
@@ -38,7 +38,7 @@ body {
   width: 45%;
 }
 .amount-due {
-  margin-top: 30px;
+  margin: 30px 0px 20px 0px;
   font-weight: bold;
 }
 .line-header {
@@ -95,4 +95,34 @@ body {
   font-size: 11px;
   color: #555;
   margin-top: 10px;
+}
+/* Reset any inherited styles and force disclaimer list styles */
+.disclaimer ul,
+.disclaimer ol,
+p.disclaimer ul,
+p.disclaimer ol {
+  margin: 5px 0 !important;
+  padding-left: 20px !important;
+  font-size: 11px !important;
+  color: #555 !important;
+  list-style-type: disc !important;
+}
+.disclaimer li,
+.disclaimer ul li,
+.disclaimer ol li,
+p.disclaimer li,
+p.disclaimer ul li,
+p.disclaimer ol li {
+  font-size: 11px !important;
+  color: #555 !important;
+  margin: 2px 0 !important;
+  list-style-type: disc !important;
+}
+/* Override any body or default styles */
+body .disclaimer ul,
+body .disclaimer ul li,
+body p.disclaimer ul,
+body p.disclaimer ul li {
+  font-size: 11px !important;
+  color: #555 !important;
 }

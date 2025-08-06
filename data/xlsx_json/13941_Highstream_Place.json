@@ -1,0 +1,210 @@
+{
+  "estimate_number": "EST-202507-'",
+  "estimate_date": "2025-07-",
+  "company": {
+    "name": "Enter Construction, Inc.",
+    "address": "3887 Fairfax Ridge Road #445",
+    "city": "Fairfax",
+    "state": "Virginia",
+    "zip": "22030",
+    "phone": "(240) 271-5270",
+    "email": "jyoo@enter.construction",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "13941 Highstream Place",
+    "city": "Germantown",
+    "state": "MD",
+    "zip": "20874",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "",
+  "bottom_note": "Service Specifications:\n- Professional setup includes complete unpacking, placement, and customer walkthrough\n- Heavy item handling includes specialized equipment and additional safety measures\n- Packing services categorized based on item value and fragility requirements\n- Extended storage periods beyond 3-month term will incur additional monthly charges at quoted rate\n\nAccess and Logistics:\n- Shared parking lot access accommodated with appropriate equipment positioning\n- Multi-story stair carry charges applied for all 2nd and 3rd floor items\n- Professional coordination with property management for parking access\n- Delivery scheduling coordinated upon completion of restoration work\n\nQuality Assurance:\n- Final invoice may vary based on actual quantities and field conditions\n- All fragile items receive enhanced protection protocols",
+  "disclaimer": "",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "PACK-OUT SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Trip Fee - Pack Out",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 155.0,
+          "dec": "Round trip to Public Storage Middlebrook Road(2.5 miles) including fuel and equipment transport"
+        },
+        {
+          "name": "Professional Pack-Out Labor",
+          "qty": 16.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "4-person crew complete 3-story townhouse pack-out"
+        },
+        {
+          "name": "Standard Item Packing",
+          "qty": 25.0,
+          "unit": "EA",
+          "price": 18.0,
+          "dec": "Shoe case, chairs 6EA, small chair, basket, drawer, clothes rod, shelf 2EA, lamps, decor items, miscellaneous furniture"
+        },
+        {
+          "name": "Fragile Item Packing",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Dishes 4BX, bathroom contents, wall hanging pictures 2EA, electronics, glassware, fragile household items"
+        },
+        {
+          "name": "Premium Item Packing",
+          "qty": 8.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Sofa medium, sofa large, sofa desk 2EA, bed frame, dining table, specialty furniture"
+        },
+        {
+          "name": "Box Packing - Standard",
+          "qty": 20.0,
+          "unit": "EA",
+          "price": 55.0,
+          "dec": "Clothes boxes 14EA, bedding, pillows, packed contents, books, linens, general items"
+        },
+        {
+          "name": "Box Packing - Premium Protection",
+          "qty": 6.0,
+          "unit": "EA",
+          "price": 135.0,
+          "dec": "Dishes 4BX, kitchen items, fragile contents with specialized protection"
+        },
+        {
+          "name": "Heavy Item Handling - Furniture",
+          "qty": 6.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Sofa medium, sofa large, bed frame, mattress, dining table, heavy appliances"
+        },
+        {
+          "name": "Stair Carry Surcharge - Multi-Story",
+          "qty": 60.0,
+          "unit": "EA",
+          "price": 12.0,
+          "dec": "All 2nd and 3rd floor items stair carry charge including additional household items"
+        }
+      ],
+      "subtotal": 9220.0
+    },
+    {
+      "title": "PACK-IN SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Trip Fee - Pack In",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 155.0,
+          "dec": "Round trip delivery from storage facility with equipment"
+        },
+        {
+          "name": "Professional Pack-In Labor",
+          "qty": 16.0,
+          "unit": "HR",
+          "price": 220.0,
+          "dec": "4-person crew complete delivery setup and placement all floors"
+        },
+        {
+          "name": "Standard Item Unpacking",
+          "qty": 25.0,
+          "unit": "EA",
+          "price": 18.0,
+          "dec": "Professional unpacking and placement of standard furniture items, lamps, decor"
+        },
+        {
+          "name": "Fragile Item Unpacking",
+          "qty": 35.0,
+          "unit": "EA",
+          "price": 38.0,
+          "dec": "Careful unpacking of dishes, bathroom contents, electronics, wall pictures, fragile items"
+        },
+        {
+          "name": "Premium Item Setup",
+          "qty": 8.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Professional setup sofas, sofa desk, bed frame, dining table, specialty items"
+        },
+        {
+          "name": "Box Unpacking - Standard",
+          "qty": 20.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Clothes boxes 14EA, bedding, pillows, books, linens, general items unpacking and placement"
+        },
+        {
+          "name": "Box Unpacking - Premium",
+          "qty": 6.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Dishes 4BX, kitchen items, careful unpacking and placement"
+        },
+        {
+          "name": "Heavy Item Setup",
+          "qty": 6.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Reassembly and positioning of sofas, bed frame, mattress, dining table, heavy appliances"
+        },
+        {
+          "name": "Stair Delivery Setup - Multi-Story",
+          "qty": 60.0,
+          "unit": "EA",
+          "price": 12.0,
+          "dec": "Multi-story delivery and placement including stair carry for all household items"
+        },
+        {
+          "name": "Post-Delivery Cleanup",
+          "qty": 3.0,
+          "unit": "HR",
+          "price": 135.0,
+          "dec": "Debris removal and final cleanup service"
+        }
+      ],
+      "subtotal": 7920.0
+    },
+    {
+      "title": "STORAGE SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Climate Controlled Storage - Month 1",
+          "qty": 475.0,
+          "unit": "CF",
+          "price": 2.25,
+          "dec": "Professional storage facility with Climate-controlled, security monitoring"
+        },
+        {
+          "name": "Climate Controlled Storage - Month 2",
+          "qty": 475.0,
+          "unit": "CF",
+          "price": 2.25,
+          "dec": "Continued storage second month"
+        },
+        {
+          "name": "Climate Controlled Storage - Month 3",
+          "qty": 475.0,
+          "unit": "CF",
+          "price": 2.25,
+          "dec": "Extended storage third month per project timeline"
+        }
+      ],
+      "subtotal": 3206.25
+    }
+  ],
+  "subtotal": 20346.25,
+  "op_amount": 0.0,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 20346.25
+}

@@ -1,0 +1,481 @@
+{
+  "estimate_number": "EST-202507-5709",
+  "estimate_date": "2025-07-21",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "KEUN CHOI",
+    "address": "15709 Rothschild Ct",
+    "city": "Haymarket",
+    "state": "VA",
+    "zip": "20169",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This comprehensive restoration estimate reflects restoration to pre-loss condition using Like Kind and Quality materials.",
+  "trades": [
+    {
+      "name": "Interior Reconstruction",
+      "note": "Multi-room restoration including Bedroom, Living Room, Kitchen, Entry/Foyer, Hallway(2nd Floor), Garage",
+      "locations": [
+        {
+          "name": "Bedroom",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 343.53 SF<br>- Wall Area (Net): 758.35 SF<br>- Ceiling Area: 365.26 SF<br>- Baseboard Length: 87.40 LF<br>- Height: Peaked FT<br><br>",
+          "showSubtotal": true,
+          "subtotal": 4487.82,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Painting protection - plastic sheeting and masking tape",
+                  "qty": 343.53,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Protection of floors and surfaces during painting with plastic sheeting and masking tape"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 170.28,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Includes high ceiling premium"
+                },
+                {
+                  "name": "Ceiling Insulation",
+                  "qty": 100.8,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 758.35,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 365.26,
+                  "unit": "SF",
+                  "price": 3.13,
+                  "description": "Includes high ceiling premium"
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 96.0,
+                  "unit": "SF",
+                  "price": 3.13,
+                  "description": "Includes high ceiling premium"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "One-time post-construction cleanup",
+                  "qty": 343.53,
+                  "unit": "SF",
+                  "price": 0.25,
+                  "description": "One-time post-construction cleanup to ensure a safe and organized work environment after project completion."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Living Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 541.93 SF<br>- Wall Area (Net): 1659.00 SF<br>- Ceiling Area: 541.93 SF<br>- Baseboard Length: 83.67 LF<br>- Height: 18.3 FT<br><br>",
+          "showSubtotal": true,
+          "subtotal": 6706.45,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Painting protection - plastic sheeting and masking tape",
+                  "qty": 541.93,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Protection of floors and surfaces during painting with plastic sheeting and masking tape"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 72.56,
+                  "unit": "SF",
+                  "price": 3.75,
+                  "description": "Includes high ceiling premium"
+                },
+                {
+                  "name": "Ceiling Insulation",
+                  "qty": 33.6,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 1659.0,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 541.93,
+                  "unit": "SF",
+                  "price": 3.13,
+                  "description": "Includes high ceiling premium"
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 32.0,
+                  "unit": "SF",
+                  "price": 3.13,
+                  "description": "Includes high ceiling premium"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "One-time post-construction cleanup",
+                  "qty": 541.93,
+                  "unit": "SF",
+                  "price": 0.25,
+                  "description": "One-time post-construction cleanup to ensure a safe and organized work environment after project completion."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Kitchen",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 289.74 SF<br>- Wall Area (Net): 451.31 SF<br>- Ceiling Area: 289.74 SF<br>- Baseboard Length: 60.92 LF<br>- Height: 8 FT<br><br>",
+          "showSubtotal": true,
+          "subtotal": 2239.56,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Painting protection - plastic sheeting and masking tape",
+                  "qty": 289.74,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Protection of floors and surfaces during painting with plastic sheeting and masking tape"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 36.04,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Insulation",
+                  "qty": 12.6,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 451.31,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 289.74,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 12.0,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "One-time post-construction cleanup",
+                  "qty": 289.74,
+                  "unit": "SF",
+                  "price": 0.25,
+                  "description": "One-time post-construction cleanup to ensure a safe and organized work environment after project completion."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Entry/Foyer",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 99.83 SF<br>- Wall Area (Net): 610.88 SF<br>- Ceiling Area: 99.83 SF<br>- Baseboard Length: 31.89 LF<br>- Height: 18.3 FT<br><br>",
+          "showSubtotal": true,
+          "subtotal": 1914.55,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Painting protection - plastic sheeting and masking tape",
+                  "qty": 99.83,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Protection of floors and surfaces during painting with plastic sheeting and masking tape"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Paint",
+                  "qty": 610.88,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 99.83,
+                  "unit": "SF",
+                  "price": 3.13,
+                  "description": "Includes high ceiling premium"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "One-time post-construction cleanup",
+                  "qty": 99.83,
+                  "unit": "SF",
+                  "price": 0.25,
+                  "description": "One-time post-construction cleanup to ensure a safe and organized work environment after project completion."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hallway(2nd Floor)",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 431.33 SF<br>- Wall Area (Net): 641.86 SF<br>- Ceiling Area: 431.33 SF<br>- Baseboard Length: 80.23 LF<br>- Height: 8 FT<br><br>",
+          "showSubtotal": true,
+          "subtotal": 3006.48,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Painting protection - plastic sheeting and masking tape",
+                  "qty": 431.33,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Protection of floors and surfaces during painting with plastic sheeting and masking tape"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Paint",
+                  "qty": 641.86,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 431.33,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "One-time post-construction cleanup",
+                  "qty": 431.33,
+                  "unit": "SF",
+                  "price": 0.25,
+                  "description": "One-time post-construction cleanup to ensure a safe and organized work environment after project completion."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Garage",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 429.02 SF<br>- Wall Area (Net): 576.00 SF<br>- Ceiling Area: 429.02 SF<br>- Baseboard Length: 69.83 LF<br>- Height: 8 FT<br><br>",
+          "showSubtotal": true,
+          "subtotal": 3375.94,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Painting protection - plastic sheeting and masking tape",
+                  "qty": 429.02,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Protection of floors and surfaces during painting with plastic sheeting and masking tape"
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 98.54,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Insulation",
+                  "qty": 50.4,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 576.0,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 429.02,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 48.0,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "One-time post-construction cleanup",
+                  "qty": 429.02,
+                  "unit": "SF",
+                  "price": 0.25,
+                  "description": "One-time post-construction cleanup to ensure a safe and organized work environment after project completion."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Project Cleanup & Debris Disposal",
+      "note": "Comprehensive project cleanup and debris disposal from drywall, insulation, painting work across all project areas",
+      "locations": [
+        {
+          "name": "Entire Property",
+          "note": "",
+          "showSubtotal": true,
+          "subtotal": 2609.5,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Scaffolding rental for high ceiling safety (Agreed Price)",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 989.5,
+                  "description": "Rental for high ceilings in Bedroom, Living Room, Entry/Foyer (agreed price adjustment)"
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Project final cleaning",
+                  "qty": 2135.0,
+                  "unit": "SF",
+                  "price": 0.76,
+                  "description": "Final construction cleaning required due to drywall dust, debris tracking, and material transport throughout 2135 SF of work area.<br><br>Cleaning includes dust removal from surfaces, fixtures, and HVAC systems affected by drywall, insulation, painting work."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 24340.3,
+  "overhead": {
+    "rate": 10.0,
+    "amount": 2434.03
+  },
+  "profit": {
+    "rate": 10.0,
+    "amount": 2434.03
+  },
+  "overhead_rate": 10.0,
+  "profit_rate": 10.0,
+  "total": 29208.36,
+  "bottom_note": "<strong>OVERHEAD (10%)</strong><br>Overhead covers essential project management costs including coordination of 3 trades across 6 rooms spanning 2135 SF. This includes administrative expenses such as project documentation, scheduling, material procurement, and quality control oversight for standard coordination requirements. Additionally covers operational costs including equipment rental, vehicle expenses, job site utilities, and business infrastructure necessary for project completion over 12 days timeline. General liability coverage, workers' compensation, and performance bonding are also included based on project scope and risk assessment.<br><br><strong>PROFIT (10%)</strong><br>Profit margin reflects current market standards for professional restoration contractors performing reconstruction project work in VA region. This rate provides appropriate compensation for financial investment, project risk assumption, and performance guarantee while ensuring business sustainability for minor complexity projects. The profit component covers the value of professional expertise, comprehensive warranty coverage, industry knowledge, and quality assurance that ensures successful project completion to pre-loss condition. This rate structure maintains competitive positioning while providing the resources necessary for excellence in execution and customer satisfaction.",
+  "disclaimer": "This estimate reflects restoration to pre-loss condition using Like Kind and Quality materials. Overhead and Profit rates reflect professional standards for the determined complexity level.",
+  "overhead_amount": 2434.03,
+  "profit_amount": 2434.03,
+  "sales_tax_amount": 0.0,
+  "discount": 0.0,
+  "sales_tax": {
+    "amount": 0.0
+  }
+}

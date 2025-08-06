@@ -1,0 +1,242 @@
+{
+  "estimate_number": "EST-202506-4803",
+  "estimate_date": "2025-06-08",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "571-365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "4803 Carriagepark Road",
+    "city": "Fairfax",
+    "state": "VA",
+    "zip": "22032",
+    "phone": ""
+  },
+  "top_note": "This estimate represents a complete and accurate assessment of costs required to restore the roof system to pre-loss condition in compliance with all applicable building codes and industry standards.",
+  "bottom_note": "This estimate includes all items necessary for a complete roof replacement compliant with:\n- International Residential Code (IRC) 2021 Edition - Adopted by Virginia\n- OSHA Safety Standards 29 CFR 1926 - Fall protection requirements\n-Virginia Uniform Statewide Building Code (VUSBC)\n\nSpecial Considerations:\n1) Mansard Roof Complexity - Requires specialized installation techniques and additional safety measures\n2) Manual Debris Handling - Site constraints prevent direct dumpster access, necessitating hand-carry operations\n3) Gutter Integration - Existing gutters installed beneath shingles require complete replacement for proper installation\n4) Multiple Dormers - Complex flashing details and tie-ins increase installation time and material requirements",
+  "disclaimer": "All pricing reflects current 2025 market conditions in the DMV area with appropriate regional cost adjustments.",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "ROOF REPLACEMENT",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Fall Protection Equipment & Setup",
+          "qty": 1220.0,
+          "unit": "SF",
+          "price": 0.68,
+          "dec": "OSHA 29 CFR 1926.501 compliance for work above 6 feet on 6/12 pitch roof. Safety harness systems and guardrail protection required"
+        },
+        {
+          "name": "Property Protection & Tarping",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 345.0,
+          "dec": "Protective coverings for landscaping HVAC units and adjacent structures. IRC requirements to prevent property damage during installation"
+        },
+        {
+          "name": "Site Setup & Material Staging",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 225.0,
+          "dec": "Establish safe work zones and material staging areas per IRC R905.1 compliance for proper installation access and workflow"
+        },
+        {
+          "name": "Remove Existing 3-Tab Shingles",
+          "qty": 1220.0,
+          "unit": "SF",
+          "price": 0.92,
+          "dec": "Complete removal of existing 3-tab roofing material to deck. Required for proper substrate inspection per IRC R905.2.1"
+        },
+        {
+          "name": "Remove Existing Gutters & Downspouts",
+          "qty": 100.0,
+          "unit": "LF",
+          "price": 2.65,
+          "dec": "Removal necessary as gutters improperly installed beneath shingles prevent code-compliant installation of new roofing system"
+        },
+        {
+          "name": "Remove All Existing Flashing",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": ""
+        },
+        {
+          "name": "Manual Debris Handling Surcharge",
+          "qty": 1220.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Hand-carry debris due to inaccessible dumpster placement. Additional labor required for safe material transport from roof to staging area"
+        },
+        {
+          "name": "Roof Deck Re-nailing",
+          "qty": 1220.0,
+          "unit": "SF",
+          "price": 0.34,
+          "dec": "IRC R803.2.1 requires proper fastening. Re-secure loose sheathing with 8d ring shank nails at 6 inches on center for code compliance"
+        },
+        {
+          "name": "Deck Inspection & Minor Repairs",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 195.0,
+          "dec": "Inspect sheathing for damage and replace compromised areas. Code requires structurally sound substrate before new installation"
+        },
+        {
+          "name": "3-Tab Shingles (25-Year)",
+          "qty": 13.4,
+          "unit": "SQ",
+          "price": 135.0,
+          "dec": "Standard 3-tab shingles with 10% waste factor applied. IRC R905.2.4 compliant installation maintaining like-kind replacement standard"
+        },
+        {
+          "name": "#15 Felt Underlayment",
+          "qty": 13.4,
+          "unit": "SQ",
+          "price": 42.0,
+          "dec": ""
+        },
+        {
+          "name": "Ice & Water Shield",
+          "qty": 285.0,
+          "unit": "SF",
+          "price": 1.35,
+          "dec": "Applied to eaves valleys and penetrations. IRC R905.2.3.2 mandates ice barrier protection in Virginia climate zone"
+        },
+        {
+          "name": "Ridge Vent - Aluminum",
+          "qty": 33.25,
+          "unit": "LF",
+          "price": 6.45,
+          "dec": "Replace existing aluminum ridge vent system. IRC R806.2 requires continuous ridge ventilation per exact measurement"
+        },
+        {
+          "name": "Mansard Installation Complexity Premium",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 265.0,
+          "dec": "Additional labor premium for mansard roof installation requiring specialized techniques safety measures and extended installation time"
+        },
+        {
+          "name": "Dormer Installation Complexity Premium",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 145.0,
+          "dec": "Premium for complex dormer integration work requiring specialized flashing details and precise tie-in procedures"
+        },
+        {
+          "name": "Step Flashing - Complete System",
+          "qty": 88.0,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": "Wall-to-roof step flashing per Roofr measurement 87 feet 9 inches. IRC R905.2.8.3 mandates minimum 4-inch headlap"
+        },
+        {
+          "name": "Valley Flashing - Closed Cut",
+          "qty": 19.0,
+          "unit": "LF",
+          "price": 13.75,
+          "dec": "IRC R905.2.8.2 valley waterproofing with closed-cut installation method per exact Roofr measurement of 19 linear feet"
+        },
+        {
+          "name": "Wall Flashing",
+          "qty": 31.0,
+          "unit": "LF",
+          "price": 8.65,
+          "dec": "Counter-flashing at wall penetrations per IRC R905.2.8.4 requirements. Measurement matches Roofr specification exactly"
+        },
+        {
+          "name": "Chimney Flashing Complete",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 275.0,
+          "dec": "Complete small chimney reflashing with cricket and counter-flashing. IRC R905.2.9 penetration waterproofing compliance"
+        },
+        {
+          "name": "Pipe Jack Replacement",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 32.0,
+          "dec": ""
+        },
+        {
+          "name": "Pipe Boot Replacement",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 24.0,
+          "dec": ""
+        },
+        {
+          "name": "5-inch K-Style Gutters",
+          "qty": 100.0,
+          "unit": "LF",
+          "price": 9.75,
+          "dec": "Heavy-gauge aluminum gutters properly secured beneath drip edge for code-compliant water management system"
+        },
+        {
+          "name": "3x4 Downspouts",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 6.85,
+          "dec": "Aluminum downspouts with proper slope and drainage connections to existing drainage system"
+        },
+        {
+          "name": "Downspout Extensions",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 18.0,
+          "dec": "Proper water discharge extensions directing water away from foundation per IRC R801.3 drainage requirements"
+        },
+        {
+          "name": "Soffit Ventilation Inspection",
+          "qty": 100.0,
+          "unit": "LF",
+          "price": 2.55,
+          "dec": "Ensure adequate intake ventilation per IRC R806.2 requirements. Verify 1:150 net free area ratio for proper attic airflow"
+        },
+        {
+          "name": "Single-Day Coordination Premium",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 395.0,
+          "dec": "Specialized project coordination for compressed timeline ensuring quality installation safety standards and weather contingency planning"
+        },
+        {
+          "name": "Dumpster Rental",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 750.0,
+          "dec": "Rental and placement of a roll-off dumpster for efficient and lawful disposal of all roofing debris. This cost covers the duration of the project and transport to the waste disposal facility. This is separate from debris hauling labor."
+        },
+        {
+          "name": "Trip Fee",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 215.0,
+          "dec": "Standard trip fee to cover the cost of transporting personnel, tools, and equipment to and from the job site located at 4803 Carriagepark Road, Fairfax, VA 22032."
+        },
+        {
+          "name": "Final Cleanup & Safety Sweep",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 155.0,
+          "dec": "Complete site cleanup including magnetic nail sweep gutter cleaning and final safety inspection"
+        }
+      ],
+      "subtotal": 12791.21
+    }
+  ],
+  "subtotal": 12791.21,
+  "op_amount": 0.0,
+  "total": 12791.21
+}

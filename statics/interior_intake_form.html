@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interior Estimate Intake Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #333;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .form-content {
+            padding: 15px;
+        }
+
+        .form-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 8px;
+            background: #f9f9f9;
+            padding: 5px;
+            border-left: 3px solid #2a5298;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-row-triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-row-quad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 4px;
+            margin-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .room-template {
+            border: 2px solid #e0e0e0;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fafafa;
+        }
+
+        .room-header {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 10px;
+            padding: 5px;
+            background: white;
+            border-left: 4px solid #2a5298;
+        }
+
+        .demolition-section, .material-section, .work-scope-section {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+
+        .submit-section {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .submit-btn {
+            background: #333;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #555;
+        }
+
+        .measurement-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .form-row, .form-row-triple, .form-row-quad {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-content {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .submit-section {
+                display: none;
+            }
+            .container {
+                border: none;
+                box-shadow: none;
+            }
+            .header {
+                padding: 10px;
+            }
+            .form-content {
+                padding: 10px;
+            }
+            .form-section {
+                margin-bottom: 8px;
+                padding: 6px;
+                page-break-inside: avoid;
+            }
+            textarea {
+                min-height: 30px;
+            }
+            .checkbox-group {
+                gap: 2px;
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .checkbox-item {
+                padding: 1px;
+                font-size: 0.75rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .form-row-triple {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            .form-row-quad {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            
+            /* Page footer for print */
+            @page {
+                margin: 1in 1.5in 0.8in 1.5in;
+                @bottom-left {
+                    content: "Page " counter(page) " of " counter(pages);
+                    font-size: 12px;
+                    font-family: Arial, sans-serif;
+                    color: #000;
+                    font-weight: bold;
+                    margin-bottom: 0.2in;
+                    margin-left: 0.5in;
+                }
+                @bottom-right {
+                    content: "Interior Estimate Intake Form";
+                    font-size: 12px;
+                    font-family: Arial, sans-serif;
+                    color: #000;
+                    font-weight: bold;
+                    margin-bottom: 0.2in;
+                    margin-right: 0.5in;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Interior Estimate Intake Form</h1>
+            <p>Complete this form to provide essential project information for accurate interior restoration estimates</p>
+        </div>
+
+        <form class="form-content" id="intakeForm">
+            <!-- Measurement Data Requirements -->
+            <div class="measurement-note">
+                <h3 style="font-weight: bold; margin-bottom: 8px;">📐 Required Measurement Data</h3>
+                <p><strong>Please provide the following measurements for each location/room:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 5px;">
+                    <li><strong>Room dimensions:</strong> Length x Width (in feet)</li>
+                    <li><strong>Ceiling height:</strong> Floor to ceiling measurement</li>
+                    <li><strong>Square footage:</strong> Total floor area</li>
+                    <li><strong>Wall areas:</strong> Total wall surface area (if available)</li>
+                </ul>
+                <p style="margin-top: 8px;"><strong>Note:</strong> These measurements can be provided separately via photos, drawings, or measurement list.</p>
+            </div>
+
+            <!-- Project Information -->
+            <div class="form-section">
+                <h2 class="section-title">Project Information</h2>
+                <div class="form-group">
+                    <label for="propertyAddress">Property Address <span class="required">*</span></label>
+                    <textarea id="propertyAddress" name="propertyAddress" placeholder="Full property address including city, state, zip code" required></textarea>
+                </div>
+            </div>
+
+            <!-- Occupancy & Access -->
+            <div class="form-section">
+                <h2 class="section-title">Occupancy & Access</h2>
+                
+                <div class="form-group">
+                    <label><strong>Occupancy Status:</strong></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="vacant" name="occupancy[]" value="vacant" onchange="updateOccupancy('vacant')">
+                            <label for="vacant">Vacant during work</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="occupiedNormal" name="occupancy[]" value="occupied-normal" onchange="updateOccupancy('occupied-normal')">
+                            <label for="occupiedNormal">Occupied (normal)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="occupiedElderly" name="occupancy[]" value="occupied-elderly" onchange="updateOccupancy('occupied-elderly')">
+                            <label for="occupiedElderly">Occupied (elderly/disabled)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="occupiedChildren" name="occupancy[]" value="occupied-children" onchange="updateOccupancy('occupied-children')">
+                            <label for="occupiedChildren">Occupied (small children)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="petsPresent" name="occupancy[]" value="pets-present">
+                            <label for="petsPresent">Pets present</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Site Access Conditions:</strong></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="normalAccess" name="siteAccess[]" value="normal" onchange="updateSiteAccess('normal')">
+                            <label for="normalAccess">Normal access</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="limitedAccess" name="siteAccess[]" value="limited" onchange="updateSiteAccess('limited')">
+                            <label for="limitedAccess">Limited access</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="furnitureHeavy" name="siteAccess[]" value="furniture-heavy">
+                            <label for="furnitureHeavy">Furniture heavy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="multipleFloors" name="siteAccess[]" value="multiple-floors">
+                            <label for="multipleFloors">Multiple floors</label>
+                        </div>
+                    </div>
+                    <input type="text" id="otherSiteAccess" name="otherSiteAccess" placeholder="Other site access conditions" style="margin-top: 5px;">
+                </div>
+            </div>
+
+            <!-- Project-Wide Defaults -->
+            <div class="form-section">
+                <h2 class="section-title">🟦 Project-Wide Defaults (These apply to all rooms unless overridden)</h2>
+                
+                <div class="form-row-quad">
+                    <div class="form-group">
+                        <label>Flooring:</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultHardwood" name="defaultFlooring[]" value="hardwood" onchange="updateDefaultFlooring('hardwood')">
+                                <label for="defaultHardwood">Hardwood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultLaminate" name="defaultFlooring[]" value="laminate" onchange="updateDefaultFlooring('laminate')">
+                                <label for="defaultLaminate">Laminate</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultCarpet" name="defaultFlooring[]" value="carpet" onchange="updateDefaultFlooring('carpet')">
+                                <label for="defaultCarpet">Carpet</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultTile" name="defaultFlooring[]" value="tile" onchange="updateDefaultFlooring('tile')">
+                                <label for="defaultTile">Tile</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultVinyl" name="defaultFlooring[]" value="vinyl" onchange="updateDefaultFlooring('vinyl')">
+                                <label for="defaultVinyl">Vinyl</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Wall Finish:</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultPaintedDrywall" name="defaultWall[]" value="painted-drywall" onchange="updateDefaultWall('painted-drywall')">
+                                <label for="defaultPaintedDrywall">Painted drywall</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultTexturedDrywall" name="defaultWall[]" value="textured-drywall" onchange="updateDefaultWall('textured-drywall')">
+                                <label for="defaultTexturedDrywall">Textured drywall</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultWallpaper" name="defaultWall[]" value="wallpaper" onchange="updateDefaultWall('wallpaper')">
+                                <label for="defaultWallpaper">Wallpaper</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultWood" name="defaultWall[]" value="wood" onchange="updateDefaultWall('wood')">
+                                <label for="defaultWood">Wood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultBrick" name="defaultWall[]" value="brick" onchange="updateDefaultWall('brick')">
+                                <label for="defaultBrick">Brick</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ceiling Finish:</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultCeilingPainted" name="defaultCeiling[]" value="painted-drywall" onchange="updateDefaultCeiling('painted-drywall')">
+                                <label for="defaultCeilingPainted">Painted drywall</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultCeilingTextured" name="defaultCeiling[]" value="textured-drywall" onchange="updateDefaultCeiling('textured-drywall')">
+                                <label for="defaultCeilingTextured">Textured drywall</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultCeilingTile" name="defaultCeiling[]" value="tile" onchange="updateDefaultCeiling('tile')">
+                                <label for="defaultCeilingTile">Tile</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultCeilingWood" name="defaultCeiling[]" value="wood" onchange="updateDefaultCeiling('wood')">
+                                <label for="defaultCeilingWood">Wood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultDropCeiling" name="defaultCeiling[]" value="drop-ceiling" onchange="updateDefaultCeiling('drop-ceiling')">
+                                <label for="defaultDropCeiling">Drop ceiling</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Paint Scope:</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultWallsOnly" name="defaultPaint[]" value="walls-only" onchange="updateDefaultPaint('walls-only')">
+                                <label for="defaultWallsOnly">Walls only</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultCeilingOnly" name="defaultPaint[]" value="ceiling-only" onchange="updateDefaultPaint('ceiling-only')">
+                                <label for="defaultCeilingOnly">Ceiling only</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultBothWallsCeiling" name="defaultPaint[]" value="both-walls-ceiling" onchange="updateDefaultPaint('both-walls-ceiling')">
+                                <label for="defaultBothWallsCeiling">Both walls & ceiling</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defaultNoPaint" name="defaultPaint[]" value="no-paint" onchange="updateDefaultPaint('no-paint')">
+                                <label for="defaultNoPaint">No paint needed</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Baseboard</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardStandard" name="defaultBaseboard[]" value="standard" onchange="updateDefaultBaseboard('standard')">
+                                <label for="baseboardStandard">Standard (3-4")</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardMedium" name="defaultBaseboard[]" value="medium" onchange="updateDefaultBaseboard('medium')">
+                                <label for="baseboardMedium">Medium (5-6")</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardTall" name="defaultBaseboard[]" value="tall" onchange="updateDefaultBaseboard('tall')">
+                                <label for="baseboardTall">Tall (7"+)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardDecorative" name="defaultBaseboard[]" value="decorative" onchange="updateDefaultBaseboard('decorative')">
+                                <label for="baseboardDecorative">Decorative</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardNone" name="defaultBaseboard[]" value="none" onchange="updateDefaultBaseboard('none')">
+                                <label for="baseboardNone">None</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quarter Round</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="quarterRoundYes" name="defaultQuarterRound[]" value="yes" onchange="updateDefaultQuarterRound('yes')">
+                                <label for="quarterRoundYes">Yes</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="quarterRoundNo" name="defaultQuarterRound[]" value="no" onchange="updateDefaultQuarterRound('no')">
+                                <label for="quarterRoundNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Baseboard Material</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardPainted" name="defaultBaseboardMaterial[]" value="painted-wood" onchange="updateDefaultBaseboardMaterial('painted-wood')">
+                                <label for="baseboardPainted">Painted wood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardStained" name="defaultBaseboardMaterial[]" value="stained-wood" onchange="updateDefaultBaseboardMaterial('stained-wood')">
+                                <label for="baseboardStained">Stained wood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="baseboardMDF" name="defaultBaseboardMaterial[]" value="mdf" onchange="updateDefaultBaseboardMaterial('mdf')">
+                                <label for="baseboardMDF">MDF</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quarter Round Material</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="quarterRoundPainted" name="defaultQuarterRoundMaterial[]" value="painted-wood" onchange="updateDefaultQuarterRoundMaterial('painted-wood')">
+                                <label for="quarterRoundPainted">Painted wood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="quarterRoundStained" name="defaultQuarterRoundMaterial[]" value="stained-wood" onchange="updateDefaultQuarterRoundMaterial('stained-wood')">
+                                <label for="quarterRoundStained">Stained wood</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="quarterRoundMDF" name="defaultQuarterRoundMaterial[]" value="mdf" onchange="updateDefaultQuarterRoundMaterial('mdf')">
+                                <label for="quarterRoundMDF">MDF</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Room Entry Template -->
+            <div class="form-section">
+                <h2 class="section-title">🟩 Room Entry (Copy this section for each room)</h2>
+                
+                <div class="room-template">
+                    <div class="room-header">ROOM NAME: <input type="text" id="roomName1" name="roomName1" placeholder="Enter room name" style="display: inline; width: 300px; margin-left: 10px;"></div>
+                    
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <div class="checkbox-item" style="border: 2px solid #2a5298; background: #f0f8ff;">
+                            <input type="checkbox" id="useDefaults1" name="useDefaults1" value="use-defaults">
+                            <label for="useDefaults1" style="font-weight: bold;">Use project defaults for all finishes and dimensions</label>
+                        </div>
+                    </div>
+
+                    <div class="demolition-section">
+                        <div class="section-subtitle">Demolition Status & Scope</div>
+                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 8px; margin-bottom: 8px; font-size: 0.8rem; color: #856404;">
+                            <strong>Note:</strong> This section is for documenting areas that have ALREADY been demolished or damaged. Specify what percentage or area has already been removed.
+                        </div>
+                        <div class="form-row-triple">
+                            <div class="form-group">
+                                <label>Floor Demolition</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="floorDemoNone1" name="floorDemo1[]" value="none" onchange="updateFloorDemo1('none')">
+                                        <label for="floorDemoNone1">None</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="floorDemoAll1" name="floorDemo1[]" value="all" onchange="updateFloorDemo1('all')">
+                                        <label for="floorDemoAll1">All</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="floorDemoPartial1" name="floorDemo1[]" value="partial" onchange="updateFloorDemo1('partial')">
+                                        <label for="floorDemoPartial1">Partial (%)</label>
+                                    </div>
+                                </div>
+                                <input type="text" id="floorDemoPercent1" name="floorDemoPercent1" placeholder="% or SF already demolished" style="margin-top: 3px;">
+                            </div>
+                            <div class="form-group">
+                                <label>Wall Demolition</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="wallDemoNone1" name="wallDemo1[]" value="none" onchange="updateWallDemo1('none')">
+                                        <label for="wallDemoNone1">None</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="wallDemoAll1" name="wallDemo1[]" value="all" onchange="updateWallDemo1('all')">
+                                        <label for="wallDemoAll1">All</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="wallDemoPartial1" name="wallDemo1[]" value="partial" onchange="updateWallDemo1('partial')">
+                                        <label for="wallDemoPartial1">Partial (%)</label>
+                                    </div>
+                                </div>
+                                <input type="text" id="wallDemoPercent1" name="wallDemoPercent1" placeholder="% or SF already demolished" style="margin-top: 3px;">
+                            </div>
+                            <div class="form-group">
+                                <label>Ceiling Demolition</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ceilingDemoNone1" name="ceilingDemo1[]" value="none" onchange="updateCeilingDemo1('none')">
+                                        <label for="ceilingDemoNone1">None</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ceilingDemoAll1" name="ceilingDemo1[]" value="all" onchange="updateCeilingDemo1('all')">
+                                        <label for="ceilingDemoAll1">All</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ceilingDemoPartial1" name="ceilingDemo1[]" value="partial" onchange="updateCeilingDemo1('partial')">
+                                        <label for="ceilingDemoPartial1">Partial (%)</label>
+                                    </div>
+                                </div>
+                                <input type="text" id="ceilingDemoPercent1" name="ceilingDemoPercent1" placeholder="% or SF already demolished" style="margin-top: 3px;">
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-top: 8px;">
+                            <div class="form-group">
+                                <label>Wall Insulation</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="wallInsulationNone1" name="wallInsulation1[]" value="none" onchange="updateWallInsulation1('none')">
+                                        <label for="wallInsulationNone1">None</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="wallInsulationAll1" name="wallInsulation1[]" value="all" onchange="updateWallInsulation1('all')">
+                                        <label for="wallInsulationAll1">All</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="wallInsulationPartial1" name="wallInsulation1[]" value="partial" onchange="updateWallInsulation1('partial')">
+                                        <label for="wallInsulationPartial1">Partial (%)</label>
+                                    </div>
+                                </div>
+                                <input type="text" id="wallInsulationPercent1" name="wallInsulationPercent1" placeholder="% or SF already removed" style="margin-top: 3px;">
+                            </div>
+                            <div class="form-group">
+                                <label>Ceiling Insulation</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ceilingInsulationNone1" name="ceilingInsulation1[]" value="none" onchange="updateCeilingInsulation1('none')">
+                                        <label for="ceilingInsulationNone1">None</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ceilingInsulationAll1" name="ceilingInsulation1[]" value="all" onchange="updateCeilingInsulation1('all')">
+                                        <label for="ceilingInsulationAll1">All</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ceilingInsulationPartial1" name="ceilingInsulation1[]" value="partial" onchange="updateCeilingInsulation1('partial')">
+                                        <label for="ceilingInsulationPartial1">Partial (%)</label>
+                                    </div>
+                                </div>
+                                <input type="text" id="ceilingInsulationPercent1" name="ceilingInsulationPercent1" placeholder="% or SF already removed" style="margin-top: 3px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="material-section">
+                        <div class="section-subtitle">Material Overrides (only fill if different from defaults)</div>
+                        <div class="form-row-triple">
+                            <div class="form-group">
+                                <label for="roomFlooring1">Flooring</label>
+                                <input type="text" id="roomFlooring1" name="roomFlooring1" placeholder="Override flooring type">
+                            </div>
+                            <div class="form-group">
+                                <label for="roomWall1">Wall</label>
+                                <input type="text" id="roomWall1" name="roomWall1" placeholder="Override wall finish">
+                            </div>
+                            <div class="form-group">
+                                <label for="roomCeiling1">Ceiling</label>
+                                <input type="text" id="roomCeiling1" name="roomCeiling1" placeholder="Override ceiling finish">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="work-scope-section">
+                        <div class="section-subtitle">Work Scope Required</div>
+                        <div style="background: #e6f3ff; border: 1px solid #b3d9ff; padding: 8px; margin-bottom: 8px; font-size: 0.8rem; color: #004080;">
+                            <strong>Note:</strong> This section is for specifying work that NEEDS TO BE DONE. Indicate what areas require installation, repair, or restoration work.
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Flooring Work:</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="floorAll1" name="floorWork1[]" value="all" onchange="updateFloorWork1('all')">
+                                        <label for="floorAll1">All</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="floorPartial1" name="floorWork1[]" value="partial" onchange="updateFloorWork1('partial')">
+                                        <label for="floorPartial1">Partial</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="floorNone1" name="floorWork1[]" value="none" onchange="updateFloorWork1('none')">
+                                        <label for="floorNone1">None</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Paint Scope:</label>
+                                <div class="checkbox-group" style="grid-template-columns: 1fr;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="paintDefault1" name="roomPaint1[]" value="default" onchange="updateRoomPaint1('default')">
+                                        <label for="paintDefault1">Use default</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="paintWalls1" name="roomPaint1[]" value="walls-only" onchange="updateRoomPaint1('walls-only')">
+                                        <label for="paintWalls1">Walls only</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="paintCeiling1" name="roomPaint1[]" value="ceiling-only" onchange="updateRoomPaint1('ceiling-only')">
+                                        <label for="paintCeiling1">Ceiling only</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="paintBoth1" name="roomPaint1[]" value="both" onchange="updateRoomPaint1('both')">
+                                        <label for="paintBoth1">Both walls & ceiling</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="paintNone1" name="roomPaint1[]" value="none" onchange="updateRoomPaint1('none')">
+                                        <label for="paintNone1">None</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialConditions1">Special Conditions & Notes</label>
+                        <textarea id="specialConditions1" name="specialConditions1" placeholder="Describe any special conditions, structural issues, built-in features, stairs, storage spaces, doors, windows, appliances, or other relevant details for this room"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Single selection functions for mutually exclusive options
+        function updateOccupancy(selected) {
+            const occupancyTypes = ['vacant', 'occupiedNormal', 'occupiedElderly', 'occupiedChildren'];
+            occupancyTypes.forEach(type => {
+                if (type !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateSiteAccess(selected) {
+            if (selected === 'normal') {
+                document.getElementById('limitedAccess').checked = false;
+            } else if (selected === 'limited') {
+                document.getElementById('normalAccess').checked = false;
+            }
+        }
+
+        // Default selections
+        function updateDefaultFlooring(selected) {
+            const types = ['defaultHardwood', 'defaultLaminate', 'defaultCarpet', 'defaultTile', 'defaultVinyl', 'defaultMixed'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultWall(selected) {
+            const types = ['defaultPaintedDrywall', 'defaultTexturedDrywall', 'defaultWallTile', 'defaultWallpaper', 'defaultWood', 'defaultBrick'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultCeiling(selected) {
+            const types = ['defaultCeilingPainted', 'defaultCeilingTextured', 'defaultCeilingTile', 'defaultCeilingWood', 'defaultDropCeiling'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultPaint(selected) {
+            const types = ['defaultWallsOnly', 'defaultCeilingOnly', 'defaultBothWallsCeiling', 'defaultNoPaint'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultBaseboard(selected) {
+            const types = ['baseboardStandard', 'baseboardMedium', 'baseboardTall', 'baseboardDecorative', 'baseboardNone'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultQuarterRound(selected) {
+            const types = ['quarterRoundYes', 'quarterRoundNo'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultBaseboardMaterial(selected) {
+            const types = ['baseboardPainted', 'baseboardStained', 'baseboardMDF'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateDefaultQuarterRoundMaterial(selected) {
+            const types = ['quarterRoundPainted', 'quarterRoundStained', 'quarterRoundMDF'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        // Room demolition selections
+        function updateFloorDemo1(selected) {
+            const types = ['floorDemoNone1', 'floorDemoAll1', 'floorDemoPartial1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateWallDemo1(selected) {
+            const types = ['wallDemoNone1', 'wallDemoAll1', 'wallDemoPartial1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateCeilingDemo1(selected) {
+            const types = ['ceilingDemoNone1', 'ceilingDemoAll1', 'ceilingDemoPartial1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateRoomPaint1(selected) {
+            const types = ['paintDefault1', 'paintWalls1', 'paintCeiling1', 'paintBoth1', 'paintNone1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateWallInsulation1(selected) {
+            const types = ['wallInsulationNone1', 'wallInsulationAll1', 'wallInsulationPartial1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateCeilingInsulation1(selected) {
+            const types = ['ceilingInsulationNone1', 'ceilingInsulationAll1', 'ceilingInsulationPartial1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+        function updateFloorWork1(selected) {
+            const types = ['floorAll1', 'floorPartial1', 'floorNone1'];
+            types.forEach(type => {
+                if (document.getElementById(type).value !== selected) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function submitForm() {
+            const form = document.getElementById('intakeForm');
+            
+            // Basic validation
+            const requiredFields = form.querySelectorAll('[required]');
+            let allValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'red';
+                    allValid = false;
+                } else {
+                    field.style.borderColor = '#ccc';
+                }
+            });
+            
+            if (!allValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            alert('Thank you! Your interior estimate intake form has been submitted successfully. We will review the information and provide a detailed estimate.');
+        }
+    </script>
+</body>
+</html>

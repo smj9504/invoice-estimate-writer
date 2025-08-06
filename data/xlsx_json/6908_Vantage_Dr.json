@@ -1,0 +1,861 @@
+{
+  "estimate_number": "RST-202506-6517",
+  "estimate_date": "2025-06-16",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "YOUNG SHIN KIM",
+    "address": "6908 Vantage Dr",
+    "city": "Alexandria",
+    "state": "Virginia",
+    "zip": "22306",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "[RESTORATION SCOPE]\n1) INTERIOR RESTORATION \nWater damage repair, structural framing, drywall/flooring replacement, interior finishes\n2) COMPLETE SIDING REPLACEMENT \nRemove existing siding, install weather barrier, premium vinyl siding (2,510.6 sq ft)\n3) PARTIAL ROOF REPLACEMENT\nRepair roof deck punctures (Facets C & D), reconstruct eave structure, complete roofing\n\n[BUILDING CODE ADHERENCE]\nVirginia 2021 USBC: Enhanced requirements for tornado-prone designation areas\nInternational Residential Code (IRC): Structural and envelope restoration standards\nOSHA 29 CFR 1926.451: Safety compliance for multi-story restoration work\nASTM Standards: Material specifications and installation practices\n\n[OVERHEAD & PROFIT]\nIndustry Standard Application: 20% O&P reflects standard DMV market rates for restoration projects involving multiple specialized trades.\nOverhead (10%): Project management, insurance/bonding, equipment, administrative costs, warranty provisions\nProfit (10%): Market-rate contractor profit, business risk assumption, investment return, quality incentive\n\nMulti-Trade:\n- Complex project coordination between interior restoration, complete siding replacement, and partial roof reconstruction\n- Structural repairs involving roof deck punctures and eave damage from tree impact\n- Building code compliance across multiple disciplines (2021 USBC, IRC requirements)\n- Quality assurance for structural integrity and weather envelope restoration\n- Risk management for coordinated exterior work (siding and roofing) and interior finishes",
+  "bottom_note": "Scope & Exclusions: \nThis estimate covers only the work detailed herein. Any additional structural damages or code-required upgrades discovered after the removal of existing materials will be documented and submitted as a supplemental estimate for approval.\n\n\nRoofing Estimate:\nThis proposal details the estimated costs to perform a partial roof replacement on the rear slopes (identified as Facets C and D in the EagleView report ) of the property listed above. The damage is a direct result of a fallen tree, which caused multiple punctures in the roof deck and significant damage to the eave structure.\n\nAll specified materials and installation methods are based on the requirements of the International Residential Code (IRC) and applicable local building codes to ensure a safe and durable restoration of the property.\n\nCode Compliance: All work shall be performed in a professional manner and in compliance with all applicable local and state building codes, as well as the material manufacturer's installation specifications. This estimate includes costs for all code-required components for a new roofing system.\n • IRC R803.2.3: Deck re-nailing        \n • IRC R905: Underlayment requirements   \n • IRC R806.2: Ventilation standards     \n • OSHA 1926.501: Fall protection        \n • IRC R903.2: Flashing specifications",
+  "disclaimer": "",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "ROOFING",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Fall protection harness",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": "OSHA 1926.501(b)(13) compliance"
+        },
+        {
+          "name": "Property protection",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 225.0,
+          "dec": "Insurance requirement"
+        },
+        {
+          "name": "Site preparation",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": "Deck inspection and prep"
+        },
+        {
+          "name": "Temporary tarp removal",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 125.0,
+          "dec": "Remove existing tarp"
+        },
+        {
+          "name": "Remove existing shingles",
+          "qty": 12.3,
+          "unit": "SQ",
+          "price": 85.0,
+          "dec": "Facets C & D only"
+        },
+        {
+          "name": "Remove underlayment",
+          "qty": 1228.0,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "1 layer removal"
+        },
+        {
+          "name": "Dumpster rent fee",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 550.0,
+          "dec": "20 yard container"
+        },
+        {
+          "name": "Debris hauling fee",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Local regulation compliance"
+        },
+        {
+          "name": "Material delivery to roof",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": "Crane/conveyor to roof level"
+        },
+        {
+          "name": "Deck re-nailing",
+          "qty": 1228.0,
+          "unit": "SF",
+          "price": 0.65,
+          "dec": "Deck re-nailing per IRC R803.2.3"
+        },
+        {
+          "name": "Plywood replacement - tree damage",
+          "qty": 96.0,
+          "unit": "SF",
+          "price": 3.25,
+          "dec": "3 plywood penetrations requiring replacement (96 sq ft)"
+        },
+        {
+          "name": "Fascia board replacement",
+          "qty": 24.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Fascia damage on Facet C eave section (24 LF)"
+        },
+        {
+          "name": "Synthetic underlayment",
+          "qty": 1228.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": "IRC R905 requirement"
+        },
+        {
+          "name": "Ice & water barrier",
+          "qty": 245.0,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": ""
+        },
+        {
+          "name": "3-tab asphalt shingles",
+          "qty": 12.3,
+          "unit": "SQ",
+          "price": 165.0,
+          "dec": "New roof installation"
+        },
+        {
+          "name": "Starter shingles",
+          "qty": 82.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Warranty requirement"
+        },
+        {
+          "name": "Waste allowance",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": "7% material waste"
+        },
+        {
+          "name": "Drip edge installation",
+          "qty": 82.0,
+          "unit": "LF",
+          "price": 3.25,
+          "dec": "IRC R905.2.8.5 requirement"
+        },
+        {
+          "name": "Skylight flashing",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": "1 unit flashing only"
+        },
+        {
+          "name": "Step flashing replacement",
+          "qty": 43.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Wall intersections"
+        },
+        {
+          "name": "Ridge vent installation",
+          "qty": 26.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R806.2 requirement"
+        },
+        {
+          "name": "Gutter replacement",
+          "qty": 10.0,
+          "unit": "LF",
+          "price": 12.5,
+          "dec": "Gutter/downspout damage (10 LF each)"
+        },
+        {
+          "name": "Downspout replacement",
+          "qty": 10.0,
+          "unit": "LF",
+          "price": 8.75,
+          "dec": ""
+        },
+        {
+          "name": "Trip fee",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 200.0,
+          "dec": "20-mile mobilization"
+        }
+      ],
+      "subtotal": 9982.05
+    },
+    {
+      "title": "INTERIOR - SUNROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection during Construction",
+          "qty": 665.17,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Protects adjacent finished surfaces from damage during construction activities as per OSHA standards."
+        },
+        {
+          "name": "Plastic Sheeting/Dust Barriers",
+          "qty": 665.17,
+          "unit": "SF",
+          "price": 0.8,
+          "dec": "Erecting dust barriers in occupied spaces to contain debris and dust during construction, in accordance with industry best practices."
+        },
+        {
+          "name": "Floor Protection (Ram board/cardboard)",
+          "qty": 227.61,
+          "unit": "SF",
+          "price": 0.9,
+          "dec": "Protecting finished floor areas in adjacent spaces from damage due to foot traffic and material transport during construction."
+        },
+        {
+          "name": "Door Casing Undercut (for flooring work)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Required for proper installation of new flooring. IRC R502.3 requires proper subfloor preparation and transitions between different floor materials."
+        },
+        {
+          "name": "Transition Strip Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 12.0,
+          "dec": "Required between rooms with different flooring materials. IRC R502.3 requires proper subfloor preparation and transitions between different floor materials."
+        },
+        {
+          "name": "Subfloor Inspection",
+          "qty": 227.61,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Per IRC R502.3, required for proper subfloor preparation before new flooring installation."
+        },
+        {
+          "name": "Room-Specific Cleanup",
+          "qty": 665.17,
+          "unit": "SF",
+          "price": 0.6,
+          "dec": "Daily cleanup within the work area to maintain a safe and efficient job site."
+        },
+        {
+          "name": "Remove Baseboard",
+          "qty": 51.28,
+          "unit": "LF",
+          "price": 0.75,
+          "dec": "Removal of undamaged baseboard not removed during water mitigation"
+        },
+        {
+          "name": "Remove Crown Molding",
+          "qty": 62.83,
+          "unit": "LF",
+          "price": 1.0,
+          "dec": "Removal of undamaged crown molding not removed during water mitigation"
+        },
+        {
+          "name": "Carpet Installation",
+          "qty": 227.61,
+          "unit": "SF",
+          "price": 8.0,
+          "dec": "Installation of new carpet and pad to match existing type and quality per LKQ standards. IRC R503.1 requires proper subfloor preparation."
+        },
+        {
+          "name": "Acoustic Ceiling Tile (2 layers)",
+          "qty": 227.61,
+          "unit": "SF",
+          "price": 5.0,
+          "dec": "Replacement of ceiling tile to match existing per LKQ standards."
+        },
+        {
+          "name": "1/2\" Drywall Installation (3 layers, on wall)",
+          "qty": 437.56,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": "Installation of new drywall where existing was removed due to water damage. IRC R702.3 requires proper installation per manufacturer specifications."
+        },
+        {
+          "name": "Drywall Tape and Blend (on wall)",
+          "qty": 437.56,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "Taping and blending of new drywall joints. IRC R702.3.8 mandates joint treatment with minimum three coats of joint compound."
+        },
+        {
+          "name": "Drywall Repair for Trim Detach/Reset (Walls)",
+          "qty": 170.28,
+          "unit": "SF",
+          "price": 3.0,
+          "dec": "Repair of drywall surfaces where trim was detached and reset."
+        },
+        {
+          "name": "Blown-in insulation - 10\" depth - R26 (Ceiling)",
+          "qty": 227.61,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Replacement of ceiling insulation due to water damage. IRC R402 mandates minimum insulation requirements by climate zone."
+        },
+        {
+          "name": "Batt insulation 10\" R30 unfaced batt (Walls)",
+          "qty": 437.56,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "Replacement of wall insulation only in areas where wet insulation was removed during water mitigation. IRC R402 mandates minimum insulation requirements by climate zone."
+        },
+        {
+          "name": "Paneling & Wood Wall Finishes",
+          "qty": 437.56,
+          "unit": "SF",
+          "price": 3.05,
+          "dec": "Replacement of wood paneling to match existing style and quality per LKQ standards."
+        },
+        {
+          "name": "Prime Walls",
+          "qty": 437.56,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Required for proper paint adhesion on new drywall and wood surfaces. IRC R702.3.8 requires proper surface preparation with PVA primer for proper paint adhesion."
+        },
+        {
+          "name": "Paint Walls (2 Coats)",
+          "qty": 437.56,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Painting walls to match existing color and sheen per LKQ standards."
+        },
+        {
+          "name": "Baseboard Replacement (7\"+ Tall)",
+          "qty": 51.28,
+          "unit": "LF",
+          "price": 9.5,
+          "dec": "Water-damaged baseboard requires complete replacement to match existing height and profile. IRC R702.5 mandates continuous trim installation."
+        },
+        {
+          "name": "Quarter Round Replacement",
+          "qty": 51.28,
+          "unit": "LF",
+          "price": 7.0,
+          "dec": "Replacement of quarter round to match existing. IRC R702.5 mandates continuous trim installation."
+        },
+        {
+          "name": "Prime Baseboard and Quarter Round (Stained Wood)",
+          "qty": 102.56,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Required for proper stain adhesion on new trim. IRC R702.3.8 requires proper surface preparation."
+        },
+        {
+          "name": "Stain & Finish Baseboard (2 coats)",
+          "qty": 51.28,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": ""
+        },
+        {
+          "name": "Stain & Finish Quarter Round (2 coats)",
+          "qty": 51.28,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": ""
+        },
+        {
+          "name": "Crown Molding Replacement (Standard Wood)",
+          "qty": 62.83,
+          "unit": "LF",
+          "price": 15.0,
+          "dec": "Water-damaged crown molding requires complete replacement to match existing. IRC R702.5 mandates continuous trim installation."
+        },
+        {
+          "name": "Prime Crown Molding (Stained Wood)",
+          "qty": 62.83,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Required for proper stain adhesion on new trim. IRC R702.3.8 requires proper surface preparation."
+        },
+        {
+          "name": "Stain & Finish Crown Molding (2 coats)",
+          "qty": 62.83,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Staining and finishing new crown molding to match existing."
+        },
+        {
+          "name": "Beam Inspection and Repair (Exposed Beam near Skylight)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 300.0,
+          "dec": "Inspection and necessary repair of exposed beams due to potential impact from falling tree branch. IRC R502.1 requires structural integrity for framing."
+        },
+        {
+          "name": "Window Trim Replacement (Wood)",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Door Trim Replacement (Wood)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Wood Wall Corner Trim Replacement",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 50.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 15780.13
+    },
+    {
+      "title": "INTERIOR - ADDITION",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Wood Trim at Drywall/Wood Wall Boundary",
+          "qty": 25.0,
+          "unit": "LF",
+          "price": 10.0,
+          "dec": "Replacement of wood trim at the boundary between drywall and wood paneling to match existing."
+        },
+        {
+          "name": "Surface Protection during Construction",
+          "qty": 318.95,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Protects adjacent finished surfaces from damage during construction activities as per OSHA standards."
+        },
+        {
+          "name": "Plastic Sheeting/Dust Barriers",
+          "qty": 318.95,
+          "unit": "SF",
+          "price": 0.8,
+          "dec": "Erecting dust barriers in occupied spaces to contain debris and dust during construction, in accordance with industry best practices."
+        },
+        {
+          "name": "Floor Protection (Ram board/cardboard)",
+          "qty": 87.6,
+          "unit": "SF",
+          "price": 0.9,
+          "dec": "Protecting finished floor areas in adjacent spaces from damage due to foot traffic and material transport during construction."
+        },
+        {
+          "name": "Room-Specific Cleanup",
+          "qty": 318.95,
+          "unit": "SF",
+          "price": 0.6,
+          "dec": "Daily cleanup within the work area to maintain a safe and efficient job site."
+        },
+        {
+          "name": "Tear Out Trim",
+          "qty": 17.54,
+          "unit": "LF",
+          "price": 0.75,
+          "dec": "Removal of undamaged trim not removed during water mitigation"
+        },
+        {
+          "name": "Tear Out Baseboard",
+          "qty": 17.54,
+          "unit": "LF",
+          "price": 0.75,
+          "dec": "Removal of undamaged baseboard not removed during water mitigation"
+        },
+        {
+          "name": "1/2\" Drywall Installation (3 layers)",
+          "qty": 70.67,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": "Installation of new drywall where existing was removed due to water damage. IRC R702.3 requires proper installation per manufacturer specifications."
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 70.67,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "Taping and blending of new drywall joints. IRC R702.3.8 mandates joint treatment with minimum three coats of joint compound."
+        },
+        {
+          "name": "Batt Insulation 10\" R30-unfaced batt",
+          "qty": 70.67,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "Replacement of insulation due to water damage. IRC R402 mandates minimum insulation requirements by climate zone."
+        },
+        {
+          "name": "Remove Paneling (Existing)",
+          "qty": 159.66,
+          "unit": "SF",
+          "price": 0.36,
+          "dec": "Removal of existing paneling in preparation for new installation."
+        },
+        {
+          "name": "Paneling (New Installation)",
+          "qty": 230.33,
+          "unit": "SF",
+          "price": 3.05,
+          "dec": "Replacement of wood paneling to match existing style and quality per LKQ standards."
+        },
+        {
+          "name": "Prime Walls",
+          "qty": 230.33,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Required for proper paint adhesion on new drywall and wood surfaces. IRC R702.3.8 requires proper surface preparation with PVA primer for proper paint adhesion."
+        },
+        {
+          "name": "Paint Walls (2 Coats)",
+          "qty": 230.33,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Painting walls to match existing color and sheen per LKQ standards."
+        },
+        {
+          "name": "Trim Board - 1\" x 2\" - installed (pine)",
+          "qty": 17.54,
+          "unit": "LF",
+          "price": 3.32,
+          "dec": ""
+        },
+        {
+          "name": "Baseboard-5 1/4\" stain grade",
+          "qty": 17.54,
+          "unit": "LF",
+          "price": 7.01,
+          "dec": ""
+        },
+        {
+          "name": "Stain & Finish Trim",
+          "qty": 17.54,
+          "unit": "LF",
+          "price": 2.04,
+          "dec": ""
+        },
+        {
+          "name": "Stain & Finish Baseboard",
+          "qty": 17.54,
+          "unit": "LF",
+          "price": 2.03,
+          "dec": ""
+        },
+        {
+          "name": "Window Trim Replacement (Wood)",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Door Trim Replacement (Wood)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Wood Wall Corner Trim Replacement",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 50.0,
+          "dec": ""
+        },
+        {
+          "name": "Wood Trim at Drywall/Wood Wall Boundary",
+          "qty": 25.0,
+          "unit": "LF",
+          "price": 10.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 4170.64
+    },
+    {
+      "title": "GENERAL CONDITIONS",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Dumpster Rental",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 500.0,
+          "dec": "For disposal of construction debris and waste."
+        },
+        {
+          "name": "Final Project Cleanup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 200.0,
+          "dec": "Comprehensive cleaning of the entire work area upon project completion."
+        }
+      ],
+      "subtotal": 700.0
+    },
+    {
+      "title": "SIDING",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "OSHA-compliant scaffolding setup",
+          "qty": 1890.0,
+          "unit": "SF",
+          "price": 1.45,
+          "dec": "29 CFR 1926.451 - Fall protection for two-story installation"
+        },
+        {
+          "name": "Equipment delivery and staging",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Site logistics for multi-story siding project"
+        },
+        {
+          "name": "Site protection installation",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": "Ground and landscape protection during construction"
+        },
+        {
+          "name": "Remove existing vinyl siding",
+          "qty": 2510.6,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Complete removal for substrate inspection per IRC R703.1.1"
+        },
+        {
+          "name": "Dispose of existing siding material",
+          "qty": 28.5,
+          "unit": "CY",
+          "price": 45.0,
+          "dec": ""
+        },
+        {
+          "name": "Minor substrate repairs",
+          "qty": 125.0,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": "Repair damaged sheathing discovered during removal"
+        },
+        {
+          "name": "Weather-Resistive Barrier Grade-D",
+          "qty": 2760.7,
+          "unit": "SF",
+          "price": 1.0,
+          "dec": "IRC R703.2 - Grade-D 60-minute minimum rating with 10% waste"
+        },
+        {
+          "name": "WRB integration with building envelope",
+          "qty": 235.4,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Proper sealing at existing roof and foundation connections"
+        },
+        {
+          "name": "Window/door flashing installation",
+          "qty": 311.0,
+          "unit": "LF",
+          "price": 4.0,
+          "dec": "IRC R703.4 - Flashing at all penetrations"
+        },
+        {
+          "name": "Corner and penetration sealant",
+          "qty": 15.0,
+          "unit": "TB",
+          "price": 13.0,
+          "dec": "Polyurethane sealant per manufacturer specifications"
+        },
+        {
+          "name": "Vinyl siding panels",
+          "qty": 2812.0,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": "2510.6 SF + 12% waste factor ASTM D3679 compliant"
+        },
+        {
+          "name": "Starter strips",
+          "qty": 246.0,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Foundation perimeter starter installation"
+        },
+        {
+          "name": "J-channel windows/doors",
+          "qty": 311.0,
+          "unit": "LF",
+          "price": 3.0,
+          "dec": "Window and door perimeter trim"
+        },
+        {
+          "name": "Inside corner treatments",
+          "qty": 66.6,
+          "unit": "LF",
+          "price": 5.0,
+          "dec": ""
+        },
+        {
+          "name": "Outside corner treatments",
+          "qty": 168.9,
+          "unit": "LF",
+          "price": 5.95,
+          "dec": ""
+        },
+        {
+          "name": "Vinyl trim boards decorative",
+          "qty": 425.0,
+          "unit": "LF",
+          "price": 6.75,
+          "dec": "Architectural trim matching existing design"
+        },
+        {
+          "name": "Utility trim and accessories",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 385.0,
+          "dec": "Electrical meter utility penetrations"
+        },
+        {
+          "name": "Galvanized nails",
+          "qty": 45.0,
+          "unit": "LB",
+          "price": 2.85,
+          "dec": "IRC R703.3 - Corrosion resistant fasteners"
+        },
+        {
+          "name": "Roof-to-wall transition work",
+          "qty": 246.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Step flashing and proper siding termination"
+        },
+        {
+          "name": "Gable end installations",
+          "qty": 485.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Enhanced fastening per Virginia wind load requirements"
+        },
+        {
+          "name": "High-access installation premium",
+          "qty": 1350.0,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "OSHA 29 CFR 1926.451 compliance surcharge"
+        },
+        {
+          "name": "Architectural detail work",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 1250.0,
+          "dec": "Complex window trim and building transitions"
+        },
+        {
+          "name": "Penetration sealing",
+          "qty": 18.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Weatherproof sealing at all penetrations"
+        },
+        {
+          "name": "Scaffolding rental 15 days",
+          "qty": 15.0,
+          "unit": "DAY",
+          "price": 185.0,
+          "dec": ""
+        },
+        {
+          "name": "Pneumatic siding nailers",
+          "qty": 3.0,
+          "unit": "WK",
+          "price": 85.0,
+          "dec": ""
+        },
+        {
+          "name": "Safety training and supervision",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 375.0,
+          "dec": "OSHA compliance and crew safety oversight"
+        },
+        {
+          "name": "Ground protection and landscape shields",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Protect existing landscaping and hardscapes"
+        },
+        {
+          "name": "30-yard dumpster rental",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 525.0,
+          "dec": ""
+        },
+        {
+          "name": "Hauling fees and disposal costs",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 675.0,
+          "dec": ""
+        },
+        {
+          "name": "Daily site cleanup",
+          "qty": 12.0,
+          "unit": "DAY",
+          "price": 125.0,
+          "dec": ""
+        },
+        {
+          "name": "Installation inspection ASTM D4756",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 425.0,
+          "dec": "Vinyl siding installation standard verification"
+        },
+        {
+          "name": "Site cleanup and debris removal",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 325.0,
+          "dec": ""
+        },
+        {
+          "name": "Magnetic sweep for metal debris",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 125.0,
+          "dec": "Safety sweep for fastener debris"
+        },
+        {
+          "name": "Protective covering removal",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 185.0,
+          "dec": "Remove all temporary protection materials"
+        }
+      ],
+      "subtotal": 43464.96
+    }
+  ],
+  "subtotal": 74097.78,
+  "op_amount": 14819.56,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 88917.34
+}

@@ -1,0 +1,287 @@
+{
+  "estimate_number": "EST-202506-6878",
+  "estimate_date": "2025-06-23",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "OK YOUNG NAM",
+    "address": "6878 Ridge Water Ct",
+    "city": "Centreville",
+    "state": "VA",
+    "zip": "20121",
+    "phone": "(703) 623-8485",
+    "email": "a1004miss@gmail.com"
+  },
+  "top_note": "Applicable Codes: Virginia enforces the 2021 Virginia Uniform Statewide Building Code (USBC), which references the 2021 International Residential Code (IRC). The 2021 USBC became effective January 18, 2024, with mandatory compliance required for all new applications as of January 18, 2025.",
+  "bottom_note": "",
+  "disclaimer": "",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "Removal & Preparation",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "8.5 SQ base area from measurement report with metal roof areas excluded. Removal includes existing 3-tab shingles and felt underlayment. Deck re-nailing ensures proper fastening per IRC requirements."
+        },
+        {
+          "name": "Remove 3-Tab Comp Shingle Roofing incl. felt",
+          "qty": 8.5,
+          "unit": "SQ",
+          "price": 70.0,
+          "dec": ""
+        },
+        {
+          "name": "Deck Re-nailing",
+          "qty": 8.5,
+          "unit": "SQ",
+          "price": 38.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 918.0
+    },
+    {
+      "title": "Roofing Materials & Installation",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "3-tab shingles calculated at 8.5 SQ with material and labor included (metal roof areas excluded). Ridge cap cut from field shingles (17 LF adjusted for aluminum ridge vent sections - no ridge cap needed over aluminum vent). Felt underlayment covers shingle roof area including areas beneath ice & water shield."
+        },
+        {
+          "name": "3-Tab Comp Shingle Roofing",
+          "qty": 8.5,
+          "unit": "SQ",
+          "price": 375.0,
+          "dec": ""
+        },
+        {
+          "name": "Ridge Cap Cut from 3-Tab",
+          "qty": 17.0,
+          "unit": "LF",
+          "price": 6.0,
+          "dec": ""
+        },
+        {
+          "name": "#15 Felt Underlayment",
+          "qty": 850.0,
+          "unit": "SF",
+          "price": 0.95,
+          "dec": ""
+        },
+        {
+          "name": "Asphalt Starter Course",
+          "qty": 115.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": ""
+        }
+      ],
+      "subtotal": 4384.5
+    },
+    {
+      "title": "Ice & Water Shield",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Calculation Detail:\n\t•\tEaves Coverage (shingle areas only): 60 LF perimeter × 3 ft width = 180 SF\n\t•\tPenetrations (3 EA): 1 SF each = 3 SF\n\t•\tTotal: 183 SF × 15% waste = 210 SF supply, rounded to 185 SF application"
+        },
+        {
+          "name": "Ice & Water Shield",
+          "qty": 185.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 370.0
+    },
+    {
+      "title": "Ventilation",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Calculation Detail: Aluminum ridge vent (exposed style) based on ventilation requirements (1/150 ratio) and available ridge length on shingle areas only."
+        },
+        {
+          "name": "Ridge Vent Aluminum",
+          "qty": 18.0,
+          "unit": "LF",
+          "price": 13.5,
+          "dec": ""
+        }
+      ],
+      "subtotal": 243.0
+    },
+    {
+      "title": "Flashing & Edge Protection",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Drip Edge",
+          "qty": 115.0,
+          "unit": "LF",
+          "price": 3.75,
+          "dec": ""
+        },
+        {
+          "name": "Step Flashing",
+          "qty": 30.0,
+          "unit": "LF",
+          "price": 5.25,
+          "dec": ""
+        },
+        {
+          "name": "Pipe Jack Flashing",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 663.75
+    },
+    {
+      "title": "Roof Accessories",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Roof Vent - Turtle Type - Metal R&R",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": ""
+        },
+        {
+          "name": "Rain Cap - 4” to 5” R&R",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 95.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 220.0
+    },
+    {
+      "title": "Gutter Work",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Detach and reset existing gutters/downspouts on shingle roof sections only during roof work."
+        },
+        {
+          "name": "Detach & Reset Gutters",
+          "qty": 60.0,
+          "unit": "LF",
+          "price": 5.25,
+          "dec": ""
+        },
+        {
+          "name": "Detach & Reset Downspouts",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": ""
+        }
+      ],
+      "subtotal": 445.0
+    },
+    {
+      "title": "Debris & Cleanup",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Estimated debris weight: 8.5 SQ single layer = 2,550 lbs (8.5 × 100 SF × 3 lbs/SF) plus felt waste = 400 lbs. Total 2,950 lbs requires 15-yard container at local rate of $395 including delivery, pickup, and disposal fees."
+        },
+        {
+          "name": "Debris Removal",
+          "qty": 8.5,
+          "unit": "SQ",
+          "price": 25.0,
+          "dec": ""
+        },
+        {
+          "name": "Dumpster/Waste Hauling",
+          "qty": 1.0,
+          "unit": "JOB",
+          "price": 395.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 607.5
+    },
+    {
+      "title": "Supervision & General Conditions",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Per Virginia Code § 54.1-1100 and 2021 Virginia IRC requirements, all construction work must be performed under the supervision of a licensed contractor. Virginia DPOR regulations require direct supervision by licensed personnel to ensure code compliance, quality control, and safety standards. Supervision includes project coordination, material inspection, work quality verification, and compliance with Virginia 2021 IRC requirements.\nProject Duration: Single-day completion (8 hours) with continuous licensed supervision."
+        },
+        {
+          "name": "Residential Supervision",
+          "qty": 8.0,
+          "unit": "HOUR",
+          "price": 55.0,
+          "dec": ""
+        },
+        {
+          "name": "Exterior Content Protection",
+          "qty": 1.0,
+          "unit": "JOB",
+          "price": 150.0,
+          "dec": ""
+        },
+        {
+          "name": "Fall Protection Equipment",
+          "qty": 1.0,
+          "unit": "DAY",
+          "price": 45.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 635.0
+    }
+  ],
+  "subtotal": 8486.75,
+  "op_amount": 0.0,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 8486.75
+}

@@ -3,7 +3,7 @@ import json
 import math
 from pathlib import Path
 
-def excel_to_estimate_json(excel_path: str, output_dir: str = ".", filename_by_address: bool = True) -> str:
+def excel_to_estimate_json(excel_path: str, output_dir: str = None, filename_by_address: bool = True) -> str:
     df_info = pd.read_excel(excel_path, sheet_name="Estimate_Info", engine="openpyxl")
     df_items = pd.read_excel(excel_path, sheet_name="Service_Items", engine="openpyxl")
     
@@ -94,6 +94,13 @@ def excel_to_estimate_json(excel_path: str, output_dir: str = ".", filename_by_a
     else:
         address_part = "estimate"
     
+    # JSON 저장 디렉토리 설정
+    if output_dir is None:
+        # 기본 저장 경로를 data/xlsx_json으로 설정
+        project_root = Path(__file__).parent.parent
+        output_dir = project_root / "data" / "xlsx_json"
+        output_dir.mkdir(parents=True, exist_ok=True)
+    
     filename = f"{address_part}.json" if filename_by_address else "estimate.json"
     output_path = Path(output_dir) / filename
     
@@ -105,5 +112,5 @@ def excel_to_estimate_json(excel_path: str, output_dir: str = ".", filename_by_a
 # 예시 실행
 if __name__ == "__main__":
     excel_file = "estimate_input_template.xlsx"
-    output_json = excel_to_estimate_json(excel_file, output_dir=".")
+    output_json = excel_to_estimate_json(excel_file)  # output_dir 인자 제거하여 기본 경로 사용
     print(f"JSON saved to: {output_json}")

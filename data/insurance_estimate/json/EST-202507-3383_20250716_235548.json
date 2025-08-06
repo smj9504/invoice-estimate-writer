@@ -1,0 +1,807 @@
+{
+  "estimate_number": "EST-202507-3383",
+  "estimate_date": "2025-07-16",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "43383 Stukely Dr",
+    "city": "Sterling",
+    "state": "VA",
+    "zip": "20166",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This comprehensive restoration estimate reflects restoration to pre-loss condition using Like Kind and Quality materials.",
+  "trades": [
+    {
+      "name": "Interior Reconstruction",
+      "note": "Multi-room restoration including Work Room, Recreation Room, Recreation Room Closet, Back Double Door Bedroom, Sump Room, Closet Two, Stair, Under Stairs",
+      "locations": [
+        {
+          "name": "Work Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 384.58 SF<br>- Wall Area (Net): 692.42 SF<br>- Ceiling Area: 384.58 SF<br>- Baseboard Length: 90.42 LF<br>- Height: 8.58 FT<br><br>Water damage restoration including drywall, insulation, and painting",
+          "showSubtotal": true,
+          "subtotal": 9593.4,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Contents Manipulation/Protection",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 500.0,
+                  "description": "Manipulation and protection of room contents to prevent damage during restoration. Includes protective coverings (plastic sheeting, drop cloths)."
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 324.5,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "Installation of 1/2-inch gypsum drywall on walls at 8.58 FT height. Includes drywall sheets, joint compound, tape, and screws with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 140.8,
+                  "unit": "SF",
+                  "price": 6.0,
+                  "description": "Installation of 5/8-inch gypsum drywall on ceilings at 8.58 FT height. Includes drywall sheets, joint compound, tape, and screws with 15% waste allowance for overhead installation complexity."
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 134.4,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Installation of fiberglass batt insulation (R-13) in walls at 8.58 FT height. Includes 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 90.42,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Installation of baseboards. Includes nails and caulk with 10% waste allowance for cutting and mitered joints."
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 295.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on walls at 8.58 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 692.42,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of paint on walls at 8.58 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 128.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on ceilings at 8.58 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 384.58,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of ceiling paint at 8.58 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 82.2,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on baseboards. Includes paint and brushes."
+                },
+                {
+                  "name": "Door Paint",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 100.0,
+                  "description": "Painting of two interior doors at 8.58 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Trim Paint",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 80.0,
+                  "description": "Painting of trim at 8.58 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Interior Door Unit",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 250.0,
+                  "description": "Installation of one pre-hung interior door unit at 8.58 FT height. Includes door, frame, and hardware with 5% waste allowance."
+                },
+                {
+                  "name": "Recessed LED Panel Light (Detach & Reset)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 50.0,
+                  "description": "Detaching and resetting one recessed LED panel light at 8.58 FT height. Includes minor wiring materials."
+                },
+                {
+                  "name": "Window Blind (Detach & Reset)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 40.0,
+                  "description": "Detaching and resetting one window blind at 8.58 FT height. Includes minor mounting hardware."
+                },
+                {
+                  "name": "Door Knob/Lockset (Detach & Reset)",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 30.0,
+                  "description": "Detaching and resetting one door knob/lockset at 8.58 FT height. Includes minor hardware."
+                },
+                {
+                  "name": "Outlets (Detach & Reset)",
+                  "qty": 7.0,
+                  "unit": "EA",
+                  "price": 35.0,
+                  "description": "Detaching and resetting seven electrical outlets at 8.58 FT height. Includes minor wiring materials."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Recreation Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 1134.88 SF<br>- Wall Area (Net): 1055.92 SF<br>- Ceiling Area: 1134.88 SF<br>- Baseboard Length: 129.31 LF<br>- Height: 8.583 FT<br><br>Water damage restoration including drywall, insulation, flooring, and painting",
+          "showSubtotal": true,
+          "subtotal": 22165.31,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 343.2,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "Installation of 1/2-inch gypsum drywall on walls at 8.583 FT height. Includes drywall sheets, joint compound, tape, and screws with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Ceiling Drywall",
+                  "qty": 412.5,
+                  "unit": "SF",
+                  "price": 6.0,
+                  "description": "Installation of 5/8-inch gypsum drywall on ceilings at 8.583 FT height. Includes drywall sheets, joint compound, tape, and screws with 15% waste allowance for overhead installation."
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 234.15,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Installation of fiberglass batt insulation (R-13) in walls at 8.583 FT height. Includes 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 1305.11,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Installation of carpet flooring. Includes carpet material with 10% waste allowance for seams and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 1305.11,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Installation of carpet padding. Includes padding material with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 129.31,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Installation of baseboards. Includes nails and caulk with 10% waste allowance for cutting and mitered joints."
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 312.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on walls at 8.583 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 1055.92,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of paint on walls at 8.583 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Ceiling Primer",
+                  "qty": 375.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on ceilings at 8.583 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 1134.88,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of ceiling paint at 8.583 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 117.55,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on baseboards. Includes paint and brushes."
+                },
+                {
+                  "name": "Trim Paint",
+                  "qty": 10.0,
+                  "unit": "EA",
+                  "price": 80.0,
+                  "description": "Painting of trim at 8.583 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Outlets (Detach & Reset)",
+                  "qty": 10.0,
+                  "unit": "EA",
+                  "price": 35.0,
+                  "description": "Detaching and resetting ten electrical outlets at 8.583 FT height. Includes minor wiring materials."
+                },
+                {
+                  "name": "Recessed LED Panel Light (Protection)",
+                  "qty": 8.0,
+                  "unit": "EA",
+                  "price": 20.0,
+                  "description": "Protection of eight recessed LED panel lights during construction at 8.583 FT height. Includes protective coverings."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Recreation Room Closet",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 44.93 SF<br>- Wall Area (Net): 264.74 SF<br>- Ceiling Area: 44.93 SF<br>- Baseboard Length: 29.53 LF<br>- Height: 8.58 FT<br><br>Water damage restoration including flooring and painting",
+          "showSubtotal": true,
+          "subtotal": 1638.34,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation."
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation."
+                },
+                {
+                  "name": "Baseboard Removal",
+                  "qty": 29.53,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Baseboard removal and disposal preparation."
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 51.67,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Installation of carpet flooring. Includes carpet material with 10% waste allowance for seams and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 51.67,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Installation of carpet padding. Includes padding material with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 32.48,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Installation of baseboards. Includes nails and caulk with 10% waste allowance for cutting and mitered joints."
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 264.74,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of paint on walls at 8.58 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 44.93,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of ceiling paint at 8.58 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 29.53,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on baseboards. Includes paint and brushes."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Back Double Door Bedroom",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 210.94 SF<br>- Wall Area (Net): 416.96 SF<br>- Ceiling Area: 210.94 SF<br>- Baseboard Length: 51.12 LF<br>- Height: 8.583 FT<br><br>Water damage restoration including drywall, insulation, flooring, and painting",
+          "showSubtotal": true,
+          "subtotal": 4618.54,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 115.43,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "Installation of 1/2-inch gypsum drywall on walls at 8.583 FT height. Includes drywall sheets, joint compound, tape, and screws with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 27.38,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Installation of fiberglass batt insulation (R-13) in walls at 8.583 FT height. Includes 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 242.58,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Installation of carpet flooring. Includes carpet material with 10% waste allowance for seams and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 242.58,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Installation of carpet padding. Includes padding material with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 51.12,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Installation of baseboards. Includes nails and caulk with 10% waste allowance for cutting and mitered joints."
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 104.94,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on walls at 8.583 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 416.96,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of paint on walls at 8.583 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 210.94,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of ceiling paint at 8.583 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 46.47,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on baseboards. Includes paint and brushes."
+                },
+                {
+                  "name": "Outlets (Detach & Reset)",
+                  "qty": 4.0,
+                  "unit": "EA",
+                  "price": 35.0,
+                  "description": "Detaching and resetting four electrical outlets at 8.583 FT height. Includes minor wiring materials."
+                },
+                {
+                  "name": "Recessed LED Panel Light (Protection)",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 20.0,
+                  "description": "Protection of two recessed LED panel lights during construction at 8.583 FT height. Includes protective coverings."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sump Room",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 7.19 SF<br>- Wall Area (Net): 54.37 SF<br>- Ceiling Area: 7.19 SF<br>- Baseboard Length: 7.77 LF<br>- Height: 8.58 FT<br><br>Water damage restoration including drywall, insulation, and painting",
+          "showSubtotal": true,
+          "subtotal": 686.64,
+          "categories": [
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 59.81,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "Installation of 1/2-inch gypsum drywall on walls at 8.58 FT height. Includes drywall sheets, joint compound, tape, and screws with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Wall Insulation",
+                  "qty": 28.35,
+                  "unit": "SF",
+                  "price": 2.5,
+                  "description": "Installation of fiberglass batt insulation (R-13) in walls at 8.58 FT height. Includes 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 54.37,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on walls at 8.58 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Door Trim Install",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 150.0,
+                  "description": "Installation of door trim at 8.58 FT height. Includes trim material, nails, and caulk with 5% waste allowance for cutting and fitting."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Closet Two",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 11.33 SF<br>- Wall Area (Net): 29.75 SF<br>- Ceiling Area: 11.33 SF<br>- Baseboard Length: 4.10 LF<br>- Height: 7.42 FT<br><br>Water damage restoration including flooring and painting",
+          "showSubtotal": true,
+          "subtotal": 271.33,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation."
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation."
+                },
+                {
+                  "name": "Baseboard Removal",
+                  "qty": 4.1,
+                  "unit": "LF",
+                  "price": 0.75,
+                  "description": "Baseboard removal and disposal preparation."
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 13.03,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Installation of carpet flooring. Includes carpet material with 10% waste allowance for seams and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 13.03,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Installation of carpet padding. Includes padding material with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 4.51,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Installation of baseboards. Includes nails and caulk with 10% waste allowance for cutting and mitered joints."
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 29.75,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of paint on walls at 7.42 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 11.33,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of ceiling paint at 7.42 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 4.1,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on baseboards. Includes paint and brushes."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Stair",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 78.73 SF<br>- Wall Area (Net): 391.49 SF<br>- Ceiling Area: 48.00 SF<br>- Baseboard Length: 0.00 LF<br>- Height: 17.33 FT<br><br>Water damage restoration including flooring and painting",
+          "showSubtotal": true,
+          "subtotal": 1282.01,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation."
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 78.73,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation."
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 90.54,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Installation of carpet flooring. Includes carpet material with 10% waste allowance for seams and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 90.54,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Installation of carpet padding. Includes padding material with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Skirtboard Paint",
+                  "qty": 25.24,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on skirtboards at 17.33 FT height. Includes paint and brushes."
+                },
+                {
+                  "name": "Stair Charge",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 300.0,
+                  "description": "Specialized installation of stair components at 17.33 FT height. Includes minor materials (adhesives, fasteners) with 5% waste allowance."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Under Stairs",
+          "note": "ROOM DIMENSIONS:<br>- Floor Area: 45.05 SF<br>- Wall Area (Net): 349.24 SF<br>- Ceiling Area: 45.05 SF<br>- Baseboard Length: 51.69 LF<br>- Height: 7.42 FT<br><br>Water damage restoration including drywall, flooring, and painting",
+          "showSubtotal": true,
+          "subtotal": 3693.23,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Flooring (Carpet) Removal",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet removal and disposal preparation."
+                },
+                {
+                  "name": "Flooring (Carpet Pad) Removal",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 2.0,
+                  "description": "Carpet pad removal and disposal preparation."
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Drywall",
+                  "qty": 220.0,
+                  "unit": "SF",
+                  "price": 5.0,
+                  "description": "Installation of 1/2-inch gypsum drywall on walls at 7.42 FT height. Includes drywall sheets, joint compound, tape, and screws with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet)",
+                  "qty": 51.81,
+                  "unit": "SF",
+                  "price": 3.5,
+                  "description": "Installation of carpet flooring. Includes carpet material with 10% waste allowance for seams and fitting."
+                },
+                {
+                  "name": "Flooring (Carpet Pad)",
+                  "qty": 51.81,
+                  "unit": "SF",
+                  "price": 1.0,
+                  "description": "Installation of carpet padding. Includes padding material with 10% waste allowance for cutting and fitting."
+                },
+                {
+                  "name": "Baseboard",
+                  "qty": 51.69,
+                  "unit": "LF",
+                  "price": 5.5,
+                  "description": "Installation of baseboards. Includes nails and caulk with 10% waste allowance for cutting and mitered joints."
+                },
+                {
+                  "name": "Wall Primer",
+                  "qty": 200.0,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of one coat of primer on walls at 7.42 FT height. Includes primer and application materials."
+                },
+                {
+                  "name": "Wall Paint",
+                  "qty": 349.24,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of paint on walls at 7.42 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Ceiling Paint",
+                  "qty": 45.05,
+                  "unit": "SF",
+                  "price": 3.0,
+                  "description": "Application of two coats of ceiling paint at 7.42 FT height. Includes paint and application materials."
+                },
+                {
+                  "name": "Baseboard Paint",
+                  "qty": 46.99,
+                  "unit": "LF",
+                  "price": 2.5,
+                  "description": "Application of two coats of paint on baseboards. Includes paint and brushes."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Project Cleanup & Debris Disposal",
+          "note": "Comprehensive project cleanup and debris disposal from drywall, flooring, and baseboard work across all project areas",
+          "showSubtotal": true,
+          "subtotal": 5802.64,
+          "categories": [
+            {
+              "name": "Project Cleanup",
+              "items": [
+                {
+                  "name": "Daily Cleanup",
+                  "qty": 1887.62,
+                  "unit": "SF",
+                  "price": 0.15,
+                  "description": "Daily construction cleaning for 1887.62 SF over 8 days. Includes dust and debris removal from drywall, flooring, and painting work."
+                },
+                {
+                  "name": "Final Cleanup",
+                  "qty": 200.0,
+                  "unit": "SF",
+                  "price": 1.375,
+                  "description": "Final construction cleaning for 200 SF of common areas. Includes dust removal from surfaces, fixtures, and HVAC systems affected by drywall, flooring, and painting work."
+                }
+              ]
+            },
+            {
+              "name": "Debris Disposal",
+              "items": [
+                {
+                  "name": "Dumpster & Disposal",
+                  "qty": 1.0,
+                  "unit": "Job",
+                  "price": 3262.5,
+                  "description": "Rental of a dumpster for 5000 lbs (2.5 tons) of debris, including carpet, carpet padding, and baseboards. Includes dumpster rental ($1250.00 for 10 days), disposal fees ($212.50 for 2.5 tons at $85/ton), and delivery/pickup fees ($250.00)."
+                },
+                {
+                  "name": "Hauling Labor",
+                  "qty": 5000.0,
+                  "unit": "LB",
+                  "price": 0.35,
+                  "description": "Hauling of 5000 lbs of debris, including carpet (359.88 lbs), carpet padding (134.96 lbs), baseboards (8.41 lbs), and miscellaneous debris (54.74 lbs). Base rate of $0.30/lb with surcharges for multi-story access and distance."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "financial_breakdown": {
+    "construction_subtotal": 46668.47,
+    "overhead": {
+      "rate": 10,
+      "amount": 4666.85
+    },
+    "profit": {
+      "rate": 4,
+      "amount": 1866.74
+    },
+    "subtotal_before_tax": 53202.06,
+    "sales_tax": {
+      "rate": 6,
+      "taxable_amount": 19550.61,
+      "amount": 1173.04
+    },
+    "final_total": 54375.1
+  },
+  "subtotal": 49751.44,
+  "overhead": {
+    "rate": 10.0,
+    "amount": 4975.14
+  },
+  "profit": {
+    "rate": 4.0,
+    "amount": 1990.06
+  },
+  "sales_tax": {
+    "amount": 1173.04
+  },
+  "overhead_rate": 10.0,
+  "profit_rate": 4.0,
+  "sales_tax_rate": 6,
+  "total": 57889.68,
+  "bottom_note": "<strong>OVERHEAD (10%)</strong><br>Overhead covers essential project management costs including coordination of 5 trades across 8 rooms spanning 1887.62 SF. This includes administrative expenses such as project documentation, scheduling, material procurement, and quality control oversight for standard coordination requirements. Additionally covers operational costs including equipment rental, vehicle expenses, job site utilities, and business infrastructure necessary for project completion over a 10-day timeline. General liability coverage, workers' compensation, and performance bonding are also included based on project scope and risk assessment. Special conditions such as multi-story basement access require additional overhead allocation for increased project management complexity.<br><br><strong>PROFIT (4%)</strong><br>Profit margin reflects current market standards for professional restoration contractors performing interior restoration work in the VA region. This rate provides appropriate compensation for financial investment, project risk assumption, and performance guarantee while ensuring business sustainability for standard complexity projects. The profit component covers the value of professional expertise, comprehensive warranty coverage, industry knowledge, and quality assurance that ensures successful project completion to pre-loss condition. This rate structure maintains competitive positioning while providing the resources necessary for excellence in execution and customer satisfaction.<br><br><strong>SALES TAX (6%)</strong><br>Applied to materials ($19,550.61) as required by VA jurisdiction. Tax calculation based on material costs per local regulations.",
+  "disclaimer": "This estimate reflects restoration to pre-loss condition using Like Kind and Quality materials. Overhead and Profit rates reflect professional standards for the determined complexity level.",
+  "overhead_amount": 4975.14,
+  "profit_amount": 1990.06,
+  "sales_tax_amount": 1173.04,
+  "discount": 0.0
+}

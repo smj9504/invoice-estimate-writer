@@ -1,0 +1,599 @@
+{
+  "estimate_number": "EST-202506-6223",
+  "estimate_date": "2025-06-02",
+  "company": {
+    "name": "NuvoHaus Home Improvement, Inc.",
+    "address": "14641 Lee Hwy, STE 109",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": 20121,
+    "phone": "(703) 962-0745",
+    "email": "nuvohausva@gmail.com",
+    "logo": NaN
+  },
+  "client": {
+    "name": "GYUNAM KIM",
+    "address": "6223 Stonepath Cir",
+    "city": "Centreville",
+    "state": "VA",
+    "zip": 20120,
+    "phone": NaN
+  },
+  "top_note": NaN,
+  "bottom_note": "O&P reflects industry standard project management, supervision, insurance, bonding, warranty obligations, and contractor profit margin required for multi-trade coordination. Per Xactimate standards and regional market rates, 20% O&P is standard for restoration projects involving multiple trades, code compliance coordination, and insurance claim management. This rate ensures proper project supervision, quality control, and contractor liability coverage essential for insurance work.\n",
+  "disclaimer": "This estimate reflects minimum code-compliant restoration to pre-loss condition. Any reduction in scope may result in:\n\n- Building code violations (e.g., IRC, IBC)\n- Safety hazards (e.g., OSHA)\n- Future liability exposure for the homeowner and potentially the insurer\n- Incomplete restoration requiring additional claims\n- Failure to meet \"Like Kind and Quality\" (LKQ) standards, impacting property value and homeowner satisfaction.\n\nAll pricing reflects competitive market rates with supporting documentation available upon request. We are committed to restoring the property to its pre-loss condition in a safe, efficient, and code-compliant manner.",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "Upper Level",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": NaN,
+          "qty": NaN,
+          "unit": NaN,
+          "price": NaN,
+          "dec": NaN
+        }
+      ],
+      "subtotal": NaN
+    },
+    {
+      "title": "Upper Level Bathroom",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove & Dispose Toilet",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "Includes hauling fee\n\nFixture Replacement (Toilet, Vanity, Mirror): To facilitate the complete and proper replacement of the wall and floor tiles, the existing toilet, vanity, and mirror must be carefully removed. Attempting to work around these fixtures would compromise the quality and integrity of the tile installation, leading to an inferior finish and potential future issues."
+        },
+        {
+          "name": "Remove & Dispose Vanity",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "Includes hauling fee"
+        },
+        {
+          "name": "Remove & Dispose Wall Mirror",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "Includes hauling fee"
+        },
+        {
+          "name": "Remove & Dispose Ceramic/Porcelain Wall Tile",
+          "qty": 208.0,
+          "unit": "SF",
+          "price": 3.5,
+          "dec": NaN
+        },
+        {
+          "name": "Remove & Dispose Ceramic/Porcelain Floor Tile",
+          "qty": 40.0,
+          "unit": "SF",
+          "price": 3.5,
+          "dec": NaN
+        },
+        {
+          "name": "Remove & Dispose Cement Board/Substrate",
+          "qty": 248.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": NaN
+        },
+        {
+          "name": "Hauling Fee (General Debris)",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 150.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install Cement Board (Walls & Floor)",
+          "qty": 248.0,
+          "unit": "SF",
+          "price": 3.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install Waterproofing Membrane (Shower/Tub Surround)",
+          "qty": 120.0,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": "IRC R702.4.3, R702.4.2 compliant"
+        },
+        {
+          "name": "Install Ceramic/Porcelain Wall Tile (High Grade)",
+          "qty": 208.0,
+          "unit": "SF",
+          "price": 15.0,
+          "dec": "Aesthetic Continuity & LKQ (IRC R302.1): The existing walls and floor are constructed of the same high-grade ceramic/porcelain tile. Partial tile replacement, as suggested by the carrier, will inevitably result in visible grout line discrepancies, color variations (due to natural aging and wear of existing tile), and texture mismatches. This fails to restore the bathroom to its \"pre-loss condition\" with \"Like Kind and Quality\" materials and finishes, which is a fundamental principle of insurance restoration. IRC R302.1 mandates that repairs shall be of materials and methods equivalent to those used in the original construction.\n\nWaterproofing Integrity (IRC R702.4.3, R702.4.2): When water damage necessitates the removal of any portion of a tiled shower or bathroom wall/floor, the underlying waterproofing membrane (e.g., shower pan liner, liquid applied membrane) is often compromised. Patching a compromised waterproofing system is a high-risk endeavor that can lead to future leaks, structural damage, and mold growth. IRC R702.4.3 requires a waterproof membrane for shower and tub walls, and R702.4.2 mandates a shower pan liner. Replacing the entire tiled area allows for the installation of a complete, continuous, and code-compliant waterproofing system, ensuring long-term integrity and preventing future water intrusion, thereby mitigating future liability for both the homeowner and the insurer.\n\nSubstrate Integrity: Water intrusion often wicks into the cement board or drywall behind the tile, compromising its structural integrity and creating an environment conducive to mold growth. Replacing the entire tiled section ensures all compromised substrate is removed and replaced, which is critical for health, safety, and structural soundness."
+        },
+        {
+          "name": "Install Ceramic/Porcelain Floor Tile (High Grade)",
+          "qty": 40.0,
+          "unit": "SF",
+          "price": 15.0,
+          "dec": "Includes labor & material for entire replacement"
+        },
+        {
+          "name": "Grout Tile",
+          "qty": 248.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": NaN
+        },
+        {
+          "name": "Seal Grout",
+          "qty": 248.0,
+          "unit": "SF",
+          "price": 1.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Toilet",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 600.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Vanity & Sink",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 1000.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Wall Mirror",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 100.0,
+          "dec": NaN
+        },
+        {
+          "name": "Prep & Paint Ceiling (2 Coats)",
+          "qty": 40.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "All surrounding surfaces (walls, fixtures, flooring) will be properly masked and protected prior to ceiling painting to prevent overspray and ensure a clean finish."
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Comprehensive final cleaning of the entire bathroom area, including debris removal and surface wipe-down, will be performed to ensure the space is move-in ready."
+        }
+      ],
+      "subtotal": 10180.0
+    },
+    {
+      "title": "Lower Level",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": NaN,
+          "qty": NaN,
+          "unit": NaN,
+          "price": NaN,
+          "dec": NaN
+        }
+      ],
+      "subtotal": NaN
+    },
+    {
+      "title": "Lower Level Bathroom",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove & Dispose Toilet",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "Includes hauling fee\n\nFixture Replacement (Toilet, Vanity, Bathtub, Mirror): With the entire wall drywall removed, the existing toilet, vanity, and bathtub must be properly disconnected and removed to allow for new drywall installation, plumbing rough-in, and tile work around the tub.\n\nSimilar to the upper level, replacing these fixtures ensures new seals, proper connections, and a cohesive aesthetic with the newly reconstructed bathroom. The labor involved in carefully handling and re-installing used fixtures, especially a bathtub, often makes replacement a more efficient and reliable solution, minimizing future issues and aligning with LKQ standards. The mirror, already removed, requires replacement for a complete restoration."
+        },
+        {
+          "name": "Remove & Dispose Vanity",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "Includes hauling fee"
+        },
+        {
+          "name": "Remove & Dispose Bathtub",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 250.0,
+          "dec": "Includes hauling fee"
+        },
+        {
+          "name": "Remove & Dispose Wall Drywall",
+          "qty": 224.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": NaN
+        },
+        {
+          "name": "Remove & Dispose Ceiling Drywall",
+          "qty": 48.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": NaN
+        },
+        {
+          "name": "Remove & Dispose Door & Frame",
+          "qty": 1.0,
+          "unit": "SF",
+          "price": 100.0,
+          "dec": NaN
+        },
+        {
+          "name": "Hauling Fee (General Debris)",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 150.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install 1/2\" Drywall (Walls)",
+          "qty": 224.0,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": NaN
+        },
+        {
+          "name": "Install 1/2\" Drywall (Ceiling)",
+          "qty": 48.0,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": NaN
+        },
+        {
+          "name": "Drywall Tape and Blend (Walls & Ceiling)",
+          "qty": 272.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Pre-hung Door Unit",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 325.0,
+          "dec": "A new door, frame (jamb), and trim (casing) are required to restore functionality and finish to the bathroom entry. These components will be installed and painted to match the new finishes."
+        },
+        {
+          "name": "Install Door Jamb & Casing",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 12.5,
+          "dec": NaN
+        },
+        {
+          "name": "Prime & Paint Door & Trim (2 Coats)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 150.0,
+          "dec": NaN
+        },
+        {
+          "name": "Reconnect Vanity Lighting",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "The electrical connection for the vanity lighting will be re-established upon drywall installation, ensuring proper and safe functionality. All electrical work will adhere to NEC standards."
+        },
+        {
+          "name": "Install Cement Board (Bathtub Surround)",
+          "qty": 55.0,
+          "unit": "SF",
+          "price": 3.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install Waterproofing Membrane (Bathtub Surround)",
+          "qty": 55.0,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install Ceramic/Porcelain Tile (Bathtub Surround)",
+          "qty": 55.0,
+          "unit": "SF",
+          "price": 15.0,
+          "dec": NaN
+        },
+        {
+          "name": "Grout Tile (Bathtub Surround)",
+          "qty": 55.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "Installation of new tile around the bathtub is essential for waterproofing and aesthetic completion."
+        },
+        {
+          "name": "Seal Grout (Bathtub Surround)",
+          "qty": 55.0,
+          "unit": "SF",
+          "price": 1.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Toilet",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 600.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Vanity & Sink",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 1000.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Wall Mirror",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 100.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install New Bathtub",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 2500.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install Shower Rod",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 100.0,
+          "dec": "These accessories, having been removed, will be replaced to restore full functionality to the bathroom."
+        },
+        {
+          "name": "Install Towel Rod",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 100.0,
+          "dec": "These accessories, having been removed, will be replaced to restore full functionality to the bathroom."
+        },
+        {
+          "name": "Prep & Paint Walls (2 Coats)",
+          "qty": 83.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": NaN
+        },
+        {
+          "name": "Prep & Paint Ceiling (2 Coats)",
+          "qty": 48.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": NaN
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Comprehensive final cleaning of the entire bathroom area."
+        }
+      ],
+      "subtotal": 10510.7
+    },
+    {
+      "title": "Hallway, Subroom",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove & Dispose Baseboard",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 1.5,
+          "dec": "Partial replacement of baseboards and quarter round will inevitably lead to visible seams, mismatched profiles, and inconsistent paint finishes. Even with careful color matching, the age and wear of existing trim will differ from new materials, creating an aesthetically disjointed appearance that does not meet the \"Like Kind and Quality\" standard for restoration. Replacing the entire run ensures a uniform, clean, and professional finish throughout the affected areas."
+        },
+        {
+          "name": "Remove & Dispose Quarter Round",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 1.0,
+          "dec": NaN
+        },
+        {
+          "name": "Hauling Fee (General Debris)",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 100.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install 1/2\" Drywall (Walls)",
+          "qty": 32.0,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": NaN
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 32.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": NaN
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": NaN
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": NaN
+        },
+        {
+          "name": "Prime Baseboard & Quarter Round",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": NaN
+        },
+        {
+          "name": "Paint Baseboard & Quarter Round (2 Coats)",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": NaN
+        },
+        {
+          "name": "Prep & Paint Walls (2 Coats)",
+          "qty": 200.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": NaN
+        },
+        {
+          "name": "Prep & Paint Ceiling (2 Coats)",
+          "qty": 80.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": NaN
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": NaN
+        }
+      ],
+      "subtotal": 1718.2
+    },
+    {
+      "title": "Living Room",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove & Dispose Baseboard",
+          "qty": 50.0,
+          "unit": "LF",
+          "price": 1.5,
+          "dec": "Similar to the hallway, partial replacement of baseboards and quarter round in the living room will lead to visible seams, mismatched profiles, and inconsistent paint finishes, failing to meet the \"Like Kind and Quality\" standard. Replacing the entire run ensures a uniform, clean, and professional finish throughout the affected areas."
+        },
+        {
+          "name": "Remove & Dispose Quarter Round",
+          "qty": 50.0,
+          "unit": "LF",
+          "price": 1.0,
+          "dec": NaN
+        },
+        {
+          "name": "Hauling Fee (General Debris)",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 150.0,
+          "dec": NaN
+        },
+        {
+          "name": "Install 1/2\" Drywall (Walls)",
+          "qty": 35.0,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": NaN
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 35.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": NaN
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 50.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Includes labor & material for entire replacement"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 50.0,
+          "unit": "LF",
+          "price": 6.25,
+          "dec": "Includes labor & material for entire replacement"
+        },
+        {
+          "name": "Prime Baseboard & Quarter Round",
+          "qty": 100.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": NaN
+        },
+        {
+          "name": "Paint Baseboard & Quarter Round (2 Coats)",
+          "qty": 100.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": NaN
+        },
+        {
+          "name": "Prep & Paint Walls (2 Coats)",
+          "qty": 500.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "All walls and ceilings in the affected living room will be primed and painted with two coats to ensure a uniform and consistent finish."
+        },
+        {
+          "name": "Prep & Paint Sloped Ceiling (2 Coats) w/ Scaffolding",
+          "qty": 400.0,
+          "unit": "SF",
+          "price": 3.0,
+          "dec": "Increased rate for high ceiling, scaffolding, and additional labor per OSHA safety guidelines\n\nThe 17-foot sloped ceiling necessitates the use of specialized scaffolding and additional labor for safe and efficient access. This additional cost is factored into the painting line items. OSHA safety standards for working at heights will be strictly adhered to."
+        },
+        {
+          "name": "Floor Protection",
+          "qty": 400.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Extensive floor protection will be implemented to safeguard existing flooring from paint, dust, and debris during the restoration process."
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Comprehensive final cleaning of the area."
+        }
+      ],
+      "subtotal": 4784.75
+    },
+    {
+      "title": "Project Costs",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Final Job Site Cleanup & Debris Hauling",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 500.0,
+          "dec": NaN
+        }
+      ],
+      "subtotal": 500.0
+    }
+  ],
+  "subtotal": 27693.65,
+  "op_amount": 5538.73,
+  "total": 33232.38
+}

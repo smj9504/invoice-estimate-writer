@@ -1,0 +1,41 @@
+{
+  "comment": "Example for non-rectangular rooms using polygon coordinates",
+  "rooms": [
+    {
+      "name": "L-Shaped Living Room",
+      "coordinates": [
+        {"x": 0, "y": 0},
+        {"x": 20, "y": 0},
+        {"x": 20, "y": 10},
+        {"x": 12, "y": 10},
+        {"x": 12, "y": 15},
+        {"x": 0, "y": 15}
+      ],
+      "area": 280,
+      "perimeter": 70,
+      "measurements": {
+        "ceiling_height": 9
+      },
+      "work_items": {
+        "flooring": {"area": 280, "unit": "sq ft"},
+        "painting": {"area": 630, "unit": "sq ft"}
+      }
+    },
+    {
+      "name": "Bay Window Room",
+      "coordinates": [
+        {"x": 0, "y": 0},
+        {"x": 15, "y": 0},
+        {"x": 18, "y": 3},
+        {"x": 18, "y": 7},
+        {"x": 15, "y": 10},
+        {"x": 0, "y": 10}
+      ],
+      "area": 165,
+      "perimeter": 48,
+      "measurements": {
+        "ceiling_height": 8
+      }
+    }
+  ]
+}

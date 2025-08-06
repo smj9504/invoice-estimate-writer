@@ -1,0 +1,119 @@
+{
+  "estimate_number": "EST-202506-43383",
+  "estimate_date": "2025-06-16",
+  "company": {
+    "name": "H.K Junk Removal Service LLC",
+    "address": "14013 Tanners House Way",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 723-0446",
+    "email": "info@junk8282.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Young Hee Sung",
+    "address": "43383 Stukely Dr",
+    "city": "Sterling",
+    "state": "VA",
+    "zip": "20166",
+    "phone": "703-622-3365",
+    "email": "publicadjuster.kim@gmail.com"
+  },
+  "top_note": "PRE-MITIGATION CONTENT REMOVAL ONLY\n- This estimate is strictly for the packaging and temporary relocation of contents to allow for mitigation/restoration work to begin.\n- Contents temporarily relocated for mitigation/restoration access\n- All items will remain on-site in a designated staging area within the basement as requested.",
+  "bottom_note": "NO UNPACKING OR RESET SERVICES INCLUDED\n- This scope does NOT include moving contents back to their original location, unpacking, or any form of content re-organization post-mitigation.\n- Post-restoration content return requires separate estimate.\n- A new, separate estimate must be generated for any services required after the restoration work is complete.",
+  "disclaimer": "",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "CONTENT PACKAGING",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Individual Document Wrapping - Small Items",
+          "qty": 225.0,
+          "unit": "EA",
+          "price": 8.0,
+          "dec": "Important documents requiring individual plastic protection per client specification"
+        },
+        {
+          "name": "Individual Document Wrapping - Large Items",
+          "qty": 70.0,
+          "unit": "EA",
+          "price": 12.0,
+          "dec": "Large format documents and files with special handling requirements"
+        },
+        {
+          "name": "Bookshelf and Shelving Unit Protection",
+          "qty": 8.0,
+          "unit": "EA",
+          "price": 20.0,
+          "dec": "Document room furniture cloth covering and protective wrapping"
+        },
+        {
+          "name": "Document Storage Container Preparation",
+          "qty": 10.0,
+          "unit": "EA",
+          "price": 12.0,
+          "dec": "Organized document boxes with labeling system for temporary staging"
+        }
+      ],
+      "subtotal": 2920.0
+    },
+    {
+      "title": "CONTENT RELOCATION",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Multi-Day Basement Content Manipulation",
+          "qty": 16.0,
+          "unit": "HR",
+          "price": 135.0,
+          "dec": "3-person crew - basement to same floor relocation over 3-day period"
+        },
+        {
+          "name": "Stair Carry Fee - Document Boxes",
+          "qty": 25.0,
+          "unit": "EA",
+          "price": 10.0,
+          "dec": "Individual document containers requiring careful stair transport"
+        },
+        {
+          "name": "Special Handling Coordination",
+          "qty": 3.0,
+          "unit": "SV",
+          "price": 95.0,
+          "dec": "Daily coordination and progress management for extended project timeline"
+        }
+      ],
+      "subtotal": 2695.0
+    },
+    {
+      "title": "STAGING SERVICES",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Document Organization and Staging Setup",
+          "qty": 1.0,
+          "unit": "LT",
+          "price": 325.0,
+          "dec": "Temporary staging area preparation with systematic document organization"
+        },
+        {
+          "name": "Climate Protection Setup",
+          "qty": 1.0,
+          "unit": "SV",
+          "price": 85.0,
+          "dec": "Environmental protection for sensitive documents during staging period"
+        }
+      ],
+      "subtotal": 410.0
+    }
+  ],
+  "subtotal": 6025.0,
+  "op_amount": 0.0,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 6025.0
+}

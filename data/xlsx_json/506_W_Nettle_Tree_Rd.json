@@ -1,0 +1,382 @@
+{
+  "estimate_number": "EST-202506-506 ",
+  "estimate_date": "2025-06-05",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": 20121,
+    "phone": "571-365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": NaN
+  },
+  "client": {
+    "name": NaN,
+    "address": "506 W Nettle Tree Rd",
+    "city": "Sterling",
+    "state": "VA",
+    "zip": 20164,
+    "phone": NaN
+  },
+  "top_note": NaN,
+  "bottom_note": "Note: This project involves multiple specialized trades—including roofing, electrical, drywall, insulation, and painting—requiring coordinated execution across three interconnected rooms and roof areas. The 20% Overhead & Profit reflects industry-standard project management costs, including trade scheduling and supervision, general liability insurance and bonding, material procurement, quality control inspections, warranty management, and contractor risk coverage. In accordance with Xactimate standards, roofing combined with ceiling reconstruction and electrical coordination qualifies for 20% O&P to ensure compliant oversight across trades, full code compliance, and continuity of workmanship throughout all affected areas.",
+  "disclaimer": "This estimate reflects minimum code-compliant restoration to pre-loss condition. Any reduction in scope may result in: building code violations, safety hazards, future liability exposure, and incomplete restoration requiring additional claims. All pricing reflects competitive market rates with supporting documentation available upon request.",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "ROOF",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove 3-tab shingles",
+          "qty": 12.25,
+          "unit": "SQ",
+          "price": 67.01,
+          "dec": NaN
+        },
+        {
+          "name": "Install 3-tab shingles (25 yr)",
+          "qty": 13.11,
+          "unit": "SQ",
+          "price": 280.08,
+          "dec": "Based on total roof area with 7% waste."
+        },
+        {
+          "name": "Asphalt starter - universal starter course",
+          "qty": 77.0,
+          "unit": "LF",
+          "price": 2.14,
+          "dec": NaN
+        },
+        {
+          "name": "Hip / Ridge cap - cut from 3 tab - composition shingles",
+          "qty": 38.61,
+          "unit": "LF",
+          "price": 7.54,
+          "dec": NaN
+        },
+        {
+          "name": "Continuous ridge vent - shingle-over style",
+          "qty": 38.61,
+          "unit": "LF",
+          "price": 12.35,
+          "dec": NaN
+        },
+        {
+          "name": "Roofing felt - 15 lb.",
+          "qty": 10.79,
+          "unit": "SQ",
+          "price": 40.47,
+          "dec": NaN
+        },
+        {
+          "name": "Ice & water barrier",
+          "qty": 232.0,
+          "unit": "SF",
+          "price": 2.36,
+          "dec": "Installed along eaves, valleys, step flashing, and wall flashing. IRC R905.2.7 requires ice dam protection in vulnerable locations."
+        },
+        {
+          "name": "Drip edge",
+          "qty": 140.68,
+          "unit": "LF",
+          "price": 3.7,
+          "dec": NaN
+        },
+        {
+          "name": "Furnace Vent Flashing",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 110.0,
+          "dec": NaN
+        },
+        {
+          "name": "Re-nailing of Roof Sheathing",
+          "qty": 1225.0,
+          "unit": "SF",
+          "price": 0.32,
+          "dec": "IRC R907.5 requires that roof sheathing be re-fastened when reroofing. \"Sheathing shall be fastened in accordance with Section R803.2.\" This ensures decking is structurally sound and properly secured to resist wind uplift."
+        },
+        {
+          "name": "Gutter - Remove & Replace",
+          "qty": 77.0,
+          "unit": "LF",
+          "price": 9.5,
+          "dec": "Gutters typically damaged during shingle tear-off."
+        },
+        {
+          "name": "Downspout - Remove & Replace",
+          "qty": 30.0,
+          "unit": "LF",
+          "price": 9.0,
+          "dec": "Like Kind and Quality (LKQ) replacement."
+        },
+        {
+          "name": "Roofing Height Charge (1.5-story)",
+          "qty": 12.25,
+          "unit": "SQ",
+          "price": 12.0,
+          "dec": "OSHA compliance and labor adjustment for roof height."
+        },
+        {
+          "name": "Ladder Jacks and Plank",
+          "qty": 1.0,
+          "unit": "SET",
+          "price": 131.25,
+          "dec": "Per OSHA Subpart L, scaffolding or equivalent systems are required for safe access to elevated work areas. This 1.5-story home requires ladder jacks and plank systems to access rake edges and upper roof planes safely. Includes daily setup and takedown for compliance and fall prevention."
+        },
+        {
+          "name": "Fall Protection Harness and Lanyard",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 68.38,
+          "dec": "Per OSHA 29 CFR 1926.501(b)(13), all workers exposed to a fall of 6 feet or more must be protected by personal fall arrest systems. This 1.5-story roof exceeds that threshold, requiring individual harnesses and lanyards for each crew member on the roof. Mandatory for code compliance and worker safety."
+        },
+        {
+          "name": "Content Manipulation",
+          "qty": 1.0,
+          "unit": "JOB",
+          "price": 183.75,
+          "dec": "During exterior roof replacement work, items located around the home's perimeter (such as patio furniture, potted plants, grills, and outdoor fixtures) must be temporarily relocated or covered to prevent accidental damage from falling shingles, tools, or debris. This line item covers the time and labor required to safely move and protect these items before and during construction activities."
+        },
+        {
+          "name": "Job Site Clean-up & Magnet Sweep",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Post-installation clean-up and magnetic nail sweep are required per OSHA housekeeping standards. This is especially important for residential sites with foot traffic and active occupancy, reducing injury risk from roofing debris such as nails or sharp flashing offcuts."
+        }
+      ],
+      "subtotal": 9225.8
+    },
+    {
+      "title": "DINING ROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Contents - move out then reset - Small room",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 59.17,
+          "dec": "Required for safe work access. Furniture protection during ceiling reconstruction per IICRC S500 standards."
+        },
+        {
+          "name": "Floor protection - plastic and tape - 10 mil ",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 0.36,
+          "dec": "IRC R503.1 requires subfloor protection during overhead work. Prevents debris damage and moisture intrusion."
+        },
+        {
+          "name": "Chandelier - Install and reconnect",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 225.0,
+          "dec": "NEC 314.27 requires proper electrical box support for ceiling fixtures. Professional installation required for insurance liability coverage."
+        },
+        {
+          "name": "Nail removal and stud preparation",
+          "qty": 1.0,
+          "unit": "HR",
+          "price": 85.0,
+          "dec": "IRC R602.3 requires clean attachment surfaces. Existing fasteners must be removed for proper drywall installation."
+        },
+        {
+          "name": "Batt insulation - 12” - R38 - paper faced",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 2.7,
+          "dec": "IRC R402.2 requires R38 minimum in ceiling applications for Zone 4A (Virginia). Paper facing required for vapor barrier per IRC R702.7."
+        },
+        {
+          "name": "Insulation support wiring installation",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "IRC R318.2 requires proper insulation support to prevent sagging and maintain R-value effectiveness."
+        },
+        {
+          "name": "1/2” drywall installation - ceiling",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "IRC R702.3.1 requires 1/2” minimum thickness for ceiling applications. Replacement of water-damaged material removed during mitigation."
+        },
+        {
+          "name": "Drywall tape and blend - ceiling",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "IRC R702.3.8 requires proper joint treatment with minimum three coats of joint compound for code compliance and uniform surface preparation."
+        },
+        {
+          "name": "Crown molding - detach and reset",
+          "qty": 32.58,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Required for drywall installation access. IRC R702.5 requires continuous trim installation for proper finish."
+        },
+        {
+          "name": "Prime crown molding ",
+          "qty": 32.58,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "IRC R702.3.8 requires proper surface preparation with PVA primer for paint adhesion on new drywall joints."
+        },
+        {
+          "name": "Paint crown molding (2 coats)",
+          "qty": 32.58,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Two-coat system required per manufacturer specifications for uniform appearance and moisture protection."
+        },
+        {
+          "name": "Prime ceiling - PVA primer ",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 1.45,
+          "dec": "IRC R702.3.8 requires primer application over new drywall and joint compound for proper paint adhesion."
+        },
+        {
+          "name": "Paint ceiling (2 coats)",
+          "qty": 100.35,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Two-coat paint system required for uniform coverage and Like Kind & Quality restoration per insurance standards."
+        }
+      ],
+      "subtotal": 2030.11
+    },
+    {
+      "title": "LIVING/FOYER",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Contents - move out then reset - Medium room",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 78.5,
+          "dec": "Furniture protection required during painting operations per IICRC S500 standards."
+        },
+        {
+          "name": "Floor protection - plastic and tape - 10 mil ",
+          "qty": 230.77,
+          "unit": "SF",
+          "price": 0.36,
+          "dec": "Required protection during overhead painting operations to prevent paint damage to existing flooring."
+        },
+        {
+          "name": "Wall protection - plastic sheeting",
+          "qty": 404.67,
+          "unit": "SF",
+          "price": 0.25,
+          "dec": "Protects wall surfaces during ceiling painting operations. Required for overspray prevention."
+        },
+        {
+          "name": "Recessed light fixtures - detach and reset",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "NEC 314.27 requires removal for proper painting access. Prevents paint contamination of electrical components."
+        },
+        {
+          "name": "Prime crown molding ",
+          "qty": 50.58,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Required for color matching with dining room. IRC R702.3.8 requires proper surface preparation for paint adhesion."
+        },
+        {
+          "name": "Paint crown molding (2 coats)",
+          "qty": 50.58,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Color matching with adjacent dining room per Like Kind & Quality standards. Two-coat system for uniform finish."
+        },
+        {
+          "name": "Prime ceiling - PVA primer ",
+          "qty": 230.77,
+          "unit": "SF",
+          "price": 1.45,
+          "dec": "Required for proper paint adhesion and color matching with dining room ceiling reconstruction."
+        },
+        {
+          "name": "Paint ceiling (2 coats)",
+          "qty": 230.77,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Color matching with dining room required for uniform appearance per Like Kind & Quality restoration standards."
+        }
+      ],
+      "subtotal": 1480.89
+    },
+    {
+      "title": "HALLWAY",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Floor protection - plastic and tape - 10 mil ",
+          "qty": 45.25,
+          "unit": "SF",
+          "price": 0.36,
+          "dec": "Required protection during painting operations per IICRC S500 standards."
+        },
+        {
+          "name": "Prime crown molding ",
+          "qty": 33.33,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Required for color matching with adjacent rooms. IRC R702.3.8 requires proper surface preparation."
+        },
+        {
+          "name": "Paint crown molding (2 coats)",
+          "qty": 33.33,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Color matching with living/foyer and dining room for uniform appearance throughout connected spaces."
+        },
+        {
+          "name": "Prime ceiling - PVA primer ",
+          "qty": 45.25,
+          "unit": "SF",
+          "price": 1.45,
+          "dec": "Required for proper paint adhesion and color matching with adjacent room ceiling work."
+        },
+        {
+          "name": "Paint ceiling (2 coats)",
+          "qty": 45.25,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Color matching required for visual continuity between connected living spaces per Like Kind & Quality standards."
+        }
+      ],
+      "subtotal": 315.84
+    },
+    {
+      "title": "PROJECT-WIDE COSTS",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Debris removal and hauling",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": "Removal of construction debris per local waste management requirements."
+        },
+        {
+          "name": "Final project cleanup",
+          "qty": 376.37,
+          "unit": "SF",
+          "price": 0.65,
+          "dec": "Post-construction cleaning of all work areas per IICRC S500 completion standards."
+        }
+      ],
+      "subtotal": 529.64
+    }
+  ],
+  "subtotal": 13582.28,
+  "op_amount": 2716.46,
+  "total": 16298.74
+}

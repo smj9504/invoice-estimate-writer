@@ -1310,8 +1310,53 @@ def main():
                         if items_data:
                             st.dataframe(items_data, use_container_width=True)
             
+            # Floor plan data upload section
+            with st.expander("📐 Floor Plan Data (Optional)", expanded=False):
+                st.info("Upload floor plan data to include room diagrams in the PDF")
+                
+                col_fp1, col_fp2 = st.columns([1, 1])
+                
+                with col_fp1:
+                    # Upload floor plan JSON
+                    floor_plan_file = st.file_uploader(
+                        "Upload Floor Plan JSON",
+                        type=['json'],
+                        key="floor_plan_uploader",
+                        help="Upload JSON file with room dimensions and measurements"
+                    )
+                    
+                    if floor_plan_file:
+                        try:
+                            floor_plan_data = json.load(floor_plan_file)
+                            data['floor_plans'] = floor_plan_data.get('floor_plans', floor_plan_data)
+                            st.success(f"✅ Loaded {len(data['floor_plans'].get('rooms', []))} rooms")
+                        except Exception as e:
+                            st.error(f"Error loading floor plan: {e}")
+                
+                with col_fp2:
+                    # Show sample format
+                    if st.button("📋 Show Sample Format", key="show_sample_floor_plan"):
+                        sample_data = {
+                            "floor_plans": {
+                                "rooms": [
+                                    {
+                                        "name": "Living Room",
+                                        "dimensions": {"length": 20, "width": 15},
+                                        "area": 300,
+                                        "perimeter": 70,
+                                        "measurements": {"ceiling_height": 9},
+                                        "work_items": {
+                                            "flooring": {"area": 300, "unit": "sq ft"},
+                                            "painting": {"area": 540, "unit": "sq ft"}
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                        st.json(sample_data)
+            
             # PDF generation and download buttons
-            col1, col2, col3 = st.columns([1, 1, 1])
+            col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
             
             with col1:
                 if st.button("📄 Generate PDF", type="primary", key="generate_pdf_btn"):
@@ -1342,6 +1387,40 @@ def main():
                         logger.error(f"PDF generation error: {str(e)}")
             
             with col2:
+                # Generate PDF with Floor Plans
+                if st.button("📐 PDF with Plans", type="secondary", key="generate_pdf_with_plans_btn"):
+                    try:
+                        from pdf_generator import generate_insurance_estimate_pdf_with_plans
+                        
+                        if 'floor_plans' not in data or not data.get('floor_plans', {}).get('rooms'):
+                            st.warning("⚠️ No floor plan data available. Please upload floor plan JSON first.")
+                        else:
+                            # Get PDF file path
+                            pdf_file_path = get_pdf_file_path(
+                                st.session_state.session_id, 
+                                data.get('estimate_number', 'unknown') + "_with_plans"
+                            )
+                            
+                            # Generate PDF with floor plans
+                            generate_insurance_estimate_pdf_with_plans(data, str(pdf_file_path))
+                            
+                            # Provide PDF download
+                            with open(pdf_file_path, 'rb') as pdf_file:
+                                st.download_button(
+                                    label="⬇️ Download PDF with Plans",
+                                    data=pdf_file.read(),
+                                    file_name=f"estimate_{data.get('estimate_number', 'unknown')}_with_plans.pdf",
+                                    mime="application/pdf",
+                                    key="download_pdf_with_plans_btn"
+                                )
+                            
+                            st.success(f"✅ PDF with floor plans generated!")
+                        
+                    except Exception as e:
+                        st.error(f"❌ Error generating PDF with plans: {str(e)}")
+                        logger.error(f"PDF with plans generation error: {str(e)}")
+            
+            with col3:
                 # Download modified JSON
                 if st.button("📥 Download JSON", key="download_json_main_btn"):
                     json_str = json.dumps(data, indent=2, ensure_ascii=False)
@@ -1353,7 +1432,7 @@ def main():
                         key="download_json_btn"
                     )
             
-            with col3:
+            with col4:
                 # Save permanent copy
                 if st.button("💾 Save Permanent Copy", key="save_permanent_copy_btn"):
                     try:

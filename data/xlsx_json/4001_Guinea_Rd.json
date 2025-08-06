@@ -1,0 +1,1218 @@
+{
+  "estimate_number": "EST-202506-4001",
+  "estimate_date": "2025-06-15",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Won Kim",
+    "address": "4001 Guinea Rd",
+    "city": "Annandale",
+    "state": "VA",
+    "zip": "22003",
+    "phone": "(703) 766-5222",
+    "email": "EUNJOOWK@GMAIL.COM"
+  },
+  "top_note": "This estimate reflects minimum code-compliant restoration to pre-loss condition. Any reduction in scope may result in: Building code violations, Safety hazards, Future liability exposure, Incomplete restoration requiring additional claims. All pricing reflects competitive DMV market rates with supporting documentation available upon request.",
+  "bottom_note": "O&P reflects industry standard project management, supervision, insurance, bonding, warranty obligations, and contractor profit margin required for multi-trade coordination. Per Xactimate standards and regional market rates, 20% O&P is standard for restoration projects involving multiple trades, code compliance coordination, and insurance claim management.",
+  "disclaimer": "CODE COMPLIANCE REFERENCES\n\nIRC R502.3: Subfloor requirements and transitions\nIRC R702.3: Drywall installation per manufacturer specifications\nIRC R702.3.8: Joint treatment and surface preparation requirements\nIRC R702.5: Continuous trim installation requirements\nOSHA Standards: Worker safety and surface protection requirements",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "CABINETRY",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 0.0
+    },
+    {
+      "title": "KITCHEN CABINET",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Initial Site Survey & Precise Measurement",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Required for Like Kind and Quality compliance - detailed field measurement"
+        },
+        {
+          "name": "Template Creation & Field Verification",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 275.0,
+          "dec": "Required for countertop fabrication and custom millwork"
+        },
+        {
+          "name": "Comprehensive Surface Protection",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": ""
+        },
+        {
+          "name": "Dust Containment System",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": "Required for occupied finished kitchen space"
+        },
+        {
+          "name": "Cabinet Contents Removal & Storage",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 385.0,
+          "dec": "Careful removal and protection during reconstruction"
+        },
+        {
+          "name": "Utility Shutoffs & PPE Setup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 125.0,
+          "dec": "Safety protocols and preparation"
+        },
+        {
+          "name": "Refrigerator - Detach/Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": "Professional appliance coordination"
+        },
+        {
+          "name": "Gas Range - Detach/Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 325.0,
+          "dec": "Gas line coordination and safety protocols"
+        },
+        {
+          "name": "Dishwasher - Detach/Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 245.0,
+          "dec": "Plumbing coordination required"
+        },
+        {
+          "name": "Built-in Microwave - Detach/Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 195.0,
+          "dec": "Electrical coordination required"
+        },
+        {
+          "name": "Cabinet Demolition & Removal",
+          "qty": 28.0,
+          "unit": "LF",
+          "price": 35.0,
+          "dec": "Careful removal to protect adjacent surfaces"
+        },
+        {
+          "name": "Countertop Demolition & Removal",
+          "qty": 24.0,
+          "unit": "LF",
+          "price": 28.0,
+          "dec": "Granite removal with precision cutting"
+        },
+        {
+          "name": "20-Yard Dumpster Rental",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 485.0,
+          "dec": "Kitchen demo debris volume"
+        },
+        {
+          "name": "36\" W Base Cabinet - Double Door/Drawer",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 685.0,
+          "dec": ""
+        },
+        {
+          "name": "30\" W Base Cabinet - Double Door",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 595.0,
+          "dec": ""
+        },
+        {
+          "name": "24\" W Base Cabinet - Single Door/Drawer",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 525.0,
+          "dec": ""
+        },
+        {
+          "name": "18\" W Base Cabinet - Single Door",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 465.0,
+          "dec": ""
+        },
+        {
+          "name": "33\" W Sink Base Cabinet - Double Door",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 625.0,
+          "dec": ""
+        },
+        {
+          "name": "30\" W Wall Cabinet - Double Door",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 385.0,
+          "dec": ""
+        },
+        {
+          "name": "24\" W Wall Cabinet - Double Door",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 345.0,
+          "dec": ""
+        },
+        {
+          "name": "18\" W Wall Cabinet - Single Door",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 285.0,
+          "dec": ""
+        },
+        {
+          "name": "30\" W Microwave Wall Cabinet",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 485.0,
+          "dec": ""
+        },
+        {
+          "name": "Cabinet Crown Molding Installation",
+          "qty": 28.0,
+          "unit": "LF",
+          "price": 25.0,
+          "dec": ""
+        },
+        {
+          "name": "Cabinet Hardware Installation",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 385.0,
+          "dec": ""
+        },
+        {
+          "name": "Toe Kick Installation",
+          "qty": 24.0,
+          "unit": "LF",
+          "price": 18.0,
+          "dec": "Matching finished toe kicks"
+        },
+        {
+          "name": "Granite Countertop Fabrication",
+          "qty": 28.0,
+          "unit": "SF",
+          "price": 85.0,
+          "dec": "Template creation and precision cutting"
+        },
+        {
+          "name": "Granite Countertop Installation",
+          "qty": 28.0,
+          "unit": "SF",
+          "price": 45.0,
+          "dec": "Professional installation with sealing"
+        },
+        {
+          "name": "Undermount Double Sink Cutout",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": "Precision cutting and edge finishing"
+        },
+        {
+          "name": "Sink & Faucet Installation Coordination",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 165.0,
+          "dec": "Plumbing contractor coordination"
+        },
+        {
+          "name": "Cabinet Contents Reset",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": "Careful replacement of contents"
+        },
+        {
+          "name": "Site Cleanup & Restoration",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 385.0,
+          "dec": "Complete cleanup and restoration"
+        },
+        {
+          "name": "Final Quality Inspection",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 125.0,
+          "dec": "Quality control and punch list"
+        }
+      ],
+      "subtotal": 18829.0
+    },
+    {
+      "title": "INTERIOR",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 0.0
+    },
+    {
+      "title": "DINING_ROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 207.36,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Protect adjacent surfaces during construction per OSHA standards"
+        },
+        {
+          "name": "Chandelier Work Around Protection",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": "Special protection and work around existing chandelier during construction"
+        },
+        {
+          "name": "Remove Existing Hardwood Flooring",
+          "qty": 207.36,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Water-damaged hardwood flooring requires complete removal per damage scope"
+        },
+        {
+          "name": "Subfloor Inspection & Repair",
+          "qty": 207.36,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "IRC R502.3 requires proper subfloor preparation after water exposure"
+        },
+        {
+          "name": "Door Casing Undercut",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "IRC R502.3 requires proper transitions between different floor materials"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 207.36,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ replacement matching pre-loss 3/4 inch solid hardwood"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 34.6,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Water-damaged baseboard requires complete removal per mitigation scope"
+        },
+        {
+          "name": "Quarter Round Removal",
+          "qty": 34.6,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Quarter round trim removal required for proper baseboard replacement"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 34.6,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R702.5 mandates continuous trim installation"
+        },
+        {
+          "name": "Quarter Round Replacement",
+          "qty": 34.6,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Complete quarter round replacement required to match pre-loss condition"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 423.18,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "IRC R702.3.8 requires proper surface preparation with PVA primer"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 423.18,
+          "unit": "SF",
+          "price": 2.2,
+          "dec": "Two-coat application required for proper coverage and finish continuity"
+        },
+        {
+          "name": "Prime Baseboard and Quarter Round",
+          "qty": 69.2,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": "All new trim must be primed before painting per IRC R702.3.8"
+        },
+        {
+          "name": "Paint Baseboard and Quarter Round (2 Coats)",
+          "qty": 69.2,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Two-coat finish application required for durability and LKQ compliance"
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 207.36,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Final cleaning and debris removal per project completion standards"
+        }
+      ],
+      "subtotal": 6244.23
+    },
+    {
+      "title": "LIVING_ROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 182.7,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Protect adjacent surfaces during construction per OSHA standards"
+        },
+        {
+          "name": "Light Fixture Detach & Reset",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Multiple fixtures requiring detachment for ceiling work access"
+        },
+        {
+          "name": "Remove Existing Hardwood Flooring",
+          "qty": 182.7,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Water-damaged hardwood flooring removal for proper restoration"
+        },
+        {
+          "name": "Subfloor Inspection & Repair",
+          "qty": 182.7,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "IRC R502.3 requires proper subfloor preparation after water exposure"
+        },
+        {
+          "name": "Door Casing Undercut",
+          "qty": 5.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Multiple door transitions requiring proper undercut for flooring installation"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 182.7,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ replacement matching pre-loss 3/4 inch solid hardwood"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 52.08,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Complete baseboard removal required per damage scope"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 52.08,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R702.5 continuous trim installation requirements"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 611.15,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Very high ceilings requiring primer application for continuity finishing"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 611.15,
+          "unit": "SF",
+          "price": 2.4,
+          "dec": "High ceiling surcharge applied - specialized equipment and additional labor"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 52.08,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Paint Baseboard (2 Coats)",
+          "qty": 52.08,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Two-coat finish application for durability"
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 182.7,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Final cleaning and debris removal"
+        }
+      ],
+      "subtotal": 6781.26
+    },
+    {
+      "title": "ROOM3",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content Manipulation",
+          "qty": 4.0,
+          "unit": "HR",
+          "price": 45.0,
+          "dec": "Moderate contents estimated - move and reset for construction access"
+        },
+        {
+          "name": "Surface Protection",
+          "qty": 150.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Adjacent surface protection during construction activities"
+        },
+        {
+          "name": "Light Fixture Detach & Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Standard fixtures requiring removal for ceiling work"
+        },
+        {
+          "name": "Remove Existing Hardwood Flooring",
+          "qty": 150.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Complete hardwood removal per water damage scope"
+        },
+        {
+          "name": "Subfloor Inspection & Repair",
+          "qty": 150.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "IRC R502.3 subfloor preparation requirements"
+        },
+        {
+          "name": "Door Casing Undercut",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Proper door transitions for new flooring"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 150.0,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ hardwood replacement matching existing"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Complete baseboard removal required"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R702.5 continuous trim requirements"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 380.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Surface preparation for finish continuity"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 380.0,
+          "unit": "SF",
+          "price": 2.2,
+          "dec": "Two-coat application for proper coverage"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": "New trim primer application required"
+        },
+        {
+          "name": "Paint Baseboard (2 Coats)",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Two-coat finish for durability"
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 150.0,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Final cleaning and debris removal"
+        }
+      ],
+      "subtotal": 4993.5
+    },
+    {
+      "title": "KITCHEN/PANTRY",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content Manipulation",
+          "qty": 12.0,
+          "unit": "HR",
+          "price": 45.0,
+          "dec": "Heavy kitchen contents - specialized handling required"
+        },
+        {
+          "name": "Surface Protection",
+          "qty": 200.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Extensive protection required for occupied kitchen during renovation"
+        }
+      ],
+      "subtotal": 690.0
+    },
+    {
+      "title": "KITCHEN_PANTRY",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Skylight Protection",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Specialized protection for skylights during ceiling and flooring work"
+        },
+        {
+          "name": "Recessed Light Detach & Reset",
+          "qty": 8.0,
+          "unit": "EA",
+          "price": 95.0,
+          "dec": "Several recessed fixtures requiring electrical disconnection and reinstallation"
+        },
+        {
+          "name": "Remove Existing Hardwood Flooring",
+          "qty": 101.95,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Kitchen hardwood removal for cabinet preparation work"
+        },
+        {
+          "name": "Subfloor Inspection & Repair",
+          "qty": 101.95,
+          "unit": "SF",
+          "price": 3.5,
+          "dec": "Enhanced subfloor preparation required for kitchen environment per IRC R502.3"
+        },
+        {
+          "name": "Ceiling Plywood Patch Repair",
+          "qty": 45.0,
+          "unit": "SF",
+          "price": 4.5,
+          "dec": "Structural ceiling repair required before drywall installation"
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 45.0,
+          "unit": "SF",
+          "price": 3.8,
+          "dec": "IRC R702.3 compliant drywall installation over repaired ceiling structure"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 45.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "IRC R702.3.8 joint treatment with minimum three coats of joint compound"
+        },
+        {
+          "name": "Door Casing Undercut",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Exterior door transitions for new flooring"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 101.95,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ hardwood replacement - kitchen-grade finish required"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 45.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": ""
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 45.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": ""
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 394.11,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": ""
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 394.11,
+          "unit": "SF",
+          "price": 2.2,
+          "dec": ""
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 45.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Paint Baseboard (2 Coats)",
+          "qty": 45.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 101.95,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Kitchen final cleaning and debris removal"
+        }
+      ],
+      "subtotal": 5565.28
+    },
+    {
+      "title": "HALL/CLOSET",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 72.46,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Stair area protection during construction activities"
+        },
+        {
+          "name": "Light Fixture Detach & Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Hall lighting requiring removal for construction access"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 72.46,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ hardwood replacement - flooring already removed during mitigation"
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 120.0,
+          "unit": "SF",
+          "price": 3.5,
+          "dec": "Partial wall replacement - 50% of drywall already removed during mitigation"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 120.0,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "IRC R702.3.8 joint treatment for new drywall installation"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 36.07,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Complete baseboard replacement - existing trim removed during mitigation"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 362.51,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Primer application for new drywall and ceiling continuity"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 362.51,
+          "unit": "SF",
+          "price": 2.2,
+          "dec": "Complete hall and closet painting for finish continuity"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 36.07,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Paint Baseboard (2 Coats)",
+          "qty": 36.07,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Closet Flooring Installation",
+          "qty": 6.0,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "Small closet area hardwood installation"
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 72.46,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Hall and stair area cleanup"
+        }
+      ],
+      "subtotal": 3753.49
+    },
+    {
+      "title": "BEDROOM1",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content Manipulation",
+          "qty": 4.0,
+          "unit": "HR",
+          "price": 45.0,
+          "dec": "Moderate bedroom contents - unable to assess estimated standard furniture"
+        },
+        {
+          "name": "Surface Protection",
+          "qty": 160.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Bedroom protection during flooring and painting work"
+        },
+        {
+          "name": "Light Fixture Detach & Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Bedroom lighting fixtures requiring removal"
+        },
+        {
+          "name": "Remove Existing Hardwood Flooring",
+          "qty": 160.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Bedroom hardwood removal per damage scope"
+        },
+        {
+          "name": "Subfloor Inspection & Repair",
+          "qty": 160.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "IRC R502.3 subfloor preparation for bedroom"
+        },
+        {
+          "name": "Door Casing Undercut",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Door transitions in bedroom"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 160.0,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ hardwood replacement for bedroom"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Complete baseboard removal bedroom"
+        },
+        {
+          "name": "Quarter Round Removal",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Quarter round removal bedroom"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R702.5 continuous trim installation requirements"
+        },
+        {
+          "name": "Quarter Round Replacement",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Complete quarter round replacement bedroom"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 400.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Wall and ceiling primer for finish continuity"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 400.0,
+          "unit": "SF",
+          "price": 2.2,
+          "dec": "Complete painting bedroom"
+        },
+        {
+          "name": "Prime Baseboard and Quarter Round",
+          "qty": 84.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Paint Baseboard and Quarter Round (2 Coats)",
+          "qty": 84.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 160.0,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Final cleaning bedroom"
+        }
+      ],
+      "subtotal": 5795.0
+    },
+    {
+      "title": "BEDROOM2",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content Manipulation",
+          "qty": 4.0,
+          "unit": "HR",
+          "price": 45.0,
+          "dec": "Moderate bedroom contents - unable to assess estimated standard furniture"
+        },
+        {
+          "name": "Surface Protection",
+          "qty": 140.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Bedroom protection during flooring and painting work"
+        },
+        {
+          "name": "Light Fixture Detach & Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Bedroom lighting fixtures requiring removal"
+        },
+        {
+          "name": "Remove Existing Hardwood Flooring",
+          "qty": 140.0,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Bedroom hardwood removal per damage scope"
+        },
+        {
+          "name": "Subfloor Inspection & Repair",
+          "qty": 140.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "IRC R502.3 subfloor preparation for bedroom"
+        },
+        {
+          "name": "Door Casing Undercut",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Door transitions in bedroom"
+        },
+        {
+          "name": "Install Hardwood Flooring",
+          "qty": 140.0,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "LKQ hardwood replacement for bedroom"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 38.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Complete baseboard removal bedroom"
+        },
+        {
+          "name": "Quarter Round Removal",
+          "qty": 38.0,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Quarter round removal bedroom"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 38.0,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "IRC R702.5 continuous trim installation requirements"
+        },
+        {
+          "name": "Quarter Round Replacement",
+          "qty": 38.0,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Complete quarter round replacement bedroom"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 350.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Wall and ceiling primer for finish continuity"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 350.0,
+          "unit": "SF",
+          "price": 2.2,
+          "dec": "Complete painting bedroom"
+        },
+        {
+          "name": "Prime Baseboard and Quarter Round",
+          "qty": 76.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": "All new trim primer application"
+        },
+        {
+          "name": "Paint Baseboard and Quarter Round (2 Coats)",
+          "qty": 76.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Trim finish painting"
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 140.0,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Final cleaning bedroom"
+        }
+      ],
+      "subtotal": 5155.0
+    },
+    {
+      "title": "BATHROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content Manipulation",
+          "qty": 1.0,
+          "unit": "HR",
+          "price": 45.0,
+          "dec": "Light bathroom contents - work around detached fixtures"
+        },
+        {
+          "name": "Surface Protection",
+          "qty": 50.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Bathroom fixture and surface protection"
+        },
+        {
+          "name": "Vanity Removal",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 150.0,
+          "dec": "Water-damaged vanity removal per damage assessment"
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 80.0,
+          "unit": "SF",
+          "price": 4.0,
+          "dec": "Bathroom drywall replacement - 80 SF already removed during mitigation"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 80.0,
+          "unit": "SF",
+          "price": 2.8,
+          "dec": "IRC R702.3.8 joint treatment - bathroom moisture considerations"
+        },
+        {
+          "name": "Baseboard Removal",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Complete baseboard removal per damage scope"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 9.5,
+          "dec": "Bathroom baseboard - moisture-resistant materials required"
+        },
+        {
+          "name": "Vanity Reinstallation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 200.0,
+          "dec": "Professional vanity installation with proper waterproofing"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 157.34,
+          "unit": "SF",
+          "price": 1.75,
+          "dec": "Bathroom primer - moisture-resistant application required"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 157.34,
+          "unit": "SF",
+          "price": 2.5,
+          "dec": "Bathroom paint - moisture-resistant finish required"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": "Moisture-resistant primer for bathroom trim"
+        },
+        {
+          "name": "Paint Baseboard (2 Coats)",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 2.5,
+          "dec": "Bathroom baseboard finish - moisture protection"
+        },
+        {
+          "name": "Room Cleanup",
+          "qty": 32.73,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Bathroom final cleaning"
+        }
+      ],
+      "subtotal": 1986.56
+    },
+    {
+      "title": "PROJECT_WIDE",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Dumpster Rental",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 550.0,
+          "dec": "30-yard dumpster for multi-room renovation debris disposal"
+        },
+        {
+          "name": "Debris Hauling Fee",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Professional debris removal and disposal coordination"
+        },
+        {
+          "name": "Final Project Cleanup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 400.0,
+          "dec": "Complete project final cleaning and site restoration"
+        },
+        {
+          "name": "Plastic Sheeting/Dust Barriers",
+          "qty": 500.0,
+          "unit": "SF",
+          "price": 0.4,
+          "dec": "Occupied home dust containment during construction"
+        },
+        {
+          "name": "Floor Protection Ram Board",
+          "qty": 800.0,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Adjacent finished area protection during construction"
+        }
+      ],
+      "subtotal": 1900.0
+    }
+  ],
+  "subtotal": 61693.32,
+  "op_amount": 12338.66,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 74031.98
+}

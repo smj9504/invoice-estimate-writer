@@ -1,0 +1,350 @@
+{
+  "estimate_number": "RFG-202506-442",
+  "estimate_date": "2025-06-16",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "442 Randolph Ave",
+    "city": "Front Royal",
+    "state": "VA",
+    "zip": "22630",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This proposal outlines the costs for the roof and gutter replacement project for the two structures (Main House and Shed/Garage) located at 442 Randolph Ave, Front Royal, VA 22630.",
+  "bottom_note": "This proposal is designed to provide a comprehensive and durable roofing system that meets or exceeds all regulatory requirements. The scope of work and all line items within this estimate are based on applicable local and state building codes, including the International Residential Code (IRC).",
+  "disclaimer": "This estimate expires 30 days from issue date\nPrices subject to material cost fluctuations after 30 days\nWork authorization requires signed contract and initial deposit\nContractor reserves right to verify all measurements prior to final contract",
+  "op_percent": 0.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "DETACHED GARAGE ROOF",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove existing shingles (1 layer)",
+          "qty": 10.1,
+          "unit": "SQ",
+          "price": 88.0,
+          "dec": "Complete removal of existing 3-tab shingles from 1005 sqft roof area"
+        },
+        {
+          "name": "Remove underlayment",
+          "qty": 1005.0,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "Removal of all existing felt or underlayment material"
+        },
+        {
+          "name": "Deck re-nailing",
+          "qty": 1005.0,
+          "unit": "SF",
+          "price": 0.65,
+          "dec": "IRC R803.2.3 compliance to meet uplift code"
+        },
+        {
+          "name": "Synthetic underlayment",
+          "qty": 1005.0,
+          "unit": "SF",
+          "price": 0.9,
+          "dec": "Full roof coverage with new synthetic underlayment"
+        },
+        {
+          "name": "Ice & water barrier",
+          "qty": 170.0,
+          "unit": "SF",
+          "price": 1.3,
+          "dec": "Code-required protection for eaves (56 LF x 2 rows)"
+        },
+        {
+          "name": "Asphalt shingles (3-tab)",
+          "qty": 10.1,
+          "unit": "SQ",
+          "price": 155.0,
+          "dec": "New roof installation per material request"
+        },
+        {
+          "name": "Starter shingles",
+          "qty": 56.0,
+          "unit": "LF",
+          "price": 2.3,
+          "dec": "Required for wind resistance and shingle warranty. Eaves length 55ft 10in"
+        },
+        {
+          "name": "Waste allowance",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 170.0,
+          "dec": "10% standard material waste for simple gable roof"
+        },
+        {
+          "name": "Drip edge installation",
+          "qty": 128.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": "IRC R905.2.8.5 code requirement. Eaves (56 LF) + Rakes (72 LF)"
+        },
+        {
+          "name": "Flashing replacement",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 250.0,
+          "dec": "Standard flashing replacement for vents and edges"
+        },
+        {
+          "name": "Ridge vent installation",
+          "qty": 28.0,
+          "unit": "LF",
+          "price": 9.0,
+          "dec": "IRC R806.2 attic ventilation requirement. Ridge length 27ft 11in"
+        },
+        {
+          "name": "Gutter replacement",
+          "qty": 56.0,
+          "unit": "LF",
+          "price": 11.0,
+          "dec": "Installation of new seamless aluminum gutters along eaves"
+        },
+        {
+          "name": "Downspout installation",
+          "qty": 20.0,
+          "unit": "LF",
+          "price": 6.0,
+          "dec": "Installation of new downspouts and elbows per request"
+        }
+      ],
+      "subtotal": 6569.6
+    },
+    {
+      "title": "MAIN STRUCTURE ROOF",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove existing shingles (1 layer)",
+          "qty": 21.8,
+          "unit": "SQ",
+          "price": 88.0,
+          "dec": "Complete removal of existing 3-tab shingles from 2176 sqft roof area"
+        },
+        {
+          "name": "Remove underlayment",
+          "qty": 2176.0,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "Removal of all existing felt or underlayment material"
+        },
+        {
+          "name": "Deck re-nailing",
+          "qty": 2176.0,
+          "unit": "SF",
+          "price": 0.65,
+          "dec": "IRC R803.2.3 compliance to meet uplift code"
+        },
+        {
+          "name": "Minor deck repairs",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Allowance for up to 2 sheets of plywood replacement"
+        },
+        {
+          "name": "Synthetic underlayment",
+          "qty": 2176.0,
+          "unit": "SF",
+          "price": 0.9,
+          "dec": "Full roof coverage with new synthetic underlayment"
+        },
+        {
+          "name": "Ice & water barrier",
+          "qty": 450.0,
+          "unit": "SF",
+          "price": 1.3,
+          "dec": "Code-required protection for eaves (123 LF x 2 rows) and valleys (27 LF)"
+        },
+        {
+          "name": "Asphalt shingles (3-tab)",
+          "qty": 21.8,
+          "unit": "SQ",
+          "price": 155.0,
+          "dec": "New roof installation per material request"
+        },
+        {
+          "name": "Starter shingles",
+          "qty": 123.0,
+          "unit": "LF",
+          "price": 2.3,
+          "dec": "Required for wind resistance and shingle warranty. Eaves length 122ft 11in"
+        },
+        {
+          "name": "Waste allowance",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 450.0,
+          "dec": "12% material waste for complex roof with 7 facets"
+        },
+        {
+          "name": "Drip edge installation",
+          "qty": 245.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": "IRC R905.2.8.5 code requirement. Eaves (123 LF) + Rakes (122 LF)"
+        },
+        {
+          "name": "Chimney flashing - Copper",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 750.0,
+          "dec": "New copper counter and step flashing per IRC R903.2"
+        },
+        {
+          "name": "Step flashing - Copper",
+          "qty": 35.0,
+          "unit": "LF",
+          "price": 22.0,
+          "dec": "New copper step flashing (34ft 6in) per request"
+        },
+        {
+          "name": "Pipe jack flashing",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 65.0,
+          "dec": "Replacement of existing plumbing vent flashing"
+        },
+        {
+          "name": "Metal valley flashing",
+          "qty": 27.0,
+          "unit": "LF",
+          "price": 12.0,
+          "dec": "Installation of new metal in open valleys (27ft 0in)"
+        },
+        {
+          "name": "Accessory Painting",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 75.0,
+          "dec": "Painting of pipe jacks and vents to match roof color"
+        },
+        {
+          "name": "Ridge vent installation",
+          "qty": 75.0,
+          "unit": "LF",
+          "price": 9.0,
+          "dec": "IRC R806.2 attic ventilation requirement. Ridge length 75ft 1in"
+        },
+        {
+          "name": "Turtle vent - Metal",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Replacement of existing static vent"
+        },
+        {
+          "name": "Flue cap replacement",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 120.0,
+          "dec": "Replacement of 3 flue caps as requested"
+        },
+        {
+          "name": "Gutter replacement",
+          "qty": 123.0,
+          "unit": "LF",
+          "price": 11.0,
+          "dec": "Installation of new seamless aluminum gutters along eaves"
+        },
+        {
+          "name": "Downspout installation",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 6.0,
+          "dec": "Installation of new downspouts and elbows (Assumed qty)"
+        },
+        {
+          "name": "Slope charge (Medium 7/12)",
+          "qty": 21.8,
+          "unit": "SQ",
+          "price": 12.0,
+          "dec": "Increased labor and safety for 7/12 predominant pitch roof"
+        }
+      ],
+      "subtotal": 16980.8
+    },
+    {
+      "title": "SHARED PROJECT COSTS",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Fall protection harness",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 300.0,
+          "dec": "OSHA 1926.501(b)(13) compliance for crew safety"
+        },
+        {
+          "name": "Property protection",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 350.0,
+          "dec": "Landscape and siding protection; insurance requirement"
+        },
+        {
+          "name": "Site preparation",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 300.0,
+          "dec": "Initial deck inspection and project area preparation"
+        },
+        {
+          "name": "Dumpster rent fee",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 700.0,
+          "dec": "30 yard container for duration of project"
+        },
+        {
+          "name": "Debris hauling fee",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 500.0,
+          "dec": "Combined hauling fee for all project debris"
+        },
+        {
+          "name": "Trip fee (50+ miles)",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 500.0,
+          "dec": "Mobilization cost from Centreville to Front Royal"
+        },
+        {
+          "name": "Project supervision",
+          "qty": 1.0,
+          "unit": "DAY",
+          "price": 250.0,
+          "dec": "On-site management for safety"
+        },
+        {
+          "name": "Final cleanup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 300.0,
+          "dec": "Thorough site cleaning including magnetic nail sweep"
+        }
+      ],
+      "subtotal": 3200.0
+    }
+  ],
+  "subtotal": 26750.4,
+  "op_amount": 0.0,
+  "sales_tax": 1417.77,
+  "tax_rate": 5.3,
+  "total": 28168.17
+}

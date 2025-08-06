@@ -1,0 +1,198 @@
+{
+  "estimate_number": "MV-202507-0723",
+  "estimate_date": "2025-07-23",
+  "company": {
+    "name": "SOS Moving Company",
+    "address": "8280 Willow Oaks Corporate Dr. Suite 600",
+    "city": "Fairfax",
+    "state": "VA",
+    "zip": "22031",
+    "phone": "443-985-2998 ",
+    "email": "sosmovingcompany@gmail.com ",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "723 Old Hunt Way",
+    "city": "Herndon",
+    "state": "VA",
+    "zip": "20170",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This estimate provides a detailed breakdown of costs for moving and contents management services following a property event at 723 Old Hunt Way, Herndon, VA. The scope includes comprehensive pack-out and pack-in services for basement contents, secure transportation, two months of climate-controlled storage, specialized handling for unique items, and debris hauling.<br>The estimate explicitly accounts for the <strong>extremely challenging access conditions</strong>, which include a <strong>long walk through a backyard gate, slippery grass, and a slope</strong>. This is further compounded by the need to move <strong>heavy lifting equipment (bar, squat rack)</strong> and <strong>large, heavy furniture (pool table, exercise machines)</strong>. These significant complications necessitate increased labor time, specialized equipment, and enhanced safety protocols, all of which are reflected in the adjusted pricing to ensure an accurate and defensible estimate for review.",
+  "trades": [
+    {
+      "name": "Contents Management & Moving Services",
+      "note": "This service encompasses initial pack-out, transportation to and from storage, professional climate-controlled storage, and final pack-in with placement of items at the restored site. Specialized handling for valuable, fragile, or oversized items is included. The inventory includes:<br><ul><li>Picture Frames (2)</li><li>Pool Table (1)</li><li>Squat Rack (1)</li><li>Wardrobes (4): (2) 2x6, (2) 5x3</li><li>Exercise Bench (1)</li><li>Wooden Hallway Table (1)</li><li>Medium Moving Boxes (17 total)</li><li>Wooden Chair (1)</li><li>Misc. Items (1 set): rug, floor mat, picnic chair, golf bag</li><li>Table (1)</li><li>Inversion Table (1)</li><li>Lamp and Table (2 items)</li><li>Children’s Toys (various)</li><li>Picnic Table (1)</li></ul><br>Special Requirements & Complexity Factors:<br><ul><li><strong>Challenging Access:</strong> The primary access involves a long carry through a backyard gate, slippery grass, and a slope. This significantly increases labor time and physical demands, impacting efficiency and requiring additional safety measures.</li><li><strong>Heavy Lifting:</strong> The presence of a pool table, squat rack, and exercise bench necessitates specialized moving equipment and a trained crew experienced in safely handling substantial items.</li></ul>",
+      "locations": [
+        {
+          "name": "Basement Contents",
+          "note": "Comprehensive packing, handling, and moving of all specified basement contents, including delicate, large, and heavy items. Includes both pack-out from origin and pack-in to destination.",
+          "showSubtotal": true,
+          "subtotal": 7126.5,
+          "categories": [
+            {
+              "name": "Pack-Out & Pack-In Labor",
+              "items": [
+                {
+                  "name": "Initial Pack-Out Labor (3-person crew)",
+                  "qty": 7.0,
+                  "unit": "Hours",
+                  "price": 350.0,
+                  "description": "Covers comprehensive packing, wrapping, and inventorying of all basement contents, including heavy items and challenging access (long carry, slope, slippery grass). <strong>Increased hours reflect the significant impact of the long, challenging carry through a backyard gate, slippery grass, and slope, as well as handling heavy/awkward items (pool table, squat rack).</strong> This ensures proper time for safety and meticulous work."
+                },
+                {
+                  "name": "Retrieval & Transport Labor (3-person crew)",
+                  "qty": 2.0,
+                  "unit": "Hours",
+                  "price": 350.0,
+                  "description": "Loading of packed contents from storage onto truck, securing items, and transport to destination."
+                },
+                {
+                  "name": "Final Pack-In & Placement Labor (3-person crew)",
+                  "qty": 6.0,
+                  "unit": "Hours",
+                  "price": 350.0,
+                  "description": "Unloading, unpacking, and careful placement of all contents back into designated/original locations in the basement. <strong>Increased hours reflect the challenging access (long carry, slope, slippery grass) for re-delivery and placement, including reassembly of the pool table.</strong>"
+                }
+              ]
+            },
+            {
+              "name": "Packing Materials",
+              "items": [
+                {
+                  "name": "Moving Blankets",
+                  "qty": 28.0,
+                  "unit": "Units",
+                  "price": 6.5,
+                  "description": "For robust protection of furniture, large items (pool table, wardrobes), and delicate pieces, reflecting premium quality and comprehensive usage to prevent damage. Increased unit cost for enhanced protection."
+                },
+                {
+                  "name": "Plastic Stretch Wrap (Heavy Duty)",
+                  "qty": 4.0,
+                  "unit": "Rolls",
+                  "price": 35.0,
+                  "description": "Extensive wrapping for all large items, especially pool table, squat rack, wardrobes, exercise bench, wooden tables, picnic table, and consolidated misc. items/toys. Increased unit cost for higher quality/quantity."
+                },
+                {
+                  "name": "Bubble Wrap",
+                  "qty": 1.0,
+                  "unit": "Roll",
+                  "price": 20.0,
+                  "description": "For delicate items like the lamp and picture frames. Increased unit cost for higher quality/quantity."
+                },
+                {
+                  "name": "Medium Moving Boxes",
+                  "qty": 17.0,
+                  "unit": "Boxes",
+                  "price": 3.5,
+                  "description": "Supply of new, sturdy medium-sized moving boxes as per inventory. For client's use or for professional packing by our crew."
+                },
+                {
+                  "name": "Inventory & Labeling Supplies",
+                  "qty": 1.0,
+                  "unit": "Lot",
+                  "price": 25.0,
+                  "description": "Cost for inventory sheets, labels, markers to ensure accurate tracking. Increased unit cost for comprehensive supplies."
+                }
+              ]
+            },
+            {
+              "name": "Storage & Transportation",
+              "items": [
+                {
+                  "name": "Climate-Controlled Storage Unit",
+                  "qty": 2.0,
+                  "unit": "Months",
+                  "price": 350.0,
+                  "description": "Secure, climate-controlled storage for all contents for the project duration (2 months). A single unit is utilized."
+                },
+                {
+                  "name": "Transportation Labor to Storage (3-person crew)",
+                  "qty": 2.0,
+                  "unit": "Hours",
+                  "price": 350.0,
+                  "description": "Loading of packed contents from origin onto truck, securing items, and transport from Herndon, VA to storage facility in Fairfax, VA. Accounts for heavy item handling."
+                }
+              ]
+            },
+            {
+              "name": "Post-Move Services",
+              "items": [
+                {
+                  "name": "Packaging Waste Removal (Labor & Disposal)",
+                  "qty": 1.0,
+                  "unit": "Lot",
+                  "price": 50.0,
+                  "description": "Collection and disposal of all used packing materials (blankets, plastic, bubble wrap) after unpacking."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Debris Hauling Services",
+      "note": "This service exclusively covers the removal and disposal of demolition debris generated by other mitigation companies, including construction waste (drywall, insulation, carpet) and electronics. It encompasses all necessary labor for loading, transport, and appropriate disposal fees. The total estimated debris weight is approximately 3,362.8 lbs.<br>Special Requirements & Complexity Factors:<br><ul><li><strong>Challenging Access:</strong> The debris removal will also be impacted by the long carry through a backyard gate, slippery grass, and a slope. This requires additional labor time and careful maneuvering.</li></ul>",
+      "locations": [
+        {
+          "name": "Basement Debris",
+          "note": "Removal and disposal of specified demolition debris from the basement.",
+          "showSubtotal": true,
+          "subtotal": 1046.4,
+          "categories": [
+            {
+              "name": "Debris Removal & Disposal",
+              "items": [
+                {
+                  "name": "Debris Hauling Labor (3-person crew)",
+                  "qty": 2.5,
+                  "unit": "Hours",
+                  "price": 350.0,
+                  "description": "Labor for loading 3,362.8 lbs of specified debris (drywall, insulation, carpet) from basement and transport to disposal facility. <strong>Increased hours reflect the challenging access for debris removal as well.</strong>"
+                },
+                {
+                  "name": "Disposal Facility Fees",
+                  "qty": 1.68,
+                  "unit": "Tons",
+                  "price": 42.5,
+                  "description": "Based on estimated total debris weight of 3,362.8 lbs (1.68 tons) and current commercial disposal rates in Fairfax County. Includes construction and electronic waste disposal."
+                },
+                {
+                  "name": "Debris Hauling Trip Fee",
+                  "qty": 1.0,
+                  "unit": "Trip",
+                  "price": 100.0,
+                  "description": "Dedicated trip for debris hauling to disposal facility. Covers truck and fuel specifically for this separate service."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 8172.9,
+  "discount": 0.0,
+  "total": 8172.9,
+  "bottom_note": "We have carefully adjusted the estimate to reflect the significant complexities posed by the challenging basement access and the nature of the heavy items. This ensures fair pricing for the specialized labor and time required. We believe this detailed estimate accurately reflects the necessary services and associated costs for this project. Please let us know if you have any further questions or require additional details.",
+  "disclaimer": "<ul><li><strong>Scope of Work:</strong> This estimate covers only the services explicitly listed. Any additional services requested outside this scope will require a separate change order and may incur additional charges.</li><li><strong>Unforeseen Conditions:</strong> This estimate does not account for unforeseen circumstances (e.g., severe weather impacting ground conditions, hazardous materials not disclosed, structural instability) that may arise during the project and require additional resources or time. Such instances will be communicated immediately, and additional costs may apply.</li><li><strong>Contents Value:</strong> This estimate does not determine or guarantee the value of the contents.</li><li><strong>Packing Not Listed:</strong> Unless specifically itemized, packing of contents beyond the pre-packed boxes and a few listed items is not included.</li><li><strong>Utility Disconnection/Reconnection:</strong> Disconnection or reconnection of appliances, electronics, or complex systems (e.g., plumbing for washing machines, electrical for large appliances) is excluded unless explicitly stated. The pool table disassembly/reassembly is included as a specialized service.</li><li><strong>Permits & Fees (Excluding Disposal):</strong> Any permits, HOA fees, or parking fines required for the move are the client's responsibility, unless otherwise agreed upon.</li><li><strong>Pest Control/Mold Remediation:</strong> This estimate does not include any pest control, mold remediation, or structural repairs.</li></ul>",
+  "overhead_rate": 0.0,
+  "profit_rate": 0.0,
+  "overhead_amount": 0.0,
+  "profit_amount": 0.0,
+  "sales_tax_amount": 0.0,
+  "overhead": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "profit": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "sales_tax": {
+    "amount": 0.0
+  }
+}

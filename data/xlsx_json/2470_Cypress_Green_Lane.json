@@ -1,0 +1,301 @@
+{
+  "estimate_number": "EST-202506-2470",
+  "estimate_date": "2025-06-24",
+  "company": {
+    "name": "NuvoHaus Home Improvement, Inc.",
+    "address": "14641 Lee Hwy, STE 109",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(703) 962-0745",
+    "email": "nuvohausva@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Yong & Jung-Oak Choi",
+    "address": "2470 Cypress Green Lane",
+    "city": "Herndon",
+    "state": "Virginia",
+    "zip": "20171",
+    "phone": "(703) 969-6426",
+    "email": ""
+  },
+  "top_note": "WORK INCLUDED: \nThis estimate covers drywall installation and finishing throughout the garage space, blown-in insulation replacement for 1,063 square feet, complete primer and paint application for all new surfaces, electrical fixture coordination, and comprehensive surface protection during construction. All work will be performed to restore the finished garage to its pre-loss condition with like-kind and quality materials.\n\nRoofing work includes complexity adjustments for multi-story height and roof slope, gutter coordination, and specialized flashing for furnace vents and custom cornice returns. All debris management, material handling, and final cleanup services are included for both exterior and interior work phases.\n\nEXCLUSIONS:\nThis estimate excludes mold remediation work, garage door repair or replacement, flooring work, permanent electrical system modifications, plumbing work, HVAC modifications, and any structural repairs beyond standard drywall installation. Content storage, temporary housing arrangements, and utility coordination are also excluded from this scope.\n\nRoofing work excludes solar panel removal/reinstallation, chimney repairs, and any structural modifications beyond standard deck preparation.",
+  "bottom_note": "All roofing work will comply with IRC R905 requirements for complete roof systems, IRC R803.2.3 for deck preparation, and OSHA 1926.501(b)(13) for fall protection protocols. \n\nGarage restoration work meets IRC R702.3 drywall installation standards and R402 insulation requirements. The project requires coordination between roofing and interior phases to ensure weather protection during garage restoration. \n\nPricing reflects 2025 DMV market rates with adjustments for 13-foot garage ceiling height, work-around conditions for existing garage shelving, multi-story roofing safety requirements, and 7/12 roof slope complexity. \n\nAll materials specified for like-kind and quality replacement matching pre-loss conditions.",
+  "disclaimer": "OVERHEAD (12%): \nNote: This 12% overhead covers essential costs of operating a professional restoration company, including project management and daily site supervision, administrative and office expenses, maintaining necessary licenses and certifications, technology systems, and vehicle and equipment upkeep. The allocation also supports orchestrating complex multi-trade coordination between roofing and interior restoration phases, while upholding strict safety protocols throughout the project due to multi-story roofing work and specialized garage restoration requirements. This allocation is essential for the seamless and professional delivery of the project.\n\nPROFIT (8%): \nNote: The 8% profit margin represents fair return for specialized knowledge, significant business investment, and inherent risks associated with comprehensive restoration efforts involving complex multi-room construction work. It ensures the ability to provide comprehensive workmanship guarantees, invest in skilled personnel, maintain capacity to respond effectively to complex scheduling and logistics, stringent quality control standards, and ongoing client communication and coordination, and deliver high-quality results.",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "ROOF",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Primary Code: 2018 International Residential Code (Virginia Residential Code)\nLocal Amendments: Fairfax County has adopted the 2018 Virginia Uniform Statewide Building Code (USBC), which is based on the 2018 International Codes with state and local amendments."
+        },
+        {
+          "name": "Remove shingles w/underlayment",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 69.7,
+          "dec": ""
+        },
+        {
+          "name": "Deck inspection, re-nailing",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 15.0,
+          "dec": "Deck inspection and re-nailing are crucial for ensuring the structural integrity and longevity of the new roof. Before installing new roofing materials, the existing deck needs to be inspected for any damage, rot, or weakness. Re-nailing reinforces the deck, ensuring it can adequately support the new shingles and withstand wind uplift, which is essential for manufacturer warranty eligibility and compliance with local building codes, such as the 2018 International Residential Code in Herndon, Fairfax County, Virginia."
+        },
+        {
+          "name": "Felt underlayment #15",
+          "qty": 2820.96,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": ""
+        },
+        {
+          "name": "Ice and water shield",
+          "qty": 710.7,
+          "unit": "SF",
+          "price": 1.88,
+          "dec": "Ice and Water Shield (IWS) coverage is calculated from three main areas: 485.04 sq ft for eaves , 87 sq ft for valleys , and 46 sq ft for penetrations (1 small, 2 medium). With a 15% waste factor, the total IWS required is 710.7 sq ft, equating to 35 rolls."
+        },
+        {
+          "name": "Laminated comp shingle roofing",
+          "qty": 29.66,
+          "unit": "SQ",
+          "price": 338.95,
+          "dec": "The calculated waste factor for the entire roof is applied to the base area.\nBase (8% for moderate) + Pitch (2% for 7/12) + Features (2% for multiple valleys/hips/penetrations) = 12%"
+        },
+        {
+          "name": "Ridge cap shingles (high profile)",
+          "qty": 64.0,
+          "unit": "LF",
+          "price": 11.38,
+          "dec": ""
+        },
+        {
+          "name": "Asphalt starter course",
+          "qty": 97.0,
+          "unit": "LF",
+          "price": 2.14,
+          "dec": ""
+        },
+        {
+          "name": "Drip edge",
+          "qty": 268.0,
+          "unit": "LF",
+          "price": 3.58,
+          "dec": ""
+        },
+        {
+          "name": "Step flashing",
+          "qty": 46.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": ""
+        },
+        {
+          "name": "Pipe jack flashing",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 67.73,
+          "dec": ""
+        },
+        {
+          "name": "Furnace vent flashing",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 125.15,
+          "dec": ""
+        },
+        {
+          "name": "Gable cornice return",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Kick-out diverter",
+          "qty": 6.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "A kick-out diverter is a crucial flashing component installed at roof-to-wall intersections where a roof slope meets a vertical wall. Its purpose is to prevent water runoff from draining behind the siding and causing long-term water damage at the wall bases. This is a mandatory requirement by the International Residential Code (IRC) and is critical at areas like step flashing terminations and dormer connections."
+        },
+        {
+          "name": "Ridge vent aluminum",
+          "qty": 52.7,
+          "unit": "LF",
+          "price": 12.65,
+          "dec": "Ridge vent quantity is calculated based on the attic's 2,195 sq ft area and local 1/300 ventilation code requirements. This necessitates 48.8 linear feet of ridge vent, which, after an 8% waste factor, totals 52.7 linear feet, or 14 pieces. This ensures adequate exhaust ventilation for the roof system."
+        },
+        {
+          "name": "Detach & reset gutters",
+          "qty": 97.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": "Gutters are detached and reset to protect them during roof replacement and ensure proper reinstallation, which is typically more cost-effective than full replacement. This is done unless existing gutters are irreparably damaged, non-compliant, or new gutters are specifically requested."
+        },
+        {
+          "name": "Fall protection harness/lanyard",
+          "qty": 5.0,
+          "unit": "EA",
+          "price": 15.0,
+          "dec": "A fall protection harness and lanyard are included as mandatory safety equipment for all roof work where there is a risk of a 6-foot or greater drop. This is a requirement under OSHA regulations to ensure worker safety and prevent injuries from falls. It is a distinct safety measure, separate from charges for working on high roofs, which are related to the increased logistical and labor challenges of elevated work, not the specific safety gear itself."
+        },
+        {
+          "name": "Remove Additional charge for high roof (2 stories or greater)",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 6.29,
+          "dec": ""
+        },
+        {
+          "name": "Additional charge for high roof (2 stories or greater)",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 25.04,
+          "dec": ""
+        },
+        {
+          "name": "Remove Additional charge for steep roof - 7/12 - 9/12 slope",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 16.63,
+          "dec": ""
+        },
+        {
+          "name": "Additional charge for steep roof - 7/12 - 9/12 slope",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 56.69,
+          "dec": ""
+        }
+      ],
+      "subtotal": 22654.54
+    },
+    {
+      "title": "GARAGE",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Install drywall and finishing replace insulation complete painting with electrical coordination"
+        },
+        {
+          "name": "1/2\" Drywall Installation",
+          "qty": 1615.0,
+          "unit": "SF",
+          "price": 1.65,
+          "dec": "Adjusted for very high ceiling height and work around existing shelving"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 49.0,
+          "unit": "LF",
+          "price": 2.2,
+          "dec": "IRC R702.3.8 requirements - increased for ceiling height and coordination"
+        },
+        {
+          "name": "Blown-in Insulation Installation",
+          "qty": 1063.0,
+          "unit": "SF",
+          "price": 2.75,
+          "dec": "IRC R402 requirements - adjusted for work around conditions"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 1615.0,
+          "unit": "SF",
+          "price": 1.65,
+          "dec": "IRC R702.3.8 surface preparation - increased for ceiling height"
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 Coats)",
+          "qty": 1615.0,
+          "unit": "SF",
+          "price": 2.36,
+          "dec": "Increased for very high ceiling height and work around shelving"
+        },
+        {
+          "name": "Surface protection during construction",
+          "qty": 1615.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": ""
+        },
+        {
+          "name": "Light fixture detach & reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": "Required to prevent damage during construction per OSHA standards"
+        },
+        {
+          "name": "Outlet/switch cover removal & reset",
+          "qty": 8.0,
+          "unit": "EA",
+          "price": 15.0,
+          "dec": "Required for proper surface preparation per OSHA standards"
+        },
+        {
+          "name": "Garage door opener disconnect & reconnect",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Two garage doors - coordinate electrical connections during restoration"
+        }
+      ],
+      "subtotal": 13823.2
+    },
+    {
+      "title": "PROJECT CLEANUP & DISPOSAL",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Final project cleanup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 250.0,
+          "dec": ""
+        },
+        {
+          "name": "Roofing debris removal",
+          "qty": 26.12,
+          "unit": "SQ",
+          "price": 15.0,
+          "dec": "Immediate removal of tear-off materials"
+        },
+        {
+          "name": "Dumpster rental - 20 yard",
+          "qty": 3.0,
+          "unit": "DA",
+          "price": 65.0,
+          "dec": "Minimum rental period (typically 3-day minimum)"
+        },
+        {
+          "name": "Landfill disposal fees",
+          "qty": 4.0,
+          "unit": "TN",
+          "price": 85.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 1176.8
+    }
+  ],
+  "subtotal": 37654.54,
+  "op_amount": 7530.91,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 45185.45
+}

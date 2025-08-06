@@ -1,0 +1,448 @@
+{
+  "estimate_number": "EST-202507-12323",
+  "estimate_date": "07-17-2025",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "SONG, JUNG",
+    "address": "12323 Old Gunpowder Rd",
+    "city": "Beltsville",
+    "state": "MD",
+    "zip": "20705",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "",
+  "bottom_note": "OVERHEAD(12%): \nProject management and administration\nInsurance, bonding, and regulatory compliance\nEquipment, tools, and transportation\nQuality control and site supervision\nBusiness operations and support services\n\nPROFIT(8%): \nProfessional service delivery and expertise\nRisk assumption and warranty obligations\nBusiness sustainability and reinvestment\nSkilled workforce development and retention\n\nThis restoration project requires the coordination of multiple specialized trades over multiple weeks. Industry standard and legal precedent establish that overhead and profit is necessary when multiple trades are reasonably required for proper restoration. Professional project management ensures proper sequencing, quality control, and timely completion while maintaining safety standards and building code compliance throughout the restoration process.",
+  "disclaimer": "",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "Living Room",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Complete hardwood flooring replacement due to water damage, partial drywall and ceiling repairs, and full baseboard/quarter round trim replacement are required. The scope includes priming and painting of the entire living room and kitchen area, along with window blind detachment/reset and construction protection installation."
+        },
+        {
+          "name": "Content manipulation - small scope",
+          "qty": 6.0,
+          "unit": "HR",
+          "price": 48.0,
+          "dec": "Limited content handling required for construction access and material protection during restoration work"
+        },
+        {
+          "name": "Construction protection (comprehensive)",
+          "qty": 465.0,
+          "unit": "SF",
+          "price": 0.65,
+          "dec": "Comprehensive protection measures per OSHA standards including surface protection during construction plastic sheeting/dust barriers for occupied adjacent spaces floor protection (Ram board/cardboard) for finished areas and fireplace protection to prevent damage to existing finishes and maintain safe work environment"
+        },
+        {
+          "name": "Remove hardwood flooring (remaining)",
+          "qty": 185.0,
+          "unit": "SF",
+          "price": 2.65,
+          "dec": ""
+        },
+        {
+          "name": "Remove baseboard (remaining)",
+          "qty": 40.0,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": ""
+        },
+        {
+          "name": "Electrical fixture detach & reset",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": ""
+        },
+        {
+          "name": "Window treatment detach & reset",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 28.0,
+          "dec": ""
+        },
+        {
+          "name": "Decorative item detach & reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Removal and reinstallation of wall-mounted artwork to prevent damage during construction"
+        },
+        {
+          "name": "Install drywall 1/2\"",
+          "qty": 70.0,
+          "unit": "SF",
+          "price": 3.45,
+          "dec": "IRC R702.3 installation requirements with cutting allowance for proper joint placement and breakage prevention"
+        },
+        {
+          "name": "Drywall tape and blend - seam connection",
+          "qty": 35.0,
+          "unit": "LF",
+          "price": 2.15,
+          "dec": "New-to-existing drywall connections for water damage restoration"
+        },
+        {
+          "name": "Flooring preparation work",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 165.0,
+          "dec": "IRC R502.3 requires proper subfloor preparation including door casing undercut (3 EA) subfloor inspection and minor prep and transition strip installation between rooms"
+        },
+        {
+          "name": "Install hardwood flooring",
+          "qty": 248.0,
+          "unit": "SF",
+          "price": 11.25,
+          "dec": "IRC R503.1 requires proper board layout with staggered joints. 10% waste factor accounts for end cuts defective boards and proper installation pattern"
+        },
+        {
+          "name": "Install baseboard",
+          "qty": 53.0,
+          "unit": "LF",
+          "price": 8.0,
+          "dec": "Installation of baseboard trim with 10% waste factor for proper fitting and cutting allowance"
+        },
+        {
+          "name": "Install quarter round",
+          "qty": 53.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Installation of quarter round trim with 10% waste factor for proper fitting and cutting allowance"
+        },
+        {
+          "name": "Prime walls and ceiling",
+          "qty": 1226.0,
+          "unit": "SF",
+          "price": 1.6,
+          "dec": "IRC R702.3.8 requires proper surface preparation with PVA primer for proper paint adhesion"
+        },
+        {
+          "name": "Paint walls and ceiling (2 coats)",
+          "qty": 1226.0,
+          "unit": "SF",
+          "price": 2.4,
+          "dec": ""
+        }
+      ],
+      "subtotal": 10281.5
+    },
+    {
+      "title": "Dining Room",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Only wall and ceiling priming and painting work is needed to match the color scheme with the living room/kitchen. No structural repairs are required as there is no physical damage in this area."
+        },
+        {
+          "name": "Prime walls and ceiling",
+          "qty": 336.0,
+          "unit": "SF",
+          "price": 1.6,
+          "dec": "IRC R702.3.8 requires proper surface preparation with PVA primer for proper paint adhesion"
+        },
+        {
+          "name": "Paint walls and ceiling (2 coats) - match living room",
+          "qty": 336.0,
+          "unit": "SF",
+          "price": 2.4,
+          "dec": "Replacement materials selected to match pre-loss condition per insurance policy LKQ requirements"
+        }
+      ],
+      "subtotal": 1344.0
+    },
+    {
+      "title": "Bathroom",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Partial drywall replacement with texture matching and damaged vanity replacement are the primary tasks. Baseboard installation (excluding bathtub area) and moisture-resistant primer and paint application suitable for bathroom environment are included."
+        },
+        {
+          "name": "Content manipulation - small scope",
+          "qty": 3.0,
+          "unit": "HR",
+          "price": 48.0,
+          "dec": "Limited content handling required for construction access and material protection during restoration work"
+        },
+        {
+          "name": "Content protection in place",
+          "qty": 50.0,
+          "unit": "SF",
+          "price": 0.8,
+          "dec": "Limited content handling required for construction access and material protection during restoration work"
+        },
+        {
+          "name": "Install drywall 1/2\"",
+          "qty": 33.0,
+          "unit": "SF",
+          "price": 3.45,
+          "dec": "IRC R702.3 installation requirements with cutting allowance for proper joint placement and breakage prevention"
+        },
+        {
+          "name": "Drywall tape and blend - seam connection",
+          "qty": 22.0,
+          "unit": "LF",
+          "price": 2.15,
+          "dec": "New-to-existing drywall connections for water damage restoration"
+        },
+        {
+          "name": "Remove & install vanity (water damaged)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 560.0,
+          "dec": ""
+        },
+        {
+          "name": "Install baseboard (exclude tub area)",
+          "qty": 13.0,
+          "unit": "LF",
+          "price": 8.0,
+          "dec": "Installation of baseboard trim excluding tub area with 10% waste factor"
+        },
+        {
+          "name": "Install quarter round",
+          "qty": 13.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Installation of quarter round trim with 10% waste factor"
+        },
+        {
+          "name": "Prime walls and ceiling",
+          "qty": 189.0,
+          "unit": "SF",
+          "price": 1.6,
+          "dec": "IRC R702.3.8 requires proper surface preparation with PVA primer for proper paint adhesion"
+        },
+        {
+          "name": "Paint walls and ceiling (2 coats)",
+          "qty": 189.0,
+          "unit": "SF",
+          "price": 2.4,
+          "dec": "Two coat paint application for walls and ceiling"
+        }
+      ],
+      "subtotal": 1820.4
+    },
+    {
+      "title": "Bedroom",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content manipulation - small scope",
+          "qty": 4.0,
+          "unit": "HR",
+          "price": 48.0,
+          "dec": "Limited content handling required for construction access and material protection during restoration work"
+        },
+        {
+          "name": "Content protection in place",
+          "qty": 175.0,
+          "unit": "SF",
+          "price": 0.8,
+          "dec": ""
+        },
+        {
+          "name": "Remove hardwood flooring (remaining)",
+          "qty": 153.0,
+          "unit": "SF",
+          "price": 2.65,
+          "dec": ""
+        },
+        {
+          "name": "Remove baseboard",
+          "qty": 50.0,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Removal of existing baseboard trim for proper flooring installation"
+        },
+        {
+          "name": "Electrical fixture detach & reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": ""
+        },
+        {
+          "name": "Flooring preparation work",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 45.0,
+          "dec": "IRC R502.3 requires proper subfloor preparation including door casing undercut (1 EA) and subfloor inspection"
+        },
+        {
+          "name": "Install hardwood flooring",
+          "qty": 248.0,
+          "unit": "SF",
+          "price": 11.25,
+          "dec": "IRC R503.1 requires proper board layout with staggered joints. 10% waste factor accounts for end cuts defective boards and proper installation pattern"
+        },
+        {
+          "name": "Install baseboard",
+          "qty": 55.0,
+          "unit": "LF",
+          "price": 8.0,
+          "dec": "Installation of baseboard trim with 10% waste factor for proper fitting and cutting allowance"
+        },
+        {
+          "name": "Install quarter round",
+          "qty": 55.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Installation of quarter round trim with 10% waste factor for proper fitting and cutting allowance"
+        }
+      ],
+      "subtotal": 4373.7
+    },
+    {
+      "title": "2nd Floor Hallway",
+      "showSubtotal": false,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Complete hardwood flooring replacement and baseboard/quarter round replacement in the hallway connected to the bedroom. This area includes flooring replacement with associated trim work and painting."
+        },
+        {
+          "name": "Remove hardwood flooring",
+          "qty": 76.0,
+          "unit": "SF",
+          "price": 2.65,
+          "dec": "Removal of existing hardwood flooring for replacement"
+        },
+        {
+          "name": "Remove baseboard",
+          "qty": 49.0,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Removal of existing baseboard trim for replacement"
+        },
+        {
+          "name": "Remove quarter round",
+          "qty": 49.0,
+          "unit": "LF",
+          "price": 1.6,
+          "dec": "Removal of existing quarter round trim for replacement"
+        },
+        {
+          "name": "Install hardwood flooring",
+          "qty": 84.0,
+          "unit": "SF",
+          "price": 11.25,
+          "dec": "IRC R503.1 requires proper board layout with staggered joints. 10% waste factor accounts for end cuts defective boards and proper installation pattern"
+        },
+        {
+          "name": "Install baseboard",
+          "qty": 54.0,
+          "unit": "LF",
+          "price": 8.0,
+          "dec": "Installation of baseboard trim with 10% waste factor for proper fitting and cutting allowance"
+        },
+        {
+          "name": "Install quarter round",
+          "qty": 54.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Installation of quarter round trim with 10% waste factor for proper fitting and cutting allowance"
+        }
+      ],
+      "subtotal": 1976.95
+    },
+    {
+      "title": "PROJECT-WIDE",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Ground level hauling (1st floor)",
+          "qty": 575.0,
+          "unit": "LB",
+          "price": 0.2,
+          "dec": "Hauling of construction debris from ground level work areas"
+        },
+        {
+          "name": "Stair surcharge (2nd floor - 1 flight)",
+          "qty": 848.0,
+          "unit": "LB",
+          "price": 0.6,
+          "dec": "Additional hauling cost for debris removal from second floor via stairs"
+        },
+        {
+          "name": "Distance surcharge (>50ft)",
+          "qty": 1423.0,
+          "unit": "LB",
+          "price": 0.32,
+          "dec": "Additional hauling cost for debris transport over 50 feet to dumpster location"
+        },
+        {
+          "name": "10-yard dumpster rental (15 days)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 450.0,
+          "dec": "Dumpster rental for estimated 0.7 tons of construction debris"
+        },
+        {
+          "name": "Permit fees (street placement)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 90.0,
+          "dec": "Municipal permit for dumpster placement on public street"
+        },
+        {
+          "name": "Daily construction cleanup (ongoing throughout project)",
+          "qty": 1117.0,
+          "unit": "SF",
+          "price": 0.55,
+          "dec": "Daily cleanup of work areas to maintain safe working conditions per OSHA standards and prevent debris accumulation during multi-phase construction"
+        },
+        {
+          "name": "Final detail cleaning (post-construction)",
+          "qty": 1117.0,
+          "unit": "SF",
+          "price": 0.8,
+          "dec": "Comprehensive post-construction cleaning including dust removal surface cleaning and preparation for occupancy per industry standards"
+        },
+        {
+          "name": "Fixture and finish cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 3412.11
+    }
+  ],
+  "subtotal": 23208.66,
+  "op_amount": 4641.73,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 27850.39
+}

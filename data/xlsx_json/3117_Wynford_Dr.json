@@ -1,0 +1,574 @@
+{
+  "estimate_number": "EST-202506-6517",
+  "estimate_date": "2025-06-30",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "projjlinc@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Sung Hwang",
+    "address": "3117 Wynford Dr",
+    "city": "Fairfax",
+    "state": "VA",
+    "zip": "22031",
+    "phone": "(224) 888-1323",
+    "email": "qwerty1323@gmail.com"
+  },
+  "top_note": "This comprehensive restoration project addresses water damage originating in the kitchen that has affected multiple connected living areas. The scope encompasses complete interior restoration services including hardwood flooring replacement, paint restoration, trim work, and full kitchen cabinetry reconstruction to restore the property to pre-loss condition while maintaining Like Kind and Quality (LKQ) standards.",
+  "bottom_note": "This restoration project requires the coordination of 4 specialized trades over 3 weeks. Industry standard and legal precedent establish that overhead and profit is owed when multiple trades are reasonably required for proper restoration. Professional project management ensures proper sequencing, quality control, and timely completion while maintaining safety standards and building code compliance throughout the restoration process.",
+  "disclaimer": "OVERHEAD (10%):\nOur business overhead represents the essential operational costs required to deliver professional restoration services. This includes comprehensive multi-trade project management and coordination to ensure seamless integration between kitchen cabinetry, interior flooring, painting, and content management services. Insurance, bonding, and regulatory compliance requirements are maintained throughout the project to protect both the homeowner and the work quality. Equipment, tools, and transportation logistics cover the specialized tools and vehicles necessary for each trade, along with the coordination of material deliveries across multiple suppliers and installation phases. Daily site supervision and quality control oversight ensures that all work meets industry standards and building codes, while business operations and administrative support covers the professional documentation, scheduling, and communication required for a project of this complexity.\n\nPROFIT (10%):\nOur contractor profit margin supports the delivery of professional expertise and skilled craftsmanship across all restoration trades. This includes risk assumption and comprehensive warranty obligations, where we stand behind all work performed and coordinate warranty coverage across multiple trades and suppliers. Quality assurance and customer protection services ensure that the restoration meets Like Kind and Quality standards while protecting the homeowner’s investment throughout the construction process. Business sustainability and skilled workforce development allows us to maintain a team of experienced professionals, invest in ongoing training and certifications, and ensure the long-term viability of our services to support future warranty obligations and customer needs.",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "Kitchen Cabinetry",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Initial Site Survey & Precise Measurement",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Required for LKQ compliance - detailed field measurement of all existing cabinetry including non-standard dimensions, filler strips, and custom modifications"
+        },
+        {
+          "name": "Template Creation & Field Verification",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 425.0,
+          "dec": "Countertop and custom millwork requiring precise field templates for LKQ compliance"
+        },
+        {
+          "name": "Comprehensive Surface Protection System",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 685.0,
+          "dec": "Floor protection, wall covering, appliance masking for finished space preservation during cabinet work"
+        },
+        {
+          "name": "Dust Containment System - Professional Grade",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 450.0,
+          "dec": "Required for work in occupied, finished kitchen space per OSHA standards"
+        },
+        {
+          "name": "Dishwasher - Detach & Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 375.0,
+          "dec": "Professional disconnection and reconnection including water supply, drain, and electrical connections"
+        },
+        {
+          "name": "Refrigerator - Detach & Reset (Side by Side 22-25 CF)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 360.0,
+          "dec": "Careful removal and reset of large appliance with dolly and protection"
+        },
+        {
+          "name": "Range - Detach & Reset (Freestanding Gas)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 255.0,
+          "dec": "Gas disconnection and reconnection per local code requirements"
+        },
+        {
+          "name": "Garbage Disposal - Detach & Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 255.0,
+          "dec": "Electrical and plumbing disconnection/reconnection of disposal unit"
+        },
+        {
+          "name": "P-trap Assembly - Detach & Reset (ABS Plastic)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 95.0,
+          "dec": "Plumbing disconnection and reconnection for sink access"
+        },
+        {
+          "name": "Remove Existing Base Cabinets",
+          "qty": 18.33,
+          "unit": "LF",
+          "price": 12.5,
+          "dec": "Careful removal preserving surrounding finished surfaces"
+        },
+        {
+          "name": "Remove Existing Wall Cabinets",
+          "qty": 16.0,
+          "unit": "LF",
+          "price": 15.25,
+          "dec": "Overhead removal with proper support and protection"
+        },
+        {
+          "name": "Remove Existing Countertops",
+          "qty": 13.0,
+          "unit": "LF",
+          "price": 8.75,
+          "dec": "Countertop removal including backsplash tile - excludes appliance areas"
+        },
+        {
+          "name": "Remove Cabinet Contents & Reset",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 425.0,
+          "dec": "Professional packing, storage, and reset of kitchen contents - larger kitchen"
+        },
+        {
+          "name": "15-Yard Dumpster Rental (Kitchen Demo)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 485.0,
+          "dec": ""
+        },
+        {
+          "name": "36\" W Sink Base Cabinet - Full Overlay",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 685.0,
+          "dec": ""
+        },
+        {
+          "name": "30\" W Base Cabinet - Full Overlay",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 575.0,
+          "dec": ""
+        },
+        {
+          "name": "24\" W Base Cabinet - Full Overlay",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 525.0,
+          "dec": ""
+        },
+        {
+          "name": "18\" W Base Cabinet - Full Overlay",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 465.0,
+          "dec": ""
+        },
+        {
+          "name": "15\" W Base Cabinet - Full Overlay",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 445.0,
+          "dec": ""
+        },
+        {
+          "name": "12\" W Base Cabinet - Full Overlay",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 425.0,
+          "dec": ""
+        },
+        {
+          "name": "36\" W Wall Cabinet - Full Overlay",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 485.0,
+          "dec": ""
+        },
+        {
+          "name": "30\" W Wall Cabinet - Full Overlay",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 445.0,
+          "dec": ""
+        },
+        {
+          "name": "24\" W Wall Cabinet - Full Overlay",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 395.0,
+          "dec": ""
+        },
+        {
+          "name": "18\" W Wall Cabinet - Full Overlay",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 365.0,
+          "dec": ""
+        },
+        {
+          "name": "Cabinet Crown Molding Installation",
+          "qty": 18.33,
+          "unit": "LF",
+          "price": 18.5,
+          "dec": ""
+        },
+        {
+          "name": "Matching Toe Kick Installation",
+          "qty": 18.33,
+          "unit": "LF",
+          "price": 12.25,
+          "dec": "Custom-fitted toe kick matching cabinet finish"
+        },
+        {
+          "name": "Cabinet Installation Labor Premium",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 2150.0,
+          "dec": "Finished space protection protocols, precision work, hardware adjustment, sequencing, material handling through finished spaces per LKQ standards - larger kitchen"
+        },
+        {
+          "name": "Laminate Countertop w/ Bullnose Edge",
+          "qty": 13.0,
+          "unit": "LF",
+          "price": 45.5,
+          "dec": "Template creation, precision cutting, edge work, fabrication, installation, sealing per manufacturer specifications - excludes range and refrigerator areas"
+        },
+        {
+          "name": "Countertop Installation Labor",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Professional templating, fabrication oversight, precision installation, sink cutout, and sealing"
+        },
+        {
+          "name": "Ceramic Tile Backsplash (4\" x 4\")",
+          "qty": 32.0,
+          "unit": "SF",
+          "price": 8.75,
+          "dec": ""
+        },
+        {
+          "name": "Tile Installation Labor",
+          "qty": 32.0,
+          "unit": "SF",
+          "price": 12.5,
+          "dec": "Professional tile setting, grouting, and sealing"
+        },
+        {
+          "name": "Grout & Sealant Materials",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 95.0,
+          "dec": "Premium grout and sealant for proper installation - larger area"
+        },
+        {
+          "name": "Daily Cleanup Protocols",
+          "qty": 15.0,
+          "unit": "Days",
+          "price": 35.0,
+          "dec": "Maintaining livable conditions during construction in occupied space - realistic timeline"
+        },
+        {
+          "name": "Final Detail Cleaning & Inspection",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 325.0,
+          "dec": "Comprehensive cleaning and quality inspection before occupancy - larger kitchen"
+        },
+        {
+          "name": "Site Protection Removal",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 225.0,
+          "dec": "Careful removal of protection systems without damage to finished surfaces"
+        }
+      ],
+      "subtotal": 17827.02
+    },
+    {
+      "title": "Kitchen/Breakfast Room",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Remove existing hardwood flooring",
+          "qty": 207.3,
+          "unit": "SF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Subfloor inspection and preparation",
+          "qty": 213.3,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": "IRC R503.1 requires subfloor inspection and preparation to ensure proper substrate for new flooring installation"
+        },
+        {
+          "name": "Install hardwood flooring (Oak #1 common no finish)",
+          "qty": 234.6,
+          "unit": "SF",
+          "price": 13.25,
+          "dec": "LKQ replacement matching existing hardwood throughout connected areas. DMV market rate per recent research showing $12.77-$16.19/SF range. 10% waste factor applied per IRC R503.1 for proper board layout and cutting allowance"
+        },
+        {
+          "name": "Install hardwood underlayment",
+          "qty": 234.6,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Manufacturer specifications require proper underlayment for hardwood installation. Updated DMV market rate. 10% waste factor applied for cutting and fitting"
+        },
+        {
+          "name": "Remove existing baseboard",
+          "qty": 32.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "Baseboard removal required for proper flooring installation per industry standards"
+        },
+        {
+          "name": "Install new baseboard (3.5\" painted wood)",
+          "qty": 35.2,
+          "unit": "LF",
+          "price": 5.25,
+          "dec": "LKQ replacement matching existing profile. 10% waste factor applied for proper cutting and fitting"
+        },
+        {
+          "name": "Remove existing quarter round",
+          "qty": 32.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": "Quarter round removal required for flooring replacement"
+        },
+        {
+          "name": "Install new quarter round (stained wood)",
+          "qty": 35.2,
+          "unit": "LF",
+          "price": 3.25,
+          "dec": "LKQ replacement matching existing stained wood profile. 10% waste factor applied"
+        },
+        {
+          "name": "Paint walls and ceiling (1 coat)",
+          "qty": 678.0,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Color matching restoration required due to water mitigation containment damage. Single coat adequate for color continuity over existing paint base"
+        }
+      ],
+      "subtotal": 5279.13
+    },
+    {
+      "title": "Dining Room",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Move out large furniture and contents",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 850.0,
+          "dec": "Heavy furniture including dining table, chairs, and china cabinet require professional moving for flooring replacement access. Standard content manipulation for complete flooring replacement"
+        },
+        {
+          "name": "Reset furniture and contents",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 650.0,
+          "dec": "Professional replacement of heavy furniture after flooring completion, including protective pads and proper positioning"
+        },
+        {
+          "name": "Remove existing hardwood flooring",
+          "qty": 115.0,
+          "unit": "SF",
+          "price": 1.75,
+          "dec": "Complete hardwood flooring removal required for LKQ replacement maintaining continuity with kitchen area. IRC R503.1 requires removal of existing flooring for proper substrate inspection"
+        },
+        {
+          "name": "Subfloor inspection and preparation",
+          "qty": 115.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": "IRC R503.1 requires subfloor inspection and preparation to ensure proper substrate for new flooring installation"
+        },
+        {
+          "name": "Install hardwood flooring (Oak #1 common no finish)",
+          "qty": 126.5,
+          "unit": "SF",
+          "price": 13.25,
+          "dec": "LKQ replacement maintaining continuity with kitchen flooring. DMV market rate per recent research. 10% waste factor applied per IRC R503.1"
+        },
+        {
+          "name": "Install hardwood underlayment",
+          "qty": 126.5,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Manufacturer specifications require proper underlayment. Updated DMV market rate. 10% waste factor applied"
+        },
+        {
+          "name": "Install new baseboard (3.5\" painted wood)",
+          "qty": 33.2,
+          "unit": "LF",
+          "price": 5.25,
+          "dec": "LKQ replacement for flooring continuity. 10% waste factor applied"
+        },
+        {
+          "name": "Install new quarter round (stained wood)",
+          "qty": 33.2,
+          "unit": "LF",
+          "price": 3.25,
+          "dec": "LKQ replacement matching existing profile. 10% waste factor applied"
+        },
+        {
+          "name": "Paint walls and ceiling (1 coat)",
+          "qty": 373.2,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Color matching restoration for continuity with kitchen area. Single coat adequate for color matching over existing paint base"
+        }
+      ],
+      "subtotal": 4413.57
+    },
+    {
+      "title": "Living Room",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Move out large furniture and contents",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 875.0,
+          "dec": "Extensive furniture including sofas, entertainment center, coffee tables, and decorative items require professional moving for complete flooring replacement. Large room with substantial content load"
+        },
+        {
+          "name": "Reset furniture and contents",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 675.0,
+          "dec": "Professional replacement of furniture after flooring completion, including protective pads and careful positioning to prevent floor damage"
+        },
+        {
+          "name": "Remove existing hardwood flooring",
+          "qty": 258.3,
+          "unit": "SF",
+          "price": 1.75,
+          "dec": "Complete hardwood flooring removal required for LKQ replacement maintaining continuity throughout connected living areas. IRC R503.1 requires removal of existing flooring for proper substrate inspection"
+        },
+        {
+          "name": "Subfloor inspection and preparation",
+          "qty": 258.3,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": "IRC R503.1 requires subfloor inspection and preparation to ensure proper substrate for new flooring installation"
+        },
+        {
+          "name": "Install hardwood flooring (Oak #1 common no finish)",
+          "qty": 284.1,
+          "unit": "SF",
+          "price": 13.25,
+          "dec": "LKQ replacement maintaining continuity throughout connected areas. DMV market rate per recent research showing $12.77-$16.19/SF range. 10% waste factor applied per IRC R503.1"
+        },
+        {
+          "name": "Install hardwood underlayment",
+          "qty": 284.1,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Manufacturer specifications require proper underlayment. Updated DMV market rate. 10% waste factor applied"
+        },
+        {
+          "name": "Install new baseboard (3.5\" painted wood)",
+          "qty": 70.7,
+          "unit": "LF",
+          "price": 5.25,
+          "dec": "LKQ replacement for flooring continuity. 10% waste factor applied"
+        },
+        {
+          "name": "Install new quarter round (stained wood)",
+          "qty": 70.7,
+          "unit": "LF",
+          "price": 3.25,
+          "dec": "LKQ replacement matching existing profile. 10% waste factor applied"
+        },
+        {
+          "name": "Paint walls and ceiling (1 coat)",
+          "qty": 811.2,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Color matching restoration for continuity across connected living spaces. Single coat adequate for color matching over existing paint base"
+        }
+      ],
+      "subtotal": 8027.01
+    },
+    {
+      "title": "PROJECT-WIDE",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Project-wide dust containment system",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 650.0,
+          "dec": "EPA RRP Rule requires comprehensive dust containment for multi-room construction work. Professional dust barrier system with daily maintenance for 12-day project duration"
+        },
+        {
+          "name": "Hallway protection during material transport",
+          "qty": 75.0,
+          "unit": "LF",
+          "price": 4.0,
+          "dec": "OSHA walking/working surface standards require protected access for safe material transport"
+        },
+        {
+          "name": "Kitchen cabinet and countertop debris",
+          "qty": 1904.0,
+          "unit": "LB",
+          "price": 0.18,
+          "dec": "Professional removal of kitchen cabinetry, countertops, and backsplash materials from work areas to dumpster location"
+        },
+        {
+          "name": "Flooring and trim debris",
+          "qty": 2979.0,
+          "unit": "LB",
+          "price": 0.18,
+          "dec": "Labor cost for removal of hardwood flooring, trim materials, and installation waste from multiple rooms to dumpster location"
+        },
+        {
+          "name": "20-yard dumpster rental (15 days)",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 575.0,
+          "dec": "Appropriate dumpster size for estimated debris volume with extended rental period for coordinated kitchen and interior finish work"
+        },
+        {
+          "name": "Daily construction cleanup",
+          "qty": 586.6,
+          "unit": "SF",
+          "price": 0.5,
+          "dec": "Daily cleanup of work areas to maintain safe working conditions per OSHA standards and prevent debris accumulation during multi-phase construction with content coordination"
+        },
+        {
+          "name": "Final detail cleaning",
+          "qty": 586.6,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Comprehensive post-construction cleaning including dust removal, surface cleaning, and preparation for occupancy per industry standards. Enhanced cleaning required due to content manipulation"
+        },
+        {
+          "name": "Fixture and finish cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 325.0,
+          "dec": "Detailed cleaning of all installed fixtures, trim, and surfaces to remove construction residue and prepare for furniture reset"
+        },
+        {
+          "name": "Project-wide dust barrier maintenance",
+          "qty": 12.0,
+          "unit": "Days",
+          "price": 35.0,
+          "dec": "Daily inspection and maintenance of dust containment systems per EPA RRP requirements. Extended duration due to coordinated kitchen and interior finish work"
+        },
+        {
+          "name": "Dust barrier removal and cleanup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": "Professional removal of project-wide containment systems and associated cleanup"
+        }
+      ],
+      "subtotal": 4167.19
+    }
+  ],
+  "subtotal": 39713.92,
+  "op_amount": 7942.78,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 47656.7
+}

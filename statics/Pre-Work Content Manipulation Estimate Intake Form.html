@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Work Content Manipulation Estimate Intake Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #333;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .form-content {
+            padding: 15px;
+        }
+
+        .form-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .form-row-triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+            color: #bbb;
+        }
+
+        input::-moz-placeholder, textarea::-moz-placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+            color: #bbb;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            gap: 2px;
+            grid-template-columns: repeat(6, 1fr);
+            margin-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .staging-options {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        .staging-option {
+            margin-bottom: 8px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+
+        .staging-option label {
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 3px;
+        }
+
+        .staging-option input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .submit-section {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .submit-btn {
+            background: #333;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #555;
+        }
+
+        @media (max-width: 768px) {
+            .form-row, .form-row-triple {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-content {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .submit-section {
+                display: none;
+            }
+            .container {
+                border: none;
+                box-shadow: none;
+            }
+            .header {
+                padding: 10px;
+            }
+            .form-content {
+                padding: 10px;
+            }
+            .form-section {
+                margin-bottom: 8px;
+                padding: 6px;
+                page-break-inside: avoid;
+            }
+            textarea {
+                min-height: 30px;
+            }
+            .checkbox-group {
+                gap: 2px;
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .checkbox-item {
+                padding: 1px;
+                font-size: 0.75rem;
+            }
+            
+            /* Page footer for print */
+            @page {
+                margin: 1in 0.75in 1.5in 0.75in;
+                @bottom-left {
+                    content: "Page " counter(page) " of " counter(pages);
+                    font-size: 10px;
+                    font-family: Arial, sans-serif;
+                }
+                @bottom-right {
+                    content: "Pre-Work Content Manipulation Estimate";
+                    font-size: 10px;
+                    font-family: Arial, sans-serif;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pre-Work Content Manipulation Estimate Intake Form</h1>
+            <p>Complete this intake form to request an estimate for pre-mitigation content manipulation services. This form captures all necessary details to provide accurate pricing for content protection and temporary relocation before restoration work begins.</p>
+        </div>
+
+        <form class="form-content" id="intakeForm">
+            <!-- Contact Information -->
+            <div class="form-section">
+                <h2 class="section-title">Contact Information</h2>
+                <div class="form-group">
+                    <label for="companyName">Company Name <span class="required">*</span></label>
+                    <input type="text" id="companyName" name="companyName" placeholder="Restoration or contracting company" required>
+                </div>
+            </div>
+
+            <!-- Project Information -->
+            <div class="form-section">
+                <h2 class="section-title">Project Information</h2>
+                <div class="form-group">
+                    <label for="propertyAddress">Property Address <span class="required">*</span></label>
+                    <textarea id="propertyAddress" name="propertyAddress" placeholder="Full property address including city, state, zip code" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="affectedAreas">Affected Areas <span class="required">*</span></label>
+                    <textarea id="affectedAreas" name="affectedAreas" placeholder="Specific areas requiring content removal (e.g., 'Basement only', 'Kitchen and living room', '2nd floor bedrooms')" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="reasonForWork">Reason for Pre-Work Content Manipulation <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="waterMitigation" name="workReason[]" value="water-mitigation">
+                            <label for="waterMitigation">Water Mitigation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="moldRemediation" name="workReason[]" value="mold-remediation">
+                            <label for="moldRemediation">Mold Remediation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fireRestoration" name="workReason[]" value="fire-restoration">
+                            <label for="fireRestoration">Fire/Smoke Restoration</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="asbestosAbatement" name="workReason[]" value="asbestos-abatement">
+                            <label for="asbestosAbatement">Asbestos Abatement</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="construction" name="workReason[]" value="construction">
+                            <label for="construction">Construction Work</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="other" name="workReason[]" value="other">
+                            <label for="other">Other</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="workReasonDetails">Work Reason Details</label>
+                    <textarea id="workReasonDetails" name="workReasonDetails" placeholder="Additional details about the restoration work requiring content protection"></textarea>
+                </div>
+            </div>
+
+            <!-- Content Removal Details -->
+            <div class="form-section">
+                <h2 class="section-title">Content Removal Details</h2>
+                <div class="form-group">
+                    <label for="contentsInventory">Contents Inventory <span class="required">*</span></label>
+                    <textarea id="contentsInventory" name="contentsInventory" placeholder="Detailed list of items requiring removal (furniture, electronics, clothing, books, artwork, etc.)" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="valuableItems">High-Value or Fragile Items</label>
+                    <textarea id="valuableItems" name="valuableItems" placeholder="List any valuable, fragile, or special handling items (artwork, antiques, electronics, etc.)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="protectionNeeds">Content Protection Requirements</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="plasticWrap" name="protection[]" value="plastic-wrap">
+                            <label for="plasticWrap">Plastic Wrapping</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="boxPacking" name="protection[]" value="box-packing">
+                            <label for="boxPacking">Box Packing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="blanketsWrapping" name="protection[]" value="blankets-wrapping">
+                            <label for="blanketsWrapping">Blanket Wrapping</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="shrinkWrap" name="protection[]" value="shrink-wrap">
+                            <label for="shrinkWrap">Shrink Wrapping</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="clothingBoxes" name="protection[]" value="clothing-boxes">
+                            <label for="clothingBoxes">Wardrobe Boxes</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="specialHandling" name="protection[]" value="special-handling">
+                            <label for="specialHandling">Special Handling</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temporary Staging Location -->
+            <div class="form-section">
+                <h2 class="section-title">Temporary Staging Location</h2>
+                <div class="form-group">
+                    <label><strong>Where will contents be temporarily placed? <span class="required">*</span></strong></label>
+                    <div class="staging-options">
+                        <div class="staging-option">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="differentFloor" name="stagingLocation[]" value="different-floor" onchange="updateStagingDetails('different-floor')">
+                                <label for="differentFloor">Different floor within same property</label>
+                            </div>
+                            <textarea id="differentFloorDetails" name="differentFloorDetails" placeholder="Specify which floor and areas" style="margin-top: 5px; display: none;"></textarea>
+                        </div>
+
+                        <div class="staging-option">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="differentRoom" name="stagingLocation[]" value="different-room" onchange="updateStagingDetails('different-room')">
+                                <label for="differentRoom">Different room on same floor</label>
+                            </div>
+                            <textarea id="differentRoomDetails" name="differentRoomDetails" placeholder="Specify which rooms" style="margin-top: 5px; display: none;"></textarea>
+                        </div>
+
+                        <div class="staging-option">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="outdoorLocation" name="stagingLocation[]" value="outdoor-location" onchange="updateStagingDetails('outdoor-location')">
+                                <label for="outdoorLocation">Outdoor location (garage, shed, covered patio)</label>
+                            </div>
+                            <textarea id="outdoorLocationDetails" name="outdoorLocationDetails" placeholder="Describe outdoor staging area" style="margin-top: 5px; display: none;"></textarea>
+                        </div>
+
+                        <div class="staging-option">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="temporaryStaging" name="stagingLocation[]" value="temporary-staging" onchange="updateStagingDetails('temporary-staging')">
+                                <label for="temporaryStaging">Temporary staging area within property</label>
+                            </div>
+                            <textarea id="temporaryStagingDetails" name="temporaryStagingDetails" placeholder="Describe temporary staging setup" style="margin-top: 5px; display: none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="stagingDuration">Expected Staging Duration</label>
+                    <input type="text" id="stagingDuration" name="stagingDuration" placeholder="How long will contents remain in staging area? (e.g., 3-5 days, 1-2 weeks)">
+                </div>
+            </div>
+
+            <!-- Logistical Considerations -->
+            <div class="form-section">
+                <h2 class="section-title">Logistical Considerations</h2>
+                <div class="form-group">
+                    <label>Access Requirements</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="stairs" name="access[]" value="stairs">
+                            <label for="stairs">Stairs</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="elevators" name="access[]" value="elevators">
+                            <label for="elevators">Elevators</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="narrowPassages" name="access[]" value="narrow-passages">
+                            <label for="narrowPassages">Narrow Passages</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="longCarry" name="access[]" value="long-carry">
+                            <label for="longCarry">Long Carry Distances</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="limitedAccess" name="access[]" value="limited-access">
+                            <label for="limitedAccess">Limited Access Windows</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="equipmentNeeded" name="access[]" value="equipment-needed">
+                            <label for="equipmentNeeded">Special Equipment Needed</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="accessDetails">Access Details</label>
+                    <textarea id="accessDetails" name="accessDetails" placeholder="Describe any access challenges, equipment needs, or special considerations"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="workConstraints">Work Constraints & Coordination Requirements</label>
+                    <textarea id="workConstraints" name="workConstraints" placeholder="Timing constraints, coordination with other contractors, access limitations, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="preferredTiming">Preferred Work Timing</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="businessHours" name="timing[]" value="business-hours">
+                            <label for="businessHours">Business Hours</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="evenings" name="timing[]" value="evenings">
+                            <label for="evenings">Evenings</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="weekends" name="timing[]" value="weekends">
+                            <label for="weekends">Weekends</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="emergencyHours" name="timing[]" value="emergency-hours">
+                            <label for="emergencyHours">Emergency/After Hours</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Additional Information -->
+            <div class="form-section">
+                <h2 class="section-title">Additional Information</h2>
+                <div class="form-group">
+                    <label for="specialInstructions">Special Instructions or Concerns</label>
+                    <textarea id="specialInstructions" name="specialInstructions" placeholder="Any special handling requirements, concerns, or additional information"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="photoDocumentation">Photo Documentation Requirements</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="beforePhotos" name="photos[]" value="before-photos">
+                            <label for="beforePhotos">Before Photos Required</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="duringPhotos" name="photos[]" value="during-photos">
+                            <label for="duringPhotos">During Work Photos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="afterPhotos" name="photos[]" value="after-photos">
+                            <label for="afterPhotos">After Staging Photos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="inventoryPhotos" name="photos[]" value="inventory-photos">
+                            <label for="inventoryPhotos">Inventory Documentation Photos</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('intakeForm');
+            
+            // Basic validation
+            const requiredFields = form.querySelectorAll('[required]');
+            let allValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'red';
+                    allValid = false;
+                } else {
+                    field.style.borderColor = '#ccc';
+                }
+            });
+            
+            if (!allValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            alert('Thank you! Your pre-work content manipulation estimate request has been submitted successfully. We will contact you within 2 hours for urgent requests or within 24 hours for standard requests.');
+        }
+
+        function updateUrgency(selectedUrgency) {
+            const urgencyCheckboxes = ['sameDay', 'nextDay', 'within48hrs', 'withinWeek'];
+            
+            // Allow only one selection
+            urgencyCheckboxes.forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox.value !== selectedUrgency) {
+                    checkbox.checked = false;
+                }
+            });
+        }
+
+        function updateStagingDetails(stagingType) {
+            const checkbox = document.getElementById(stagingType);
+            const detailsField = document.getElementById(stagingType + 'Details');
+            
+            if (checkbox.checked) {
+                detailsField.style.display = 'block';
+                detailsField.focus();
+            } else {
+                detailsField.style.display = 'none';
+                detailsField.value = '';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+{
+  "estimate_number": "EST-202508-5709",
+  "estimate_date": "2025-08-05",
+  "company": {
+    "name": "JJL Contractor Inc.",
+    "address": "6517 Creek Run Dr",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(571) 365-5055",
+    "email": "jjpro715@outlook.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "15709 Rothschild Ct",
+    "city": "Haymarket",
+    "state": "VA",
+    "zip": "20169-6177",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "Comprehensive interior reconstruction project including drywall repair, complete interior painting, carpet replacement, and restoration services across 6 rooms. Project includes high ceiling work requiring specialized equipment, extensive fixture coordination, and comprehensive site protection for occupied residence. All work performed to current building codes and industry standards.",
+  "trades": [
+    {
+      "name": "Interior Reconstruction",
+      "note": "Room-by-room reconstruction work including Bedroom (combined main/subroom/bay), Living Room, Kitchen (combined main/bay), Entry/Foyer, Hallway, and Garage. All work performed to current IRC and Virginia building standards.",
+      "locations": [
+        {
+          "name": "Bedroom",
+          "note": "343.53 SF floor area, peaked/8' ceiling height. Combined main bedroom, subroom, and bay area with comprehensive flooring replacement.",
+          "showSubtotal": true,
+          "subtotal": 7388.32,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor Protection",
+                  "qty": 343.53,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Protective film installation and removal for occupied residence",
+                  "total_price": 257.65
+                },
+                {
+                  "name": "Detach & Reset Items",
+                  "qty": 5.0,
+                  "unit": "EA",
+                  "price": 85.0,
+                  "description": "Curtain/window drapery hardware (3 EA), recessed light fixture trim (1 EA), cold air return cover (1 EA)",
+                  "total_price": 425.0
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Drywall Repair & Integration",
+                  "qty": 192.0,
+                  "unit": "SF",
+                  "price": 4.95,
+                  "description": "1/2\" drywall installation on walls (96 SF) and ceiling (96 SF), taping, floating, and texture matching",
+                  "total_price": 950.4
+                },
+                {
+                  "name": "Primer Application",
+                  "qty": 192.0,
+                  "unit": "SF",
+                  "price": 1.45,
+                  "description": "High-quality primer application on all new and repaired drywall surfaces",
+                  "total_price": 278.4
+                },
+                {
+                  "name": "Wall Painting",
+                  "qty": 758.35,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on all walls",
+                  "total_price": 2047.55
+                },
+                {
+                  "name": "Ceiling Painting",
+                  "qty": 365.26,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on ceiling",
+                  "total_price": 986.2
+                },
+                {
+                  "name": "Carpet Removal",
+                  "qty": 343.53,
+                  "unit": "SF",
+                  "price": 1.55,
+                  "description": "Complete removal of existing carpet and padding",
+                  "total_price": 532.47
+                },
+                {
+                  "name": "Carpet Installation",
+                  "qty": 371.0,
+                  "unit": "SF",
+                  "price": 5.15,
+                  "description": "New carpet installation with premium padding and professional stretch-in method (includes 8% waste factor)",
+                  "total_price": 1910.65
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Living Room",
+          "note": "541.93 SF floor area, 18'3\" high ceiling requiring specialized scaffolding equipment and safety protocols per OSHA 1926.451",
+          "showSubtotal": true,
+          "subtotal": 9751.28,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor Protection",
+                  "qty": 541.93,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Protective film installation and removal for occupied residence",
+                  "total_price": 406.45
+                },
+                {
+                  "name": "Large Fixture Protection",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 45.0,
+                  "description": "Mask and cover large ornate light fixtures during construction",
+                  "total_price": 90.0
+                },
+                {
+                  "name": "Detach & Reset Items",
+                  "qty": 2.0,
+                  "unit": "EA",
+                  "price": 85.0,
+                  "description": "Large curtain and window drapery hardware for 2-story height",
+                  "total_price": 170.0
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Drywall Repair & Integration",
+                  "qty": 32.0,
+                  "unit": "SF",
+                  "price": 4.95,
+                  "description": "1/2\" drywall installation on ceiling (32 SF), taping, floating, and texture matching",
+                  "total_price": 158.4
+                },
+                {
+                  "name": "Primer Application",
+                  "qty": 32.0,
+                  "unit": "SF",
+                  "price": 1.45,
+                  "description": "High-quality primer application on all new and repaired drywall surfaces",
+                  "total_price": 46.4
+                },
+                {
+                  "name": "High Wall Painting",
+                  "qty": 1659.0,
+                  "unit": "SF",
+                  "price": 3.85,
+                  "description": "Specialized wall painting for 18'3\" height using professional scaffolding and safety equipment",
+                  "total_price": 6387.15
+                },
+                {
+                  "name": "High Ceiling Painting",
+                  "qty": 541.93,
+                  "unit": "SF",
+                  "price": 3.85,
+                  "description": "Specialized ceiling painting for 18'3\" height using professional scaffolding and safety equipment",
+                  "total_price": 2086.43
+                },
+                {
+                  "name": "Height Premium Labor",
+                  "qty": 541.93,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Additional labor costs for elevated work and safety measures",
+                  "total_price": 406.45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Kitchen",
+          "note": "289.74 SF floor area, 8' ceiling height. Combined main kitchen and bay area with careful attention to fixture protection.",
+          "showSubtotal": true,
+          "subtotal": 3011.74,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor Protection",
+                  "qty": 289.74,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Protective film installation and removal for occupied residence",
+                  "total_price": 217.31
+                },
+                {
+                  "name": "Large Fixture Protection",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 45.0,
+                  "description": "Mask and cover large light fixture during construction",
+                  "total_price": 45.0
+                },
+                {
+                  "name": "Detach & Reset Items",
+                  "qty": 7.0,
+                  "unit": "EA",
+                  "price": 85.0,
+                  "description": "Recessed light trim (6 EA) and window drapery hardware (1 EA)",
+                  "total_price": 595.0
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Drywall Repair & Integration",
+                  "qty": 24.0,
+                  "unit": "SF",
+                  "price": 4.95,
+                  "description": "1/2\" drywall installation on walls (12 SF) and ceiling (12 SF), taping, floating, and texture matching",
+                  "total_price": 118.8
+                },
+                {
+                  "name": "Primer Application",
+                  "qty": 24.0,
+                  "unit": "SF",
+                  "price": 1.45,
+                  "description": "High-quality primer application on all new and repaired drywall surfaces",
+                  "total_price": 34.8
+                },
+                {
+                  "name": "Wall Painting",
+                  "qty": 451.31,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on walls",
+                  "total_price": 1218.54
+                },
+                {
+                  "name": "Ceiling Painting",
+                  "qty": 289.74,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on ceiling",
+                  "total_price": 782.3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Entry/Foyer",
+          "note": "99.83 SF floor area, 18'3\" high ceiling requiring specialized scaffolding equipment and safety protocols per OSHA 1926.451",
+          "showSubtotal": true,
+          "subtotal": 2930.98,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor Protection",
+                  "qty": 99.83,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Protective film installation and removal for occupied residence",
+                  "total_price": 74.87
+                },
+                {
+                  "name": "Large Fixture Protection",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 45.0,
+                  "description": "Mask and cover large ornate light fixture during construction",
+                  "total_price": 45.0
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "High Wall Painting",
+                  "qty": 610.88,
+                  "unit": "SF",
+                  "price": 3.85,
+                  "description": "Specialized wall painting for 18'3\" height using professional scaffolding and safety equipment",
+                  "total_price": 2351.89
+                },
+                {
+                  "name": "High Ceiling Painting",
+                  "qty": 99.83,
+                  "unit": "SF",
+                  "price": 3.85,
+                  "description": "Specialized ceiling painting for 18'3\" height using professional scaffolding and safety equipment",
+                  "total_price": 384.35
+                },
+                {
+                  "name": "Height Premium Labor",
+                  "qty": 99.83,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Additional labor costs for elevated work and safety measures",
+                  "total_price": 74.87
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hallway",
+          "note": "431.33 SF floor area, 8' ceiling height with extensive fixture coordination requirements",
+          "showSubtotal": true,
+          "subtotal": 4541.11,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor Protection",
+                  "qty": 431.33,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Protective film installation and removal for occupied residence",
+                  "total_price": 323.5
+                },
+                {
+                  "name": "Large Fixture Protection",
+                  "qty": 1.0,
+                  "unit": "EA",
+                  "price": 45.0,
+                  "description": "Mask and cover large ornate light fixture during construction",
+                  "total_price": 45.0
+                },
+                {
+                  "name": "Detach & Reset Items",
+                  "qty": 15.0,
+                  "unit": "EA",
+                  "price": 85.0,
+                  "description": "Recessed light fixture trim (6 EA), Heat/AC registers (4 EA), cold air return covers (2 EA), smoke detectors (2 EA), curtain/window hardware (1 EA)",
+                  "total_price": 1275.0
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Wall Painting",
+                  "qty": 641.86,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on walls",
+                  "total_price": 1733.02
+                },
+                {
+                  "name": "Ceiling Painting",
+                  "qty": 431.33,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on ceiling",
+                  "total_price": 1164.59
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Garage",
+          "note": "429.02 SF floor area, 8' ceiling height. 2-car garage with special attention to garage door hardware and opener units.",
+          "showSubtotal": true,
+          "subtotal": 3342.52,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Floor Protection",
+                  "qty": 429.02,
+                  "unit": "SF",
+                  "price": 0.75,
+                  "description": "Protective film installation and removal for occupied residence",
+                  "total_price": 321.77
+                }
+              ]
+            },
+            {
+              "name": "Construction",
+              "items": [
+                {
+                  "name": "Drywall Repair & Integration",
+                  "qty": 48.0,
+                  "unit": "SF",
+                  "price": 4.95,
+                  "description": "1/2\" drywall installation on ceiling (48 SF), taping, floating, and texture matching",
+                  "total_price": 237.6
+                },
+                {
+                  "name": "Primer Application",
+                  "qty": 48.0,
+                  "unit": "SF",
+                  "price": 1.45,
+                  "description": "High-quality primer application on all new and repaired drywall surfaces",
+                  "total_price": 69.6
+                },
+                {
+                  "name": "Wall Painting",
+                  "qty": 576.0,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on walls, careful work around garage door supports",
+                  "total_price": 1555.2
+                },
+                {
+                  "name": "Ceiling Painting",
+                  "qty": 429.02,
+                  "unit": "SF",
+                  "price": 2.7,
+                  "description": "Two-coat premium paint application on ceiling",
+                  "total_price": 1158.35
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Project Management & Site Services",
+      "note": "Comprehensive project coordination, protection services, and cleanup management for occupied residence",
+      "locations": [
+        {
+          "name": "Project Common Items",
+          "note": "Project-wide services including coordination, protection, cleanup, and debris management",
+          "showSubtotal": true,
+          "subtotal": 2105.67,
+          "categories": [
+            {
+              "name": "Pre-Construction",
+              "items": [
+                {
+                  "name": "Material Delivery Coordination",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 150.0,
+                  "description": "Scheduled delivery management to minimize disruption in occupied home",
+                  "total_price": 150.0
+                },
+                {
+                  "name": "Daily Construction Cleanup",
+                  "qty": 12.0,
+                  "unit": "DAY",
+                  "price": 20.0,
+                  "description": "Ongoing site maintenance and safety protocols for occupied residence including dust control per OSHA 1910.1000",
+                  "total_price": 240.0
+                },
+                {
+                  "name": "Scaffold Rental & Setup",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 275.0,
+                  "description": "Professional scaffolding rental and setup for high-ceiling work (18'3\") compliant with OSHA 1926.451 standards",
+                  "total_price": 275.0
+                }
+              ]
+            },
+            {
+              "name": "Post-Construction",
+              "items": [
+                {
+                  "name": "Construction Debris Disposal",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 870.0,
+                  "description": "Professional waste management including 10-yard dumpster rental, material segregation, and proper disposal at authorized facilities for 4.5 cubic yards total waste",
+                  "total_price": 870.0
+                },
+                {
+                  "name": "Professional Carpet Cleaning",
+                  "qty": 431.33,
+                  "unit": "SF",
+                  "price": 0.5,
+                  "description": "Professional deep cleaning and deodorizing service for hallway carpet as specified for odor control",
+                  "total_price": 215.67
+                },
+                {
+                  "name": "Final Construction Cleaning",
+                  "qty": 1.0,
+                  "unit": "LS",
+                  "price": 355.0,
+                  "description": "Comprehensive post-construction cleaning including detailed dust removal, surface preparation, and final quality preparation",
+                  "total_price": 355.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 33071.62,
+  "overhead": {
+    "rate": 17.0,
+    "amount": 5622.18
+  },
+  "profit": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "sales_tax": {
+    "amount": 457.43
+  },
+  "overhead_rate": 17.0,
+  "profit_rate": 0.0,
+  "sales_tax_rate": 6.0,
+  "total": 39151.23,
+  "bottom_note": "<strong>Overhead & Profit:</strong> 17% applied to cover project management, supervision, quality control, and coordination of multiple trades including drywall, painting, flooring, and fixture work. <strong>Sales Tax:</strong> Virginia rate of 6.0% applied to materials only; labor is tax-exempt for residential construction per Virginia state tax code.",
+  "disclaimer": "<strong>Scope of Work:</strong> This estimate covers comprehensive interior reconstruction including drywall repair, interior painting, carpet replacement, and all associated restoration services. All materials will meet \"like kind and quality\" standards. <strong>Warranty:</strong> 2-year workmanship warranty on all installation and repair work. <strong>Timeline:</strong> Project estimated at 12-18 business days depending on material delivery and drying times. <strong>Terms:</strong> Estimate valid for 30 days. Additional work beyond this scope will require separate pricing. Payment terms available upon contract execution.",
+  "overhead_amount": 5622.18,
+  "profit_amount": 0.0,
+  "sales_tax_amount": 457.43,
+  "discount": 0.0
+}

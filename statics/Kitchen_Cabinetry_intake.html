@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Cabinet Estimate Intake Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #333;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        .form-content {
+            padding: 15px;
+        }
+
+        .form-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-row-triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+            color: #bbb;
+        }
+
+        input::-moz-placeholder, textarea::-moz-placeholder {
+            color: #bbb;
+            opacity: 1;
+        }
+
+        input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+            color: #bbb;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 4px;
+            margin-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 3px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .measurements-section {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        .measurement-group {
+            margin-bottom: 8px;
+        }
+
+        .measurement-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .optional-note {
+            font-style: italic;
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .submit-section {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .submit-btn {
+            background: #333;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #555;
+        }
+
+        @media (max-width: 768px) {
+            .form-row, .form-row-triple {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-content {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .submit-section {
+                display: none;
+            }
+            .container {
+                border: none;
+                box-shadow: none;
+            }
+            .header {
+                padding: 10px;
+            }
+            .form-content {
+                padding: 10px;
+            }
+            .form-section {
+                margin-bottom: 8px;
+                padding: 6px;
+                page-break-inside: avoid;
+            }
+
+            textarea {
+                min-height: 30px;
+            }
+            .checkbox-group {
+                gap: 2px;
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .checkbox-item {
+                padding: 1px;
+                font-size: 0.75rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .form-row-triple {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            /* Page footer for print */
+            @page {
+                margin: 1in 1.5in 0.8in 1.5in;
+                @bottom-left {
+                    content: "Page " counter(page) " of " counter(pages);
+                    font-size: 12px;
+                    font-family: Arial, sans-serif;
+                    color: #000;
+                    margin-bottom: 0.2in;
+                    margin-left: 0.5in;
+                }
+                @bottom-right {
+                    content: "Kitchen Cabinet Intake Form";
+                    font-size: 12px;
+                    font-family: Arial, sans-serif;
+                    color: #000;
+                    margin-bottom: 0.2in;
+                    margin-right: 0.5in;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Kitchen Cabinet Estimate Data Submission Template</h1>
+            <p><strong>(Essential Information for Estimate Generation)</strong></p>
+            <p class="subtitle">Complete this minimal form to provide project data that cannot be determined from photos.</p>
+        </div>
+
+        <form class="form-content" id="intakeForm">
+            <!-- Company Information -->
+            <div class="form-section">
+                <h2 class="section-title">Company Information</h2>
+                <div class="form-group">
+                    <label for="companyName">Company Name <span class="required">*</span></label>
+                    <input type="text" id="companyName" name="companyName" placeholder="Contracting or construction company name" required>
+                </div>
+            </div>
+
+            <!-- Project Information -->
+            <div class="form-section">
+                <h2 class="section-title">Project Information</h2>
+                <div class="form-group">
+                    <label for="propertyAddress">Property Address <span class="required">*</span></label>
+                    <textarea id="propertyAddress" name="propertyAddress" placeholder="Full property address including city, state, zip code" required></textarea>
+                </div>
+            </div>
+
+            <!-- Photo Documentation Requirements -->
+            <div class="form-section">
+                <h2 class="section-title">Photo Documentation Requirements</h2>
+                
+                <div class="form-group">
+                    <label><strong>Required Kitchen Photos <span class="required">*</span></strong></label>
+                    <div style="background: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin-top: 5px;">
+                        <p><strong>Please provide clear photos of each kitchen wall/surface:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li><strong>Wall 1:</strong> Photo showing all cabinets and appliances on the first wall</li>
+                            <li><strong>Wall 2:</strong> Photo showing all cabinets and appliances on the second wall</li>
+                            <li><strong>Wall 3:</strong> Photo showing all cabinets and appliances on the third wall</li>
+                            <li><strong>Wall 4:</strong> Photo showing all cabinets and appliances on the fourth wall (if applicable)</li>
+                            <li><strong>Island/Peninsula:</strong> Photo from multiple angles if present</li>
+                            <li><strong>Overall View:</strong> Wide-angle photo showing the entire kitchen layout</li>
+                        </ul>
+                        
+                        <p style="margin-top: 10px;"><strong>Photo Requirements:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>Take photos straight-on to each wall (not at an angle)</li>
+                            <li>Ensure all cabinets, appliances, and hardware are clearly visible</li>
+                            <li>Include photos of any existing damage or wear</li>
+                            <li>Take photos during good lighting conditions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="photoSubmissionMethod">Photo Submission Method</label>
+                    <textarea id="photoSubmissionMethod" name="photoSubmissionMethod" placeholder="How will photos be submitted? (Google Drive link, email, file sharing service, etc.)"></textarea>
+                </div>
+            </div>
+
+            <!-- Kitchen Appliances -->
+            <div class="form-section">
+                <h2 class="section-title">Kitchen Appliances & Equipment</h2>
+                
+                <div class="form-group">
+                    <label for="existingAppliances">Existing Appliances in Kitchen</label>
+                    <textarea id="existingAppliances" name="existingAppliances" placeholder="List all appliances currently in the kitchen (e.g., refrigerator, dishwasher, range/cooktop, oven, microwave, garbage disposal, etc.)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Built-in Appliances</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="builtInRefrigerator" name="builtInAppliances[]" value="refrigerator">
+                            <label for="builtInRefrigerator">Built-in Refrigerator</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="builtInDishwasher" name="builtInAppliances[]" value="dishwasher">
+                            <label for="builtInDishwasher">Built-in Dishwasher</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="builtInMicrowave" name="builtInAppliances[]" value="microwave">
+                            <label for="builtInMicrowave">Built-in Microwave</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="builtInOven" name="builtInAppliances[]" value="oven">
+                            <label for="builtInOven">Built-in Oven</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="cooktop" name="builtInAppliances[]" value="cooktop">
+                            <label for="cooktop">Cooktop</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rangeHood" name="builtInAppliances[]" value="range-hood">
+                            <label for="rangeHood">Range Hood</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="garbageDisposal" name="builtInAppliances[]" value="garbage-disposal">
+                            <label for="garbageDisposal">Garbage Disposal</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="wineRefrigerator" name="builtInAppliances[]" value="wine-refrigerator">
+                            <label for="wineRefrigerator">Wine Refrigerator</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="applianceNotes">Appliance Notes</label>
+                    <textarea id="applianceNotes" name="applianceNotes" placeholder="Any special notes about appliances (dimensions, models, integration requirements, etc.)"></textarea>
+                </div>
+            </div>
+
+            <!-- Measurements -->
+            <div class="form-section">
+                <h2 class="section-title">Measurements</h2>
+                
+                <div class="measurements-section">
+                    <h3 style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Kitchen Dimensions:</h3>
+                    
+                    <div class="form-row-triple">
+                        <div class="measurement-group">
+                            <label for="kitchenLength">Length</label>
+                            <div class="measurement-row">
+                                <input type="text" id="kitchenLength" name="kitchenLength" placeholder="Enter feet">
+                                <span style="font-size: 0.8rem; color: #666;">feet</span>
+                            </div>
+                        </div>
+                        <div class="measurement-group">
+                            <label for="kitchenWidth">Width</label>
+                            <div class="measurement-row">
+                                <input type="text" id="kitchenWidth" name="kitchenWidth" placeholder="Enter feet">
+                                <span style="font-size: 0.8rem; color: #666;">feet</span>
+                            </div>
+                        </div>
+                        <div class="measurement-group">
+                            <label for="ceilingHeight">Ceiling Height</label>
+                            <div class="measurement-row">
+                                <input type="text" id="ceilingHeight" name="ceilingHeight" placeholder="Enter feet">
+                                <span style="font-size: 0.8rem; color: #666;">feet</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="measurements-section" style="margin-top: 10px;">
+                    <h3 style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Linear Footage (if measured):</h3>
+                    
+                    <div class="form-row">
+                        <div class="measurement-group">
+                            <label for="baseCabinetsLF">Base Cabinets</label>
+                            <div class="measurement-row">
+                                <input type="text" id="baseCabinetsLF" name="baseCabinetsLF" placeholder="Linear feet">
+                                <span style="font-size: 0.8rem; color: #666;">LF</span>
+                            </div>
+                        </div>
+                        <div class="measurement-group">
+                            <label for="wallCabinetsLF">Wall Cabinets</label>
+                            <div class="measurement-row">
+                                <input type="text" id="wallCabinetsLF" name="wallCabinetsLF" placeholder="Linear feet">
+                                <span style="font-size: 0.8rem; color: #666;">LF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="measurements-section" style="margin-top: 10px;">
+                    <h3 style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">Island Dimensions (if applicable):</h3>
+                    
+                    <div class="form-row">
+                        <div class="measurement-group">
+                            <label for="islandLength">Island Length</label>
+                            <div class="measurement-row">
+                                <input type="text" id="islandLength" name="islandLength" placeholder="Enter feet">
+                                <span style="font-size: 0.8rem; color: #666;">feet</span>
+                            </div>
+                        </div>
+                        <div class="measurement-group">
+                            <label for="islandWidth">Island Width</label>
+                            <div class="measurement-row">
+                                <input type="text" id="islandWidth" name="islandWidth" placeholder="Enter feet">
+                                <span style="font-size: 0.8rem; color: #666;">feet</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Working Conditions -->
+            <div class="form-section">
+                <h2 class="section-title">Working Conditions</h2>
+                
+                <div class="form-group">
+                    <label><strong>Property Access:</strong></label>
+                    
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-weight: normal; margin-bottom: 3px;">Building Type:</label>
+                        <div class="checkbox-group" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="house" name="buildingType[]" value="house" onchange="updateBuildingType('house')">
+                                <label for="house">House</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="townhouse" name="buildingType[]" value="townhouse" onchange="updateBuildingType('townhouse')">
+                                <label for="townhouse">Townhouse</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="condo" name="buildingType[]" value="condo" onchange="updateBuildingType('condo')">
+                                <label for="condo">Condo</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="apartment" name="buildingType[]" value="apartment" onchange="updateBuildingType('apartment')">
+                                <label for="apartment">Apartment</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-weight: normal; margin-bottom: 3px;">Kitchen Level:</label>
+                        <div class="checkbox-group" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="firstFloor" name="kitchenLevel[]" value="1st-floor" onchange="updateKitchenLevel('1st-floor')">
+                                <label for="firstFloor">1st Floor</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="secondFloor" name="kitchenLevel[]" value="2nd-floor" onchange="updateKitchenLevel('2nd-floor')">
+                                <label for="secondFloor">2nd Floor</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="basement" name="kitchenLevel[]" value="basement" onchange="updateKitchenLevel('basement')">
+                                <label for="basement">Basement</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="otherLevel" name="kitchenLevel[]" value="other" onchange="updateKitchenLevel('other')">
+                                <label for="otherLevel">Other</label>
+                            </div>
+                        </div>
+                        <input type="text" id="otherLevelDetails" name="otherLevelDetails" placeholder="Specify other level" style="margin-top: 5px; display: none;">
+                    </div>
+
+                    <div>
+                        <label style="font-weight: normal; margin-bottom: 3px;">Access Challenges:</label>
+                        <div class="checkbox-group" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="stairsAccess" name="accessChallenges[]" value="stairs">
+                                <label for="stairsAccess">Stairs</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="narrowAccess" name="accessChallenges[]" value="narrow-access">
+                                <label for="narrowAccess">Narrow access</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="noneAccess" name="accessChallenges[]" value="none">
+                                <label for="noneAccess">None</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Occupancy:</strong></label>
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-weight: normal; margin-bottom: 3px;">Property Status:</label>
+                        <div class="checkbox-group" style="grid-template-columns: 1fr 1fr;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="occupied" name="propertyStatus[]" value="occupied" onchange="updatePropertyStatus('occupied')">
+                                <label for="occupied">Occupied</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="vacant" name="propertyStatus[]" value="vacant" onchange="updatePropertyStatus('vacant')">
+                                <label for="vacant">Vacant</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="form-section">
+                <h2 class="section-title">Timeline <span class="optional-note">(Optional - will automatically calculate standard timeline if not specified)</span></h2>
+                
+                <div class="form-group">
+                    <label><strong>Special Timeline Needs:</strong></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="standardTimeline" name="timelineNeeds[]" value="standard-timeline" onchange="updateTimelineNeeds('standard-timeline')">
+                            <label for="standardTimeline">Standard timeline (AI calculated)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rushCompletion" name="timelineNeeds[]" value="rush-completion" onchange="updateTimelineNeeds('rush-completion')">
+                            <label for="rushCompletion">Rush completion needed (+25% labor cost)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="specificDeadline" name="timelineNeeds[]" value="specific-deadline" onchange="updateTimelineNeeds('specific-deadline')">
+                            <label for="specificDeadline">Specific deadline</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tradeCoordination" name="timelineNeeds[]" value="trade-coordination" onchange="updateTimelineNeeds('trade-coordination')">
+                            <label for="tradeCoordination">Coordination with other trades</label>
+                        </div>
+                    </div>
+                    <textarea id="timelineDetails" name="timelineDetails" placeholder="Specify deadline date or coordination requirements" style="margin-top: 8px; display: none;"></textarea>
+                </div>
+            </div>
+
+            <!-- Special Requirements -->
+            <div class="form-section">
+                <h2 class="section-title">Special Requirements <span class="optional-note">(Optional)</span></h2>
+                
+                <div class="form-group">
+                    <label><strong>Special Considerations:</strong></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="customSizes" name="specialConsiderations[]" value="custom-sizes">
+                            <label for="customSizes">Custom/non-standard cabinet sizes</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="complexHardware" name="specialConsiderations[]" value="complex-hardware">
+                            <label for="complexHardware">Complex hardware requirements</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="accessibilityNeeds" name="specialConsiderations[]" value="accessibility-needs">
+                            <label for="accessibilityNeeds">Accessibility needs</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="otherConsiderations" name="specialConsiderations[]" value="other" onchange="updateSpecialConsiderations('other')">
+                            <label for="otherConsiderations">Other</label>
+                        </div>
+                    </div>
+                    <input type="text" id="otherConsiderationsDetails" name="otherConsiderationsDetails" placeholder="Specify other special considerations" style="margin-top: 5px; display: none;">
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="form-section">
+                <h2 class="section-title">Notes <span class="optional-note">(Optional)</span></h2>
+                
+                <div class="form-group">
+                    <label for="specialInstructions">Special Instructions</label>
+                    <textarea id="specialInstructions" name="specialInstructions" placeholder="Any special instructions or requirements"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="siteChallenges">Site Challenges</label>
+                    <textarea id="siteChallenges" name="siteChallenges" placeholder="Describe any site challenges or constraints"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('intakeForm');
+            
+            // Basic validation
+            const requiredFields = form.querySelectorAll('[required]');
+            let allValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'red';
+                    allValid = false;
+                } else {
+                    field.style.borderColor = '#ccc';
+                }
+            });
+            
+            if (!allValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            alert('Thank you! Your kitchen cabinet estimate data has been submitted successfully. We will analyze the information and provide a detailed estimate.');
+        }
+
+        function updateBuildingType(selectedType) {
+            const buildingTypes = ['house', 'townhouse', 'condo', 'apartment'];
+            buildingTypes.forEach(type => {
+                if (type !== selectedType) {
+                    document.getElementById(type).checked = false;
+                }
+            });
+        }
+
+        function updateKitchenLevel(selectedLevel) {
+            const levels = ['firstFloor', 'secondFloor', 'basement', 'otherLevel'];
+            const otherDetails = document.getElementById('otherLevelDetails');
+            
+            levels.forEach(level => {
+                const checkbox = document.getElementById(level);
+                if (checkbox.value !== selectedLevel) {
+                    checkbox.checked = false;
+                }
+            });
+            
+            if (selectedLevel === 'other') {
+                otherDetails.style.display = 'block';
+                otherDetails.focus();
+            } else {
+                otherDetails.style.display = 'none';
+                otherDetails.value = '';
+            }
+        }
+
+        function updatePropertyStatus(selectedStatus) {
+            const statuses = ['occupied', 'vacant'];
+            statuses.forEach(status => {
+                if (status !== selectedStatus) {
+                    document.getElementById(status).checked = false;
+                }
+            });
+        }
+
+        function updateTimelineNeeds(selectedNeed) {
+            const timelineDetails = document.getElementById('timelineDetails');
+            
+            if (selectedNeed === 'specific-deadline' || selectedNeed === 'trade-coordination') {
+                timelineDetails.style.display = 'block';
+                timelineDetails.focus();
+            } else {
+                timelineDetails.style.display = 'none';
+                timelineDetails.value = '';
+            }
+        }
+
+        function updateSpecialConsiderations(selectedOption) {
+            const otherDetails = document.getElementById('otherConsiderationsDetails');
+            
+            if (selectedOption === 'other') {
+                otherDetails.style.display = 'block';
+                otherDetails.focus();
+            } else {
+                otherDetails.style.display = 'none';
+                otherDetails.value = '';
+            }
+        }
+    </script>
+</body>
+</html>

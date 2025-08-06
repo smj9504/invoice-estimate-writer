@@ -1,0 +1,690 @@
+{
+  "estimate_number": "EST-202506-3958",
+  "estimate_date": "2025-06-08",
+  "company": {
+    "name": "NuvoHaus Home Improvement, Inc.",
+    "address": "14641 Lee Hwy, STE 109",
+    "city": "Centreville",
+    "state": "Virginia",
+    "zip": "20121",
+    "phone": "(703) 962-0745",
+    "email": "nuvohausva@gmail.com",
+    "logo": ""
+  },
+  "client": {
+    "name": "Byung Sung Son",
+    "address": "3958 Collis Oak Ct",
+    "city": "Fairfax",
+    "state": "VA",
+    "zip": "22033",
+    "phone": ""
+  },
+  "top_note": "This estimate incorporates costs necessary to comply with prevailing building codes (IRC, IBC) and safety standards (OSHA). \nAll work is designed to meet or exceed minimum requirements for structural integrity, weather protection, and worker safety. \n\nCompliance with IRC R506.1 (subfloor preparation), IRC R702.3.8 (drywall finishing), IRC R702.5 (trim installation), IRC M1305.1.3 (appliance enclosure), and OSHA 1926.25 (housekeeping) is explicitly detailed.",
+  "bottom_note": "A standard industry overhead and profit margin of 20% is applied to cover general operating expenses, administrative costs, insurance, taxes, project management, and to provide a reasonable return for the contractor's expertise, risk, and service guarantees. This percentage is consistent with industry standards for comprehensive residential restoration projects involving multiple trades, code compliance coordination, and insurance claim management. This rate ensures proper project supervision, quality control, and contractor liability coverage essential for insurance work.\n\n- Project Management (8%): Coordination of multiple trades across 5 basement locations, scheduling, permits, and quality control supervision required for restoration work\n- Business Operations (7%): Insurance, bonding, licensing, administrative costs\n- Risk Management (3%): Liability coverage for structural work, code compliance verification, and warranty obligations per Virginia restoration standards\n- Profit (2%): Fair market return enabling continued service capability and warranty support per Xactimate and RSMeans restoration benchmarks",
+  "disclaimer": "This estimate reflects minimum code-compliant restoration to pre-loss condition. Any reduction in scope may result in:\n\n- Building code violations\n- Safety hazards\n- Future liability exposure\n- Incomplete restoration requiring additional claims\n\nAll pricing reflects competitive market rates with supporting documentation available upon request.",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "BASEMENT",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 274.69,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "Plastic sheeting and barriers per IICRC S500 standards"
+        },
+        {
+          "name": "R-11 Batt Insulation Installation",
+          "qty": 264.0,
+          "unit": "SF",
+          "price": 2.85,
+          "dec": "Replacement per IRC R702.7 - insurance pre-approved quantity"
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 264.0,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "Replacement per IRC R702.3 proper installation specifications"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 264.0,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Joint treatment per IRC R702.3.8 - three coats minimum"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 741.47,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Surface preparation per IRC R702.3.8 - PVA primer application"
+        },
+        {
+          "name": "Paint Walls and Ceiling 2 Coats",
+          "qty": 741.47,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Two-coat system per IRC R702.3.8 for moisture protection"
+        },
+        {
+          "name": "Snaplock Laminate Flooring",
+          "qty": 290.0,
+          "unit": "SF",
+          "price": 4.25,
+          "dec": "LKQ replacement with 5.5% waste factor"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 56.9,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Complete replacement per IRC R702.5 continuous trim requirement"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 56.9,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": ""
+        },
+        {
+          "name": "Paint Baseboard 2 Coats",
+          "qty": 56.9,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Electrical Outlet Switch Detach Reset",
+          "qty": 8.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Safe construction access per NEC and OSHA standards"
+        },
+        {
+          "name": "Door Undercut",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Flooring clearance per manufacturer specifications"
+        },
+        {
+          "name": "Door Casing Detach Reset",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Required for flooring and baseboard installation"
+        },
+        {
+          "name": "Prime Door Casing",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 1.5,
+          "dec": "Surface preparation for paint adhesion"
+        },
+        {
+          "name": "Paint Door Casing 2 Coats",
+          "qty": 42.0,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Color matching to adjacent finish per LKQ standards"
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 274.69,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "Post-construction cleanup for habitability"
+        }
+      ],
+      "subtotal": 7606.37
+    },
+    {
+      "title": "CLOSET_UNDER_STAIRS",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 39.72,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "Protective barriers during construction"
+        },
+        {
+          "name": "Insulation Removal",
+          "qty": 15.0,
+          "unit": "SF",
+          "price": 0.95,
+          "dec": "Removal of remaining damaged insulation"
+        },
+        {
+          "name": "R-11 Batt Insulation Installation",
+          "qty": 153.26,
+          "unit": "SF",
+          "price": 2.85,
+          "dec": "Complete installation per IRC R702.7"
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 153.26,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "Complete wall replacement per IRC R702.3"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 153.26,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Joint treatment per IRC R702.3.8"
+        },
+        {
+          "name": "Prime Walls",
+          "qty": 153.26,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": ""
+        },
+        {
+          "name": "Paint Walls 2 Coats",
+          "qty": 153.26,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": ""
+        },
+        {
+          "name": "Snaplock Laminate Flooring",
+          "qty": 42.0,
+          "unit": "SF",
+          "price": 4.25,
+          "dec": "LKQ flooring with 5.5% waste factor"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 26.28,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Complete replacement per IRC R702.5"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 26.28,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Surface preparation per IRC R702.3.8"
+        },
+        {
+          "name": "Paint Baseboard 2 Coats",
+          "qty": 26.28,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Door Undercut",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Flooring clearance requirement"
+        },
+        {
+          "name": "Door Casing Detach Reset",
+          "qty": 14.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Required for flooring and trim installation"
+        },
+        {
+          "name": "Prime Door Casing",
+          "qty": 14.0,
+          "unit": "LF",
+          "price": 1.5,
+          "dec": "Surface preparation"
+        },
+        {
+          "name": "Paint Door Casing 2 Coats",
+          "qty": 14.0,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Color matching finish"
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 39.72,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "Post-construction cleanup"
+        }
+      ],
+      "subtotal": 2547.1
+    },
+    {
+      "title": "HALLWAY",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 79.49,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "Protective barriers during construction"
+        },
+        {
+          "name": "R-11 Batt Insulation Installation",
+          "qty": 20.0,
+          "unit": "SF",
+          "price": 2.85,
+          "dec": "Insurance pre-approved quantity per IRC R702.7"
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 20.0,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "Replacement per IRC R702.3"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 20.0,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Joint treatment per IRC R702.3.8"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 360.69,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Complete area priming for color uniformity"
+        },
+        {
+          "name": "Paint Walls and Ceiling 2 Coats",
+          "qty": 360.69,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": "Two-coat system for proper finish"
+        },
+        {
+          "name": "Snaplock Laminate Flooring",
+          "qty": 84.0,
+          "unit": "SF",
+          "price": 4.25,
+          "dec": "LKQ flooring with 5.5% waste factor"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 34.31,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Complete replacement per IRC R702.5"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 34.31,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Surface preparation per IRC R702.3.8"
+        },
+        {
+          "name": "Paint Baseboard 2 Coats",
+          "qty": 34.31,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Electrical Outlet Switch Detach Reset",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Construction access per NEC standards"
+        },
+        {
+          "name": "Door Undercut",
+          "qty": 4.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Flooring clearance requirement"
+        },
+        {
+          "name": "Door Casing Detach Reset",
+          "qty": 28.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Required for flooring installation"
+        },
+        {
+          "name": "Prime Door Casing",
+          "qty": 28.0,
+          "unit": "LF",
+          "price": 1.5,
+          "dec": "Surface preparation"
+        },
+        {
+          "name": "Paint Door Casing 2 Coats",
+          "qty": 28.0,
+          "unit": "LF",
+          "price": 2.0,
+          "dec": "Color matching finish"
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 79.49,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "Post-construction cleanup"
+        }
+      ],
+      "subtotal": 2666.14
+    },
+    {
+      "title": "BATHROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Surface Protection",
+          "qty": 33.93,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "Protective barriers during construction"
+        },
+        {
+          "name": "Tile Removal",
+          "qty": 33.93,
+          "unit": "SF",
+          "price": 3.25,
+          "dec": "IRC R702.3.1 requires proper substrate preparation. Installing flooring over existing tile creates height differential violations and potential moisture entrapment per IRC R702.3.5."
+        },
+        {
+          "name": "1/2 Drywall Installation",
+          "qty": 181.53,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "Replacement per IRC R702.3"
+        },
+        {
+          "name": "Drywall Tape and Blend",
+          "qty": 181.53,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Joint treatment per IRC R702.3.8"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 215.46,
+          "unit": "SF",
+          "price": 1.35,
+          "dec": "Moisture-resistant primer required in bathroom per IRC R702.3.8. Premium pricing for humidity-resistant products."
+        },
+        {
+          "name": "Paint Walls and Ceiling 2 Coats",
+          "qty": 215.46,
+          "unit": "SF",
+          "price": 2.25,
+          "dec": "Moisture-resistant paint system required for bathroom environment. Premium pricing reflects specialized coating."
+        },
+        {
+          "name": "Moisture Barrier Underlayment",
+          "qty": 35.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Waterproof system per IRC R702.5.1"
+        },
+        {
+          "name": "Snaplock Laminate Flooring",
+          "qty": 35.0,
+          "unit": "SF",
+          "price": 4.45,
+          "dec": "LKQ flooring with bathroom premium and waste"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 22.33,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Complete replacement per IRC R702.5"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 22.33,
+          "unit": "LF",
+          "price": 1.95,
+          "dec": "Moisture-resistant primer for bathroom"
+        },
+        {
+          "name": "Paint Baseboard 2 Coats",
+          "qty": 22.33,
+          "unit": "LF",
+          "price": 2.45,
+          "dec": "Moisture-resistant paint system"
+        },
+        {
+          "name": "Toilet Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 385.0,
+          "dec": ""
+        },
+        {
+          "name": "Vanity Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 465.0,
+          "dec": ""
+        },
+        {
+          "name": "Sink Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 275.0,
+          "dec": ""
+        },
+        {
+          "name": "Mirror Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": ""
+        },
+        {
+          "name": "Shower Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 385.0,
+          "dec": ""
+        },
+        {
+          "name": "Towel Rod Detach Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 45.0,
+          "dec": "Fixture coordination with wall finishing"
+        },
+        {
+          "name": "Plumbing Connections",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Professional plumbing for fixture installations"
+        },
+        {
+          "name": "Electrical Outlet Switch Detach Reset",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 35.0,
+          "dec": "Required for construction access"
+        },
+        {
+          "name": "Door Undercut",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 25.0,
+          "dec": "Flooring clearance requirement"
+        },
+        {
+          "name": "Door Casing Detach Reset",
+          "qty": 14.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Required for flooring installation"
+        },
+        {
+          "name": "Prime Door Casing",
+          "qty": 14.0,
+          "unit": "LF",
+          "price": 1.95,
+          "dec": "Moisture-resistant primer"
+        },
+        {
+          "name": "Paint Door Casing 2 Coats",
+          "qty": 14.0,
+          "unit": "LF",
+          "price": 2.45,
+          "dec": "Moisture-resistant paint system"
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 33.93,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "Specialized bathroom cleaning"
+        }
+      ],
+      "subtotal": 4978.8
+    },
+    {
+      "title": "LAUNDRY_ROOM",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Content Manipulation Large Appliances",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 285.0,
+          "dec": "Professional detach and reset of washer, dryer, and boiler with reconnection services."
+        },
+        {
+          "name": "Surface Protection",
+          "qty": 133.35,
+          "unit": "SF",
+          "price": 0.45,
+          "dec": "Protective barriers during construction"
+        },
+        {
+          "name": "Carpet Installation",
+          "qty": 154.5,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "Replacement with 15% waste factor"
+        },
+        {
+          "name": "Carpet Pad Installation",
+          "qty": 154.5,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Standard underlayment with waste factor"
+        },
+        {
+          "name": "Baseboard Replacement",
+          "qty": 44.32,
+          "unit": "LF",
+          "price": 8.5,
+          "dec": "Complete installation per IRC R702.5"
+        },
+        {
+          "name": "Prime Baseboard",
+          "qty": 44.32,
+          "unit": "LF",
+          "price": 1.85,
+          "dec": "Surface preparation per IRC R702.3.8"
+        },
+        {
+          "name": "Paint Baseboard 2 Coats",
+          "qty": 44.32,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Final Cleaning",
+          "qty": 133.35,
+          "unit": "SF",
+          "price": 0.35,
+          "dec": "Post-construction cleanup"
+        },
+        {
+          "name": "1/2 Drywall Installation Walls",
+          "qty": 358.41,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "IRC R702.3.4 requires habitable rooms to have finished wall surfaces. Laundry room as utility space requires drywall finishing for fire safety and habitability code compliance."
+        },
+        {
+          "name": "Drywall Tape and Blend Walls",
+          "qty": 358.41,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Joint treatment per IRC R702.3.8"
+        },
+        {
+          "name": "1/2 Drywall Installation Ceiling",
+          "qty": 133.35,
+          "unit": "SF",
+          "price": 3.85,
+          "dec": "IRC R702.3.5 requires ceiling drywall in habitable spaces for fire separation and moisture protection."
+        },
+        {
+          "name": "Drywall Tape and Blend Ceiling",
+          "qty": 133.35,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Joint treatment per IRC R702.3.8"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 491.76,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Surface preparation per IRC R702.3.8"
+        },
+        {
+          "name": "Paint Walls and Ceiling 2 Coats",
+          "qty": 491.76,
+          "unit": "SF",
+          "price": 2.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 6286.84
+    },
+    {
+      "title": "PROJECT_WIDE_COSTS",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Debris Hauling",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 485.0,
+          "dec": "Disposal of construction debris and materials"
+        },
+        {
+          "name": "Dumpster Rental",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 385.0,
+          "dec": "20-yard dumpster for project duration"
+        }
+      ],
+      "subtotal": 870.0
+    }
+  ],
+  "subtotal": 24955.25,
+  "op_amount": 4991.05,
+  "total": 29946.3
+}

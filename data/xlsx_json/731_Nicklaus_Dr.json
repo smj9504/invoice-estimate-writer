@@ -1,0 +1,980 @@
+{
+  "estimate_number": "EST-202507-",
+  "estimate_date": "07-02-2025",
+  "company": {
+    "name": "Enter Construction, Inc.",
+    "address": "3887 Fairfax Ridge Road #445",
+    "city": "Fairfax",
+    "state": "Virginia",
+    "zip": "22030",
+    "phone": "(240) 271-5270",
+    "email": "jyoo@enter.construction",
+    "logo": ""
+  },
+  "client": {
+    "name": "Sang O Chung",
+    "address": "731 Nicklaus Dr",
+    "city": "Basye",
+    "state": "VA",
+    "zip": "22810",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "Comprehensive basement water damage restoration involving seven distinct areas totaling 1,264 square feet. Work includes complete interior restoration following water damage mitigation to return property to pre-loss condition.",
+  "bottom_note": "",
+  "disclaimer": "O&P includes protection system management, multi-trade coordination, and sequence scheduling required for safe and efficient project completion per industry standards.\n\nOVERHEAD:\nOverhead costs are essential indirect expenses that cannot be attributed to specific line items but are required for professional project execution. These include project management to coordinate multiple trades and work sequences, site safety systems and protection measures for occupied spaces, equipment transportation and setup, business insurance coverage, and ongoing quality oversight. Without proper overhead allocation, projects lack adequate supervision, coordination, and safety measures, leading to delays, quality issues, and potential safety hazards.\n\nPROFIT:\nProfit margin is necessary for any sustainable business to provide professional services, assume project risks, and honor warranty commitments. This margin enables contractors to maintain skilled workforces, invest in proper equipment and training, carry adequate insurance coverage, and remain financially stable to complete projects and honor warranties. Companies operating without reasonable profit margins cannot provide reliable service or stand behind their work long-term.\n\nREGULATORY REFERENCES:\n- IRC R503.1: Subfloor requirements and installation standards\n- IRC R702.3: Drywall installation and finishing requirements  \n- OSHA 29 CFR 1926.57: Dust control requirements\n- EPA RRP Rule: Lead-safe work practices and containment\n- Industry Standards: IICRC S500 water damage restoration",
+  "op_percent": 20.0,
+  "discount": 0.0,
+  "serviceSections": [
+    {
+      "title": "Room #1",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Remove remaining paneling and install new beaded v-groove paneling with primer and paint. Install vinyl plank flooring and new trim throughout."
+        },
+        {
+          "name": "Remove Remaining Beaded V-Groove Paneling",
+          "qty": 144.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": ""
+        },
+        {
+          "name": "Subfloor Preparation and Leveling",
+          "qty": 63.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Subfloor must be level within 3/16 per 10' for proper vinyl plank installation per manufacturer requirements"
+        },
+        {
+          "name": "Install Click-Lock Vinyl Plank Flooring",
+          "qty": 69.0,
+          "unit": "SF",
+          "price": 5.25,
+          "dec": "Includes 10% waste factor"
+        },
+        {
+          "name": "Install Beaded V-Groove Paneling",
+          "qty": 317.0,
+          "unit": "SF",
+          "price": 9.5,
+          "dec": "Includes 10% waste factor"
+        },
+        {
+          "name": "Prime Paneling",
+          "qty": 288.0,
+          "unit": "SF",
+          "price": 0.95,
+          "dec": "New wood paneling requires primer for proper paint adhesion per manufacturer specifications"
+        },
+        {
+          "name": "Paint Paneling (2 coats)",
+          "qty": 288.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Two coats required for proper coverage and durability per industry standards"
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 35.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Baseboard already removed during mitigation. Includes 10% waste factor for proper fitting and miter cuts"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 35.0,
+          "unit": "LF",
+          "price": 2.75,
+          "dec": "Quarter round required to match existing conditions throughout basement. Includes 10% waste factor"
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 70.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": "New trim requires primer and two finish coats for proper appearance"
+        },
+        {
+          "name": "Basic Plastic Barriers",
+          "qty": 32.0,
+          "unit": "LF",
+          "price": 3.0,
+          "dec": "EPA RRP Rule requires containment of construction dust. Basic barriers adequate for paneling work per industry standards"
+        },
+        {
+          "name": "Floor Protection (Adjacent Areas)",
+          "qty": 100.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Protection of adjacent finished spaces during construction per industry standards"
+        },
+        {
+          "name": "Daily Protection Maintenance",
+          "qty": 18.0,
+          "unit": "HR",
+          "price": 25.0,
+          "dec": "Daily maintenance of dust barriers and access protection per OSHA walking/working surface standards"
+        }
+      ],
+      "subtotal": 5495.55
+    },
+    {
+      "title": "Basement #1",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "106 SF - includes Walking Closet + Hallway:\nRemove remaining paneling and install new beaded v-groove paneling with primer and paint. Install vinyl plank flooring, new trim, and coordinate electrical/window work. Includes walking closet paneling restoration."
+        },
+        {
+          "name": "Subfloor Preparation",
+          "qty": 106.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": ""
+        },
+        {
+          "name": "Install Click-Lock Vinyl Plank Flooring",
+          "qty": 117.0,
+          "unit": "SF",
+          "price": 5.25,
+          "dec": "Includes 10% waste factor"
+        },
+        {
+          "name": "Remove Remaining Paneling (4ft height remaining)",
+          "qty": 198.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": ""
+        },
+        {
+          "name": "Wall Insulation Removal (Entry Door Wall Only)",
+          "qty": 48.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": ""
+        },
+        {
+          "name": "Install Wall Insulation (Entry Door Wall)",
+          "qty": 50.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Entry door wall insulation with 5% waste factor for cutting around framing and utilities"
+        },
+        {
+          "name": "Install Beaded V-Groove Paneling",
+          "qty": 436.0,
+          "unit": "SF",
+          "price": 9.5,
+          "dec": "beadboard installation with 10% waste factor"
+        },
+        {
+          "name": "Prime Paneling",
+          "qty": 396.0,
+          "unit": "SF",
+          "price": 0.95,
+          "dec": "New wood paneling primer application"
+        },
+        {
+          "name": "Paint Paneling (2 coats)",
+          "qty": 396.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Two coats required for proper coverage"
+        },
+        {
+          "name": "Remove Crown Molding",
+          "qty": 52.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Install Baseboard",
+          "qty": 57.0,
+          "unit": "LF",
+          "price": 4.25,
+          "dec": "Baseboard installation with 10% waste factor"
+        },
+        {
+          "name": "Install Quarter Round",
+          "qty": 57.0,
+          "unit": "LF",
+          "price": 2.75,
+          "dec": "Quarter round installation with 10% waste factor"
+        },
+        {
+          "name": "Install Crown Molding",
+          "qty": 57.0,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Crown molding installation with 10% waste factor"
+        },
+        {
+          "name": "Prime and Paint All Trim",
+          "qty": 171.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Light Fixture Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Wall-mounted fixture requires professional disconnection/reconnection"
+        },
+        {
+          "name": "Window Trim Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": ""
+        },
+        {
+          "name": "Window Blind Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Walking Closet Wall Paneling Removal",
+          "qty": 32.0,
+          "unit": "SF",
+          "price": 1.25,
+          "dec": "Existing unpainted beadboard removal"
+        },
+        {
+          "name": "Walking Closet Paneling Installation",
+          "qty": 35.0,
+          "unit": "SF",
+          "price": 3.75,
+          "dec": "New paneling installation with 10% waste factor"
+        },
+        {
+          "name": "Walking Closet Prime and Paint",
+          "qty": 32.0,
+          "unit": "SF",
+          "price": 2.8,
+          "dec": ""
+        },
+        {
+          "name": "Enhanced Dust Containment Setup",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 225.0,
+          "dec": "Multi-room work requiring professional containment per OSHA standards"
+        },
+        {
+          "name": "Enhanced Daily Maintenance",
+          "qty": 18.0,
+          "unit": "HR",
+          "price": 35.0,
+          "dec": "Daily maintenance for enhanced protection systems"
+        }
+      ],
+      "subtotal": 9071.75
+    },
+    {
+      "title": "Basement #2",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Remove remaining paneling and install new beaded v-groove paneling with primer and paint. Install vinyl plank flooring and replace wall/base cabinets with countertop and sink."
+        },
+        {
+          "name": "Subfloor Preparation",
+          "qty": 182.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": "Subfloor preparation for vinyl installation"
+        },
+        {
+          "name": "Install Click-Lock Vinyl Plank Flooring",
+          "qty": 200.0,
+          "unit": "SF",
+          "price": 5.25,
+          "dec": "Vinyl plank installation with 10% waste factor"
+        },
+        {
+          "name": "Remove Remaining Paneling",
+          "qty": 185.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": "Remaining paneling removal for complete restoration"
+        },
+        {
+          "name": "Wall Insulation Removal (Cabinet Wall Only)",
+          "qty": 48.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": ""
+        },
+        {
+          "name": "Install Beaded V-Groove Paneling",
+          "qty": 406.0,
+          "unit": "SF",
+          "price": 9.5,
+          "dec": "Beadboard installation with 10% waste factor"
+        },
+        {
+          "name": "Prime and Paint Paneling",
+          "qty": 369.0,
+          "unit": "SF",
+          "price": 2.8,
+          "dec": "Prime and paint paneling for proper finish"
+        },
+        {
+          "name": "Remove and Replace Cabinets with Countertop",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 2000.0,
+          "dec": "Cabinet replacement as specified in project scope"
+        },
+        {
+          "name": "Sink and Faucet Replacement",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 650.0,
+          "dec": ""
+        },
+        {
+          "name": "Remove Crown Molding",
+          "qty": 54.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Install Baseboard and Quarter Round",
+          "qty": 119.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": ""
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 119.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Door Trim Work (3 doors)",
+          "qty": 3.0,
+          "unit": "EA",
+          "price": 95.0,
+          "dec": "Work around and trim installation for 3 doors as specified"
+        }
+      ],
+      "subtotal": 10125.0
+    },
+    {
+      "title": "Bathroom",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Complete tile removal and replacement for floor and shower walls with waterproofing. Replace all plumbing fixtures, install new drywall, and paint non-tile areas."
+        },
+        {
+          "name": "Remove Remaining Drywall",
+          "qty": 86.0,
+          "unit": "SF",
+          "price": 0.95,
+          "dec": "Remaining drywall removal after mitigation"
+        },
+        {
+          "name": "Remove Existing Floor Tile",
+          "qty": 70.0,
+          "unit": "SF",
+          "price": 3.5,
+          "dec": "Small mosaic tile removal requires additional labor per industry standards"
+        },
+        {
+          "name": "Remove Existing Shower Wall Tile",
+          "qty": 45.0,
+          "unit": "SF",
+          "price": 4.25,
+          "dec": "Shower wall tile removal includes waterproofing membrane"
+        },
+        {
+          "name": "Subfloor Preparation and Repair",
+          "qty": 70.0,
+          "unit": "SF",
+          "price": 2.25,
+          "dec": "Bathroom subfloor requires moisture barrier installation"
+        },
+        {
+          "name": "Install Waterproof Membrane",
+          "qty": 70.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": ""
+        },
+        {
+          "name": "Install Small Mosaic Ceramic Tile Floor",
+          "qty": 81.0,
+          "unit": "SF",
+          "price": 18.5,
+          "dec": "Small mosaic tile installation with 15% waste factor."
+        },
+        {
+          "name": "Install 1/2 Drywall (Non-Shower Areas)",
+          "qty": 139.0,
+          "unit": "SF",
+          "price": 2.85,
+          "dec": "Northern VA drywall installation with 10% waste factor"
+        },
+        {
+          "name": "Drywall Tape and Blend - Seam Connection",
+          "qty": 46.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Water damage restoration - connecting new drywall to existing drywall seams"
+        },
+        {
+          "name": "Install Shower Wall Tile",
+          "qty": 52.0,
+          "unit": "SF",
+          "price": 22.5,
+          "dec": "Shower wall ceramic tile with waterproofing. 15% waste factor for small mosaic pattern matching"
+        },
+        {
+          "name": "Prime Non-Tile Walls and Ceiling",
+          "qty": 126.0,
+          "unit": "SF",
+          "price": 1.05,
+          "dec": "Primer application for non-tile surfaces"
+        },
+        {
+          "name": "Paint Non-Tile Walls and Ceiling (2 coats)",
+          "qty": 126.0,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Paint application for non-tile surfaces"
+        },
+        {
+          "name": "Install Baseboard and Quarter Round",
+          "qty": 75.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": ""
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 75.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Remove and Replace Toilet",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 650.0,
+          "dec": ""
+        },
+        {
+          "name": "Remove and Replace Pedestal Sink",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 485.0,
+          "dec": "Pedestal sink replacement (no vanity originally present)"
+        },
+        {
+          "name": "Shower Fixtures and Faucet Replacement",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 850.0,
+          "dec": ""
+        },
+        {
+          "name": "Shower Corner Shelf Replacement",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": ""
+        },
+        {
+          "name": "Install Grab Bars (2 EA)",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": "ADA-compliant grab bars with proper backing validated against $100-$350/EA market range"
+        },
+        {
+          "name": "Light Fixture Over Sink Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Professional fixture disconnection and reconnection"
+        },
+        {
+          "name": "Ceiling Light Fixture Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Ceiling-mounted light fixture professional disconnection/reconnection"
+        },
+        {
+          "name": "GFCI Outlet Installation",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 165.0,
+          "dec": "Code-required GFCI protection in bathroom renovation"
+        },
+        {
+          "name": "Towel Hanger Detach and Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 65.0,
+          "dec": "Wall-mounted towel bars professional removal and reinstallation"
+        },
+        {
+          "name": "Shower Curtain rod Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": "Curtain rod system removal and reinstallation"
+        },
+        {
+          "name": "Work Around 2 Doors",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 65.0,
+          "dec": ""
+        },
+        {
+          "name": "Bathroom Dust Containment",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 185.0,
+          "dec": "Hygiene-critical space requires enhanced protection per EPA RRP standards"
+        },
+        {
+          "name": "Daily Moisture Protection",
+          "qty": 18.0,
+          "unit": "HR",
+          "price": 25.0,
+          "dec": "Bathroom environments require enhanced moisture control during construction to prevent mold growth material damage and ensure proper curing of tile adhesives and grout per industry standards"
+        }
+      ],
+      "subtotal": 8846.05
+    },
+    {
+      "title": "Room 2",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Install new drywall and insulation only in areas previously demolished during mitigation, with tape and blend connections to existing surfaces. Install vinyl plank flooring and prime/paint new drywall areas plus full ceiling for uniform appearance. Replace crown molding, baseboards, and quarter round throughout."
+        },
+        {
+          "name": "Subfloor Preparation",
+          "qty": 100.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": ""
+        },
+        {
+          "name": "Install Click-Lock Vinyl Plank Flooring",
+          "qty": 110.0,
+          "unit": "SF",
+          "price": 5.25,
+          "dec": "Vinyl plank installation with 10% waste factor"
+        },
+        {
+          "name": "Wall Insulation Installation (Damaged Areas Only)",
+          "qty": 160.0,
+          "unit": "SF",
+          "price": 1.85,
+          "dec": "Wall insulation with 5% waste factor"
+        },
+        {
+          "name": "Install 1/2\" Drywall (Damaged Areas Only)",
+          "qty": 176.0,
+          "unit": "SF",
+          "price": 2.85,
+          "dec": "Drywall installation with 10% waste factor"
+        },
+        {
+          "name": "Drywall Tape and Blend - Seam Connection",
+          "qty": 64.0,
+          "unit": "LF",
+          "price": 4.5,
+          "dec": "Water damage restoration - connecting new drywall to existing drywall seams per industry standards"
+        },
+        {
+          "name": "Prime Walls and Ceiling",
+          "qty": 420.0,
+          "unit": "SF",
+          "price": 1.05,
+          "dec": ""
+        },
+        {
+          "name": "Paint Walls and Ceiling (2 coats)",
+          "qty": 420.0,
+          "unit": "SF",
+          "price": 2.15,
+          "dec": "Paint application with ceiling paint required per wall/ceiling same color rule"
+        },
+        {
+          "name": "Install Baseboard and Quarter Round",
+          "qty": 88.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": ""
+        },
+        {
+          "name": "Prime and Paint All Trim",
+          "qty": 132.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Window Blind Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        },
+        {
+          "name": "Door Work Around (2 doors)",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 65.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 3967.1
+    },
+    {
+      "title": "Basement #3",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Remove remaining paneling and install new beaded v-groove paneling with primer and paint. Install vinyl plank flooring and coordinate HVAC equipment detach/reset."
+        },
+        {
+          "name": "Subfloor Preparation",
+          "qty": 323.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": ""
+        },
+        {
+          "name": "Install Click-Lock Vinyl Plank Flooring",
+          "qty": 355.0,
+          "unit": "SF",
+          "price": 5.25,
+          "dec": "Vinyl plank installation with 10% waste factor"
+        },
+        {
+          "name": "Remove Remaining Paneling",
+          "qty": 239.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": ""
+        },
+        {
+          "name": "Install Beaded V-Groove Paneling",
+          "qty": 525.0,
+          "unit": "SF",
+          "price": 9.5,
+          "dec": "Beadboard installation with 10% waste factor"
+        },
+        {
+          "name": "Prime and Paint Paneling",
+          "qty": 477.0,
+          "unit": "SF",
+          "price": 2.8,
+          "dec": "Prime and paint paneling"
+        },
+        {
+          "name": "Remove Crown Molding",
+          "qty": 72.0,
+          "unit": "LF",
+          "price": 1.75,
+          "dec": ""
+        },
+        {
+          "name": "Install Crown Molding",
+          "qty": 79.0,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Crown molding installation with 10% waste factor"
+        },
+        {
+          "name": "Install Baseboard and Quarter Round",
+          "qty": 158.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": "Baseboard and quarter round installation"
+        },
+        {
+          "name": "Prime and Paint All Trim",
+          "qty": 237.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Air Conditioner Unit Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 185.0,
+          "dec": "HVAC unit professional disconnection and reconnection"
+        },
+        {
+          "name": "Baseboard Heater Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Baseboard heater professional disconnection and reconnection"
+        },
+        {
+          "name": "Built-in Bookshelf Work Around",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 95.0,
+          "dec": ""
+        },
+        {
+          "name": "Sliding Door Vertical Blind Detach and Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": ""
+        },
+        {
+          "name": "Window Blind Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 11345.25
+    },
+    {
+      "title": "Room 3",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "",
+          "qty": 0.0,
+          "unit": "",
+          "price": 0.0,
+          "dec": "Install new beaded v-groove paneling with primer and paint. Install vinyl plank flooring and coordinate electrical/HVAC work around built-in features."
+        },
+        {
+          "name": "Subfloor Preparation",
+          "qty": 120.0,
+          "unit": "SF",
+          "price": 1.5,
+          "dec": ""
+        },
+        {
+          "name": "Install Click-Lock Vinyl Plank Flooring",
+          "qty": 132.0,
+          "unit": "SF",
+          "price": 5.25,
+          "dec": "Vinyl plank installation with 10% waste factor"
+        },
+        {
+          "name": "Install Beaded V-Groove Paneling",
+          "qty": 317.0,
+          "unit": "SF",
+          "price": 9.5,
+          "dec": "Beadboard installation with 10% waste factor"
+        },
+        {
+          "name": "Prime and Paint Paneling",
+          "qty": 288.0,
+          "unit": "SF",
+          "price": 2.8,
+          "dec": ""
+        },
+        {
+          "name": "Install Crown Molding",
+          "qty": 51.0,
+          "unit": "LF",
+          "price": 6.5,
+          "dec": "Crown molding installation with 10% waste factor"
+        },
+        {
+          "name": "Install Baseboard and Quarter Round",
+          "qty": 101.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": ""
+        },
+        {
+          "name": "Prime and Paint Trim",
+          "qty": 152.0,
+          "unit": "LF",
+          "price": 2.25,
+          "dec": ""
+        },
+        {
+          "name": "Wall Light Fixture Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Professional fixture disconnection and reconnection"
+        },
+        {
+          "name": "Baseboard Heater Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 125.0,
+          "dec": "Baseboard heater professional disconnection and reconnection"
+        },
+        {
+          "name": "Built-in Shelving Work Around",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 95.0,
+          "dec": ""
+        },
+        {
+          "name": "Rod System Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 65.0,
+          "dec": ""
+        },
+        {
+          "name": "Door Vertical Blind Detach and Reset",
+          "qty": 2.0,
+          "unit": "EA",
+          "price": 85.0,
+          "dec": ""
+        },
+        {
+          "name": "Window Blind Detach and Reset",
+          "qty": 1.0,
+          "unit": "EA",
+          "price": 75.0,
+          "dec": ""
+        }
+      ],
+      "subtotal": 6372.9
+    },
+    {
+      "title": "PROJECT-WIDE",
+      "showSubtotal": true,
+      "items": [
+        {
+          "name": "Project Management and Trade Coordination",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 450.0,
+          "dec": "Multi-room protection coordination and scheduling required for safe and efficient project completion"
+        },
+        {
+          "name": "Access Route Protection (Common Areas)",
+          "qty": 150.0,
+          "unit": "LF",
+          "price": 3.5,
+          "dec": "Protected access path required for basement construction traffic"
+        },
+        {
+          "name": "Daily Route Maintenance",
+          "qty": 18.0,
+          "unit": "HR",
+          "price": 30.0,
+          "dec": "Daily maintenance of access route protection"
+        },
+        {
+          "name": "Base Debris Hauling Labor",
+          "qty": 3656.0,
+          "unit": "LB",
+          "price": 0.85,
+          "dec": "Base debris hauling rate for construction materials removal."
+        },
+        {
+          "name": "Basement Access Surcharge",
+          "qty": 3656.0,
+          "unit": "LB",
+          "price": 0.25,
+          "dec": "Additional labor cost for basement-level debris removal requiring carry to grade level."
+        },
+        {
+          "name": "15-Yard Dumpster Rental",
+          "qty": 21.0,
+          "unit": "DAY",
+          "price": 23.1,
+          "dec": "15-yard container rental for 1.8 tons of construction debris. Container sized per debris weight calculation and 21-day project duration including delivery/pickup."
+        },
+        {
+          "name": "Daily Construction Cleanup",
+          "qty": 1264.0,
+          "unit": "SF",
+          "price": 0.55,
+          "dec": "Daily cleanup of work areas to maintain safe working conditions per OSHA standards. Rate includes debris consolidation and staging for removal."
+        },
+        {
+          "name": "Final Detail Cleaning",
+          "qty": 1264.0,
+          "unit": "SF",
+          "price": 0.85,
+          "dec": "Post-construction comprehensive cleaning including dust removal and surface preparation. Professional cleaning rate validated against DMV area standards."
+        },
+        {
+          "name": "Daily Construction Cleanup",
+          "qty": 18.0,
+          "unit": "HR",
+          "price": 65.0,
+          "dec": "Daily cleanup of work areas to maintain safe working conditions per OSHA standards - validated against $20.93/hour construction cleanup labor rates"
+        },
+        {
+          "name": "Final Detail Cleaning",
+          "qty": 1264.0,
+          "unit": "SF",
+          "price": 0.75,
+          "dec": "Comprehensive post-construction cleaning validated against $0.10-$0.60/SF industry range"
+        },
+        {
+          "name": "Fixture and Finish Cleaning",
+          "qty": 1.0,
+          "unit": "LS",
+          "price": 225.0,
+          "dec": "Detailed cleaning of all installed fixtures trim and surfaces to remove construction residue and fingerprints"
+        }
+      ],
+      "subtotal": 10134.3
+    }
+  ],
+  "subtotal": 65357.9,
+  "op_amount": 13071.58,
+  "sales_tax": 0,
+  "tax_rate": 0.0,
+  "total": 78429.48
+}

@@ -1,0 +1,278 @@
+{
+  "estimate_number": "MV-202507-3556",
+  "estimate_date": "2025-08-02",
+  "company": {
+    "name": "SOS Moving Company",
+    "address": "8280 Willow Oaks Corporate Dr. Suite 600",
+    "city": "Fairfax",
+    "state": "VA",
+    "zip": "22031",
+    "phone": "443-985-2998 ",
+    "email": "sosmovingcompany@gmail.com ",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "3556 Woodlake Drive",
+    "city": "Silver Spring",
+    "state": "MD",
+    "zip": "20904",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "<strong>Project Overview</strong><br>This estimate outlines the scope of contents management, moving services, and debris hauling for your property located in Silver Spring, MD, following recent water damage. The project involves the careful handling, transportation, storage, and re-delivery of your household contents, along with the removal and disposal of construction debris. The project duration is two months. Per specific instructions from the insurance adjuster, this estimate excludes all packing services and related costs to align with the agreed claim scope, though packing is often standard in water damage restoration to protect contents.",
+  "trades": [
+    {
+      "name": "Contents Management & Moving Services",
+      "note": "This service includes the careful handling, transportation, storage, and re-delivery of household contents without packing, as directed by the insurance adjuster for this specific claim.<br><strong>Project Scope and Specific Considerations:</strong><ul><li><strong>Multi-Floor Operations:</strong> Work spans the 2nd and 3rd floors, requiring careful coordination and movement.</li><li><strong>Access Limitations:</strong> Narrow passages within your home and limited parking outside will necessitate additional time and specialized handling.</li><li><strong>Stairs & Long Carry:</strong> Significant stair and long-carry requirements will increase labor intensity for all movements.</li><li><strong>Heavy Items:</strong> The presence of heavy objects, including a massage chair and other heavy furniture, on the 2nd floor, combined with narrow passages, will require specialized equipment and an experienced crew.</li><li><strong>Project Duration:</strong> A 2-month project duration implies a need for secure, climate-controlled storage for your contents.</li></ul>",
+      "locations": [
+        {
+          "name": "Initial Contents Move-out Services (Origin)",
+          "note": "Careful inventorying and loading of contents from the damaged site without packing, as per insurance adjuster instructions. Includes site preparation, handling of specific items by floor, and meticulous loading onto moving truck. Labor hours adjusted to reflect move-out only, excluding packing time, based on typical industry rates for contents manipulation (e.g., 2-3 hours per room for loading heavy contents per OSHA handling guidelines).",
+          "showSubtotal": true,
+          "subtotal": 2015.0,
+          "categories": [
+            {
+              "name": "Labor & Equipment",
+              "items": [
+                {
+                  "name": "Move-out Labor (Standard - 3 movers)",
+                  "qty": 10.0,
+                  "unit": "HR",
+                  "price": 110.0,
+                  "description": "General loading and handling of contents without packing, justified by current market labor rates in the DMV area (adjusted for 2025 cost increases of approx. 5-7% due to inflation and supply chain factors).",
+                  "total_price": 1100.0
+                },
+                {
+                  "name": "Move-out Labor (Specialized - 4th mover for heavy items)",
+                  "qty": 4.0,
+                  "unit": "HR",
+                  "price": 110.0,
+                  "description": "Elevated labor for handling heavy objects like the <strong>massage chair</strong> and other heavy furniture, requiring a specialized crew member and specific equipment. Accounts for maneuvering through narrow passages and stairs, in line with OSHA safety standards for heavy lifting.",
+                  "total_price": 440.0
+                },
+                {
+                  "name": "Specialized Equipment Rental",
+                  "qty": 1.0,
+                  "unit": "DA",
+                  "price": 75.0,
+                  "description": "Includes heavy-duty appliance dolly, furniture sliders, and straps for safe handling of heavy items, necessary for code-compliant (IBC) movement without damage.",
+                  "total_price": 75.0
+                }
+              ]
+            },
+            {
+              "name": "Materials & Surcharges",
+              "items": [
+                {
+                  "name": "Floor/Wall Protection",
+                  "qty": 1.0,
+                  "unit": "LT",
+                  "price": 150.0,
+                  "description": "Installation of floor runners and wall padding in high-traffic areas and narrow passages to prevent damage during the moving process, required for property protection per restoration best practices.",
+                  "total_price": 150.0
+                },
+                {
+                  "name": "Access Surcharge",
+                  "qty": 1.0,
+                  "unit": "LT",
+                  "price": 250.0,
+                  "description": "Additional time for navigating narrow passages, stairs (2nd and 3rd floors), and extended long carries, which increase project complexity and labor intensity, justified by site-specific conditions.",
+                  "total_price": 250.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Transportation to Storage",
+          "note": "Secure transfer of contents to a designated storage facility.",
+          "showSubtotal": true,
+          "subtotal": 1165.0,
+          "categories": [
+            {
+              "name": "Logistics & Transport",
+              "items": [
+                {
+                  "name": "Moving Truck Rental (26 ft Box Truck)",
+                  "qty": 1.0,
+                  "unit": "DA",
+                  "price": 100.0,
+                  "description": "Rental of a fully equipped 26-foot box truck to accommodate all household contents for transport, with rates reflecting 2025 fuel and rental increases.",
+                  "total_price": 100.0
+                },
+                {
+                  "name": "Mileage Fee",
+                  "qty": 60.0,
+                  "unit": "MI",
+                  "price": 1.5,
+                  "description": "Covers vehicle mileage from origin to destination and return (approx. 30 miles one way, 60 miles round trip), including fuel and tolls.",
+                  "total_price": 90.0
+                },
+                {
+                  "name": "Driver Labor",
+                  "qty": 4.0,
+                  "unit": "HR",
+                  "price": 90.0,
+                  "description": "Labor for professional truck driver, ensuring safe and efficient transportation of your belongings, compliant with DOT regulations.",
+                  "total_price": 360.0
+                },
+                {
+                  "name": "Fuel Surcharge",
+                  "qty": 1.0,
+                  "unit": "LT",
+                  "price": 75.0,
+                  "description": "Covers fuel costs for transportation services, adjusted for current market fluctuations.",
+                  "total_price": 75.0
+                },
+                {
+                  "name": "Crew Labor (3 Movers)",
+                  "qty": 6.0,
+                  "unit": "HR",
+                  "price": 90.0,
+                  "description": "Labor for loading and unloading due to contents volume, based on standard crew requirements.",
+                  "total_price": 540.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Contents Storage",
+          "note": "Professional, climate-controlled storage of items for the duration of the restoration project.",
+          "showSubtotal": true,
+          "subtotal": 700.0,
+          "categories": [
+            {
+              "name": "Storage Services",
+              "items": [
+                {
+                  "name": "Climate-Controlled Storage Unit (10x20/10x30 equivalent)",
+                  "qty": 2.0,
+                  "unit": "MO",
+                  "price": 350.0,
+                  "description": "Secure, climate-controlled storage to protect items from environmental damage (humidity, temperature fluctuations) for the project duration. Sized to accommodate all household contents, aligned with best practices for water damage restoration.",
+                  "total_price": 700.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Retrieval from Storage & Final Move-in Services (Destination)",
+          "note": "Coordinated pick-up and transport of contents from storage upon project completion, followed by unloading and placement at the restored site without unpacking services, per insurance adjuster instructions.",
+          "showSubtotal": true,
+          "subtotal": 2030.0,
+          "categories": [
+            {
+              "name": "Labor & Logistics",
+              "items": [
+                {
+                  "name": "Transport from Storage (Labor & Truck)",
+                  "qty": 1.0,
+                  "unit": "TR",
+                  "price": 460.0,
+                  "description": "Includes labor and truck usage for retrieving contents from storage and transporting them back to your property. Equivalent to the inbound transportation cost.",
+                  "total_price": 460.0
+                },
+                {
+                  "name": "Move-in Labor (Standard - 3 movers)",
+                  "qty": 8.0,
+                  "unit": "HR",
+                  "price": 110.0,
+                  "description": "Labor for careful unloading and placement back into original or designated locations without unpacking, adjusted for efficiency in move-in phase per claim requirements.",
+                  "total_price": 880.0
+                },
+                {
+                  "name": "Move-in Labor (Specialized - 4th mover for heavy items)",
+                  "qty": 4.0,
+                  "unit": "HR",
+                  "price": 110.0,
+                  "description": "Elevated labor for re-positioning and reassembly (if applicable) of the <strong>massage chair</strong> and other heavy furniture, utilizing specialized equipment and an increased crew, ensuring OSHA-compliant handling.",
+                  "total_price": 440.0
+                }
+              ]
+            },
+            {
+              "name": "Post-Service & Surcharges",
+              "items": [
+                {
+                  "name": "Access Surcharge",
+                  "qty": 1.0,
+                  "unit": "LT",
+                  "price": 250.0,
+                  "description": "Additional time for navigating narrow passages, stairs (2nd and 3rd floors), and extended long carries during the move-in phase.",
+                  "total_price": 250.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Debris Hauling Services",
+      "note": "This service covers the removal and disposal of water-damaged demolition debris. It includes labor, truck, and disposal facility charges. A separate trip fee is applied for this dedicated service.<br><strong>Project Scope and Specific Considerations:</strong><ul><li><strong>Water-Damaged Debris:</strong> The demolition debris is water-damaged, which significantly increases its weight and requires specific handling for disposal.</li><li><strong>Disposal Requirements:</strong> Construction debris from water damage will be removed and properly disposed of at a licensed facility.</li><li><strong>Access Considerations:</strong> The presence of stairs, narrow passages, and long carries for debris removal will impact labor intensity.</li></ul>",
+      "locations": [
+        {
+          "name": "Construction Debris Removal & Disposal",
+          "note": "Removal and disposal of existing water-damaged demolition debris from the property, with an approximate total weight of 1420.88 lbs (0.71 tons).",
+          "showSubtotal": true,
+          "subtotal": 486.03,
+          "categories": [
+            {
+              "name": "Disposal & Hauling",
+              "items": [
+                {
+                  "name": "Debris Hauling Labor (2 movers)",
+                  "qty": 3.0,
+                  "unit": "HR",
+                  "price": 90.0,
+                  "description": "Labor for loading water-damaged debris into the truck, accounting for the increased weight and difficulty of handling, as well as navigation through stairs and narrow passages.",
+                  "total_price": 270.0
+                },
+                {
+                  "name": "Debris Hauling Truck & Fuel (Dedicated trip)",
+                  "qty": 1.0,
+                  "unit": "TR",
+                  "price": 150.0,
+                  "description": "Dedicated small box truck or dump truck for debris transport to the disposal facility, including fuel and vehicle costs. A separate trip fee is applied.",
+                  "total_price": 150.0
+                },
+                {
+                  "name": "Disposal Facility Fee (Water Damaged C&D Waste)",
+                  "qty": 0.71,
+                  "unit": "TN",
+                  "price": 93.0,
+                  "description": "Landfill fees for construction and demolition (C&D) waste, calculated based on the estimated weight of water-damaged debris (1420.88 lbs / 0.71 tons) at the facility's rate in Montgomery County, MD.",
+                  "total_price": 66.03
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 6396.03,
+  "discount": 0.0,
+  "total": 6396.03,
+  "bottom_note": "",
+  "disclaimer": "<strong>Disclaimers and Exclusions:</strong><ul><li>This estimate is based on the provided inventory and project details. Any changes to the scope of work, including additional items, unexpected access challenges, or changes in project duration, may result in an adjusted estimate.</li><li>This estimate <strong>excludes</strong> all packing and unpacking services, materials, and related labor as per specific insurance adjuster instructions for this claim.</li><li>This estimate <strong>excludes</strong> cleaning services (pre-move-out or post-move-in).</li><li>This estimate <strong>excludes</strong> restoration, repair, or cleaning of damaged contents.</li><li>This estimate <strong>excludes</strong> hazardous waste disposal (e.g., chemicals, paint, regulated materials) unless explicitly agreed upon and priced separately.</li><li>This estimate <strong>excludes</strong> disconnection or re-connection of appliances, electronics, or complex fixtures (e.g., chandeliers, wall-mounted TVs), unless otherwise specified and quoted.</li><li>This estimate <strong>excludes</strong> pest control or mold remediation services.</li><li>Any services not specifically itemized in this estimate are <strong>excluded</strong>.</li><li>Additional trips for debris hauling beyond the single trip indicated, unless necessitated by unexpected volume or your request, will incur additional trip fees.</li></ul>",
+  "overhead_rate": 0.0,
+  "profit_rate": 0.0,
+  "overhead_amount": 0.0,
+  "profit_amount": 0.0,
+  "sales_tax_amount": 0.0,
+  "overhead": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "profit": {
+    "rate": 0.0,
+    "amount": 0.0
+  },
+  "sales_tax": {
+    "amount": 0.0
+  }
+}

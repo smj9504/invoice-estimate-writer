@@ -1,0 +1,224 @@
+{
+  "estimate_number": "",
+  "estimate_date": "",
+  "company": {
+    "name": "",
+    "address": "",
+    "city": "",
+    "state": "",
+    "zip": "",
+    "phone": "",
+    "email": "",
+    "logo": ""
+  },
+  "client": {
+    "name": "",
+    "address": "456 Oak Avenue",
+    "city": "Seattle",
+    "state": "WA",
+    "zip": "98102",
+    "phone": "",
+    "email": ""
+  },
+  "top_note": "This estimate is valid for 30 days from the date above.",
+  
+  "trades": [
+    {
+      "name": "Roofing",
+      "note": "",
+      "locations": [
+        {
+          "name": "Main House",
+          "note": "Work will be completed in 3-4 days weather permitting.",
+          "showSubtotal": true,
+          "subtotal": "",
+          "categories": [
+            {
+              "name": "Demolition",
+              "items": [
+                {
+                  "name": "Remove existing asphalt shingles",
+                  "qty": 2500,
+                  "unit": "sq ft",
+                  "price": 0.50,
+                  "description": "Including disposal and cleanup"
+                },
+                {
+                  "name": "Remove old flashing",
+                  "qty": 200,
+                  "unit": "lin ft",
+                  "price": 2.50,
+                  "description": "Around chimneys and vents"
+                }
+              ]
+            },
+            {
+              "name": "Installation",
+              "items": [
+                {
+                  "name": "Install ice and water shield",
+                  "qty": 500,
+                  "unit": "sq ft",
+                  "price": 1.25,
+                  "description": "First 3 feet from eave"
+                },
+                {
+                  "name": "Install 30# felt underlayment",
+                  "qty": 2500,
+                  "unit": "sq ft",
+                  "price": 0.35,
+                  "description": "Over entire roof area"
+                },
+                {
+                  "name": "Install architectural shingles",
+                  "qty": 25,
+                  "unit": "squares",
+                  "price": 180.00,
+                  "description": "GAF Timberline HD, Charcoal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Garage",
+          "showSubtotal": true,
+          "subtotal": "",
+          "categories": [
+            {
+              "name": "Installation",
+              "items": [
+                {
+                  "name": "Install architectural shingles",
+                  "qty": 8,
+                  "unit": "squares",
+                  "price": 180.00,
+                  "description": "GAF Timberline HD, Charcoal"
+                },
+                {
+                  "name": "Install ridge cap shingles",
+                  "qty": 40,
+                  "unit": "lin ft",
+                  "price": 3.50,
+                  "description": "GAF Seal-A-Ridge"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Siding",
+      "note": "All siding materials are pre-primed and ready for painting.",
+      "locations": [
+        {
+          "name": "Exterior Walls",
+          "showSubtotal": true,
+          "subtotal": "",
+          "categories": [
+            {
+              "name": "Preparation",
+              "items": [
+                {
+                  "name": "Remove existing siding",
+                  "qty": 1200,
+                  "unit": "sq ft",
+                  "price": 1.25,
+                  "description": "Including disposal"
+                }
+              ]
+            },
+            {
+              "name": "Installation",
+              "items": [
+                {
+                  "name": "Install house wrap",
+                  "qty": 1200,
+                  "unit": "sq ft",
+                  "price": 0.75,
+                  "description": "Tyvek HomeWrap"
+                },
+                {
+                  "name": "Install fiber cement siding",
+                  "qty": 1200,
+                  "unit": "sq ft",
+                  "price": 4.50,
+                  "description": "HardiePlank, Primed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Interior",
+      "locations": [
+        {
+          "name": "Kitchen",
+          "note": "Kitchen work requires 2-week lead time for cabinet delivery.",
+          "showSubtotal": true,
+          "subtotal": "",
+          "categories": [
+            {
+              "name": "Cabinetry",
+              "items": [
+                {
+                  "name": "Upper cabinets",
+                  "qty": 12,
+                  "unit": "lin ft",
+                  "price": 200.00,
+                  "description": "Shaker style, soft close hinges"
+                },
+                {
+                  "name": "Base cabinets",
+                  "qty": 15,
+                  "unit": "lin ft",
+                  "price": 240.00,
+                  "description": "Shaker style, soft close drawers"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Living Room",
+          "showSubtotal": true,
+          "subtotal": "",
+          "categories": [
+            {
+              "name": "Flooring",
+              "items": [
+                {
+                  "name": "Luxury vinyl plank flooring",
+                  "qty": 400,
+                  "unit": "sq ft",
+                  "price": 8.00,
+                  "description": "LifeProof Sterling Oak"
+                },
+                {
+                  "name": "Installation labor",
+                  "qty": 1,
+                  "unit": "job",
+                  "price": 800.00,
+                  "description": "Professional installation"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  
+  "subtotal": "",
+  "discount": "",
+  "tax_rate": "",
+  "sales_tax": "",
+  "total": "",
+  
+  "bottom_note": "Payment terms: 50% down, 25% at rough completion, 25% upon final completion.",
+  "disclaimer": "This estimate is based on current material costs and may be subject to change."
+}
+ 
