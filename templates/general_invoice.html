@@ -17,9 +17,14 @@
         </div>
 
     <div class="company-logo">
-        <!-- Optional logo image -->
         {% if company.logo %}
-        <img src="{{ company.logo }}" alt="" class="logo">
+            {% if company.logo.startswith('data:image') %}
+                <!-- Base64 encoded image -->
+                <img src="{{ company.logo }}" alt="Company Logo" class="logo">
+            {% elif company.logo.startswith('http') %}
+                <!-- URL image -->
+                <img src="{{ company.logo }}" alt="Company Logo" class="logo">
+            {% endif %}
         {% endif %}
     </div>
 </div>

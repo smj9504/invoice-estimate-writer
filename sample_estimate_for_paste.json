@@ -1,0 +1,106 @@
+{
+  "estimate_number": "EST-202501-0042",
+  "estimate_date": "2025-01-13",
+  "company": {
+    "name": "Your Company Name"
+  },
+  "client": {
+    "name": "John Doe",
+    "address": "123 Main Street",
+    "city": "Seattle",
+    "state": "WA",
+    "zip": "98101",
+    "phone": "555-0123",
+    "email": "john.doe@example.com"
+  },
+  "trades": [
+    {
+      "name": "Water Damage Restoration",
+      "note": "Complete water damage restoration for living room",
+      "locations": [
+        {
+          "name": "Living Room",
+          "note": "Main living area water damage",
+          "subtotal": 5000.00,
+          "categories": [
+            {
+              "name": "Demolition & Removal",
+              "items": [
+                {
+                  "name": "Remove damaged drywall",
+                  "qty": 200,
+                  "unit": "SF",
+                  "price": 2.50,
+                  "description": "Remove water-damaged drywall"
+                },
+                {
+                  "name": "Remove damaged flooring",
+                  "qty": 300,
+                  "unit": "SF",
+                  "price": 3.00,
+                  "description": "Remove water-damaged carpet and padding"
+                }
+              ]
+            },
+            {
+              "name": "Drying Equipment",
+              "items": [
+                {
+                  "name": "Air movers",
+                  "qty": 5,
+                  "unit": "Days",
+                  "price": 50.00,
+                  "description": "Industrial air movers for drying"
+                },
+                {
+                  "name": "Dehumidifiers",
+                  "qty": 5,
+                  "unit": "Days",
+                  "price": 75.00,
+                  "description": "Industrial dehumidifiers"
+                }
+              ]
+            },
+            {
+              "name": "Reconstruction",
+              "items": [
+                {
+                  "name": "Install new drywall",
+                  "qty": 200,
+                  "unit": "SF",
+                  "price": 5.50,
+                  "description": "5/8\" drywall installation"
+                },
+                {
+                  "name": "Paint walls",
+                  "qty": 200,
+                  "unit": "SF",
+                  "price": 2.25,
+                  "description": "Prime and paint walls"
+                },
+                {
+                  "name": "Install new carpet",
+                  "qty": 300,
+                  "unit": "SF",
+                  "price": 4.50,
+                  "description": "New carpet with padding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 5000.00,
+  "overhead_rate": 10,
+  "profit_rate": 10,
+  "overhead_amount": 500.00,
+  "profit_amount": 500.00,
+  "sales_tax_amount": 450.00,
+  "discount": 0,
+  "total": 6450.00,
+  "top_note": "This estimate covers water damage restoration services.",
+  "bottom_note": "Payment due upon completion.",
+  "disclaimer": "This estimate is valid for 30 days."
+}

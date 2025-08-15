@@ -32,6 +32,7 @@ DATA_STORAGE_PATH = PROJECT_ROOT / "data" / "insurance_estimate"
 TEMP_STORAGE_PATH = DATA_STORAGE_PATH / "temp"
 PDF_STORAGE_PATH = DATA_STORAGE_PATH / "pdf"
 JSON_STORAGE_PATH = DATA_STORAGE_PATH / "json"
+HTML_STORAGE_PATH = DATA_STORAGE_PATH / "html"
 
 # Configure logging for debugging
 logging.basicConfig(level=logging.INFO)
@@ -150,7 +151,7 @@ def safe_note_processing(note_value):
 
 def ensure_storage_directories():
     """필요한 저장 디렉토리들이 존재하는지 확인하고 생성"""
-    directories = [DATA_STORAGE_PATH, TEMP_STORAGE_PATH, PDF_STORAGE_PATH, JSON_STORAGE_PATH]
+    directories = [DATA_STORAGE_PATH, TEMP_STORAGE_PATH, PDF_STORAGE_PATH, JSON_STORAGE_PATH, HTML_STORAGE_PATH]
     
     for directory in directories:
         try:
@@ -164,7 +165,7 @@ def get_storage_path(storage_type="temp"):
     """
     저장 경로 반환
     Args:
-        storage_type: 'temp', 'pdf', 'json', or 'base'
+        storage_type: 'temp', 'pdf', 'json', 'html', or 'base'
     Returns:
         Path object for the requested storage type
     """
@@ -172,7 +173,8 @@ def get_storage_path(storage_type="temp"):
         'base': DATA_STORAGE_PATH,
         'temp': TEMP_STORAGE_PATH,
         'pdf': PDF_STORAGE_PATH, 
-        'json': JSON_STORAGE_PATH
+        'json': JSON_STORAGE_PATH,
+        'html': HTML_STORAGE_PATH
     }
     
     return path_mapping.get(storage_type, TEMP_STORAGE_PATH)
@@ -748,6 +750,19 @@ def get_pdf_file_path(session_id, estimate_number="unknown"):
     
     return pdf_storage_path / filename
 
+def get_html_file_path(session_id, estimate_number="unknown", with_plans=False):
+    """
+    Get HTML file path for the estimate
+    """
+    html_storage_path = get_storage_path("html")
+    
+    # Sanitize estimate number for filename
+    safe_estimate_number = "".join(c for c in estimate_number if c.isalnum() or c in ['_', '-'])
+    suffix = "_with_plans" if with_plans else ""
+    filename = f"estimate_{safe_estimate_number}{suffix}_{session_id}.html"
+    
+    return html_storage_path / filename
+
 def cleanup_old_temp_files(days_old=7):
     """
     Clean up temporary files older than specified days
@@ -1049,14 +1064,148 @@ def main():
         st.error(f"Error loading company information: {str(e)}")
         st.stop()
     
-    # JSON file upload
-    uploaded_file = st.file_uploader("Upload JSON Estimate File", type=['json'])
+    # Create tabs for different input methods
+    tab1, tab2 = st.tabs(["📁 Upload JSON File", "📋 Paste JSON Text"])
     
-    if uploaded_file is not None:
-        # Load JSON file with enhanced error handling
+    data = None
+    json_source = None
+    
+    with tab1:
+        # JSON file upload
+        uploaded_file = st.file_uploader("Upload JSON Estimate File", type=['json'])
+        
+        if uploaded_file is not None:
+            json_source = "file"
+            data = uploaded_file
+    
+    with tab2:
+        # JSON text input area
+        st.info("💡 Paste your JSON data below. This is useful when you have long JSON data that you don't want to save as a file first.")
+        
+        # Initialize session state for JSON text if not exists
+        if 'json_text_loaded' not in st.session_state:
+            st.session_state.json_text_loaded = False
+        if 'json_text_data' not in st.session_state:
+            st.session_state.json_text_data = None
+        
+        json_text = st.text_area(
+            "Paste JSON Data Here",
+            height=400,
+            placeholder="Paste your JSON data here...\n\nExample:\n{\n  \"estimate_number\": \"EST_202501_0001\",\n  \"client\": {\n    \"name\": \"John Doe\"\n  },\n  ...\n}",
+            key="json_text_input"
+        )
+        
+        col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
+        with col1:
+            if st.button("📝 Load JSON", type="primary", key="load_json_text"):
+                if json_text.strip():
+                    try:
+                        # Try to parse JSON first to validate
+                        test_parse = json.loads(json_text)
+                        st.session_state.json_text_loaded = True
+                        st.session_state.json_text_data = json_text
+                        json_source = "text"
+                        data = json_text
+                    except json.JSONDecodeError as e:
+                        st.error(f"❌ Invalid JSON format: {str(e)}")
+                        st.session_state.json_text_loaded = False
+                else:
+                    st.warning("Please paste JSON data first.")
+        
+        with col2:
+            if st.button("🎨 Format JSON", key="format_json_text"):
+                if json_text.strip():
+                    try:
+                        # Parse and beautify JSON
+                        parsed_json = json.loads(json_text)
+                        formatted_json = json.dumps(parsed_json, indent=2, ensure_ascii=False)
+                        st.session_state.json_text_input = formatted_json
+                        st.rerun()
+                    except json.JSONDecodeError as e:
+                        st.error(f"❌ Cannot format - Invalid JSON: {str(e)}")
+                else:
+                    st.warning("Please paste JSON data first.")
+        
+        with col3:
+            if st.button("🗑️ Clear", key="clear_json_text"):
+                st.session_state.json_text_input = ""
+                st.session_state.json_text_loaded = False
+                st.session_state.json_text_data = None
+                st.rerun()
+        
+        with col4:
+            # Show status if JSON is loaded
+            if st.session_state.json_text_loaded:
+                st.success("✅ JSON data is loaded and ready to use")
+        
+        # If JSON was previously loaded from text, use it
+        if st.session_state.json_text_loaded and data is None:
+            json_source = "text"
+            data = st.session_state.json_text_data
+        
+        # Show example JSON structure
+        with st.expander("📖 View Sample JSON Structure"):
+            sample_json = {
+                "estimate_number": "EST_202501_0001",
+                "estimate_date": "2025-01-15",
+                "company": {
+                    "name": "Your Company Name"
+                },
+                "client": {
+                    "name": "Client Name",
+                    "address": "Client Address"
+                },
+                "trades": [
+                    {
+                        "name": "Trade Name",
+                        "locations": [
+                            {
+                                "name": "Location Name",
+                                "subtotal": 1000.00,
+                                "categories": [
+                                    {
+                                        "name": "Category Name",
+                                        "items": [
+                                            {
+                                                "name": "Item Name",
+                                                "qty": 1,
+                                                "unit": "EA",
+                                                "price": 1000.00
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "subtotal": 1000.00,
+                "overhead_rate": 10,
+                "profit_rate": 5,
+                "sales_tax_amount": 100.00,
+                "total": 1265.00
+            }
+            st.json(sample_json)
+    
+    if data is not None:
+        # Load JSON with enhanced error handling
         try:
-            data = json.load(uploaded_file)
-            st.success(f"✅ JSON file '{uploaded_file.name}' loaded successfully")
+            if json_source == "file":
+                # Load from uploaded file
+                json_data = json.load(data)
+                st.success(f"✅ JSON file '{data.name}' loaded successfully")
+                source_name = data.name
+            elif json_source == "text":
+                # Parse from text input
+                json_data = json.loads(data)
+                st.success("✅ JSON data loaded successfully from text input")
+                source_name = "text_input"
+            else:
+                st.error("Unknown JSON source")
+                return
+            
+            # Use json_data instead of data from here on
+            data = json_data
             
             # Initialize missing fields and normalize structure
             data = initialize_missing_fields(data)
@@ -1072,7 +1221,12 @@ def main():
             
             # Session-based filename for temporary storage
             if 'session_id' not in st.session_state:
-                st.session_state.session_id = str(hash(uploaded_file.name + str(uploaded_file.size)))
+                if json_source == "file":
+                    # For file upload, use filename and size
+                    st.session_state.session_id = str(hash(source_name + str(len(json.dumps(data)))))
+                else:
+                    # For text input, use content hash
+                    st.session_state.session_id = str(hash(json.dumps(data)[:1000]))  # Use first 1000 chars for hash
             
             temp_filename = f"estimate_{st.session_state.session_id}.json"
             
@@ -1247,6 +1401,7 @@ def main():
                 st.write(f"Temp: `{get_storage_path('temp')}`")
                 st.write(f"JSON: `{get_storage_path('json')}`")
                 st.write(f"PDF: `{get_storage_path('pdf')}`")
+                st.write(f"HTML: `{get_storage_path('html')}`")
             
             # Detailed breakdown
             st.subheader("Calculation Breakdown")
@@ -1355,7 +1510,11 @@ def main():
                         }
                         st.json(sample_data)
             
-            # PDF generation and download buttons
+            # PDF and HTML generation and download buttons
+            st.subheader("📄 Document Generation")
+            
+            # Create two rows of buttons
+            # First row: PDF and HTML generation
             col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
             
             with col1:
@@ -1448,9 +1607,119 @@ def main():
                             
                     except Exception as e:
                         st.error(f"❌ Error saving permanent copy: {str(e)}")
+            
+            # Second row: HTML generation buttons
+            st.markdown("---")
+            col5, col6, col7, col8 = st.columns([1, 1, 1, 1])
+            
+            with col5:
+                if st.button("🌐 Generate HTML", type="secondary", key="generate_html_btn"):
+                    try:
+                        from pdf_generator import generate_insurance_estimate_html
+                        import webbrowser
+                        
+                        # Get HTML file path
+                        html_file_path = get_html_file_path(
+                            st.session_state.session_id, 
+                            data.get('estimate_number', 'unknown')
+                        )
+                        
+                        # Generate HTML
+                        generate_insurance_estimate_html(data, str(html_file_path))
+                        
+                        # Provide HTML download
+                        with open(html_file_path, 'r', encoding='utf-8') as html_file:
+                            st.download_button(
+                                label="⬇️ Download HTML",
+                                data=html_file.read(),
+                                file_name=f"estimate_{data.get('estimate_number', 'unknown')}.html",
+                                mime="text/html",
+                                key="download_html_btn"
+                            )
+                        
+                        st.success(f"✅ HTML generated: `{html_file_path}`")
+                        
+                        # Open in browser button
+                        if st.button("🌐 Open in Browser", key="open_html_browser"):
+                            webbrowser.open(f"file:///{html_file_path}")
+                            st.info("HTML opened in your default browser!")
+                        
+                    except Exception as e:
+                        st.error(f"❌ Error generating HTML: {str(e)}")
+                        logger.error(f"HTML generation error: {str(e)}")
+            
+            with col6:
+                if st.button("🌐📐 HTML with Plans", type="secondary", key="generate_html_with_plans_btn"):
+                    try:
+                        from pdf_generator import generate_insurance_estimate_html_with_plans
+                        import webbrowser
+                        
+                        if 'floor_plans' not in data or not data.get('floor_plans', {}).get('rooms'):
+                            st.warning("⚠️ No floor plan data available. Please upload floor plan JSON first.")
+                        else:
+                            # Get HTML file path
+                            html_file_path = get_html_file_path(
+                                st.session_state.session_id, 
+                                data.get('estimate_number', 'unknown'),
+                                with_plans=True
+                            )
+                            
+                            # Generate HTML with floor plans
+                            generate_insurance_estimate_html_with_plans(data, str(html_file_path))
+                            
+                            # Provide HTML download
+                            with open(html_file_path, 'r', encoding='utf-8') as html_file:
+                                st.download_button(
+                                    label="⬇️ Download HTML with Plans",
+                                    data=html_file.read(),
+                                    file_name=f"estimate_{data.get('estimate_number', 'unknown')}_with_plans.html",
+                                    mime="text/html",
+                                    key="download_html_with_plans_btn"
+                                )
+                            
+                            st.success(f"✅ HTML with floor plans generated!")
+                            
+                            # Open in browser button
+                            if st.button("🌐 Open in Browser", key="open_html_plans_browser"):
+                                webbrowser.open(f"file:///{html_file_path}")
+                                st.info("HTML with plans opened in your default browser!")
+                        
+                    except Exception as e:
+                        st.error(f"❌ Error generating HTML with plans: {str(e)}")
+                        logger.error(f"HTML with plans generation error: {str(e)}")
+            
+            with col7:
+                # View existing HTML files
+                if st.button("📂 View HTML Files", key="view_html_files"):
+                    html_path = get_storage_path("html")
+                    if html_path.exists():
+                        html_files = list(html_path.glob("*.html"))
+                        if html_files:
+                            st.info(f"Found {len(html_files)} HTML files")
+                            for file in html_files[-5:]:  # Show last 5 files
+                                st.write(f"📄 {file.name}")
+                        else:
+                            st.warning("No HTML files found")
+                    else:
+                        st.warning("HTML directory doesn't exist yet")
+            
+            with col8:
+                # Clear HTML cache
+                if st.button("🗑️ Clear HTML Cache", key="clear_html_cache"):
+                    try:
+                        html_path = get_storage_path("html")
+                        if html_path.exists():
+                            import shutil
+                            shutil.rmtree(html_path)
+                            html_path.mkdir(parents=True, exist_ok=True)
+                            st.success("HTML cache cleared!")
+                        else:
+                            st.info("HTML cache is already empty")
+                    except Exception as e:
+                        st.error(f"Error clearing HTML cache: {str(e)}")
     
     else:
-        st.info("Please upload a JSON estimate file.")
+        st.info("Please upload a JSON file or paste JSON data to get started.")
         
         # Display storage information even when no file is uploaded
         st.subheader("📁 Storage Configuration")
@@ -1458,9 +1727,30 @@ def main():
         st.write(f"**Temporary Files:** `{TEMP_STORAGE_PATH}`")
         st.write(f"**JSON Files:** `{JSON_STORAGE_PATH}`")
         st.write(f"**PDF Files:** `{PDF_STORAGE_PATH}`")
+        st.write(f"**HTML Files:** `{HTML_STORAGE_PATH}`")
+        
+        # Quick tips
+        st.subheader("💡 Quick Tips")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.info("""
+            **Using File Upload:**
+            1. Click on "Upload JSON File" tab
+            2. Browse and select your JSON file
+            3. The file will be loaded automatically
+            """)
+        
+        with col2:
+            st.info("""
+            **Using JSON Text Input:**
+            1. Click on "Paste JSON Text" tab
+            2. Paste your JSON data in the text area
+            3. Click "Load JSON" to process the data
+            4. Use "Format JSON" to beautify the text
+            """)
         
         # Display sample JSON structure
-        with st.expander("Sample JSON File Structure"):
+        with st.expander("📖 Complete Sample JSON Structure"):
             sample_json = {
                 "estimate_number": "EST_202507_1234",
                 "estimate_date": "2025-07-15",

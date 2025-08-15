@@ -106,7 +106,7 @@ test_*.json
 debug_*.html
 
 # Data folders (if needed, uncomment)
-# data/
+data/
 # measurements/
 
 # Project specific

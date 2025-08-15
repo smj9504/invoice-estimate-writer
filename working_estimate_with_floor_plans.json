@@ -1,0 +1,336 @@
+{
+  "estimate_number": "EST-202501-0042",
+  "estimate_date": "2025-01-06",
+  "company": {
+    "name": "Premium Construction & Design LLC",
+    "address": "1234 Builder's Way",
+    "city": "Los Angeles",
+    "state": "CA",
+    "zip": "90028",
+    "phone": "(323) 555-0100",
+    "email": "info@premiumconstruction.com"
+  },
+  "client": {
+    "name": "Sarah Johnson",
+    "address": "789 Sunset Boulevard",
+    "city": "Beverly Hills",
+    "state": "CA",
+    "zip": "90210",
+    "phone": "(310) 555-2468",
+    "email": "sjohnson@email.com"
+  },
+  "top_note": "Complete kitchen and bathroom renovation including custom cabinetry, plumbing fixtures, electrical upgrades, and tile work. All work to be completed within 8 weeks.",
+  "trades": [
+    {
+      "name": "Kitchen Renovation",
+      "note": "Complete kitchen remodel - 15' x 20' space with island installation",
+      "locations": [
+        {
+          "name": "Main Kitchen",
+          "note": "15' x 20' kitchen with 9' ceilings, includes structural modifications for island",
+          "showSubtotal": true,
+          "subtotal": 42500.00,
+          "categories": [
+            {
+              "name": "Demolition",
+              "items": [
+                {
+                  "name": "Remove existing cabinets and countertops",
+                  "qty": 300,
+                  "unit": "SF",
+                  "price": 8.50,
+                  "description": "Includes disposal and site cleanup"
+                },
+                {
+                  "name": "Remove flooring",
+                  "qty": 300,
+                  "unit": "SF",
+                  "price": 3.50,
+                  "description": ""
+                }
+              ]
+            },
+            {
+              "name": "Cabinetry",
+              "items": [
+                {
+                  "name": "Custom upper cabinets",
+                  "qty": 12,
+                  "unit": "LF",
+                  "price": 450.00,
+                  "description": "Solid wood with soft-close hinges"
+                },
+                {
+                  "name": "Custom base cabinets",
+                  "qty": 18,
+                  "unit": "LF",
+                  "price": 550.00,
+                  "description": "Including drawer slides and organizers"
+                },
+                {
+                  "name": "Kitchen island",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 4500.00,
+                  "description": "6' x 3' with storage and breakfast bar"
+                }
+              ]
+            },
+            {
+              "name": "Countertops",
+              "items": [
+                {
+                  "name": "Quartz countertop fabrication",
+                  "qty": 65,
+                  "unit": "SF",
+                  "price": 85.00,
+                  "description": "Premium quartz with undermount sink cutout"
+                },
+                {
+                  "name": "Island countertop with overhang",
+                  "qty": 24,
+                  "unit": "SF",
+                  "price": 95.00,
+                  "description": "Extended for breakfast bar seating"
+                }
+              ]
+            },
+            {
+              "name": "Plumbing",
+              "items": [
+                {
+                  "name": "Relocate sink plumbing",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 1200.00,
+                  "description": "Move to island location"
+                },
+                {
+                  "name": "Install dishwasher connection",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 350.00,
+                  "description": ""
+                },
+                {
+                  "name": "Install garbage disposal",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 450.00,
+                  "description": "Including electrical connection"
+                }
+              ]
+            },
+            {
+              "name": "Electrical",
+              "items": [
+                {
+                  "name": "Under-cabinet LED lighting",
+                  "qty": 30,
+                  "unit": "LF",
+                  "price": 45.00,
+                  "description": "Dimmable LED strips with transformer"
+                },
+                {
+                  "name": "Pendant lights over island",
+                  "qty": 3,
+                  "unit": "EA",
+                  "price": 350.00,
+                  "description": "Including installation and wiring"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Master Bathroom Renovation",
+      "note": "Complete bathroom remodel - 10' x 12' space with custom shower",
+      "locations": [
+        {
+          "name": "Master Bathroom",
+          "note": "10' x 12' bathroom with 9' ceilings, includes walk-in shower and double vanity",
+          "showSubtotal": true,
+          "subtotal": 28750.00,
+          "categories": [
+            {
+              "name": "Demolition",
+              "items": [
+                {
+                  "name": "Remove existing fixtures and tile",
+                  "qty": 120,
+                  "unit": "SF",
+                  "price": 12.00,
+                  "description": "Complete tearout to studs"
+                }
+              ]
+            },
+            {
+              "name": "Plumbing",
+              "items": [
+                {
+                  "name": "Rough-in for double vanity",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 850.00,
+                  "description": ""
+                },
+                {
+                  "name": "Shower valve and drain",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 1200.00,
+                  "description": "Thermostatic valve with 3 functions"
+                },
+                {
+                  "name": "Toilet installation",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 450.00,
+                  "description": "Including wax ring and supply line"
+                }
+              ]
+            },
+            {
+              "name": "Tile Work",
+              "items": [
+                {
+                  "name": "Floor tile installation",
+                  "qty": 120,
+                  "unit": "SF",
+                  "price": 18.00,
+                  "description": "Porcelain tile with heated floor system"
+                },
+                {
+                  "name": "Shower wall tile",
+                  "qty": 140,
+                  "unit": "SF",
+                  "price": 22.00,
+                  "description": "Full height to ceiling"
+                },
+                {
+                  "name": "Custom shower niche",
+                  "qty": 2,
+                  "unit": "EA",
+                  "price": 450.00,
+                  "description": "Recessed with accent tile"
+                },
+                {
+                  "name": "Shower pan installation",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 1800.00,
+                  "description": "Custom sloped with waterproofing"
+                }
+              ]
+            },
+            {
+              "name": "Fixtures",
+              "items": [
+                {
+                  "name": "Double vanity cabinet",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 2800.00,
+                  "description": "60\" custom vanity with soft-close drawers"
+                },
+                {
+                  "name": "Vanity tops with sinks",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 1600.00,
+                  "description": "Quartz tops with undermount sinks"
+                },
+                {
+                  "name": "Shower glass enclosure",
+                  "qty": 1,
+                  "unit": "EA",
+                  "price": 2200.00,
+                  "description": "Frameless glass with chrome hardware"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subtotal": 71250.00,
+  "overhead": {
+    "rate": 10.0,
+    "amount": 7125.00
+  },
+  "profit": {
+    "rate": 15.0,
+    "amount": 10687.50
+  },
+  "sales_tax": {
+    "rate": 9.5,
+    "amount": 8460.94
+  },
+  "overhead_rate": 10.0,
+  "profit_rate": 15.0,
+  "sales_tax_rate": 9.5,
+  "total": 97523.44,
+  "bottom_note": "Overhead includes project management, insurance, and administrative costs. Profit margin reflects market standards for custom renovation work. California sales tax rate of 9.5% applied to materials and labor.",
+  "disclaimer": "This estimate is valid for 30 days from the date above. Prices subject to change based on material availability. Does not include: permits, unforeseen structural issues, or changes to the original scope. Payment terms: 30% deposit, 40% at midpoint, 30% upon completion. All work guaranteed for one year from completion date.",
+  "floor_plans": {
+    "rooms": [
+      {
+        "name": "Main Kitchen",
+        "dimensions": {
+          "length": 20,
+          "width": 15
+        },
+        "area": 300,
+        "perimeter": 70,
+        "features": {
+          "doors": [
+            {"type": "entry", "location": "south", "width": 3}
+          ],
+          "windows": [
+            {"type": "double", "location": "north", "width": 4}
+          ],
+          "fixtures": [
+            {"type": "island", "dimensions": "6' x 3'"},
+            {"type": "sink", "location": "island"},
+            {"type": "range", "location": "north wall"},
+            {"type": "refrigerator", "location": "east wall"}
+          ]
+        },
+        "measurements": {
+          "ceiling_height": 9,
+          "wall_area": 630,
+          "floor_area": 300
+        }
+      },
+      {
+        "name": "Master Bathroom",
+        "dimensions": {
+          "length": 12,
+          "width": 10
+        },
+        "area": 120,
+        "perimeter": 44,
+        "features": {
+          "doors": [
+            {"type": "entry", "location": "east", "width": 2.5}
+          ],
+          "fixtures": [
+            {"type": "shower", "dimensions": "5' x 5'", "location": "west"},
+            {"type": "double_vanity", "dimensions": "60\"", "location": "north"},
+            {"type": "toilet", "location": "southeast"}
+          ]
+        },
+        "measurements": {
+          "ceiling_height": 9,
+          "wall_area": 396,
+          "floor_area": 120,
+          "shower_area": 25,
+          "shower_wall_area": 140
+        }
+      }
+    ]
+  }
+}

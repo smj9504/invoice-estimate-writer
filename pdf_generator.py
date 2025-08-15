@@ -775,7 +775,7 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
         print(f"DEBUG: Error logging context structure: {e}")
     context = clean_nan(context)
 
-    if doc_type == "insurance_estimate":
+    if doc_type in ["insurance_estimate", "insurance_estimate_with_plans"]:
         context = validate_estimate_data(context)
         context = calculate_estimate_totals(context)
 
@@ -973,6 +973,230 @@ def generate_pdf(context: dict, output_path: str, doc_type: str = "insurance_est
         print(f"DEBUG: PDF generated successfully (without custom CSS) at: {output_path}")
 
     print(f"DEBUG: ========== PDF GENERATION END ==========")
+
+def generate_insurance_estimate_html(context: dict, output_path: str):
+    """보험 견적서 HTML 생성 (PDF와 동일한 템플릿 사용)"""
+    import copy
+    
+    print(f"DEBUG: generate_insurance_estimate_html called")
+    print(f"DEBUG: Output path: {output_path}")
+    
+    # 깊은 복사로 원본 보호
+    context_copy = copy.deepcopy(context)
+    
+    # Process floor plans if they exist (for consistency)
+    from floor_plan_generator import FloorPlanGenerator
+    
+    if 'floor_plans' in context_copy and context_copy.get('floor_plans', {}).get('rooms'):
+        generator = FloorPlanGenerator()
+        rooms_data = context_copy['floor_plans']['rooms']
+        
+        # Handle both list and dict formats
+        if isinstance(rooms_data, list):
+            for i, room_data in enumerate(rooms_data):
+                if isinstance(room_data, dict):
+                    # Generate SVG floor plan
+                    if 'coordinates' in room_data and room_data['coordinates']:
+                        svg = generator.generate_complex_room_svg(room_data)
+                    else:
+                        svg = generator.generate_room_svg(room_data)
+                    context_copy['floor_plans']['rooms'][i]['svg_plan'] = svg
+        elif isinstance(rooms_data, dict):
+            for room_key, room_data in rooms_data.items():
+                if isinstance(room_data, dict):
+                    # Generate SVG floor plan
+                    if 'coordinates' in room_data and room_data['coordinates']:
+                        svg = generator.generate_complex_room_svg(room_data)
+                    else:
+                        svg = generator.generate_room_svg(room_data)
+                    context_copy['floor_plans']['rooms'][room_key]['svg_plan'] = svg
+    
+    # HTML 생성
+    _generate_html_output(context_copy, output_path, "insurance_estimate")
+
+def generate_insurance_estimate_html_with_plans(context: dict, output_path: str):
+    """보험 견적서 HTML 생성 with Floor Plans"""
+    import copy
+    
+    print(f"DEBUG: generate_insurance_estimate_html_with_plans called")
+    print(f"DEBUG: Output path: {output_path}")
+    
+    # 깊은 복사로 원본 보호
+    context_copy = copy.deepcopy(context)
+    
+    # Floor plan data validation
+    from floor_plan_generator import FloorPlanGenerator
+    
+    if 'floor_plans' in context_copy and context_copy.get('floor_plans', {}).get('rooms'):
+        print(f"DEBUG: Processing floor plans for HTML with plans")
+        generator = FloorPlanGenerator()
+        rooms_data = context_copy['floor_plans']['rooms']
+        print(f"DEBUG: Rooms data type: {type(rooms_data)}")
+        print(f"DEBUG: Number of rooms: {len(rooms_data) if isinstance(rooms_data, (list, dict)) else 0}")
+        
+        # Handle both list and dict formats
+        if isinstance(rooms_data, list):
+            # If rooms is a list, iterate directly
+            print(f"DEBUG: Processing rooms as list")
+            for i, room_data in enumerate(rooms_data):
+                if isinstance(room_data, dict):
+                    print(f"DEBUG: Processing room {i}: {room_data.get('name', 'Unknown')}")
+                    # Generate SVG floor plan
+                    if 'coordinates' in room_data and room_data['coordinates']:
+                        svg = generator.generate_complex_room_svg(room_data)
+                        print(f"DEBUG: Generated complex SVG for room {i}")
+                    else:
+                        svg = generator.generate_room_svg(room_data)
+                        print(f"DEBUG: Generated simple SVG for room {i}, length: {len(svg) if svg else 0}")
+                    
+                    # Use svg_plan to match template expectation
+                    context_copy['floor_plans']['rooms'][i]['svg_plan'] = svg
+                    print(f"DEBUG: Set svg_plan for room {i}")
+                    
+                    measurements_html = generator.generate_measurement_table_html(room_data)
+                    context_copy['floor_plans']['rooms'][i]['measurements_html'] = measurements_html
+        elif isinstance(rooms_data, dict):
+            # If rooms is a dict, iterate over items
+            print(f"DEBUG: Processing rooms as dict")
+            for room_key, room_data in rooms_data.items():
+                if isinstance(room_data, dict):
+                    print(f"DEBUG: Processing room {room_key}: {room_data.get('name', 'Unknown')}")
+                    # Generate SVG floor plan
+                    if 'coordinates' in room_data and room_data['coordinates']:
+                        svg = generator.generate_complex_room_svg(room_data)
+                        print(f"DEBUG: Generated complex SVG for room {room_key}")
+                    else:
+                        svg = generator.generate_room_svg(room_data)
+                        print(f"DEBUG: Generated simple SVG for room {room_key}, length: {len(svg) if svg else 0}")
+                    
+                    # Use svg_plan to match template expectation
+                    context_copy['floor_plans']['rooms'][room_key]['svg_plan'] = svg
+                    print(f"DEBUG: Set svg_plan for room {room_key}")
+                    
+                    measurements_html = generator.generate_measurement_table_html(room_data)
+                    context_copy['floor_plans']['rooms'][room_key]['measurements_html'] = measurements_html
+    else:
+        print(f"DEBUG: No floor plans found or rooms is empty")
+        print(f"DEBUG: floor_plans exists: {'floor_plans' in context_copy}")
+        if 'floor_plans' in context_copy:
+            print(f"DEBUG: floor_plans.rooms exists: {'rooms' in context_copy.get('floor_plans', {})}")
+            if 'rooms' in context_copy.get('floor_plans', {}):
+                print(f"DEBUG: rooms value: {context_copy['floor_plans']['rooms']}")
+    
+    # Convert rooms dict to list if needed for template compatibility
+    if 'floor_plans' in context_copy and 'rooms' in context_copy['floor_plans']:
+        rooms = context_copy['floor_plans']['rooms']
+        if isinstance(rooms, dict):
+            # Convert dict to list for template iteration
+            context_copy['floor_plans']['rooms'] = list(rooms.values())
+            print(f"DEBUG: Converted rooms dict to list of {len(context_copy['floor_plans']['rooms'])} rooms")
+    
+    # HTML 생성
+    _generate_html_output(context_copy, output_path, "insurance_estimate_with_plans")
+
+def _generate_html_output(context: dict, output_path: str, template_type: str):
+    """HTML 파일 생성 헬퍼 함수"""
+    
+    # Define filter functions
+    def format_currency(value):
+        """통화 포맷팅 필터"""
+        try:
+            if value is None or value == '':
+                return "$0.00"
+            # Convert to float, handling various input types
+            if isinstance(value, str):
+                # Remove $ and commas
+                value = value.replace('$', '').replace(',', '').strip()
+            
+            num_value = float(value)
+            # Format with commas and 2 decimal places
+            return f"${num_value:,.2f}"
+        except (ValueError, TypeError):
+            return "$0.00"
+    
+    def format_number(value, decimal_places=2):
+        """숫자 포맷팅 필터"""
+        try:
+            num_value = safe_float_conversion(value)
+            return f"{num_value:,.{decimal_places}f}"
+        except:
+            return "0"
+    
+    # NaN 값 정리
+    context = clean_nan(context)
+    
+    # 견적서 타입별 계산 수행 (PDF와 동일한 로직)
+    if template_type in ["insurance_estimate", "insurance_estimate_with_plans"]:
+        # Calculate totals - same logic as in generate_insurance_estimate_pdf
+        subtotal = 0.0
+        for trade in context.get('trades', []):
+            for location in trade.get('locations', []):
+                location_subtotal = calculate_location_subtotal(location)
+                location['subtotal'] = location_subtotal
+                subtotal += location_subtotal
+        
+        context['subtotal'] = subtotal
+        
+        # Calculate overhead and profit
+        overhead_rate = safe_float_conversion(context.get('overhead_rate', 0))
+        profit_rate = safe_float_conversion(context.get('profit_rate', 0))
+        
+        overhead_amount = safe_float_conversion(context.get('overhead_amount', 0))
+        profit_amount = safe_float_conversion(context.get('profit_amount', 0))
+        
+        if overhead_amount <= 0 and overhead_rate > 0:
+            if overhead_rate <= 1:
+                overhead_amount = subtotal * overhead_rate
+            else:
+                overhead_amount = subtotal * (overhead_rate / 100)
+            context['overhead_amount'] = overhead_amount
+        
+        if profit_amount <= 0 and profit_rate > 0:
+            if profit_rate <= 1:
+                profit_amount = subtotal * profit_rate
+            else:
+                profit_amount = subtotal * (profit_rate / 100)
+            context['profit_amount'] = profit_amount
+        
+        # Sales tax
+        sales_tax_amount = safe_float_conversion(context.get('sales_tax_amount', 0))
+        if sales_tax_amount <= 0:
+            sales_tax_amount = safe_float_conversion(context.get('sales_tax', 0))
+        context['sales_tax_amount'] = sales_tax_amount
+        
+        # Calculate total
+        total = subtotal + overhead_amount + profit_amount + sales_tax_amount
+        context['total'] = total
+    
+    # Jinja2 템플릿 렌더링
+    env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+    env.filters['format_currency'] = format_currency
+    env.filters['format_number'] = format_number
+    
+    template_info = TEMPLATE_MAP[template_type]
+    template = env.get_template(template_info["template"])
+    
+    # HTML 렌더링
+    html_content = template.render(context)
+    
+    # CSS 파일 경로
+    css_path = TEMPLATE_DIR / template_info["css"]
+    
+    # CSS를 인라인으로 포함
+    with open(css_path, 'r', encoding='utf-8') as css_file:
+        css_content = css_file.read()
+    
+    # HTML에 CSS 삽입
+    html_with_css = html_content.replace('</head>', f'<style>{css_content}</style></head>')
+    
+    # HTML 파일 저장
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html_with_css)
+    
+    print(f"HTML file saved to: {output_path}")
 
 def generate_insurance_estimate_pdf_with_plans(context: dict, output_path: str):
     """보험 견적서 PDF 생성 with Floor Plans"""

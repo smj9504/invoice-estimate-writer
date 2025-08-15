@@ -8,13 +8,13 @@
     /* Additional styles for floor plans */
     .floor-plans-section {
       page-break-before: always;
-      padding: 20px;
+      padding: 10px;
     }
     
     .floor-plans-header {
       text-align: center;
-      margin-bottom: 30px;
-      padding-bottom: 10px;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
       border-bottom: 2px solid #333;
     }
     
@@ -25,19 +25,20 @@
     }
     
     .room-plan-container {
-      margin-bottom: 40px;
+      margin-bottom: 5px;
       page-break-inside: avoid;
       border: 1px solid #ddd;
-      padding: 15px;
+      padding: 5px;
       background: #fff;
-      overflow: hidden; /* Prevent content from overflowing container */
+      overflow: visible;
       box-sizing: border-box;
+      height: auto;
     }
     
     .room-header {
       background: #f0f0f0;
-      padding: 10px;
-      margin: -15px -15px 15px -15px;
+      padding: 8px;
+      margin: -5px -5px 5px -5px;
       border-bottom: 2px solid #333;
     }
     
@@ -48,61 +49,69 @@
     }
     
     .plan-layout {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
+      display: table;
       width: 100%;
       box-sizing: border-box;
+      padding: 0;
+      overflow: visible;
+      table-layout: fixed;
     }
     
     .floor-plan {
-      flex: 1.5;
-      background: #f9f9f9;
-      padding: 10px;
-      border: 1px solid #ccc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 400px;
+      display: table-cell;
+      width: 65%;
+      background: white;
+      padding: 0;
+      border: none;
+      text-align: center;
+      vertical-align: top;
+      min-height: auto;
+      height: auto;
       box-sizing: border-box;
-      overflow: hidden;
+      overflow: visible;
     }
     
     .floor-plan svg {
       max-width: 100%;
       height: auto;
+      display: inline-block;
+      margin: 0 auto;
     }
     
     .measurements-panel {
-      flex: 1;
-      min-width: 0; /* Prevent flex item from overflowing */
-      max-width: 400px; /* Set maximum width to prevent excessive stretching */
+      display: table-cell;
+      width: 35%;
+      min-width: 200px;
+      max-width: 300px;
       box-sizing: border-box;
-      overflow-x: auto; /* Allow horizontal scroll if needed */
+      overflow: visible;
+      padding: 0 0 0 10px;
+      margin: 0;
+      vertical-align: top;
     }
     
     .room-measurements {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       background: white;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      table-layout: fixed; /* Force table to respect width constraints */
+      table-layout: auto;
     }
     
     .room-measurements thead th {
       background: #333;
       color: white;
-      padding: 10px;
+      padding: 6px 8px;
       text-align: left;
-      font-size: 14px;
+      font-size: 12px;
       word-wrap: break-word;
     }
     
     .room-measurements tbody td {
-      padding: 8px 10px;
+      padding: 5px 8px;
       border-bottom: 1px solid #eee;
-      font-size: 12px;
+      font-size: 11px;
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
@@ -110,7 +119,7 @@
     .room-measurements tbody td:first-child {
       font-weight: bold;
       background: #f9f9f9;
-      width: 40%;
+      width: 45%;
     }
     
     .work-items {
@@ -118,22 +127,22 @@
       border-collapse: collapse;
       background: white;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      table-layout: fixed; /* Force table to respect width constraints */
+      table-layout: auto;
     }
     
     .work-items thead th {
       background: #666;
       color: white;
-      padding: 10px;
+      padding: 6px 8px;
       text-align: left;
-      font-size: 14px;
+      font-size: 12px;
       word-wrap: break-word;
     }
     
     .work-items tbody td {
-      padding: 8px 10px;
+      padding: 5px 8px;
       border-bottom: 1px solid #eee;
-      font-size: 12px;
+      font-size: 11px;
       word-wrap: break-word;
       overflow-wrap: break-word;
     }
@@ -141,7 +150,7 @@
     .work-items tbody td:first-child {
       font-weight: bold;
       background: #f9f9f9;
-      width: 40%;
+      width: 45%;
     }
     
     .measurement-notes {
@@ -156,7 +165,13 @@
     /* Responsive layout for smaller screens */
     @media screen and (max-width: 768px) {
       .plan-layout {
-        flex-direction: column;
+        display: block;
+      }
+      
+      .floor-plan,
+      .measurements-panel {
+        display: block;
+        width: 100%;
       }
       
       .measurements-panel {
@@ -166,7 +181,7 @@
       }
       
       .floor-plan {
-        min-height: 300px;
+        min-height: auto;
       }
     }
     
@@ -181,11 +196,18 @@
       
       /* Ensure proper layout in print */
       .plan-layout {
-        display: flex;
-        flex-direction: row;
+        display: table;
+        table-layout: fixed;
+      }
+      
+      .floor-plan {
+        display: table-cell;
+        width: 60%;
       }
       
       .measurements-panel {
+        display: table-cell;
+        width: 40%;
         max-width: 40%;
       }
     }
@@ -294,8 +316,8 @@
                     <div class="col-amount">Line Total</div>
                   </div>
                   
-                  {% if category.get('items') %}
-                    {% for item in category.get('items', []) %}
+                  {% if category['items'] %}
+                    {% for item in category['items'] %}
                       {% set global_item_counter.value = global_item_counter.value + 1 %}
                       <div class="line-item">
                         <div class="col-item">{{ global_item_counter.value }}</div>
