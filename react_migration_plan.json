@@ -1,0 +1,422 @@
+{
+  "migration_analysis": {
+    "current_codebase_analysis": {
+      "application_structure": {
+        "entry_point": "app.py - Simple dashboard with navigation to estimate and invoice builders",
+        "architecture": "Multi-page Streamlit application with modular design",
+        "total_pages": 17,
+        "database": "Supabase with connection pooling and retry logic",
+        "pdf_generation": "WeasyPrint with GTK+ dependency for Windows"
+      },
+      "core_functionality": {
+        "document_types": [
+          "estimates",
+          "invoices", 
+          "insurance_estimates",
+          "depreciation_invoices",
+          "plumber_reports"
+        ],
+        "key_features": [
+          "Company management with logo upload",
+          "Client management", 
+          "Item catalog with descriptions",
+          "Multi-section document building",
+          "PDF generation with templates",
+          "Floor plan integration",
+          "JSON import/export",
+          "Excel to PDF conversion"
+        ],
+        "database_tables": [
+          "companies",
+          "estimates", 
+          "invoices",
+          "est_items",
+          "est_item_descriptions",
+          "invoice_items"
+        ]
+      },
+      "technical_dependencies": {
+        "core": ["streamlit", "supabase", "jinja2", "weasyprint"],
+        "data_processing": ["pandas", "json", "pathlib"],
+        "image_processing": ["PIL", "base64"],
+        "pdf_generation": ["weasyprint", "GTK+ runtime"],
+        "floor_plans": ["custom SVG generation"]
+      }
+    },
+    "react_architecture_design": {
+      "project_structure": {
+        "frontend": {
+          "framework": "React 18 with TypeScript",
+          "bundler": "Vite",
+          "ui_library": "Ant Design or Material-UI",
+          "state_management": "Zustand (lightweight, simple)",
+          "routing": "React Router v6",
+          "http_client": "Axios",
+          "pdf_viewer": "react-pdf",
+          "form_handling": "React Hook Form + Zod validation"
+        },
+        "directory_structure": {
+          "/src": "Main source directory",
+          "/src/components": "Reusable UI components",
+          "/src/pages": "Page-level components",
+          "/src/hooks": "Custom React hooks",
+          "/src/services": "API service layer",
+          "/src/stores": "Zustand stores",
+          "/src/types": "TypeScript type definitions",
+          "/src/utils": "Utility functions",
+          "/src/constants": "Constants and configurations"
+        }
+      },
+      "component_hierarchy": {
+        "App": {
+          "Router": {
+            "Layout": {
+              "Header": "Navigation and user info",
+              "Sidebar": "Main navigation menu", 
+              "Content": {
+                "Dashboard": "Main landing page",
+                "CompanyManagement": "Company CRUD operations",
+                "DocumentList": "List estimates/invoices with filters",
+                "DocumentBuilder": {
+                  "EstimateBuilder": "Build estimates with sections/items",
+                  "InvoiceBuilder": "Build invoices with payments/tax",
+                  "InsuranceEstimateEditor": "Complex insurance estimates"
+                },
+                "ItemManagement": "Manage estimate items catalog",
+                "Settings": "Application settings"
+              }
+            }
+          }
+        }
+      },
+      "state_management_strategy": {
+        "global_stores": [
+          "authStore - user authentication state",
+          "companyStore - company data and CRUD operations", 
+          "documentStore - estimates/invoices state",
+          "itemStore - item catalog management",
+          "uiStore - UI state (loading, notifications)"
+        ],
+        "local_state": "Component-level state for forms and UI interactions",
+        "server_state": "React Query for caching API responses"
+      }
+    },
+    "backend_strategy": {
+      "api_framework": "FastAPI with Python",
+      "architecture": "RESTful API with clear separation of concerns",
+      "database": "Keep existing Supabase setup",
+      "pdf_generation": "Microservice approach with separate PDF service",
+      "file_handling": "Cloud storage (AWS S3 or similar) for generated files",
+      "authentication": "JWT tokens with refresh mechanism"
+    }
+  },
+  "detailed_component_mapping": {
+    "dashboard_components": {
+      "Dashboard": {
+        "description": "Main landing page with navigation cards",
+        "streamlit_equivalent": "app.py main interface",
+        "features": ["Navigation cards", "Recent documents", "Quick stats"],
+        "api_endpoints": ["/api/stats", "/api/recent-documents"]
+      }
+    },
+    "company_management": {
+      "CompanyList": {
+        "description": "List all companies with CRUD operations",
+        "streamlit_equivalent": "manage_company.py company list section",
+        "features": ["Company grid", "Search/filter", "Delete confirmation"],
+        "api_endpoints": ["/api/companies"]
+      },
+      "CompanyForm": {
+        "description": "Create/edit company with logo upload",
+        "streamlit_equivalent": "manage_company.py form section", 
+        "features": ["Form validation", "Logo crop/resize", "Base64 encoding"],
+        "api_endpoints": ["/api/companies", "/api/companies/{id}"]
+      }
+    },
+    "document_management": {
+      "DocumentList": {
+        "description": "Unified list for estimates and invoices",
+        "streamlit_equivalent": "estimate_list_viewer.py + invoice_list_viewer.py",
+        "features": ["Tabbed interface", "Search/filter", "Pagination", "Status indicators"],
+        "api_endpoints": ["/api/estimates", "/api/invoices"]
+      },
+      "EstimateBuilder": {
+        "description": "Multi-section estimate builder",
+        "streamlit_equivalent": "build_estimate.py",
+        "features": ["Dynamic sections", "Item catalog integration", "Real-time totals", "Description management"],
+        "api_endpoints": ["/api/estimates", "/api/items", "/api/item-descriptions"]
+      },
+      "InvoiceBuilder": {
+        "description": "Invoice builder with payments and tax",
+        "streamlit_equivalent": "build_invoice.py",
+        "features": ["Service sections", "Payment tracking", "Tax calculations", "Client types"],
+        "api_endpoints": ["/api/invoices", "/api/invoice-items"]
+      },
+      "InsuranceEstimateEditor": {
+        "description": "Complex insurance estimate with floor plans",
+        "streamlit_equivalent": "insurance_estimate_editor.py",
+        "features": ["JSON upload/paste", "Floor plan integration", "Complex calculations", "Validation"],
+        "api_endpoints": ["/api/insurance-estimates", "/api/floor-plans"]
+      }
+    },
+    "item_management": {
+      "ItemCatalog": {
+        "description": "Manage estimate items with categories",
+        "streamlit_equivalent": "manage_items.py",
+        "features": ["Category management", "Bulk operations", "Description templates"],
+        "api_endpoints": ["/api/items", "/api/categories"]
+      }
+    },
+    "pdf_generation": {
+      "PDFPreview": {
+        "description": "Preview and download generated PDFs",
+        "streamlit_equivalent": "preview_estimate.py + preview_invoice.py",
+        "features": ["PDF viewer", "Download options", "Print functionality"],
+        "api_endpoints": ["/api/pdf/generate", "/api/pdf/download"]
+      }
+    }
+  },
+  "api_endpoint_design": {
+    "companies": {
+      "GET /api/companies": "List all companies",
+      "POST /api/companies": "Create new company",
+      "GET /api/companies/{id}": "Get company by ID", 
+      "PUT /api/companies/{id}": "Update company",
+      "DELETE /api/companies/{id}": "Delete company"
+    },
+    "estimates": {
+      "GET /api/estimates": "List estimates with pagination/filter",
+      "POST /api/estimates": "Create new estimate",
+      "GET /api/estimates/{id}": "Get estimate by ID",
+      "PUT /api/estimates/{id}": "Update estimate", 
+      "DELETE /api/estimates/{id}": "Delete estimate",
+      "POST /api/estimates/{id}/duplicate": "Duplicate estimate"
+    },
+    "invoices": {
+      "GET /api/invoices": "List invoices with pagination/filter",
+      "POST /api/invoices": "Create new invoice",
+      "GET /api/invoices/{id}": "Get invoice by ID",
+      "PUT /api/invoices/{id}": "Update invoice",
+      "DELETE /api/invoices/{id}": "Delete invoice"
+    },
+    "items": {
+      "GET /api/items": "List estimate items",
+      "POST /api/items": "Create new item",
+      "GET /api/items/{id}": "Get item by ID",
+      "PUT /api/items/{id}": "Update item",
+      "DELETE /api/items/{id}": "Delete item",
+      "GET /api/items/{id}/descriptions": "Get item descriptions",
+      "POST /api/items/{id}/descriptions": "Add item description"
+    },
+    "pdf": {
+      "POST /api/pdf/generate": "Generate PDF from document data",
+      "GET /api/pdf/download/{id}": "Download generated PDF",
+      "POST /api/pdf/preview": "Generate PDF preview"
+    },
+    "file_upload": {
+      "POST /api/upload/logo": "Upload company logo",
+      "POST /api/upload/json": "Upload JSON document",
+      "POST /api/upload/excel": "Upload Excel file for conversion"
+    }
+  },
+  "implementation_recommendations": [
+    {
+      "scenario": "High-traffic production environment",
+      "recommended_solution": "React + FastAPI + Redis caching + CDN",
+      "rationale": "Better performance and scalability than Streamlit"
+    },
+    {
+      "scenario": "Quick MVP with minimal changes", 
+      "recommended_solution": "React + existing Python functions as API",
+      "rationale": "Reuse existing business logic while improving UX"
+    },
+    {
+      "scenario": "Long-term maintainable solution",
+      "recommended_solution": "Full React + TypeScript + proper API design",
+      "rationale": "Better developer experience and type safety"
+    }
+  ],
+  "step_by_step_migration_plan": {
+    "phase_1_preparation": {
+      "duration": "1-2 weeks",
+      "tasks": [
+        "Set up React project with Vite + TypeScript",
+        "Install core dependencies (Ant Design, Zustand, React Router)",
+        "Create project structure and basic layout",
+        "Set up development environment and build pipeline"
+      ],
+      "deliverables": [
+        "Working React development environment",
+        "Basic app shell with routing",
+        "Component library setup"
+      ]
+    },
+    "phase_2_api_development": {
+      "duration": "2-3 weeks", 
+      "tasks": [
+        "Create FastAPI project structure",
+        "Extract business logic from Streamlit modules",
+        "Implement core API endpoints (companies, estimates, invoices)",
+        "Set up authentication and authorization",
+        "Create API documentation with OpenAPI"
+      ],
+      "deliverables": [
+        "Working API server",
+        "Database integration", 
+        "API documentation",
+        "Authentication system"
+      ]
+    },
+    "phase_3_core_components": {
+      "duration": "3-4 weeks",
+      "tasks": [
+        "Implement Dashboard component",
+        "Create CompanyManagement components", 
+        "Build DocumentList with filtering",
+        "Develop basic EstimateBuilder",
+        "Set up state management with Zustand"
+      ],
+      "deliverables": [
+        "Working dashboard",
+        "Company CRUD functionality",
+        "Basic document management",
+        "State management setup"
+      ]
+    },
+    "phase_4_document_builders": {
+      "duration": "4-5 weeks",
+      "tasks": [
+        "Complete EstimateBuilder with sections/items",
+        "Implement InvoiceBuilder with payments", 
+        "Create ItemCatalog management",
+        "Add form validation and error handling",
+        "Implement real-time calculations"
+      ],
+      "deliverables": [
+        "Full estimate builder functionality",
+        "Invoice builder with tax calculations",
+        "Item management system",
+        "Form validation"
+      ]
+    },
+    "phase_5_pdf_generation": {
+      "duration": "2-3 weeks",
+      "tasks": [
+        "Create PDF microservice",
+        "Implement PDF generation API",
+        "Build PDF preview components",
+        "Add download/print functionality",
+        "Handle file storage and cleanup"
+      ],
+      "deliverables": [
+        "PDF generation service",
+        "Preview functionality",
+        "File management system"
+      ]
+    },
+    "phase_6_advanced_features": {
+      "duration": "3-4 weeks", 
+      "tasks": [
+        "Implement InsuranceEstimateEditor",
+        "Add floor plan integration",
+        "Create JSON import/export features",
+        "Build Excel conversion functionality",
+        "Add advanced validation and error handling"
+      ],
+      "deliverables": [
+        "Insurance estimate editor",
+        "Floor plan generation",
+        "Import/export functionality",
+        "Excel conversion"
+      ]
+    },
+    "phase_7_testing_deployment": {
+      "duration": "2-3 weeks",
+      "tasks": [
+        "Write comprehensive tests (unit, integration, E2E)",
+        "Performance optimization", 
+        "Security audit and hardening",
+        "Deployment setup (Docker, CI/CD)",
+        "User acceptance testing"
+      ],
+      "deliverables": [
+        "Test suite with >90% coverage",
+        "Production-ready deployment",
+        "Security audit report",
+        "Performance benchmarks"
+      ]
+    }
+  },
+  "migration_strategy": {
+    "approach": "Parallel development with gradual cutover",
+    "data_migration": "No migration needed - same Supabase database",
+    "user_training": "UI similarity to reduce learning curve",
+    "rollback_plan": "Keep Streamlit version running during transition",
+    "success_metrics": [
+      "50% faster page load times",
+      "90% reduction in user workflow time", 
+      "Zero data loss during migration",
+      "User satisfaction score >4.5/5"
+    ]
+  },
+  "technology_stack_comparison": {
+    "current_streamlit": {
+      "pros": [
+        "Rapid prototyping",
+        "Python-native", 
+        "Simple deployment"
+      ],
+      "cons": [
+        "Limited UI customization",
+        "Poor mobile experience",
+        "Server-side rendering bottlenecks",
+        "Difficult to scale"
+      ]
+    },
+    "proposed_react": {
+      "pros": [
+        "Better user experience",
+        "Mobile responsive",
+        "Client-side rendering",
+        "Highly customizable",
+        "Better performance",
+        "Industry standard"
+      ],
+      "cons": [
+        "More complex development",
+        "Requires frontend expertise",
+        "Longer initial development time"
+      ]
+    }
+  },
+  "risk_assessment": {
+    "high_risks": [
+      {
+        "risk": "PDF generation complexity in new environment",
+        "mitigation": "Create dedicated microservice with current Python logic",
+        "probability": "Medium",
+        "impact": "High"
+      },
+      {
+        "risk": "User adoption resistance",
+        "mitigation": "Gradual rollout with training and feedback loops", 
+        "probability": "Medium",
+        "impact": "Medium"
+      }
+    ],
+    "medium_risks": [
+      {
+        "risk": "Development timeline overrun",
+        "mitigation": "Agile development with regular checkpoints",
+        "probability": "Medium", 
+        "impact": "Medium"
+      },
+      {
+        "risk": "Data inconsistency during transition",
+        "mitigation": "Comprehensive testing and staging environment",
+        "probability": "Low",
+        "impact": "High"
+      }
+    ]
+  }
+}
