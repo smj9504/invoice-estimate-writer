@@ -30,7 +30,7 @@ def generate_html(data, items, company):
     total = sum([item['final_price'] for item in items])
     item_html = ""
     for item in items:
-        item_html += f"""
+        item_html += """
         <tr>
             <td width="55%" style="text-align:left;"><strong>{item['name']}</strong><br>{item['description']}</td>
             <td width="15%" style="text-align:right;">${item['reg_price']:.2f}</td>
@@ -38,7 +38,7 @@ def generate_html(data, items, company):
             <td width="15%" style="text-align:right;">${item['final_price']:.2f}</td>
         </tr>
         """
-    return f"""
+    return """
     <html>
     <body style="font-family: Arial;">
         <p><strong>MJ Estimate</strong></p>
@@ -101,7 +101,7 @@ with st.form("receipt_form"):
     recipient_name = selected_company['name']
     recipient_email = selected_company.get('email', '')
     st.info(f"수신자: {recipient_name} ({recipient_email})")
-    
+
     order_date = st.date_input("주문 날짜", value=date.today())
 
     # 상품 목록 표시

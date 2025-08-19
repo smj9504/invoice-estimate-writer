@@ -13,5 +13,4 @@ with col1:
 
 with col2:
     if st.button("📄 Create Invoice", use_container_width=True):
-        st.switch_page("pages/build_invoice.py")  
-
+        st.switch_page("pages/build_invoice.py")

@@ -1,24 +1,54 @@
 @page {
-    margin-top: 2.5cm;
-    margin-bottom: 2.5cm;
-    margin-left: 2.5cm;
-    margin-right: 2cm;
+    size: A4;
+    margin: 3.5cm 1.5cm 2cm 1.5cm;
+    
+    @top-center {
+        content: element(pageHeader);
+        width: 100%;
+    }
 }
+
+@page:first {
+    margin-top: 1.5cm;
+    
+    @top-center {
+        content: none;
+    }
+}
+
+/* Running header element - removed from normal flow for PDF headers */
+.header-running {
+    position: running(pageHeader);
+    width: 100%;
+}
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+}
+
 body {
     font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
-header.page-header {
+/* First page visible header */
+.first-page-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border-bottom: 1px solid #434040;
-    padding: 10px 1cm;
-    font-size: 12px;
+    padding: 0 0 5px 0;
+    font-size: 10px;
+    margin-bottom: 0;
 }
 main {
-    padding: 0 1cm;
+    padding: 0;
+    margin-top: 10px;
 }
 .two-column {
     display: flex;
@@ -30,91 +60,163 @@ main {
     width: 100%;
 }
 h3 {
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 0;
     border-bottom: 1px solid #333;
-    padding-bottom: 4px;
+    padding-bottom: 3px;
+    font-size: 14px;
 }
 .damage-assessment {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 1px;
     margin-bottom: 20px;
 }
 
 .damage-assessment th, .damage-assessment td {
     border: 1px solid #ccc;
-    padding: 6px;
+    padding: 4px 6px;
     text-align: left;
     vertical-align: top;
+    font-size: 12px;
 }
 
 .damage-assessment th {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 !important;
     font-weight: bold;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 .damage-assessment input[type="checkbox"] {
-    margin-right: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #333;
+    background-color: white;
+    margin-right: 3px;
     vertical-align: middle;
-    accent-color: black;
+    position: relative;
+    display: inline-block;
+    caret-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.damage-assessment input[type="checkbox"]:checked {
+    background-color: white;
+}
+
+.damage-assessment input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
 }
 
 .damage-assessment label {
-    margin-right: 16px;
-    font-size: 14px;
+    margin-right: 8px;
+    font-size: 12px;
     vertical-align: middle;
+    display: inline-block;
+    white-space: nowrap;
 }
 .repair-details {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 1px;
     margin-bottom: 20px;
 }
 .repair-details th, .repair-details td {
     border: 1px solid #ccc;
-    padding: 6px;
+    padding: 4px 6px;
     text-align: left;
     vertical-align: top;
+    font-size: 12px;
 }
 .repair-details th {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 !important;
     font-weight: bold;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 0;
     margin-bottom: 20px;
 }
 th, td {
     border: 1px solid #ccc;
-    padding: 6px;
+    padding: 4px 6px;
     text-align: left;
+    font-size: 12px;
 }
 th {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 input[type="checkbox"] {
-    transform: scale(1.1);
-    margin-right: 6px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #333;
+    background-color: white;
+    margin-right: 4px;
+    vertical-align: middle;
+    position: relative;
+    display: inline-block;
+    caret-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
 }
 .invoice-table, .invoice-summary {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 1px;
+    margin-bottom: 10px;
 }
 
 .invoice-table th {
     border: none;
-    padding: 10px 12px;
+    padding: 5px 12px;
     vertical-align: top;
+    font-size: 12px;
 }
 .invoice-table td {
     border: none;
-    padding: 10px 12px 0 12px;
+    padding: 5px 12px;
     vertical-align: top;
+    font-size: 12px;
 }
 
 .invoice-table th {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 !important;
     font-weight: bold;
     text-align: center;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 .invoice-table .left {
 text-align: left;
@@ -131,6 +233,7 @@ text-align: right;
 .invoice-summary td {
     padding: 6px;
     border: none;
+    font-size: 13px;
 }
 
 .invoice-summary td strong {

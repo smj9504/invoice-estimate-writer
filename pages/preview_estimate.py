@@ -2,7 +2,7 @@ import streamlit as st
 import tempfile
 import json
 import re
-from pdf_generator import generate_estimate_pdf 
+from pdf_generator import generate_estimate_pdf
 from modules.estimate_module import save_estimate, get_estimate_by_id
 
 st.set_page_config(page_title="Estimate Preview", page_icon="🧾", layout="wide")
@@ -37,7 +37,7 @@ if estimate_id and uuid_pattern.match(estimate_id):
         st.session_state.top_note_preview = data.get("top_note", "")
         st.session_state.bottom_note_preview = data.get("bottom_note", "")
         st.session_state.disclaimer_preview = data.get("disclaimer", "")
-        
+
         st.session_state.op_percent_preview = data.get("op_percent", "")
         st.session_state.op_amount_preview = data.get("op_amount", "")
         st.session_state.total_preview = data.get("toptal", "")
@@ -128,10 +128,11 @@ for section in st.session_state.sections:
         st.markdown(f"- **{item['name']}** | 수량: {item['qty']} {item['unit']} | 단가: ${item['price']:,.2f}")
         if item.get("dec"):
             st.markdown(f"  - _{item['dec']}_")
-    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>",
+        unsafe_allow_html=True)
 
 # 전체 Total
-st.markdown(f"""
+st.markdown("""
 <h4 style='text-align:right;'>Subtotal: ${subtotal:,.2f}</h4>
 <h4 style='text-align:right;'>O&amp;P ({op_percent:.0f}%): ${op_amount:,.2f}</h4>
 <h3 style='text-align:right; font-weight:bold;'>💰 Total: ${total:,.2f}</h3>
@@ -171,7 +172,7 @@ if st.button("📄 견적서 PDF 다운로드"):
     with open(json_path, "r", encoding="utf-8") as f:
         context = json.load(f)
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pd") as tmpfile:
         output_path = tmpfile.name
         generate_estimate_pdf(context, output_path)
 
@@ -180,6 +181,6 @@ if st.button("📄 견적서 PDF 다운로드"):
             st.download_button(
                 label="견적서 PDF 다운로드",
                 data=f,
-                file_name="estimate.pdf",
+                file_name="estimate.pd",
                 mime="application/pdf"
             )

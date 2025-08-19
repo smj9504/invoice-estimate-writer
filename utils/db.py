@@ -1,6 +1,4 @@
-import os
 from supabase import create_client
-from dotenv import load_dotenv
 import streamlit as st
 import time
 
@@ -37,7 +35,7 @@ def get_connection():
     # 이미 연결이 있는 경우
     if "supabase" in st.session_state and st.session_state.supabase is not None:
         return st.session_state.supabase
-    
+
     # 새 연결 생성
     try:
         supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -48,6 +46,7 @@ def get_connection():
         print(f"[DB ERROR] Supabase 연결 실패: {e}")
         st.error(f"데이터베이스 연결에 실패했습니다: {e}")
         return None
+
 
 def get_supabase_client():
     """

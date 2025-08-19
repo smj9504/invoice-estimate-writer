@@ -18,19 +18,19 @@ from modules.company_module import get_all_companies
 def get_project_root():
     """프로젝트 루트 디렉토리 반환"""
     current_file = Path(__file__).resolve()
-    
+
     # pages 폴더에서 상위로 이동하여 프로젝트 루트 찾기
     if current_file.parent.name == "pages":
         return current_file.parent.parent
     else:
         # 파일이 루트에 있는 경우
         return current_file.parent
-    
+
 
 PROJECT_ROOT = get_project_root()
 DATA_STORAGE_PATH = PROJECT_ROOT / "data" / "insurance_estimate"
 TEMP_STORAGE_PATH = DATA_STORAGE_PATH / "temp"
-PDF_STORAGE_PATH = DATA_STORAGE_PATH / "pdf"
+PDF_STORAGE_PATH = DATA_STORAGE_PATH / "pd"
 JSON_STORAGE_PATH = DATA_STORAGE_PATH / "json"
 HTML_STORAGE_PATH = DATA_STORAGE_PATH / "html"
 
@@ -47,38 +47,39 @@ def safe_float_conversion(value, default=0.0):
     """
     if value is None or value == '' or value == 'None':
         return default
-    
+
     try:
         # Convert to string first
         str_value = str(value).strip()
-        
+
         # Handle empty string
         if not str_value:
             return default
-        
+
         # Handle special cases
         if str_value.lower() in ['nan', 'none', 'null']:
             return default
-        
+
         # Remove dollar signs, commas, and spaces
         cleaned_value = re.sub(r'[$,\s]', '', str_value)
-        
+
         # Handle percentage - remove % but keep the number as-is
         # e.g., "10%" → 10.0, not 0.1
         if '%' in cleaned_value:
             cleaned_value = cleaned_value.replace('%', '')
             # Don't divide by 100 here - the calculation will handle it later
             return float(cleaned_value)
-        
+
         # Handle empty string after cleaning
         if not cleaned_value:
             return default
-        
+
         # Convert to float
         return float(cleaned_value)
-        
+
     except (ValueError, TypeError, AttributeError):
         return default
+
 
 def safe_decimal_conversion(value, default=0.0):
     """
@@ -91,42 +92,44 @@ def safe_decimal_conversion(value, default=0.0):
     """
     if value is None or value == '' or value == 'None':
         return Decimal(str(default))
-    
+
     try:
         # Convert to string first
         str_value = str(value).strip()
-        
+
         # Handle empty string
         if not str_value:
             return Decimal(str(default))
-        
+
         # Handle special cases
         if str_value.lower() in ['nan', 'none', 'null']:
             return Decimal(str(default))
-        
+
         # Remove dollar signs, commas, and spaces
         cleaned_value = re.sub(r'[$,\s]', '', str_value)
-        
+
         # Handle percentage - remove % but keep the number as-is
         # e.g., "10%" → 10.0, not 0.1
         if '%' in cleaned_value:
             cleaned_value = cleaned_value.replace('%', '')
             # Don't divide by 100 here - the calculation will handle it later
             return Decimal(str(float(cleaned_value)))
-        
+
         # Handle empty string after cleaning
         if not cleaned_value:
             return Decimal(str(default))
-        
+
         # Convert to Decimal
         return Decimal(str(float(cleaned_value)))
-        
+
     except (ValueError, TypeError, AttributeError):
         return Decimal(str(default))
+
 
 def round_to_cents(decimal_value):
     """Round decimal value to 2 decimal places (cents)"""
     return decimal_value.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
 
 def safe_note_processing(note_value):
     """안전한 note 값 처리"""
@@ -146,44 +149,47 @@ def safe_note_processing(note_value):
         if note_str.lower() in ['nan', 'none', 'null', '']:
             return ""
         return note_str
-    except:
+    except Exception:
         return ""
+
 
 def ensure_storage_directories():
     """필요한 저장 디렉토리들이 존재하는지 확인하고 생성"""
     directories = [DATA_STORAGE_PATH, TEMP_STORAGE_PATH, PDF_STORAGE_PATH, JSON_STORAGE_PATH, HTML_STORAGE_PATH]
-    
+
     for directory in directories:
         try:
             directory.mkdir(parents=True, exist_ok=True)
         except Exception as e:
             logger.error(f"Failed to create directory {directory}: {str(e)}")
-    
+
     return DATA_STORAGE_PATH
+
 
 def get_storage_path(storage_type="temp"):
     """
     저장 경로 반환
     Args:
-        storage_type: 'temp', 'pdf', 'json', 'html', or 'base'
+        storage_type: 'temp', 'pd', 'json', 'html', or 'base'
     Returns:
         Path object for the requested storage type
     """
     path_mapping = {
         'base': DATA_STORAGE_PATH,
         'temp': TEMP_STORAGE_PATH,
-        'pdf': PDF_STORAGE_PATH, 
+        'pd': PDF_STORAGE_PATH,
         'json': JSON_STORAGE_PATH,
         'html': HTML_STORAGE_PATH
     }
-    
+
     return path_mapping.get(storage_type, TEMP_STORAGE_PATH)
+
 
 def generate_estimate_number(client_address=""):
     """Generate estimate number: EST_YYYYMM_{property address first 4 chars}"""
     now = datetime.now()
     year_month = now.strftime("%Y%m")
-    
+
     # Extract first 4 alphanumeric characters from address
     address_prefix = ""
     if client_address:
@@ -191,12 +197,14 @@ def generate_estimate_number(client_address=""):
         address_prefix = alphanumeric[:4].ljust(4, '0')  # Pad with 0 if less than 4 chars
     else:
         address_prefix = "0000"
-    
+
     return f"EST_{year_month}_{address_prefix}"
+
 
 def get_default_estimate_date():
     """Return today's date"""
     return datetime.now().strftime("%Y-%m-%d")
+
 
 def validate_json_subtotal(data):
     """
@@ -204,17 +212,18 @@ def validate_json_subtotal(data):
     Returns: (is_valid, calculated_subtotal, json_subtotal, discrepancy)
     """
     calculated_subtotal = 0.0
-    
+
     # Calculate subtotal from location subtotals
     for trade in data.get('trades', []):
         for location in trade.get('locations', []):
             # 먼저 stored subtotal 사용
             location_subtotal = safe_float_conversion(location.get('subtotal', 0))
-            
+
             if location_subtotal > 0:
                 # stored subtotal이 있으면 사용
                 calculated_subtotal += location_subtotal
-                logger.info(f"Using stored subtotal for location '{location.get('name', 'Unknown')}': ${location_subtotal}")
+                logger.info(f"Using stored subtotal for location '{location.get('name',
+                    'Unknown')}': ${location_subtotal}")
             else:
                 # stored subtotal이 없으면 아이템별 계산
                 categories = location.get('categories', [])
@@ -229,17 +238,21 @@ def validate_json_subtotal(data):
                                 item_total += qty * price
                     location_subtotal = item_total
                     calculated_subtotal += location_subtotal
-                    logger.info(f"Calculated subtotal for location '{location.get('name', 'Unknown')}': ${location_subtotal}")
+                    logger.info(f"Calculated subtotal for location '{location.get('name',
+                        'Unknown')}': ${location_subtotal}")
                 else:
-                    logger.warning(f"No categories and no stored subtotal for location '{location.get('name', 'Unknown')}'")
-    
+                    logger.warning(f"No categories and no stored subtotal for location '{location.get('name',
+                        'Unknown')}'")
+
     json_subtotal = safe_float_conversion(data.get('subtotal', 0))
     discrepancy = abs(calculated_subtotal - json_subtotal)
     is_valid = discrepancy < 0.01
-    
-    logger.info(f"Subtotal validation - Calculated: ${calculated_subtotal:,.2f}, JSON: ${json_subtotal:,.2f}, Discrepancy: ${discrepancy:,.2f}")
-    
+
+    logger.info(f"Subtotal validation - Calculated: ${calculated_subtotal:,.2f}, JSON: ${json_subtotal:,.2f}, "
+                f"Discrepancy: ${discrepancy:,.2f}")
+
     return is_valid, calculated_subtotal, json_subtotal, discrepancy
+
 
 def validate_json_item_subtotals(data):
     """
@@ -248,11 +261,11 @@ def validate_json_item_subtotals(data):
     """
     validation_details = []
     all_valid = True
-    
+
     for trade_idx, trade in enumerate(data.get('trades', [])):
         for loc_idx, location in enumerate(trade.get('locations', [])):
             stored_location_total = safe_float_conversion(location.get('subtotal', 0))
-            
+
             # categories가 있는 경우만 계산으로 검증
             categories = location.get('categories', [])
             if categories:
@@ -264,13 +277,13 @@ def validate_json_item_subtotals(data):
                             qty = safe_float_conversion(item.get('qty', 0))
                             price = safe_float_conversion(item.get('price', 0))
                             calculated_location_total += qty * price
-                
+
                 discrepancy = abs(calculated_location_total - stored_location_total)
                 is_location_valid = discrepancy < 0.01
-                
+
                 if not is_location_valid:
                     all_valid = False
-                
+
                 validation_details.append({
                     'trade_name': trade.get('name', f'Trade {trade_idx+1}'),
                     'location_name': location.get('name', f'Location {loc_idx+1}'),
@@ -291,8 +304,9 @@ def validate_json_item_subtotals(data):
                     'is_valid': True,
                     'has_categories': False
                 })
-    
+
     return all_valid, validation_details
+
 
 def initialize_missing_fields(data):
     """
@@ -305,7 +319,7 @@ def initialize_missing_fields(data):
         data['client'] = {}
     if 'trades' not in data:
         data['trades'] = []
-    
+
     # Initialize financial fields with safe defaults
     financial_fields = {
         'subtotal': 0.0,
@@ -317,12 +331,12 @@ def initialize_missing_fields(data):
         'sales_tax_amount': 0.0,
         'discount': 0.0
     }
-    
+
     for field, default_value in financial_fields.items():
         if field not in data or data[field] is None or data[field] == '':
             data[field] = default_value
             logger.info(f"Initialized missing field '{field}' with default value: {default_value}")
-    
+
     # Initialize nested objects
     if 'overhead' not in data:
         data['overhead'] = {'rate': 0.0, 'amount': 0.0}
@@ -330,19 +344,20 @@ def initialize_missing_fields(data):
         data['profit'] = {'rate': 0.0, 'amount': 0.0}
     if 'sales_tax' not in data:
         data['sales_tax'] = {'amount': 0.0}
-    
+
     # Initialize date fields
     if not data.get('estimate_date'):
         data['estimate_date'] = datetime.now().strftime("%Y-%m-%d")
         logger.info(f"Initialized missing estimate_date with today: {data['estimate_date']}")
-    
+
     # Initialize estimate number if missing
     if not data.get('estimate_number'):
         client_address = data.get('client', {}).get('address', '')
         data['estimate_number'] = generate_estimate_number(client_address)
         logger.info(f"Generated missing estimate_number: {data['estimate_number']}")
-    
+
     return data
+
 
 def test_edge_cases(data):
     """
@@ -350,22 +365,22 @@ def test_edge_cases(data):
     Returns: list of issues found
     """
     issues = []
-    
+
     # Test 1: Missing trades
     if not data.get('trades'):
         issues.append("No trades found in data")
-    
+
     # Test 2: Empty items and categories
     empty_locations = 0
     locations_without_categories = 0
-    
+
     for trade in data.get('trades', []):
         for location in trade.get('locations', []):
             categories = location.get('categories', [])
             if not categories:
                 locations_without_categories += 1
                 continue
-                
+
             has_items = False
             for category in categories:
                 if category.get('items'):
@@ -373,36 +388,37 @@ def test_edge_cases(data):
                     break
             if not has_items:
                 empty_locations += 1
-    
+
     if empty_locations > 0:
         issues.append(f"{empty_locations} location(s) have no items")
-    
+
     if locations_without_categories > 0:
         issues.append(f"{locations_without_categories} location(s) have no categories")
-    
+
     # Test 3: Negative values
     if safe_float_conversion(data.get('subtotal', 0)) < 0:
         issues.append("Negative subtotal detected")
-    
+
     if safe_float_conversion(data.get('total', 0)) < 0:
         issues.append("Negative total detected")
-    
+
     # Test 4: Inconsistent rates
     overhead_rate = safe_float_conversion(data.get('overhead_rate', 0))
     profit_rate = safe_float_conversion(data.get('profit_rate', 0))
-    
+
     if overhead_rate > 50:
         issues.append(f"Unusually high overhead rate: {overhead_rate}%")
-    
+
     if profit_rate > 50:
         issues.append(f"Unusually high profit rate: {profit_rate}%")
-    
+
     # Test 5: Missing required client info
     client = data.get('client', {})
     if not client.get('name'):
         issues.append("Missing client name")
-    
+
     return issues
+
 
 def normalize_overhead_profit_structure(data):
     """Normalize overhead, profit, and sales tax structure to handle both formats"""
@@ -420,7 +436,7 @@ def normalize_overhead_profit_structure(data):
         # Old format or missing - use existing values if available
         data['overhead_rate'] = safe_float_conversion(data.get('overhead_rate', 0))
         data['overhead_amount'] = safe_float_conversion(data.get('overhead_amount', 0))
-    
+
     # Handle profit
     if 'profit' in data and isinstance(data['profit'], dict):
         # New format: {"rate": 0.05, "amount": 1626.82}
@@ -435,7 +451,7 @@ def normalize_overhead_profit_structure(data):
         # Old format or missing - use existing values if available
         data['profit_rate'] = safe_float_conversion(data.get('profit_rate', 0))
         data['profit_amount'] = safe_float_conversion(data.get('profit_amount', 0))
-    
+
     # Handle sales tax - amount only (no rate calculation)
     if 'sales_tax' in data and isinstance(data['sales_tax'], dict):
         # New format: {"amount": 1293.67}
@@ -444,7 +460,7 @@ def normalize_overhead_profit_structure(data):
     else:
         # Old format or missing - use existing values if available
         data['sales_tax_amount'] = safe_float_conversion(data.get('sales_tax_amount', data.get('sales_tax', 0)))
-    
+
     # Ensure the overhead, profit, and sales_tax objects are properly structured
     data['overhead'] = {
         'rate': data.get('overhead_rate', 0),
@@ -457,8 +473,9 @@ def normalize_overhead_profit_structure(data):
     data['sales_tax'] = {
         'amount': data.get('sales_tax_amount', 0)
     }
-    
+
     return data
+
 
 def calculate_totals(data, force_recalculate=False):
     """
@@ -467,21 +484,21 @@ def calculate_totals(data, force_recalculate=False):
     """
     # Initialize missing fields first
     data = initialize_missing_fields(data)
-    
+
     # Normalize overhead, profit, and sales tax structure
     data = normalize_overhead_profit_structure(data)
-    
+
     # Validate input data
     is_subtotal_valid, calc_subtotal, json_subtotal, discrepancy = validate_json_subtotal(data)
     items_valid, validation_details = validate_json_item_subtotals(data)
-    
+
     # Calculate subtotal from items using Decimal for precision
     subtotal_from_items = Decimal('0.0')
-    
+
     for trade in data.get('trades', []):
         for location in trade.get('locations', []):
             location_total = Decimal('0.0')
-            
+
             # Check if we have categories with items
             categories = location.get('categories', [])
             if categories:
@@ -493,35 +510,37 @@ def calculate_totals(data, force_recalculate=False):
                             qty = safe_decimal_conversion(item.get('qty', 0))
                             price = safe_decimal_conversion(item.get('price', 0))
                             item_total = qty * price
-                            
+
                             # Store rounded value back to item for display
                             item['total_price'] = float(round_to_cents(item_total))
                             location_total += item_total
                             logger.info(f"Item '{item.get('name', 'Unknown')}': ${qty} × ${price} = ${item_total}")
-                
+
                 logger.info(f"Calculated subtotal for location '{location.get('name', 'Unknown')}': ${location_total}")
             else:
                 # Only use stored subtotal when no categories exist
                 stored_subtotal = safe_decimal_conversion(location.get('subtotal', 0))
                 if stored_subtotal > 0:
                     location_total = stored_subtotal
-                    logger.info(f"No categories found, using stored subtotal for location '{location.get('name', 'Unknown')}': ${stored_subtotal}")
+                    logger.info(f"No categories found, using stored subtotal for location '{location.get('name',
+                        'Unknown')}': ${stored_subtotal}")
                 else:
-                    logger.warning(f"No categories and no stored subtotal for location '{location.get('name', 'Unknown')}'")
+                    logger.warning(f"No categories and no stored subtotal for location '{location.get('name',
+                        'Unknown')}'")
                     location_total = Decimal('0.0')
-            
+
             # Round and store location subtotal
             location_subtotal_rounded = round_to_cents(location_total)
             location['subtotal'] = float(location_subtotal_rounded)
             subtotal_from_items += location_subtotal_rounded
-    
+
     # Get existing values as Decimals
     existing_subtotal = safe_decimal_conversion(data.get('subtotal', 0))
     existing_overhead_amount = safe_decimal_conversion(data.get('overhead_amount', 0))
     existing_profit_amount = safe_decimal_conversion(data.get('profit_amount', 0))
     existing_total = safe_decimal_conversion(data.get('total', 0))
     existing_sales_tax_amount = safe_decimal_conversion(data.get('sales_tax_amount', 0))
-    
+
     # Decision logic for recalculation
     # Always recalculate if items don't match subtotals (validation failed)
     should_recalculate = (
@@ -532,24 +551,24 @@ def calculate_totals(data, force_recalculate=False):
         existing_total <= 0 or
         abs(float(existing_subtotal - subtotal_from_items)) > 0.01
     )
-    
+
     if should_recalculate:
         logger.info("Performing precise recalculation with enhanced parsing")
-        
+
         # Use calculated subtotal
         data['subtotal'] = float(round_to_cents(subtotal_from_items))
-        
+
         # Calculate Overhead & Profit with Decimal precision
         overhead_rate = safe_decimal_conversion(data.get('overhead_rate', 0))
         profit_rate = safe_decimal_conversion(data.get('profit_rate', 0))
-        
+
         # Precise percentage calculations
         overhead_amount = round_to_cents(subtotal_from_items * overhead_rate / Decimal('100'))
         profit_amount = round_to_cents(subtotal_from_items * profit_rate / Decimal('100'))
-        
+
         data['overhead_amount'] = float(overhead_amount)
         data['profit_amount'] = float(profit_amount)
-        
+
         # Sales tax is a fixed amount (not calculated from rate)
         # Always use the amount from JSON, never calculate from rate
         sales_tax_amount = safe_decimal_conversion(data.get('sales_tax_amount', 0))
@@ -557,7 +576,7 @@ def calculate_totals(data, force_recalculate=False):
         if sales_tax_amount == 0 and isinstance(data.get('sales_tax'), dict):
             sales_tax_amount = safe_decimal_conversion(data['sales_tax'].get('amount', 0))
         data['sales_tax_amount'] = float(round_to_cents(sales_tax_amount))
-        
+
         # Update objects for consistency
         data['overhead'] = {
             'rate': float(overhead_rate),
@@ -570,14 +589,14 @@ def calculate_totals(data, force_recalculate=False):
         data['sales_tax'] = {
             'amount': float(sales_tax_amount)
         }
-        
+
         # Final total calculation with Decimal precision
         discount = safe_decimal_conversion(data.get('discount', 0))
         calculated_total = round_to_cents(
             subtotal_from_items + overhead_amount + profit_amount + sales_tax_amount - discount
         )
         data['total'] = float(calculated_total)
-        
+
         # Log precise calculation details
         logger.info("=== ENHANCED CALCULATION DETAILS ===")
         logger.info(f"Subtotal from items: ${subtotal_from_items}")
@@ -587,7 +606,7 @@ def calculate_totals(data, force_recalculate=False):
         logger.info(f"Discount: ${discount}")
         logger.info(f"Total: ${calculated_total}")
         logger.info("=== END ENHANCED CALCULATION ===")
-        
+
     else:
         # Preserve existing values but ensure consistency
         data['subtotal'] = float(existing_subtotal)
@@ -595,7 +614,7 @@ def calculate_totals(data, force_recalculate=False):
         data['overhead_amount'] = float(existing_overhead_amount)
         data['profit_amount'] = float(existing_profit_amount)
         data['sales_tax_amount'] = float(existing_sales_tax_amount)
-        
+
         # Ensure objects exist for consistency
         data['overhead'] = {
             'rate': data.get('overhead_rate', 0),
@@ -608,41 +627,42 @@ def calculate_totals(data, force_recalculate=False):
         data['sales_tax'] = {
             'amount': float(existing_sales_tax_amount)
         }
-        
+
         logger.info("✅ Preserved existing calculations")
-    
+
     return data
+
 
 def display_validation_results(data):
     """
     Display validation results in Streamlit UI
     """
     st.subheader("🔍 JSON Validation Results")
-    
+
     # Validate subtotals
     is_subtotal_valid, calc_subtotal, json_subtotal, discrepancy = validate_json_subtotal(data)
-    
+
     col1, col2, col3 = st.columns(3)
-    
+
     with col1:
         if is_subtotal_valid:
             st.success("✅ Subtotal Valid")
         else:
             st.error("❌ Subtotal Invalid")
         st.metric("JSON Subtotal", f"${json_subtotal:,.2f}")
-    
+
     with col2:
         st.metric("Calculated Subtotal", f"${calc_subtotal:,.2f}")
-    
+
     with col3:
         st.metric("Discrepancy", f"${discrepancy:,.2f}")
-    
+
     # Validate item-level subtotals
     items_valid, validation_details = validate_json_item_subtotals(data)
-    
+
     if not items_valid:
         st.warning("⚠️ Some location subtotals don't match their items")
-        
+
         with st.expander("Location Validation Details"):
             for detail in validation_details:
                 if not detail['is_valid']:
@@ -654,14 +674,15 @@ def display_validation_results(data):
                     else:
                         st.warning(f"⚠️ {detail['trade_name']} > {detail['location_name']}: "
                                   f"No categories found, using stored value: ${detail['stored']:,.2f}")
-    
+
     # Display locations without categories
     locations_without_categories = []
     for trade in data.get('trades', []):
         for location in trade.get('locations', []):
             if not location.get('categories', []):
-                locations_without_categories.append(f"{trade.get('name', 'Unknown')} > {location.get('name', 'Unknown')}")
-    
+                locations_without_categories.append(f"{trade.get('name', 'Unknown')} > {location.get('name',
+                    'Unknown')}")
+
     if locations_without_categories:
         st.info(f"ℹ️ Locations without categories: {', '.join(locations_without_categories)}")
 
@@ -671,29 +692,30 @@ def save_temp_json(data, filename="temp_estimate.json", storage_type="temp"):
     """
     storage_path = get_storage_path(storage_type)
     file_path = storage_path / filename
-    
+
     try:
         # Deep copy to protect original data
         data_to_save = copy.deepcopy(data)
-        
+
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data_to_save, f, indent=2, ensure_ascii=False)
-        
+
         logger.info(f"JSON saved successfully: {file_path}")
         return file_path
-        
+
     except Exception as e:
         logger.error(f"Failed to save JSON to {file_path}: {str(e)}")
         # Fallback to system temp directory
         fallback_dir = Path(tempfile.gettempdir()) / "estimate_editor"
         fallback_dir.mkdir(exist_ok=True)
         fallback_path = fallback_dir / filename
-        
+
         with open(fallback_path, 'w', encoding='utf-8') as f:
             json.dump(data_to_save, f, indent=2, ensure_ascii=False)
-        
+
         logger.warning(f"JSON saved to fallback location: {fallback_path}")
         return fallback_path
+
 
 def load_temp_json(filename="temp_estimate.json", storage_type="temp"):
     """
@@ -701,7 +723,7 @@ def load_temp_json(filename="temp_estimate.json", storage_type="temp"):
     """
     storage_path = get_storage_path(storage_type)
     file_path = storage_path / filename
-    
+
     # Try main storage location first
     if file_path.exists():
         try:
@@ -711,11 +733,11 @@ def load_temp_json(filename="temp_estimate.json", storage_type="temp"):
             return data
         except Exception as e:
             logger.error(f"Failed to load JSON from {file_path}: {str(e)}")
-    
+
     # Fallback to system temp directory
     fallback_dir = Path(tempfile.gettempdir()) / "estimate_editor"
     fallback_path = fallback_dir / filename
-    
+
     if fallback_path.exists():
         try:
             with open(fallback_path, 'r', encoding='utf-8') as f:
@@ -724,9 +746,10 @@ def load_temp_json(filename="temp_estimate.json", storage_type="temp"):
             return data
         except Exception as e:
             logger.error(f"Failed to load JSON from fallback {fallback_path}: {str(e)}")
-    
+
     logger.info(f"JSON file not found: {filename}")
     return None
+
 
 def save_permanent_json(data, estimate_number):
     """
@@ -735,33 +758,36 @@ def save_permanent_json(data, estimate_number):
     # Sanitize estimate number for filename
     safe_estimate_number = "".join(c for c in estimate_number if c.isalnum() or c in ['_', '-'])
     filename = f"{safe_estimate_number}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    
+
     return save_temp_json(data, filename, storage_type="json")
+
 
 def get_pdf_file_path(session_id, estimate_number="unknown"):
     """
     Get PDF file path for the estimate
     """
-    pdf_storage_path = get_storage_path("pdf")
-    
+    pdf_storage_path = get_storage_path("pd")
+
     # Sanitize estimate number for filename
     safe_estimate_number = "".join(c for c in estimate_number if c.isalnum() or c in ['_', '-'])
     filename = f"estimate_{safe_estimate_number}_{session_id}.pdf"
-    
+
     return pdf_storage_path / filename
+
 
 def get_html_file_path(session_id, estimate_number="unknown", with_plans=False):
     """
     Get HTML file path for the estimate
     """
     html_storage_path = get_storage_path("html")
-    
+
     # Sanitize estimate number for filename
     safe_estimate_number = "".join(c for c in estimate_number if c.isalnum() or c in ['_', '-'])
     suffix = "_with_plans" if with_plans else ""
     filename = f"estimate_{safe_estimate_number}{suffix}_{session_id}.html"
-    
+
     return html_storage_path / filename
+
 
 def cleanup_old_temp_files(days_old=7):
     """
@@ -771,7 +797,7 @@ def cleanup_old_temp_files(days_old=7):
         temp_path = get_storage_path("temp")
         current_time = datetime.now().timestamp()
         cutoff_time = current_time - (days_old * 24 * 3600)
-        
+
         deleted_count = 0
         for file_path in temp_path.glob("*"):
             if file_path.is_file() and file_path.stat().st_mtime < cutoff_time:
@@ -780,10 +806,10 @@ def cleanup_old_temp_files(days_old=7):
                     deleted_count += 1
                 except Exception as e:
                     logger.warning(f"Failed to delete old temp file {file_path}: {str(e)}")
-        
+
         if deleted_count > 0:
             logger.info(f"Cleaned up {deleted_count} old temporary files")
-            
+
     except Exception as e:
         logger.error(f"Failed to cleanup old temp files: {str(e)}")
 
@@ -793,13 +819,13 @@ def display_storage_info():
     """
     with st.sidebar:
         st.subheader("📁 Storage Information")
-        
+
         base_path = get_storage_path("base")
         st.write(f"**Base Path:** `{base_path}`")
-        
+
         # Check directory sizes and file counts
         storage_types = ['temp', 'json', 'pdf']
-        
+
         for storage_type in storage_types:
             path = get_storage_path(storage_type)
             if path.exists():
@@ -811,7 +837,7 @@ def display_storage_info():
                     st.write(f"**{storage_type.title()}:** Error reading")
             else:
                 st.write(f"**{storage_type.title()}:** Directory not found")
-        
+
         # Cleanup button
         if st.button("🧹 Cleanup Old Files"):
             cleanup_old_temp_files()
@@ -826,10 +852,10 @@ def save_estimate_with_validation(data, session_id, is_permanent=False):
         # Validate data before saving
         if not data:
             return False, None, "No data to save"
-        
+
         # Generate filename
         estimate_number = data.get('estimate_number', 'unknown')
-        
+
         if is_permanent:
             file_path = save_permanent_json(data, estimate_number)
             message = f"Estimate saved permanently: {file_path.name}"
@@ -837,18 +863,19 @@ def save_estimate_with_validation(data, session_id, is_permanent=False):
             temp_filename = f"estimate_{session_id}.json"
             file_path = save_temp_json(data, temp_filename, storage_type="temp")
             message = f"Estimate saved temporarily: {file_path.name}"
-        
+
         return True, file_path, message
-        
+
     except Exception as e:
         error_message = f"Failed to save estimate: {str(e)}"
         logger.error(error_message)
         return False, None, error_message
 
+
 def render_company_info(data):
     """Company information selection UI (from database)"""
     st.subheader("Company Information")
-    
+
     # Get company information from database
     companies = get_all_companies()
     if not companies:
@@ -856,7 +883,7 @@ def render_company_info(data):
         st.stop()
 
     company_names = [c["name"] for c in companies]
-    
+
     # Set default index based on current selection
     current_company_name = data.get('company', {}).get('name', '')
     default_index = 0
@@ -864,16 +891,16 @@ def render_company_info(data):
         default_index = company_names.index(current_company_name)
     elif st.session_state.get("selected_company", {}).get("name") in company_names:
         default_index = company_names.index(st.session_state["selected_company"]["name"])
-    
+
     company_name = st.selectbox(
         "Select Company",
         company_names,
         index=default_index,
         key="company_selector"
     )
-    
+
     selected_company = next((c for c in companies if c["name"] == company_name), None)
-    
+
     if selected_company:
         # Update data with selected company information
         data['company'] = {
@@ -886,15 +913,15 @@ def render_company_info(data):
             'email': selected_company.get('email', ''),
             'logo': selected_company.get('logo', '')
         }
-        
+
         # Display selected company information (read-only)
         col1, col2 = st.columns(2)
-        
+
         with col1:
             st.text_input("Company Name", selected_company.get('name', ''), disabled=True)
             st.text_input("Address", selected_company.get('address', ''), disabled=True)
             st.text_input("City", selected_company.get('city', ''), disabled=True)
-        
+
         with col2:
             st.text_input("State", selected_company.get('state', ''), disabled=True)
             st.text_input("ZIP Code", selected_company.get('zip', ''), disabled=True)
@@ -904,14 +931,14 @@ def render_company_info(data):
 def render_client_info(data):
     """Client information editing UI"""
     st.subheader("Client Information")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         data['client']['name'] = st.text_input("Client Name", data.get('client', {}).get('name', ''))
         data['client']['address'] = st.text_input("Client Address", data.get('client', {}).get('address', ''))
         data['client']['city'] = st.text_input("Client City", data.get('client', {}).get('city', ''))
-    
+
     with col2:
         data['client']['state'] = st.text_input("Client State", data.get('client', {}).get('state', ''))
         data['client']['zip'] = st.text_input("Client ZIP Code", data.get('client', {}).get('zip', ''))
@@ -921,9 +948,9 @@ def render_client_info(data):
 def render_estimate_meta(data):
     """Estimate meta information editing UI"""
     st.subheader("Estimate Information")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         # Estimate number - auto-generate default value
         current_estimate_number = data.get('estimate_number', '')
@@ -931,34 +958,37 @@ def render_estimate_meta(data):
             client_address = data.get('client', {}).get('address', '')
             current_estimate_number = generate_estimate_number(client_address)
             data['estimate_number'] = current_estimate_number
-        
+
         data['estimate_number'] = st.text_input("Estimate Number", current_estimate_number)
-        
+
         # Estimate date - default is today's date
         current_date = data.get('estimate_date', '')
         if not current_date:
             current_date = get_default_estimate_date()
             data['estimate_date'] = current_date
-        
+
         data['estimate_date'] = st.text_input("Estimate Date", current_date)
-    
+
     with col2:
         current_discount = safe_float_conversion(data.get('discount', 0))
-        
+
         data['discount'] = st.number_input("Discount", value=current_discount, min_value=0.0, step=0.01)
-        
+
         # Sales Tax Amount (not rate-based)
-        current_sales_tax_amount = safe_float_conversion(data.get('sales_tax_amount', data.get('sales_tax', {}).get('amount', 0)))
-        data['sales_tax_amount'] = st.number_input("Sales Tax Amount", value=current_sales_tax_amount, min_value=0.0, step=0.01)
-    
+        current_sales_tax_amount = safe_float_conversion(data.get('sales_tax_amount', data.get('sales_tax',
+            {}).get('amount', 0)))
+        data['sales_tax_amount'] = st.number_input("Sales Tax Amount", value=current_sales_tax_amount, min_value=0.0,
+            step=0.01)
+
     # Overhead & Profit section
     st.subheader("Overhead & Profit")
     col3, col4 = st.columns(2)
-    
+
     with col3:
         current_overhead_rate = safe_float_conversion(data.get('overhead_rate', 0))
-        data['overhead_rate'] = st.number_input("Overhead Rate (%)", value=current_overhead_rate, min_value=0.0, step=0.1)
-    
+        data['overhead_rate'] = st.number_input("Overhead Rate (%)", value=current_overhead_rate, min_value=0.0,
+            step=0.1)
+
     with col4:
         current_profit_rate = safe_float_conversion(data.get('profit_rate', 0))
         data['profit_rate'] = st.number_input("Profit Rate (%)", value=current_profit_rate, min_value=0.0, step=0.1)
@@ -966,28 +996,31 @@ def render_estimate_meta(data):
 def render_trade_items(data):
     """Trade items editing UI - categories 없는 경우도 처리"""
     st.subheader("Work Items")
-    
+
     for trade_idx, trade in enumerate(data.get('trades', [])):
         with st.expander(f"**{trade.get('name', f'Trade {trade_idx+1}')}**", expanded=True):
-            
+
             # Trade name and note editing
             col1, col2 = st.columns([2, 3])
             with col1:
-                trade['name'] = st.text_input(f"Trade Name", trade.get('name', ''), key=f"trade_name_{trade_idx}")
+                trade['name'] = st.text_input("Trade Name", trade.get('name', ''), key=f"trade_name_{trade_idx}")
             with col2:
-                trade['note'] = st.text_area(f"Trade Note", trade.get('note', ''), key=f"trade_note_{trade_idx}", height=70)
-            
+                trade['note'] = st.text_area("Trade Note", trade.get('note', ''), key=f"trade_note_{trade_idx}",
+                    height=70)
+
             # Locations
             for loc_idx, location in enumerate(trade.get('locations', [])):
                 st.markdown(f"**Location: {location.get('name', f'Location {loc_idx+1}')}**")
-                
+
                 # Location name and note editing
                 col1, col2 = st.columns([2, 3])
                 with col1:
-                    location['name'] = st.text_input(f"Location Name", location.get('name', ''), key=f"loc_name_{trade_idx}_{loc_idx}")
+                    location['name'] = st.text_input("Location Name", location.get('name', ''),
+                        key=f"loc_name_{trade_idx}_{loc_idx}")
                 with col2:
-                    location['note'] = st.text_area(f"Location Note", location.get('note', ''), key=f"loc_note_{trade_idx}_{loc_idx}", height=70)
-                
+                    location['note'] = st.text_area("Location Note", location.get('note', ''),
+                        key=f"loc_note_{trade_idx}_{loc_idx}", height=70)
+
                 # Categories and Items - categories 없는 경우 처리
                 categories = location.get('categories', [])
                 if not categories:
@@ -998,7 +1031,7 @@ def render_trade_items(data):
                     for cat_idx, category in enumerate(categories):
                         if category.get('name'):
                             st.markdown(f"*{category.get('name')}*")
-                        
+
                         # Items table
                         items = category.get('items', [])
                         if not items:
@@ -1006,17 +1039,21 @@ def render_trade_items(data):
                         else:
                             for item_idx, item in enumerate(items):
                                 col1, col2, col3, col4, col5, col6 = st.columns([3, 1, 1, 1.5, 1.5, 3])
-                                
+
                                 with col1:
-                                    item['name'] = st.text_input("Item Name", item.get('name', ''), key=f"item_name_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}")
+                                    item['name'] = st.text_input("Item Name", item.get('name', ''),
+                                        key=f"item_name_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}")
                                 with col2:
                                     current_qty = safe_float_conversion(item.get('qty', 0))
-                                    item['qty'] = st.number_input("Qty", value=current_qty, key=f"item_qty_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}", step=0.01)
+                                    item['qty'] = st.number_input("Qty", value=current_qty,
+                                        key=f"item_qty_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}", step=0.01)
                                 with col3:
-                                    item['unit'] = st.text_input("Unit", item.get('unit', ''), key=f"item_unit_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}")
+                                    item['unit'] = st.text_input("Unit", item.get('unit', ''),
+                                        key=f"item_unit_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}")
                                 with col4:
                                     current_price = safe_float_conversion(item.get('price', 0))
-                                    item['price'] = st.number_input("Unit Price", value=current_price, key=f"item_price_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}", step=0.01)
+                                    item['price'] = st.number_input("Unit Price", value=current_price,
+                                        key=f"item_price_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}", step=0.01)
                                 with col5:
                                     # Calculate and display total price
                                     item_qty = safe_float_conversion(item.get('qty', 0))
@@ -1024,36 +1061,37 @@ def render_trade_items(data):
                                     total_price = item_qty * item_price
                                     st.metric("Total", f"${total_price:,.2f}")
                                 with col6:
-                                    item['description'] = st.text_input("Description", item.get('description', ''), key=f"item_desc_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}")
-                        
+                                    item['description'] = st.text_input("Description", item.get('description', ''),
+                                        key=f"item_desc_{trade_idx}_{loc_idx}_{cat_idx}_{item_idx}")
+
                         st.markdown("---")
 
 def render_notes(data):
     """Notes editing UI"""
     st.subheader("Notes")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         data['top_note'] = st.text_area("Top Note", data.get('top_note', ''), height=100)
-    
+
     with col2:
         data['bottom_note'] = st.text_area("Bottom Note", data.get('bottom_note', ''), height=100)
-    
+
     data['disclaimer'] = st.text_area("Disclaimer", data.get('disclaimer', ''), height=100)
 
 def main():
     st.title("Estimate Editor")
-    
+
     # Initialize storage directories
     try:
         ensure_storage_directories()
     except Exception as e:
         st.warning(f"Storage initialization warning: {str(e)}")
-    
+
     # Display storage information in sidebar
     display_storage_info()
-    
+
     # Check company information
     try:
         companies = get_all_companies()
@@ -1063,38 +1101,38 @@ def main():
     except Exception as e:
         st.error(f"Error loading company information: {str(e)}")
         st.stop()
-    
+
     # Create tabs for different input methods
     tab1, tab2 = st.tabs(["📁 Upload JSON File", "📋 Paste JSON Text"])
-    
+
     data = None
     json_source = None
-    
+
     with tab1:
         # JSON file upload
         uploaded_file = st.file_uploader("Upload JSON Estimate File", type=['json'])
-        
+
         if uploaded_file is not None:
             json_source = "file"
             data = uploaded_file
-    
+
     with tab2:
         # JSON text input area
         st.info("💡 Paste your JSON data below. This is useful when you have long JSON data that you don't want to save as a file first.")
-        
+
         # Initialize session state for JSON text if not exists
         if 'json_text_loaded' not in st.session_state:
             st.session_state.json_text_loaded = False
         if 'json_text_data' not in st.session_state:
             st.session_state.json_text_data = None
-        
+
         json_text = st.text_area(
             "Paste JSON Data Here",
             height=400,
             placeholder="Paste your JSON data here...\n\nExample:\n{\n  \"estimate_number\": \"EST_202501_0001\",\n  \"client\": {\n    \"name\": \"John Doe\"\n  },\n  ...\n}",
             key="json_text_input"
         )
-        
+
         col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
         with col1:
             if st.button("📝 Load JSON", type="primary", key="load_json_text"):
@@ -1111,7 +1149,7 @@ def main():
                         st.session_state.json_text_loaded = False
                 else:
                     st.warning("Please paste JSON data first.")
-        
+
         with col2:
             if st.button("🎨 Format JSON", key="format_json_text"):
                 if json_text.strip():
@@ -1125,24 +1163,24 @@ def main():
                         st.error(f"❌ Cannot format - Invalid JSON: {str(e)}")
                 else:
                     st.warning("Please paste JSON data first.")
-        
+
         with col3:
             if st.button("🗑️ Clear", key="clear_json_text"):
                 st.session_state.json_text_input = ""
                 st.session_state.json_text_loaded = False
                 st.session_state.json_text_data = None
                 st.rerun()
-        
+
         with col4:
             # Show status if JSON is loaded
             if st.session_state.json_text_loaded:
                 st.success("✅ JSON data is loaded and ready to use")
-        
+
         # If JSON was previously loaded from text, use it
         if st.session_state.json_text_loaded and data is None:
             json_source = "text"
             data = st.session_state.json_text_data
-        
+
         # Show example JSON structure
         with st.expander("📖 View Sample JSON Structure"):
             sample_json = {
@@ -1186,7 +1224,7 @@ def main():
                 "total": 1265.00
             }
             st.json(sample_json)
-    
+
     if data is not None:
         # Load JSON with enhanced error handling
         try:
@@ -1203,14 +1241,14 @@ def main():
             else:
                 st.error("Unknown JSON source")
                 return
-            
+
             # Use json_data instead of data from here on
             data = json_data
-            
+
             # Initialize missing fields and normalize structure
             data = initialize_missing_fields(data)
             data = normalize_overhead_profit_structure(data)
-            
+
             # Test edge cases and display warnings
             edge_case_issues = test_edge_cases(data)
             if edge_case_issues:
@@ -1218,7 +1256,7 @@ def main():
                 for issue in edge_case_issues:
                     st.write(f"• {issue}")
                 st.write("---")
-            
+
             # Session-based filename for temporary storage
             if 'session_id' not in st.session_state:
                 if json_source == "file":
@@ -1227,23 +1265,23 @@ def main():
                 else:
                     # For text input, use content hash
                     st.session_state.session_id = str(hash(json.dumps(data)[:1000]))  # Use first 1000 chars for hash
-            
+
             temp_filename = f"estimate_{st.session_state.session_id}.json"
-            
+
         except json.JSONDecodeError as e:
             st.error(f"❌ Invalid JSON file: {str(e)}")
             return
         except Exception as e:
             st.error(f"❌ Error loading file: {str(e)}")
             return
-        
+
         # Mode selection
         mode = st.radio("Select Mode", ["Edit", "Preview"], horizontal=True)
-        
+
         if mode == "Edit":
             # Auto-generate estimate number button
             col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 2])
-            
+
             with col_btn1:
                 if st.button("Generate Estimate Number", key="generate_estimate_num_btn"):
                     client_address = data.get('client', {}).get('address', '')
@@ -1251,12 +1289,12 @@ def main():
                     data['estimate_number'] = new_estimate_number
                     st.success(f"Estimate number generated: '{new_estimate_number}'")
                     st.rerun()
-            
+
             with col_btn2:
                 if st.button("🧹 Cleanup Old Files", key="main_cleanup_btn"):
                     cleanup_old_temp_files()
                     st.success("Old temporary files cleaned up!")
-            
+
             # Render editing UI
             render_estimate_meta(data)
             st.markdown("---")
@@ -1267,48 +1305,48 @@ def main():
             render_trade_items(data)
             st.markdown("---")
             render_notes(data)
-            
+
             # Save buttons
             st.markdown("### Save Options")
             col1, col2, col3 = st.columns([1, 1, 1])
-            
+
             with col1:
                 if st.button("💾 Save Changes", type="primary", use_container_width=True, key="save_changes_btn"):
                     # Force recalculation when saving changes in edit mode
                     data = calculate_totals(data, force_recalculate=True)
-                    
+
                     # Save to temporary storage
                     success, file_path, message = save_estimate_with_validation(
                         data, st.session_state.session_id, is_permanent=False
                     )
-                    
+
                     if success:
                         st.success(message)
                         st.info(f"📂 Saved to: `{file_path}`")
                     else:
                         st.error(message)
-                    
+
                     st.rerun()
-            
+
             with col2:
                 if st.button("📄 Save Permanent", use_container_width=True, key="save_permanent_btn"):
                     # Force recalculation and save as permanent file
                     data = calculate_totals(data, force_recalculate=True)
-                    
+
                     success, file_path, message = save_estimate_with_validation(
                         data, st.session_state.session_id, is_permanent=True
                     )
-                    
+
                     if success:
                         st.success(message)
                         st.info(f"📂 Permanent file: `{file_path}`")
                     else:
                         st.error(message)
-            
+
             with col3:
                 if st.button("🔄 Reload", use_container_width=True, key="reload_btn"):
                     st.rerun()
-        
+
         else:  # Preview mode
             # Load saved temporary file if exists
             saved_data = load_temp_json(temp_filename, storage_type="temp")
@@ -1329,13 +1367,13 @@ def main():
             # Display validation results
             display_validation_results(data)
             st.markdown("---")
-            
+
             # Display preview
             st.subheader("Estimate Preview")
-            
+
             # Summary information with enhanced metrics
             col1, col2, col3, col4, col5, col6 = st.columns(6)
-            
+
             with col1:
                 st.metric("Estimate Number", data.get('estimate_number', 'N/A'))
             with col2:
@@ -1355,11 +1393,11 @@ def main():
                     st.metric("Discount", "None")
             with col6:
                 st.metric("Total", f"${data.get('total', 0):,.2f}")
-            
+
             # Debug information (collapsible)
             with st.expander("🔧 Debug Information"):
                 st.write("**Calculation Verification:**")
-                
+
                 # Manual verification
                 manual_subtotal = data.get('subtotal', 0)
                 manual_overhead = data.get('overhead_amount', 0)
@@ -1367,9 +1405,9 @@ def main():
                 manual_tax = data.get('sales_tax_amount', 0)
                 manual_discount = data.get('discount', 0)
                 manual_total = manual_subtotal + manual_overhead + manual_profit + manual_tax - manual_discount
-                
+
                 col_debug1, col_debug2 = st.columns(2)
-                
+
                 with col_debug1:
                     st.write("**Stored Values:**")
                     st.write(f"Subtotal: ${data.get('subtotal', 0):,.2f}")
@@ -1378,7 +1416,7 @@ def main():
                     st.write(f"Sales Tax: ${data.get('sales_tax_amount', 0):,.2f}")
                     st.write(f"Discount: ${data.get('discount', 0):,.2f}")
                     st.write(f"**Stored Total: ${data.get('total', 0):,.2f}**")
-                
+
                 with col_debug2:
                     st.write("**Manual Verification:**")
                     st.write(f"Subtotal: ${manual_subtotal:,.2f}")
@@ -1387,14 +1425,14 @@ def main():
                     st.write(f"+ Sales Tax: ${manual_tax:,.2f}")
                     st.write(f"- Discount: ${manual_discount:,.2f}")
                     st.write(f"**Calculated Total: ${manual_total:,.2f}**")
-                
+
                 # Show discrepancy if any
                 total_discrepancy = abs(data.get('total', 0) - manual_total)
                 if total_discrepancy > 0.01:
                     st.error(f"⚠️ Total discrepancy detected: ${total_discrepancy:,.2f}")
                 else:
                     st.success("✅ Total calculation verified")
-                
+
                 # Show storage paths
                 st.write("**Storage Paths:**")
                 st.write(f"Base: `{get_storage_path('base')}`")
@@ -1402,11 +1440,11 @@ def main():
                 st.write(f"JSON: `{get_storage_path('json')}`")
                 st.write(f"PDF: `{get_storage_path('pdf')}`")
                 st.write(f"HTML: `{get_storage_path('html')}`")
-            
+
             # Detailed breakdown
             st.subheader("Calculation Breakdown")
             breakdown_data = []
-            
+
             subtotal = data.get('subtotal', 0)
             overhead_rate = data.get('overhead_rate', 0)
             overhead_amount = data.get('overhead_amount', 0)
@@ -1415,42 +1453,45 @@ def main():
             sales_tax_amount = data.get('sales_tax_amount', 0)
             discount = data.get('discount', 0)
             total = data.get('total', 0)
-            
+
             breakdown_data.append({'Description': 'Subtotal', 'Rate': '', 'Amount': f"${subtotal:,.2f}"})
-            
+
             if overhead_rate > 0:
-                breakdown_data.append({'Description': 'Overhead', 'Rate': f"{overhead_rate}%", 'Amount': f"${overhead_amount:,.2f}"})
-            
+                breakdown_data.append({'Description': 'Overhead', 'Rate': f"{overhead_rate}%",
+                    'Amount': f"${overhead_amount:,.2f}"})
+
             if profit_rate > 0:
-                breakdown_data.append({'Description': 'Profit', 'Rate': f"{profit_rate}%", 'Amount': f"${profit_amount:,.2f}"})
-            
+                breakdown_data.append({'Description': 'Profit', 'Rate': f"{profit_rate}%", 'Amount': f"${profit_amount:,
+                    .2f}"})
+
             if sales_tax_amount > 0:
                 breakdown_data.append({'Description': 'Sales Tax', 'Rate': '', 'Amount': f"${sales_tax_amount:,.2f}"})
-            
+
             if discount > 0:
                 breakdown_data.append({'Description': 'Discount', 'Rate': '', 'Amount': f"-${discount:,.2f}"})
-            
+
             breakdown_data.append({'Description': 'Total', 'Rate': '', 'Amount': f"${total:,.2f}"})
-            
+
             st.dataframe(breakdown_data, use_container_width=True, hide_index=True)
-            
+
             # Trade details
             for trade in data.get('trades', []):
                 with st.expander(f"**{trade.get('name')}**", expanded=True):
                     for location in trade.get('locations', []):
-                        st.markdown(f"**Location: {location.get('name')}** - Subtotal: ${location.get('subtotal', 0):,.2f}")
-                        
+                        st.markdown(f"**Location: {location.get('name')}** - Subtotal: ${location.get('subtotal', 0):,
+                            .2f}")
+
                         # Items table
                         items_data = []
                         item_num = 1
-                        
+
                         for category in location.get('categories', []):
                             for item in category.get('items', []):
                                 if item.get('name'):
                                     qty = safe_float_conversion(item.get('qty', 0))
                                     price = safe_float_conversion(item.get('price', 0))
                                     total_price = qty * price
-                                    
+
                                     items_data.append({
                                         'No.': item_num,
                                         'Item': item.get('name', ''),
@@ -1461,16 +1502,16 @@ def main():
                                         'Description': item.get('description', '')
                                     })
                                     item_num += 1
-                        
+
                         if items_data:
                             st.dataframe(items_data, use_container_width=True)
-            
+
             # Floor plan data upload section
             with st.expander("📐 Floor Plan Data (Optional)", expanded=False):
                 st.info("Upload floor plan data to include room diagrams in the PDF")
-                
+
                 col_fp1, col_fp2 = st.columns([1, 1])
-                
+
                 with col_fp1:
                     # Upload floor plan JSON
                     floor_plan_file = st.file_uploader(
@@ -1479,7 +1520,7 @@ def main():
                         key="floor_plan_uploader",
                         help="Upload JSON file with room dimensions and measurements"
                     )
-                    
+
                     if floor_plan_file:
                         try:
                             floor_plan_data = json.load(floor_plan_file)
@@ -1487,7 +1528,7 @@ def main():
                             st.success(f"✅ Loaded {len(data['floor_plans'].get('rooms', []))} rooms")
                         except Exception as e:
                             st.error(f"Error loading floor plan: {e}")
-                
+
                 with col_fp2:
                     # Show sample format
                     if st.button("📋 Show Sample Format", key="show_sample_floor_plan"):
@@ -1509,76 +1550,76 @@ def main():
                             }
                         }
                         st.json(sample_data)
-            
+
             # PDF and HTML generation and download buttons
             st.subheader("📄 Document Generation")
-            
+
             # Create two rows of buttons
             # First row: PDF and HTML generation
             col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
-            
+
             with col1:
                 if st.button("📄 Generate PDF", type="primary", key="generate_pdf_btn"):
                     try:
                         # Get PDF file path using new storage system
                         pdf_file_path = get_pdf_file_path(
-                            st.session_state.session_id, 
+                            st.session_state.session_id,
                             data.get('estimate_number', 'unknown')
                         )
-                        
+
                         # Generate PDF
                         generate_insurance_estimate_pdf(data, str(pdf_file_path))
-                        
+
                         # Provide PDF download
                         with open(pdf_file_path, 'rb') as pdf_file:
                             st.download_button(
                                 label="⬇️ Download PDF",
                                 data=pdf_file.read(),
                                 file_name=f"estimate_{data.get('estimate_number', 'unknown')}.pdf",
-                                mime="application/pdf",
+                                mime="application/pd",
                                 key="download_pdf_btn"
                             )
-                        
+
                         st.success(f"✅ PDF generated: `{pdf_file_path}`")
-                        
+
                     except Exception as e:
                         st.error(f"❌ Error generating PDF: {str(e)}")
                         logger.error(f"PDF generation error: {str(e)}")
-            
+
             with col2:
                 # Generate PDF with Floor Plans
                 if st.button("📐 PDF with Plans", type="secondary", key="generate_pdf_with_plans_btn"):
                     try:
                         from pdf_generator import generate_insurance_estimate_pdf_with_plans
-                        
+
                         if 'floor_plans' not in data or not data.get('floor_plans', {}).get('rooms'):
                             st.warning("⚠️ No floor plan data available. Please upload floor plan JSON first.")
                         else:
                             # Get PDF file path
                             pdf_file_path = get_pdf_file_path(
-                                st.session_state.session_id, 
+                                st.session_state.session_id,
                                 data.get('estimate_number', 'unknown') + "_with_plans"
                             )
-                            
+
                             # Generate PDF with floor plans
                             generate_insurance_estimate_pdf_with_plans(data, str(pdf_file_path))
-                            
+
                             # Provide PDF download
                             with open(pdf_file_path, 'rb') as pdf_file:
                                 st.download_button(
                                     label="⬇️ Download PDF with Plans",
                                     data=pdf_file.read(),
                                     file_name=f"estimate_{data.get('estimate_number', 'unknown')}_with_plans.pdf",
-                                    mime="application/pdf",
+                                    mime="application/pd",
                                     key="download_pdf_with_plans_btn"
                                 )
-                            
-                            st.success(f"✅ PDF with floor plans generated!")
-                        
+
+                            st.success("✅ PDF with floor plans generated!")
+
                     except Exception as e:
                         st.error(f"❌ Error generating PDF with plans: {str(e)}")
                         logger.error(f"PDF with plans generation error: {str(e)}")
-            
+
             with col3:
                 # Download modified JSON
                 if st.button("📥 Download JSON", key="download_json_main_btn"):
@@ -1590,7 +1631,7 @@ def main():
                         mime="application/json",
                         key="download_json_btn"
                     )
-            
+
             with col4:
                 # Save permanent copy
                 if st.button("💾 Save Permanent Copy", key="save_permanent_copy_btn"):
@@ -1598,35 +1639,35 @@ def main():
                         success, file_path, message = save_estimate_with_validation(
                             data, st.session_state.session_id, is_permanent=True
                         )
-                        
+
                         if success:
                             st.success(message)
                             st.info(f"📂 Saved to: `{file_path}`")
                         else:
                             st.error(message)
-                            
+
                     except Exception as e:
                         st.error(f"❌ Error saving permanent copy: {str(e)}")
-            
+
             # Second row: HTML generation buttons
             st.markdown("---")
             col5, col6, col7, col8 = st.columns([1, 1, 1, 1])
-            
+
             with col5:
                 if st.button("🌐 Generate HTML", type="secondary", key="generate_html_btn"):
                     try:
                         from pdf_generator import generate_insurance_estimate_html
                         import webbrowser
-                        
+
                         # Get HTML file path
                         html_file_path = get_html_file_path(
-                            st.session_state.session_id, 
+                            st.session_state.session_id,
                             data.get('estimate_number', 'unknown')
                         )
-                        
+
                         # Generate HTML
                         generate_insurance_estimate_html(data, str(html_file_path))
-                        
+
                         # Provide HTML download
                         with open(html_file_path, 'r', encoding='utf-8') as html_file:
                             st.download_button(
@@ -1636,37 +1677,37 @@ def main():
                                 mime="text/html",
                                 key="download_html_btn"
                             )
-                        
+
                         st.success(f"✅ HTML generated: `{html_file_path}`")
-                        
+
                         # Open in browser button
                         if st.button("🌐 Open in Browser", key="open_html_browser"):
                             webbrowser.open(f"file:///{html_file_path}")
                             st.info("HTML opened in your default browser!")
-                        
+
                     except Exception as e:
                         st.error(f"❌ Error generating HTML: {str(e)}")
                         logger.error(f"HTML generation error: {str(e)}")
-            
+
             with col6:
                 if st.button("🌐📐 HTML with Plans", type="secondary", key="generate_html_with_plans_btn"):
                     try:
                         from pdf_generator import generate_insurance_estimate_html_with_plans
                         import webbrowser
-                        
+
                         if 'floor_plans' not in data or not data.get('floor_plans', {}).get('rooms'):
                             st.warning("⚠️ No floor plan data available. Please upload floor plan JSON first.")
                         else:
                             # Get HTML file path
                             html_file_path = get_html_file_path(
-                                st.session_state.session_id, 
+                                st.session_state.session_id,
                                 data.get('estimate_number', 'unknown'),
                                 with_plans=True
                             )
-                            
+
                             # Generate HTML with floor plans
                             generate_insurance_estimate_html_with_plans(data, str(html_file_path))
-                            
+
                             # Provide HTML download
                             with open(html_file_path, 'r', encoding='utf-8') as html_file:
                                 st.download_button(
@@ -1676,18 +1717,18 @@ def main():
                                     mime="text/html",
                                     key="download_html_with_plans_btn"
                                 )
-                            
-                            st.success(f"✅ HTML with floor plans generated!")
-                            
+
+                            st.success("✅ HTML with floor plans generated!")
+
                             # Open in browser button
                             if st.button("🌐 Open in Browser", key="open_html_plans_browser"):
                                 webbrowser.open(f"file:///{html_file_path}")
                                 st.info("HTML with plans opened in your default browser!")
-                        
+
                     except Exception as e:
                         st.error(f"❌ Error generating HTML with plans: {str(e)}")
                         logger.error(f"HTML with plans generation error: {str(e)}")
-            
+
             with col7:
                 # View existing HTML files
                 if st.button("📂 View HTML Files", key="view_html_files"):
@@ -1702,7 +1743,7 @@ def main():
                             st.warning("No HTML files found")
                     else:
                         st.warning("HTML directory doesn't exist yet")
-            
+
             with col8:
                 # Clear HTML cache
                 if st.button("🗑️ Clear HTML Cache", key="clear_html_cache"):
@@ -1717,10 +1758,10 @@ def main():
                             st.info("HTML cache is already empty")
                     except Exception as e:
                         st.error(f"Error clearing HTML cache: {str(e)}")
-    
+
     else:
         st.info("Please upload a JSON file or paste JSON data to get started.")
-        
+
         # Display storage information even when no file is uploaded
         st.subheader("📁 Storage Configuration")
         st.write(f"**Data Storage Path:** `{DATA_STORAGE_PATH}`")
@@ -1728,7 +1769,7 @@ def main():
         st.write(f"**JSON Files:** `{JSON_STORAGE_PATH}`")
         st.write(f"**PDF Files:** `{PDF_STORAGE_PATH}`")
         st.write(f"**HTML Files:** `{HTML_STORAGE_PATH}`")
-        
+
         # Quick tips
         st.subheader("💡 Quick Tips")
         col1, col2 = st.columns(2)
@@ -1739,7 +1780,7 @@ def main():
             2. Browse and select your JSON file
             3. The file will be loaded automatically
             """)
-        
+
         with col2:
             st.info("""
             **Using JSON Text Input:**
@@ -1748,7 +1789,7 @@ def main():
             3. Click "Load JSON" to process the data
             4. Use "Format JSON" to beautify the text
             """)
-        
+
         # Display sample JSON structure
         with st.expander("📖 Complete Sample JSON Structure"):
             sample_json = {
@@ -1777,7 +1818,7 @@ def main():
                         "name": "Interior Reconstruction",
                         "locations": [
                             {
-                                "name": "Back Double Door Bedroom", 
+                                "name": "Back Double Door Bedroom",
                                 "subtotal": 4721.71,
                                 "categories": [
                                     {

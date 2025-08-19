@@ -35,7 +35,7 @@ if uploaded_file:
         )
 
         # 4. PDF 생성
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pd") as tmp_pdf:
             pdf_path = tmp_pdf.name
             generate_estimate_pdf(estimate_data, pdf_path)
 
@@ -45,7 +45,7 @@ if uploaded_file:
                 label="PDF 다운로드",
                 data=f,
                 file_name=Path(pdf_path).name,
-                mime="application/pdf"
+                mime="application/pd"
             )
 
         # 5. 임시 파일 삭제

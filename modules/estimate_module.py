@@ -71,8 +71,8 @@ def save_estimate(data: dict) -> bool:
     except Exception as e:
         print("[ERROR] 견적서 저장 실패:", e)
         return False
-    
-    
+
+
 def get_latest_estimates() -> list[dict]:
     supabase = get_connection()
     result = with_retries(
@@ -140,6 +140,7 @@ def delete_item(item_id: str):
     # 그 다음 item 삭제
     return with_retries(lambda: supabase.table("est_items").delete().eq("id", item_id).execute())
 
+
 def get_item_by_code(code: str):
     supabase = get_connection()
     if not supabase:
@@ -166,12 +167,12 @@ def get_descriptions_by_item_id(item_id: str):
             .eq("item_id", item_id)
             .order("sort_order")
             .execute())
-        
+
         if result is None:
             return []
-        
+
         return getattr(result, 'data', []) or []
-        
+
     except Exception as e:
         print(f"Error in get_descriptions_by_item_id: {e}")
         return []
@@ -185,13 +186,13 @@ def get_descriptions_by_item_name(item_name: str):
             .select("id")
             .eq("name", item_name)
             .execute())
-        
+
         if not item_result or not item_result.data:
             return []
-        
+
         item_id = item_result.data[0]["id"]
         return get_descriptions_by_item_id(item_id)
-        
+
     except Exception as e:
         print(f"Error in get_descriptions_by_item_name: {e}")
         return []
@@ -221,7 +222,7 @@ def insert_multiple_descriptions(item_id: str, descriptions: list):
     try:
         supabase = get_connection()
         now = datetime.now().isoformat()
-        
+
         desc_data = []
         for desc in descriptions:
             desc_data.append({
@@ -232,11 +233,11 @@ def insert_multiple_descriptions(item_id: str, descriptions: list):
                 "created_at": now,
                 "updated_at": now
             })
-        
+
         if desc_data:
             return with_retries(lambda: supabase.table("est_item_descriptions").insert(desc_data).execute())
         return None
-        
+
     except Exception as e:
         print(f"Error in insert_multiple_descriptions: {e}")
         return None
@@ -248,15 +249,15 @@ def replace_item_descriptions(item_id: str, descriptions: list):
     """
     try:
         supabase = get_connection()
-        
+
         # 기존 설명들 삭제
         with_retries(lambda: supabase.table("est_item_descriptions").delete().eq("item_id", item_id).execute())
-        
+
         # 새 설명들 저장
         if descriptions:
             return insert_multiple_descriptions(item_id, descriptions)
         return None
-        
+
     except Exception as e:
         print(f"Error in replace_item_descriptions: {e}")
         return None

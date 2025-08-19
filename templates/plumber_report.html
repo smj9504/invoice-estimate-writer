@@ -8,19 +8,38 @@
 </head>
 <body>
 
-<header class="page-header">
-  <div class="header-left small">
-    <p>{{ company.name }}<br>
+<!-- Running headers for PDF (will appear on every page except first) -->
+<div class="header-running">
+  <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #434040; padding-bottom: 5px; font-family: Arial, sans-serif;">
+    <div style="font-size: 10px; line-height: 1.2;">
+      <strong>{{ company.name }}</strong><br>
+      {{ company.address }}<br>
+      {% if company.city_state_zip %}{{ company.city_state_zip }}<br>{% endif %}
+      {{ company.phone }}<br>
+      {% if company.email %}{{ company.email }}{% endif %}
+    </div>
+    <div style="font-size: 10px; line-height: 1.2; text-align: right;">
+      <strong>Report ID:</strong> {{ report_id }}<br>
+      <strong>Report Date:</strong> {{ report_date }}
+    </div>
+  </div>
+</div>
+
+<!-- Visible header for first page only -->
+<div class="first-page-header">
+  <div style="font-size: 10px; line-height: 1.2;">
+    <strong>{{ company.name }}</strong><br>
     {{ company.address }}<br>
-    {{ company.city_state_zip }}<br>
+    {% if company.city_state_zip %}{{ company.city_state_zip }}<br>{% endif %}
     {{ company.phone }}<br>
-    {{ company.email }}</p>
+    {% if company.email %}{{ company.email }}{% endif %}
   </div>
-  <div class="header-right small">
-    <p><strong>Report ID:</strong> {{ report_id }}<br>
-    <strong>Report Date:</strong> {{ report_date }}</p>
+  <div style="font-size: 10px; line-height: 1.2; text-align: right;">
+    <strong>Report ID:</strong> {{ report_id }}<br>
+    <strong>Report Date:</strong> {{ report_date }}
   </div>
-</header>
+</div>
+<hr style="border: none; border-top: 1px solid #434040; margin: 0;">
 
 <main>
   <div class="two-column">
@@ -30,22 +49,33 @@
         <p><strong>Client Name</strong><br>{{ client.name }}</p>
       {% endif %}
       {% if client.phone %}
-        <p><strong>Client Phone Number</strong><br>{{ client.phone }}</p>
+        <p><strong>Phone Number</strong><br>{{ client.phone }}</p>
       {% endif %}
-      {% if client.phone %}
-        <p><strong>Client Email Address</strong><br>{{ client.email }}</p>
+      {% if client.email %}
+        <p><strong>Email Address</strong><br>{{ client.email }}</p>
       {% endif %}
       <p><strong>Service Location</strong><br>{{ client.address }}</p>
     </div>
     <div>
-      <h3>Plumber Information</h3>
-      {% if plumber.name %}
-        <p><strong>Plumber/Representative Name</strong><br>{{ plumber.name }}</p>
-      {% endif %}
-      <p><strong>Company Name</strong><br>{{ plumber.company }}</p>
-      <p><strong>Phone Number</strong><br>{{ plumber.phone }}</p>
-      {% if plumber.license %}
-        <p><strong>License Number</strong><br>{{ plumber.license }}</p>
+      {% if plumber.use_company_info %}
+        <h3>Company Information</h3>
+        <p><strong>Company Name</strong><br>{{ plumber.company }}</p>
+        <p><strong>Contact Number</strong><br>{{ plumber.phone }}</p>
+        {% if plumber.address or plumber.city_state_zip %}
+          <p><strong>Address</strong><br>
+          {% if plumber.address %}{{ plumber.address }}<br>{% endif %}
+          {% if plumber.city_state_zip %}{{ plumber.city_state_zip }}{% endif %}</p>
+        {% endif %}
+      {% else %}
+        <h3>Plumber Information</h3>
+        {% if plumber.name %}
+          <p><strong>Plumber/Representative Name</strong><br>{{ plumber.name }}</p>
+        {% endif %}
+        <p><strong>Company Name</strong><br>{{ plumber.company }}</p>
+        <p><strong>Phone Number</strong><br>{{ plumber.phone }}</p>
+        {% if plumber.license %}
+          <p><strong>License Number</strong><br>{{ plumber.license }}</p>
+        {% endif %}
       {% endif %}
     </div>
   </div>
@@ -61,22 +91,24 @@
     <tr>
       <th>Date of Incident</th>
       <td>{{ damage.incident_date }}</td>
-      <th>Affected Area</th>
-      <td>{{ damage.area }}</td>
+      <th rowspan="2">Affected Area</th>
+      <td rowspan="2">{{ damage.area }}</td>
     </tr>
     <tr>
       <th>Water Intrusion Category</th>
-      <td>
-        <label><input type="checkbox" {% if damage.category == 'Cat 1' %}checked{% endif %}> Cat 1</label>
-        <label><input type="checkbox" {% if damage.category == 'Cat 2' %}checked{% endif %}> Cat 2</label>
-        <label><input type="checkbox" {% if damage.category == 'Cat 3' %}checked{% endif %}> Cat 3</label>
+      <td style="white-space: nowrap;">
+        <label style="display: inline-block; margin-right: 10px;"><input type="checkbox" {% if damage.category == 'Cat 1' %}checked{% endif %}> Cat 1</label>
+        <label style="display: inline-block; margin-right: 10px;"><input type="checkbox" {% if damage.category == 'Cat 2' %}checked{% endif %}> Cat 2</label>
+        <label style="display: inline-block;"><input type="checkbox" {% if damage.category == 'Cat 3' %}checked{% endif %}> Cat 3</label>
       </td>
-      <th rowspan="2">Scope of Damage</th>
-      <td rowspan="2">{{ damage.scope }}</td>
     </tr>
     <tr>
       <th>Cause of Damage</th>
-      <td>{{ damage.cause }}</td>
+      <td colspan="3">{{ damage.cause }}</td>
+    </tr>
+    <tr>
+      <th>Scope of Damage</th>
+      <td colspan="3">{{ damage.scope }}</td>
     </tr>
   </table>
 
@@ -102,6 +134,7 @@
     <tr><th>Post-Repair Condition</th><td colspan="3">{{ repair.result }}</td></tr>
   </table>
 
+  {% if invoice["items"] and invoice["items"]|length > 0 %}
   <h3 style="display: flex; justify-content: space-between; align-items: center;">
     <span>Invoice</span>
     <span style="font-weight: normal !important;">Invoice No. {{ invoice.number }}</span>
@@ -126,6 +159,7 @@
     </thead>
     <tbody>
       {% for item in invoice["items"] %}
+      {% if item.description and item.qty and item.unit_price %}
       <tr>
         <td class="left">{{ item.description }}</td>
         <td class="right">{{ item.qty }}</td>
@@ -133,6 +167,7 @@
         <td class="right">${{ "{:,.2f}".format(item.unit_price | float) }}</td>
         <td class="right">${{ "{:,.2f}".format(item.line_total | float) }}</td>
       </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>
@@ -141,22 +176,25 @@
   
   <table class="invoice-summary">
     <tr>
-      <td style="text-align: right;"><strong>Total Charges:</strong> {{ invoice.subtotal }}</td>
+      <td style="text-align: right;"><strong>Total Charges:</strong> <span style="font-size: 14px;">{{ invoice.subtotal }}</span></td>
     </tr>
     {% for payment in invoice["payments"] %}
       {% if payment.amount_display %}
       <tr>
-        <td style="text-align: right;">({{ payment.date }}) Amount Paid: -{{ payment.amount_display }}</td>
+        <td style="text-align: right;">({{ payment.date }}) Amount Paid: <span style="font-size: 13px;">-{{ payment.amount_display }}</span></td>
       </tr>
       {% endif %}
     {% endfor %}
     <tr>
-      <td style="text-align: right;"><strong>Total Due:</strong> {{ invoice.total_due }}</td>
+      <td style="text-align: right;"><strong>Total Due:</strong> <span style="font-size: 14px; font-weight: bold;">{{ invoice.total_due }}</span></td>
     </tr>
   </table>
+  {% endif %}
   
+  {% if notes %}
   <h3>Notes & Recommendations</h3>
-  <p>{{ notes }}</p>  
+  <p>{{ notes }}</p>
+  {% endif %}  
 
 </body>
 </html>

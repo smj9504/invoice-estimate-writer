@@ -26,7 +26,7 @@ st.subheader("📃 등록된 회사 목록")
 
 for company in companies:
     cols = st.columns([1, 3, 2, 2, 1, 1])
-    
+
     # 로고 표시
     if company.get('logo'):
         try:
@@ -36,25 +36,25 @@ for company in companies:
                 base64_str = company['logo'].split(',')[1]
             else:
                 base64_str = company['logo']
-            
+
             img_data = base64.b64decode(base64_str)
             img = Image.open(io.BytesIO(img_data))
             cols[0].image(img, width=40)
-        except:
+        except Exception:
             cols[0].write("🏢")
     else:
         cols[0].write("🏢")
-    
+
     cols[1].markdown(f"**{company['name']}**")
     cols[2].markdown(f"{company['city']}, {company['state']}")
     cols[3].markdown(company.get("phone", ""))
-    
+
     if cols[4].button("✏️ 수정", key=f"edit-{company['id']}"):
         st.session_state.edit_company_id = company["id"]
         # 로고가 있으면 세션에 저장
         if company.get('logo'):
             st.session_state.cropped_logo = company['logo']
-        
+
     if cols[5].button("🗑️ 삭제", key=f"delete-{company['id']}"):
         delete_company(company["id"])
         st.success(f"✅ {company['name']} 삭제 완료")
@@ -82,11 +82,11 @@ with col1:
         type=['png', 'jpg', 'jpeg'],
         key="logo_uploader"
     )
-    
+
     if uploaded_logo is not None:
         # 업로드된 이미지 열기
         image = Image.open(uploaded_logo)
-        
+
         # RGBA를 RGB로 변환 (PNG의 경우)
         if image.mode == 'RGBA':
             # 흰색 배경 생성
@@ -95,19 +95,19 @@ with col1:
             image = background
         elif image.mode != 'RGB':
             image = image.convert('RGB')
-        
+
         # 이미지 크기 제한 (최대 800px)
         max_size = 800
         if image.width > max_size or image.height > max_size:
             ratio = min(max_size/image.width, max_size/image.height)
             new_size = (int(image.width * ratio), int(image.height * ratio))
             image = image.resize(new_size, Image.Resampling.LANCZOS)
-        
+
         st.image(image, caption="업로드된 이미지", use_container_width=True)
-        
+
         # 크롭 영역 선택
         st.markdown("#### ✂️ 로고 영역 선택")
-        
+
         # 크롭 모드 선택
         crop_mode = st.radio(
             "크롭 모드",
@@ -115,7 +115,7 @@ with col1:
             format_func=lambda x: "🎯 자동 (전체 이미지 사용)" if x == "auto" else "✂️ 수동 크롭",
             horizontal=True
         )
-        
+
         if crop_mode == "auto":
             # 전체 이미지를 사용하여 자동으로 비율 유지하며 리사이즈
             if st.button("✅ 전체 이미지 사용"):
@@ -129,19 +129,19 @@ with col1:
                     # 세로가 긴 경우
                     new_height = max_dimension
                     new_width = int((image.width / image.height) * max_dimension)
-                
+
                 cropped = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
-                
+
                 # base64로 인코딩
                 buffered = io.BytesIO()
                 cropped.save(buffered, format="PNG", quality=95)
                 img_base64 = base64.b64encode(buffered.getvalue()).decode()
-                
+
                 # 세션 상태에 저장
                 st.session_state.cropped_logo = f"data:image/png;base64,{img_base64}"
                 st.success("✅ 로고 설정 완료!")
                 st.rerun()
-        
+
         else:  # manual mode
             # 크롭 타입 선택
             crop_type = st.radio(
@@ -150,7 +150,7 @@ with col1:
                 format_func=lambda x: "⬜ 정사각형" if x == "square" else "▭ 직사각형",
                 horizontal=True
             )
-            
+
             if crop_type == "square":
                 # 정사각형 크롭
                 max_crop_size = min(image.width, image.height)
@@ -164,7 +164,7 @@ with col1:
                         value=min(200, max_crop_size),
                         step=10
                     )
-                    
+
                     col_x, col_y = st.columns(2)
                     with col_x:
                         crop_x = st.number_input(
@@ -182,23 +182,23 @@ with col1:
                             value=max(0, (image.height - crop_size) // 2),
                             step=10
                         )
-                    
+
                     if st.button("✂️ 크롭 적용"):
                         # 이미지 크롭
                         cropped = image.crop((crop_x, crop_y, crop_x + crop_size, crop_y + crop_size))
                         # 150x150으로 리사이즈
                         cropped = cropped.resize((150, 150), Image.Resampling.LANCZOS)
-                        
+
                         # base64로 인코딩
                         buffered = io.BytesIO()
                         cropped.save(buffered, format="PNG", quality=95)
                         img_base64 = base64.b64encode(buffered.getvalue()).decode()
-                        
+
                         # 세션 상태에 저장
                         st.session_state.cropped_logo = f"data:image/png;base64,{img_base64}"
                         st.success("✅ 로고 크롭 완료!")
                         st.rerun()
-            
+
             else:  # rectangle
                 # 직사각형 크롭
                 col_w, col_h = st.columns(2)
@@ -218,7 +218,7 @@ with col1:
                         value=min(150, image.height),
                         step=10
                     )
-                
+
                 col_x, col_y = st.columns(2)
                 with col_x:
                     crop_x = st.number_input(
@@ -236,11 +236,11 @@ with col1:
                         value=max(0, (image.height - crop_height) // 2),
                         step=10
                     )
-                
+
                 if st.button("✂️ 크롭 적용"):
                     # 이미지 크롭
                     cropped = image.crop((crop_x, crop_y, crop_x + crop_width, crop_y + crop_height))
-                    
+
                     # 비율 유지하며 최대 150px로 리사이즈
                     max_dimension = 150
                     if cropped.width > cropped.height:
@@ -249,14 +249,14 @@ with col1:
                     else:
                         new_height = max_dimension
                         new_width = int((cropped.width / cropped.height) * max_dimension)
-                    
+
                     cropped = cropped.resize((new_width, new_height), Image.Resampling.LANCZOS)
-            
+
             # base64로 인코딩
             buffered = io.BytesIO()
             cropped.save(buffered, format="PNG", quality=95)
             img_base64 = base64.b64encode(buffered.getvalue()).decode()
-            
+
             # 세션 상태에 저장
             st.session_state.cropped_logo = f"data:image/png;base64,{img_base64}"
             st.success("✅ 로고 크롭 완료!")
@@ -270,15 +270,15 @@ with col2:
                 base64_str = st.session_state.cropped_logo.split(',')[1]
             else:
                 base64_str = st.session_state.cropped_logo
-            
+
             img_data = base64.b64decode(base64_str)
             img = Image.open(io.BytesIO(img_data))
             st.image(img, caption=f"현재 로고 ({img.width}x{img.height})", width=150)
-            
+
             if st.button("❌ 로고 제거"):
                 st.session_state.cropped_logo = None
                 st.rerun()
-        except:
+        except Exception:
             st.error("로고 표시 오류")
 
 st.markdown("---")
@@ -286,15 +286,15 @@ st.markdown("---")
 # 회사 정보 폼
 with st.form("company_form"):
     st.markdown("### 📋 회사 정보")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         name = st.text_input("회사명 *", value=edit_data["name"] if edit_data else "")
         address = st.text_input("주소 *", value=edit_data["address"] if edit_data else "")
         city = st.text_input("도시 *", value=edit_data["city"] if edit_data else "")
         state = st.text_input("주 *", value=edit_data["state"] if edit_data else "")
-    
+
     with col2:
         zip_code = st.text_input("우편번호", value=edit_data["zip"] if edit_data else "")
         phone = st.text_input("전화번호", value=edit_data["phone"] if edit_data else "")

@@ -19,29 +19,30 @@ if uploaded_file is not None:
         uploaded_file.seek(0)  # 파일 포인터를 처음으로 리셋
         file_content = uploaded_file.read().decode('utf-8')
         json_data = json.loads(file_content)
-        
+
         st.sidebar.markdown(f"**업로드된 파일:** {uploaded_file.name}")
         st.sidebar.markdown(f"**인보이스 번호:** {json_data.get('invoice_number', 'N/A')}")
-        
+
         if st.sidebar.button("📥 JSON 데이터 로드"):
             # JSON 데이터를 세션 상태로 로드
             st.session_state.invoice_number = json_data.get("invoice_number", "INV-001")
             st.session_state.date_of_issue = json_data.get("date_of_issue", datetime.date.today())
             st.session_state.date_due = json_data.get("date_due", datetime.date.today() + datetime.timedelta(days=7))
-            
+
             # 날짜 문자열을 date 객체로 변환
             if isinstance(st.session_state.date_of_issue, str):
                 try:
-                    st.session_state.date_of_issue = datetime.datetime.strptime(st.session_state.date_of_issue, "%Y-%m-%d").date()
-                except:
+                    st.session_state.date_of_issue = datetime.datetime.strptime(st.session_state.date_of_issue,
+                        "%Y-%m-%d").date()
+                except Exception:
                     st.session_state.date_of_issue = datetime.date.today()
-            
+
             if isinstance(st.session_state.date_due, str):
                 try:
                     st.session_state.date_due = datetime.datetime.strptime(st.session_state.date_due, "%Y-%m-%d").date()
-                except:
+                except Exception:
                     st.session_state.date_due = datetime.date.today() + datetime.timedelta(days=7)
-            
+
             # 클라이언트 정보
             client = json_data.get("client", {})
             st.session_state.client_name = client.get("name", "")
@@ -52,22 +53,22 @@ if uploaded_file is not None:
             st.session_state.client_state = client.get("state", "")
             st.session_state.client_zip = client.get("zip", "")
             st.session_state.client_type = json_data.get("client_type", "individual")
-            
+
             # 노트
             st.session_state.top_note = json_data.get("top_note", "")
             st.session_state.bottom_note = json_data.get("bottom_note", "")
             st.session_state.disclaimer = json_data.get("disclaimer", "")
-            
+
             # 섹션 및 결제 정보
             st.session_state.sections = json_data.get("serviceSections", [])
             st.session_state.payments = json_data.get("payments", [])
             st.session_state.selected_company = json_data.get("company", {})
-            
+
             # 세금 정보
             st.session_state.tax_type = json_data.get("tax_type", "none")
             st.session_state.tax_rate = json_data.get("tax_rate", 0.0)
             st.session_state.tax_amount = json_data.get("tax_amount", 0.0)
-            
+
             st.sidebar.success("✅ JSON 데이터가 로드되었습니다!")
             st.rerun()
 
@@ -83,7 +84,7 @@ if uploaded_file is not None:
                 st.switch_page("pages/preview_invoice.py")
             except Exception as e:
                 st.sidebar.error(f"❌ PDF 생성 오류: {e}")
-                
+
     except Exception as e:
         st.sidebar.error(f"❌ JSON 파일 읽기 오류: {e}")
 
@@ -151,7 +152,7 @@ if "manual_add_trigger" in st.session_state:
 # 항목 삭제 트리거
 if "delete_item_trigger" in st.session_state:
     section_idx, item_idx = st.session_state.delete_item_trigger
-    if (0 <= section_idx < len(st.session_state.sections) and 
+    if (0 <= section_idx < len(st.session_state.sections) and
         0 <= item_idx < len(st.session_state.sections[section_idx]["items"])):
         st.session_state.sections[section_idx]["items"].pop(item_idx)
     del st.session_state.delete_item_trigger
@@ -197,7 +198,7 @@ if invoice_id and uuid_pattern.match(invoice_id):
             st.session_state.sections = data.get("serviceSections", [])
             st.session_state.payments = data.get("payments", [])
             st.session_state.selected_company = data.get("company", {})
-            
+
             # 세금 정보 로드
             st.session_state.tax_type = data.get("tax_type", "none")
             st.session_state.tax_rate = data.get("tax_rate", 0.0)
@@ -229,12 +230,12 @@ else:
         st.session_state.disclaimer = ""
         st.session_state.selected_company = {}
         st.session_state.from_page = "build_invoice"
-        
+
         # 세금 정보 초기화
         st.session_state.tax_type = "none"
         st.session_state.tax_rate = 0.0
         st.session_state.tax_amount = 0.0
-        
+
         st.session_state.new_invoice_initialized = True
 
 # 회사 정보
@@ -252,10 +253,11 @@ company_name = st.selectbox(
 )
 selected_company = next((c for c in companies if c["name"] == company_name), None)
 
-# 인보이스 정보 
+# 인보이스 정보
 invoice_number = st.text_input("Invoice 번호", value=st.session_state.get("invoice_number", "INV-001"))
 date_of_issue = st.date_input("날짜 (Date of Issue)", value=st.session_state.get("date_of_issue", datetime.date.today()))
-date_due = st.date_input("납기일 (Date Due)", value=st.session_state.get("date_due", datetime.date.today() + datetime.timedelta(days=7)))
+date_due = st.date_input("납기일 (Date Due)", value=st.session_state.get("date_due",
+    datetime.date.today() + datetime.timedelta(days=7)))
 
 # 고객 정보
 st.subheader("👤 고객 정보")
@@ -265,7 +267,7 @@ current_client_type = st.session_state.get("client_type", "individual")
 
 # 고객 유형 선택
 client_type = st.radio(
-    "고객 유형을 선택하세요:", 
+    "고객 유형을 선택하세요:",
     options=["individual", "company"],
     format_func=lambda x: "🧑 개인 고객" if x == "individual" else "🏢 회사 고객",
     horizontal=True,
@@ -291,26 +293,27 @@ if client_type == "company":
     with cols[0]:
         # "직접 입력" 옵션을 포함한 회사 목록 생성
         company_options = ["직접 입력"] + company_names
-        
+
         # 현재 선택된 고객 회사 찾기
         current_client_company = st.session_state.get("selected_client_company", "직접 입력")
         try:
             client_company_index = company_options.index(current_client_company)
         except ValueError:
             client_company_index = 0
-            
+
         selected_client_company = st.selectbox(
             "🏢 고객 회사 선택",
             company_options,
             index=client_company_index,
             key="client_company_select"
         )
-    
+
     with cols[1]:
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
         if st.button("🔄 회사 정보 적용", key="apply_company_info"):
             if selected_client_company != "직접 입력":
-                selected_client_company_info = next((c for c in companies if c["name"] == selected_client_company), None)
+                selected_client_company_info = next((c for c in companies if c["name"] == selected_client_company),
+                    None)
                 if selected_client_company_info:
                     # 세션 상태에 회사 정보 저장
                     st.session_state.client_name = selected_client_company_info.get("name", "")
@@ -356,10 +359,10 @@ ALL_ITEMS = get_all_invoice_items()
 
 # 섹션 표시
 for i, section in enumerate(st.session_state.sections):
-    st.markdown(f"---")
+    st.markdown("---")
     cols = st.columns([1, 2])
     with cols[0]:
-        new_title = st.text_input(f"📂 섹션 이름", value=section["title"], key=f"section-title-{i}")
+        new_title = st.text_input("📂 섹션 이름", value=section["title"], key=f"section-title-{i}")
         section["title"] = new_title
     with cols[1]:
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
@@ -415,7 +418,8 @@ for i, section in enumerate(st.session_state.sections):
 
     # 섹션 소계 계산
     section["subtotal"] = round(sum(float(it["qty"]) * float(it["price"]) for it in section["items"]), 2)
-    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>",
+        unsafe_allow_html=True)
 
 # 납부 내역 입력란 UI
 st.subheader("💵 납부 내역")
@@ -469,14 +473,16 @@ with cols[0]:
 
 with cols[1]:
     if tax_type == "percentage":
-        tax_rate = st.number_input("세금율 (%)", value=st.session_state.get("tax_rate", 0.0), step=0.1, min_value=0.0, max_value=100.0)
+        tax_rate = st.number_input("세금율 (%)", value=st.session_state.get("tax_rate", 0.0), step=0.1, min_value=0.0,
+            max_value=100.0)
         st.session_state.tax_rate = tax_rate
     else:
         st.session_state.tax_rate = 0.0
-        
+
 with cols[2]:
     if tax_type == "fixed":
-        tax_amount = st.number_input("세금 금액 ($)", value=st.session_state.get("tax_amount", 0.0), step=1.0, min_value=0.0)
+        tax_amount = st.number_input("세금 금액 ($)", value=st.session_state.get("tax_amount", 0.0), step=1.0,
+            min_value=0.0)
         st.session_state.tax_amount = tax_amount
     else:
         st.session_state.tax_amount = 0.0
@@ -498,7 +504,8 @@ total_due = round(total_with_tax - paid_total, 2)
 st.markdown(f"<p style='text-align:right;'>Subtotal: ${subtotal_total:,.2f}</p>", unsafe_allow_html=True)
 if tax_calculated > 0:
     if tax_type == "percentage":
-        st.markdown(f"<p style='text-align:right;'>Tax ({tax_rate}%): ${tax_calculated:,.2f}</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align:right;'>Tax ({tax_rate}%): ${tax_calculated:,.2f}</p>",
+            unsafe_allow_html=True)
     else:
         st.markdown(f"<p style='text-align:right;'>Tax: ${tax_calculated:,.2f}</p>", unsafe_allow_html=True)
 st.markdown(f"<p style='text-align:right;'>Total with Tax: ${total_with_tax:,.2f}</p>", unsafe_allow_html=True)
@@ -527,7 +534,7 @@ if st.button("👁️ 미리보기로 이동"):
     st.session_state.top_note_preview = top_note
     st.session_state.bottom_note_preview = bottom_note
     st.session_state.disclaimer_preview = disclaimer
-    
+
     # 세금 정보 저장
     st.session_state.tax_type_preview = tax_type
     st.session_state.tax_rate_preview = tax_rate if tax_type == "percentage" else 0.0

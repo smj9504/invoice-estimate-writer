@@ -1,7 +1,7 @@
 import streamlit as st
 import datetime
 import re
-from modules.company_module import get_all_companies  
+from modules.company_module import get_all_companies
 from modules.estimate_item_module import get_all_items
 from modules.estimate_module import get_estimate_by_id, get_descriptions_by_item_id
 
@@ -82,10 +82,10 @@ if "add_items_trigger" in st.session_state:
                         available_descriptions.sort(key=lambda x: x["sort_order"])
                 except Exception as e:
                     available_descriptions = []
-                
+
                 st.session_state.sections[section_idx]["items"].append({
                     "code": item["code"],
-                    "name": item["name"], 
+                    "name": item["name"],
                     "unit": item["unit"],
                     "price": item["unit_price"],
                     "qty": 1.0,
@@ -118,7 +118,7 @@ if "manual_add_trigger" in st.session_state:
 # 항목 삭제 트리거
 if "delete_item_trigger" in st.session_state:
     section_idx, item_idx = st.session_state.delete_item_trigger
-    if (0 <= section_idx < len(st.session_state.sections) and 
+    if (0 <= section_idx < len(st.session_state.sections) and
         0 <= item_idx < len(st.session_state.sections[section_idx]["items"])):
         st.session_state.sections[section_idx]["items"].pop(item_idx)
     del st.session_state.delete_item_trigger
@@ -126,7 +126,7 @@ if "delete_item_trigger" in st.session_state:
 # 항목 순서 변경 트리거 (위로 이동)
 if "move_item_up_trigger" in st.session_state:
     section_idx, item_idx = st.session_state.move_item_up_trigger
-    if (0 <= section_idx < len(st.session_state.sections) and 
+    if (0 <= section_idx < len(st.session_state.sections) and
         1 <= item_idx < len(st.session_state.sections[section_idx]["items"])):
         # 현재 항목과 위의 항목 위치 바꾸기
         items = st.session_state.sections[section_idx]["items"]
@@ -136,7 +136,7 @@ if "move_item_up_trigger" in st.session_state:
 # 항목 순서 변경 트리거 (아래로 이동)
 if "move_item_down_trigger" in st.session_state:
     section_idx, item_idx = st.session_state.move_item_down_trigger
-    if (0 <= section_idx < len(st.session_state.sections) and 
+    if (0 <= section_idx < len(st.session_state.sections) and
         0 <= item_idx < len(st.session_state.sections[section_idx]["items"]) - 1):
         # 현재 항목과 아래의 항목 위치 바꾸기
         items = st.session_state.sections[section_idx]["items"]
@@ -170,11 +170,11 @@ if estimate_id and uuid_pattern.match(estimate_id):
                         item["selected_descriptions"] = []
                     if "manual_description" not in item:
                         item["manual_description"] = ""
-                    
+
                     # 기존 설명이 있으면 수동 설명으로 이동
                     if item.get("dec") and not item.get("manual_description"):
                         item["manual_description"] = item["dec"]
-            
+
             st.session_state.sections = loaded_sections
             st.session_state.estimate_number = data.get("estimate_number", "")
             st.session_state.estimate_date = data.get("estimate_date", datetime.date.today())
@@ -287,28 +287,28 @@ ALL_ITEMS = get_all_items()
 def update_item_description(section_idx, item_idx):
     """항목의 설명을 업데이트하는 함수"""
     item = st.session_state.sections[section_idx]["items"][item_idx]
-    
+
     # 선택된 설명들과 수동 입력 설명을 합치기
     all_descriptions = []
-    
+
     # 선택된 설명들 추가
     for desc_id in item.get("selected_descriptions", []):
         for desc in item.get("available_descriptions", []):
             if desc["id"] == desc_id:
                 all_descriptions.append(desc["text"])
                 break
-    
+
     # 수동 입력 설명 추가
     if item.get("manual_description", "").strip():
         all_descriptions.append(item["manual_description"].strip())
-    
+
     # 최종 설명 텍스트 생성
     item["dec"] = "\n".join(all_descriptions)
 
 def has_description(item):
     """항목에 설명이 있는지 확인하는 함수"""
-    return (item.get("dec", "").strip() or 
-            item.get("available_descriptions", []) or 
+    return (item.get("dec", "").strip() or
+            item.get("available_descriptions", []) or
             item.get("manual_description", "").strip())
 
 # 섹션 표시
@@ -318,8 +318,8 @@ for i, section in enumerate(st.session_state.sections):
     with cols[0]:
         # 섹션 이름 편집 가능하게 변경
         new_section_title = st.text_input(
-            "섹션 이름", 
-            value=section['title'], 
+            "섹션 이름",
+            value=section['title'],
             key=f"section-title-{i}",
             label_visibility="collapsed"
         )
@@ -327,7 +327,7 @@ for i, section in enumerate(st.session_state.sections):
         if new_section_title != section['title']:
             st.session_state.update_section_title_trigger = (i, new_section_title)
             st.rerun()
-        
+
         st.markdown(f"### 📦 {section['title']}")
     with cols[1]:
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
@@ -373,7 +373,7 @@ for i, section in enumerate(st.session_state.sections):
             # 항목 순서 표시를 위한 구분선
             if j > 0:
                 st.markdown("<hr style='margin: 5px 0; border: 1px solid #e0e0e0;'>", unsafe_allow_html=True)
-            
+
             cols = st.columns([3, 1, 1, 1, 0.5, 0.5, 0.5])
             with cols[0]:
                 # 순서 번호와 함께 항목명 표시
@@ -411,52 +411,52 @@ for i, section in enumerate(st.session_state.sections):
             # 설명 관리 섹션 - 항상 닫혀있지만 설명 유무 표시
             description_status = has_description(item)
             description_indicator = " 📝" if description_status else ""
-            
+
             with st.expander(f"📝 설명 관리{description_indicator}", expanded=False):
                 # 저장된 설명들이 있는 경우
                 if item.get("available_descriptions"):
                     st.markdown("**💾 저장된 설명 선택:**")
-                    
+
                     # 사용 가능한 설명들 표시
                     description_options = []
                     description_map = {}
-                    
+
                     for desc in item["available_descriptions"]:
                         option_text = desc["text"]
                         description_options.append(option_text)
                         description_map[option_text] = desc["id"]
-                    
+
                     # 현재 선택된 설명들 확인
                     if "selected_descriptions" not in item:
                         item["selected_descriptions"] = []
-                    
+
                     # 다중 선택 위젯
                     selected_desc_texts = st.multiselect(
                         "사용할 설명 선택 (여러 개 선택 가능)",
                         description_options,
-                        default=[desc["text"] for desc in item["available_descriptions"] 
+                        default=[desc["text"] for desc in item["available_descriptions"]
                                 if desc["id"] in item.get("selected_descriptions", [])],
                         key=f"desc-select-{i}-{j}"
                     )
-                    
+
                     # 선택된 설명 ID 업데이트
                     item["selected_descriptions"] = [description_map[text] for text in selected_desc_texts]
-                    
+
                     # 선택된 설명들 미리보기
                     if selected_desc_texts:
                         st.markdown("**📋 선택된 설명 미리보기:**")
                         for desc_text in selected_desc_texts:
                             st.info(desc_text)
-                    
+
                     st.markdown("---")
-                
+
                 # 수동 입력 섹션
                 st.markdown("**✍️ 추가 설명 입력:**")
-                
+
                 # 기존 수동 설명이 없으면 초기화
                 if "manual_description" not in item:
                     item["manual_description"] = ""
-                
+
                 new_manual_desc = st.text_area(
                     "직접 입력한 설명",
                     value=item.get("manual_description", ""),
@@ -464,31 +464,31 @@ for i, section in enumerate(st.session_state.sections):
                     help="저장된 설명 외에 추가로 입력할 설명"
                 )
                 item["manual_description"] = new_manual_desc
-                
+
                 # 설명 업데이트 버튼
-                if st.button(f"📝 설명 적용", key=f"apply-desc-{i}-{j}"):
+                if st.button("📝 설명 적용", key=f"apply-desc-{i}-{j}"):
                     update_item_description(i, j)
                     st.success("설명이 적용되었습니다!")
                     st.rerun()
-                
+
                 # 최종 설명 미리보기
                 st.markdown("---")
                 st.markdown("**📄 최종 설명 미리보기:**")
-                
+
                 # 임시로 설명 조합해서 보여주기
                 temp_descriptions = []
-                
+
                 # 선택된 저장된 설명들
                 for desc_id in item.get("selected_descriptions", []):
                     for desc in item.get("available_descriptions", []):
                         if desc["id"] == desc_id:
                             temp_descriptions.append(desc["text"])
                             break
-                
+
                 # 수동 입력 설명
                 if item.get("manual_description", "").strip():
                     temp_descriptions.append(item["manual_description"].strip())
-                
+
                 if temp_descriptions:
                     final_desc = "\n".join(temp_descriptions)
                     st.text_area(
@@ -498,7 +498,7 @@ for i, section in enumerate(st.session_state.sections):
                         disabled=True,
                         key=f"final-desc-{i}-{j}"
                     )
-                    
+
                     # 현재 적용된 설명과 다르면 알림
                     if final_desc != item.get("dec", ""):
                         st.warning("⚠️ 설명이 변경되었습니다. '📝 설명 적용' 버튼을 클릭하여 적용하세요.")
@@ -508,7 +508,7 @@ for i, section in enumerate(st.session_state.sections):
         # 섹션 소계 계산 및 표시
         section["subtotal"] = round(sum(it["qty"] * it["price"] for it in section["items"]), 2)
         st.markdown(f"<p style='text-align:right; font-weight:bold; margin-top:10px;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
-        
+
         st.markdown("---")
     else:
         # 빈 섹션일 때 메시지 표시
@@ -518,15 +518,15 @@ for i, section in enumerate(st.session_state.sections):
 
     # 새 항목 추가 섹션 (섹션 이름을 명확하게 표시)
     st.markdown(f"##### ➕ '{section['title']}' 섹션에 새 항목 추가")
-    
+
     # 전체 카테고리 및 서브카테고리 추출
     all_categories = sorted(set(item.get("category", "") for item in ALL_ITEMS if item.get("category")))
     all_categories.insert(0, "모든 카테고리")  # 전체 선택 옵션 추가
-    
+
     # 카테고리 선택 초기화
     if f"selected_category_{i}" not in st.session_state:
         st.session_state[f"selected_category_{i}"] = "모든 카테고리"
-    
+
     # 카테고리 선택
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -534,9 +534,10 @@ for i, section in enumerate(st.session_state.sections):
             "1️⃣ 카테고리 선택",
             all_categories,
             index=all_categories.index(st.session_state[f"selected_category_{i}"]) if st.session_state[f"selected_category_{i}"] in all_categories else 0,
+
             key=f"cat-{i}"
         )
-        
+
         # 카테고리가 변경되면 서브카테고리 선택 초기화
         if st.session_state[f"selected_category_{i}"] != selected_category:
             st.session_state[f"selected_category_{i}"] = selected_category
@@ -550,26 +551,28 @@ for i, section in enumerate(st.session_state.sections):
     else:
         # 특정 카테고리의 서브카테고리들 추출
         category_items = [item for item in ALL_ITEMS if item.get("category") == selected_category]
-        all_subcategories = sorted(set(item.get("subcategory", "") for item in category_items if item.get("subcategory")))
-    
+        all_subcategories = sorted(set(item.get("subcategory",
+            "") for item in category_items if item.get("subcategory")))
+
     # 서브카테고리가 있는 경우에만 서브카테고리 선택 표시
     if all_subcategories:
         all_subcategories.insert(0, "모든 서브카테고리")  # 전체 선택 옵션 추가
-        
+
         with col2:
             # 서브카테고리 선택 초기화
             if f"selected_subcategory_{i}" not in st.session_state:
                 st.session_state[f"selected_subcategory_{i}"] = "모든 서브카테고리"
-            
+
             # 서브카테고리 선택
             selected_subcategory = st.selectbox(
                 "2️⃣ 서브카테고리 선택",
                 all_subcategories,
                 index=all_subcategories.index(st.session_state[f"selected_subcategory_{i}"]) if st.session_state[f"selected_subcategory_{i}"] in all_subcategories else 0,
+
                 key=f"subcat-{i}"
             )
             st.session_state[f"selected_subcategory_{i}"] = selected_subcategory
-        
+
         # 항목 필터링
         if selected_category == "모든 카테고리" and selected_subcategory == "모든 서브카테고리":
             # 모든 항목 표시
@@ -585,17 +588,17 @@ for i, section in enumerate(st.session_state.sections):
             filter_text = f"**{selected_category}** > **모든 서브카테고리**"
         else:
             # 특정 카테고리와 서브카테고리
-            section_items = [item for item in ALL_ITEMS 
-                            if item.get("category") == selected_category 
+            section_items = [item for item in ALL_ITEMS
+                            if item.get("category") == selected_category
                             and item.get("subcategory") == selected_subcategory]
             filter_text = f"**{selected_category}** > **{selected_subcategory}**"
-        
+
         # 현재 선택 상태 표시
         st.info(f"📂 {filter_text} ({len(section_items)}개 항목)")
     else:
         with col2:
             st.markdown("*서브카테고리가 없습니다*")
-        
+
         # 서브카테고리가 없는 경우 처리
         if selected_category == "모든 카테고리":
             # 모든 항목 표시
@@ -605,10 +608,10 @@ for i, section in enumerate(st.session_state.sections):
             # 특정 카테고리의 모든 항목
             section_items = [item for item in ALL_ITEMS if item.get("category") == selected_category]
             filter_text = f"**{selected_category}**"
-        
+
         # 현재 선택 상태 표시
         st.info(f"📂 {filter_text} ({len(section_items)}개 항목)")
-    
+
     # 항목 선택 인터페이스
     if section_items:
         item_names = [f"{item.get('code', '')} - {item.get('name', '')}" for item in section_items]
@@ -635,7 +638,8 @@ for i, section in enumerate(st.session_state.sections):
 
 # O&P 퍼센트 입력
 st.subheader("💰 Overhead & Profit (O&P) 설정")
-op_percent = st.number_input("O&P 비율 (%)", min_value=0.0, max_value=100.0, step=1.0, value=st.session_state.get("op_percent", 0.0), key="op_percent")
+op_percent = st.number_input("O&P 비율 (%)", min_value=0.0, max_value=100.0, step=1.0,
+    value=st.session_state.get("op_percent", 0.0), key="op_percent")
 
 # 총계 계산
 subtotal_sum = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
@@ -643,7 +647,7 @@ op_amount = round(subtotal_sum * (op_percent / 100), 2)
 total = round(subtotal_sum + op_amount, 2)
 
 # 총계 표시
-st.markdown(f"""
+st.markdown("""
 <p style='text-align:right; font-weight:bold;'>Subtotal: ${subtotal_sum:,.2f}</p>
 <p style='text-align:right; font-weight:bold;'>O&amp;P ({op_percent:.0f}%): ${op_amount:,.2f}</p>
 <p style='text-align:right; font-size:25px; font-weight:600;'>Total: ${total:,.2f}</p>

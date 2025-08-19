@@ -16,25 +16,25 @@ if uploaded_file is not None:
         uploaded_file.seek(0)  # 파일 포인터를 처음으로 리셋
         file_content = uploaded_file.read().decode('utf-8')
         json_data = json.loads(file_content)
-        
+
         st.sidebar.markdown("**업로드된 파일:** " + uploaded_file.name)
         st.sidebar.markdown(f"**인보이스 번호:** {json_data.get('invoice_number', 'N/A')}")
-        
+
         if st.sidebar.button("📄 바로 PDF 생성 및 다운로드"):
             # JSON 데이터로 직접 PDF 생성
             try:
                 from pdf_generator import generate_invoice_pdf
-                
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pd") as tmpfile:
                     generate_invoice_pdf(json_data, tmpfile.name)
                     st.sidebar.success("📄 PDF 생성 완료!")
-                    
+
                     with open(tmpfile.name, "rb") as f:
                         st.sidebar.download_button(
                             label="📥 PDF 다운로드",
                             data=f,
                             file_name=f"{json_data.get('invoice_number', 'invoice')}.pdf",
-                            mime="application/pdf"
+                            mime="application/pd"
                         )
             except Exception as e:
                 st.sidebar.error(f"❌ PDF 생성 실패: {e}")
@@ -50,14 +50,14 @@ if uploaded_file is not None:
 if st.session_state.get("direct_pdf_mode", False):
     # 직접 PDF 생성 모드
     st.title("📄 JSON에서 PDF 생성")
-    
+
     # 세션 상태에서 JSON 데이터 복원
     invoice_data = {}
     for key in st.session_state.keys():
         if key.startswith("direct_"):
             real_key = key.replace("direct_", "")
             invoice_data[real_key] = st.session_state[key]
-    
+
     if invoice_data:
         st.subheader("📋 업로드된 인보이스 정보")
         st.json({
@@ -69,21 +69,21 @@ if st.session_state.get("direct_pdf_mode", False):
             "Tax Type": invoice_data.get("tax_type", "none"),
             "Tax Amount": invoice_data.get("tax_calculated", 0)
         })
-        
+
         if st.button("📄 PDF 생성 및 다운로드"):
             try:
                 from pdf_generator import generate_invoice_pdf
-                
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pd") as tmpfile:
                     generate_invoice_pdf(invoice_data, tmpfile.name)
                     st.success("📄 PDF 생성 완료!")
-                    
+
                     with open(tmpfile.name, "rb") as f:
                         st.download_button(
                             label="📥 PDF 다운로드",
                             data=f,
                             file_name=f"{invoice_data.get('invoice_number', 'invoice')}.pdf",
-                            mime="application/pdf"
+                            mime="application/pd"
                         )
             except Exception as e:
                 st.error(f"❌ PDF 생성 실패: {e}")
@@ -92,7 +92,7 @@ if st.session_state.get("direct_pdf_mode", False):
                 st.error("2. run_app.bat을 실행하세요")
                 st.error("3. 또는 CMD에서:")
                 st.code('set "PATH=C:\\Program Files\\GTK3-Runtime Win64\\bin;%PATH%" && streamlit run app.py')
-                    
+
         if st.button("🔙 인보이스 빌더로 돌아가기"):
             # 직접 PDF 모드 관련 세션 상태 정리
             for key in list(st.session_state.keys()):
@@ -101,7 +101,7 @@ if st.session_state.get("direct_pdf_mode", False):
             st.switch_page("pages/build_invoice.py")
     else:
         st.error("❌ JSON 데이터를 찾을 수 없습니다.")
-    
+
     st.stop()  # 일반 미리보기 로직 실행 방지
 
 # URL 파라미터에서 ID 추출
@@ -135,7 +135,7 @@ if invoice_id and uuid_pattern.match(invoice_id):
         st.session_state.sections = data.get("serviceSections", [])
         st.session_state.payments = data.get("payments", [])
         st.session_state.selected_company = data.get("company", {})
-        
+
         # 세금 정보 로드
         st.session_state.tax_type = data.get("tax_type", "none")
         st.session_state.tax_rate = data.get("tax_rate", 0.0)
@@ -227,14 +227,15 @@ for section in invoice_data["serviceSections"]:
     st.markdown(f"### 🔹 {section['title']}")
     for item in section["items"]:
         st.markdown(f"- **{item['name']}**")
-        
+
         if not item.get("hide_price"):
             st.markdown(f"  - 수량: {item['qty']} {item['unit']} | 단가: ${item['price']:,.2f}")
 
         if item.get("dec"):
             st.markdown(f"  - _{item['dec']}_")
-            
-    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
+
+    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>",
+        unsafe_allow_html=True)
 
 # 납부 내역
 st.subheader("💳 납부 내역")
@@ -278,8 +279,8 @@ if st.button("💾 인보이스 저장"):
 if st.button("📄 인보이스 PDF 다운로드"):
     try:
         from pdf_generator import generate_invoice_pdf
-        
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pd") as tmpfile:
             generate_invoice_pdf(invoice_data, tmpfile.name)
             st.success("📄 PDF 생성 완료!")
             with open(tmpfile.name, "rb") as f:
@@ -287,7 +288,7 @@ if st.button("📄 인보이스 PDF 다운로드"):
                     label="📥 PDF 다운로드",
                     data=f,
                     file_name=f"{invoice_data['invoice_number']}.pdf",
-                    mime="application/pdf"
+                    mime="application/pd"
                 )
             for key in list(st.session_state.keys()):
                 del st.session_state[key]

@@ -76,7 +76,7 @@ if "manual_add_trigger" in st.session_state:
 # 항목 삭제 트리거
 if "delete_item_trigger" in st.session_state:
     section_idx, item_idx = st.session_state.delete_item_trigger
-    if (0 <= section_idx < len(st.session_state.sections) and 
+    if (0 <= section_idx < len(st.session_state.sections) and
         0 <= item_idx < len(st.session_state.sections[section_idx]["items"])):
         st.session_state.sections[section_idx]["items"].pop(item_idx)
     del st.session_state.delete_item_trigger
@@ -124,7 +124,7 @@ if invoice_id and uuid_pattern.match(invoice_id):
 
             # Amount due 텍스트 로드
             st.session_state.amount_due_text = data.get("amount_due_text", "")
-            
+
             # Line Item Total 및 Material Sales Tax 로드
             st.session_state.line_item_total = data.get("line_item_total", 0.0)
             st.session_state.material_sales_tax = data.get("material_sales_tax", 0.0)
@@ -157,19 +157,19 @@ else:
         st.session_state.client_state = ""
         st.session_state.client_zip = ""
         st.session_state.client_type = "individual"
-        
+
         # 보험 정보 초기화
         st.session_state.insurance_company = ""
         st.session_state.insurance_policy_number = ""
         st.session_state.insurance_claim_number = ""
-        
+
         # Amount due 텍스트 초기화
         st.session_state.amount_due_text = ""
-        
+
         # Line Item Total 및 Material Sales Tax 초기화
         st.session_state.line_item_total = 0.0
         st.session_state.material_sales_tax = 0.0
-        
+
         st.session_state.top_note = ""
         st.session_state.bottom_note = ""
         st.session_state.disclaimer = ""
@@ -192,24 +192,26 @@ company_name = st.selectbox(
 )
 selected_company = next((c for c in companies if c["name"] == company_name), None)
 
-# 인보이스 정보 
+# 인보이스 정보
 invoice_number = st.text_input("Invoice 번호", value=st.session_state.get("invoice_number", "INV-001"))
 date_of_issue = st.date_input("날짜 (Date of Issue)", value=st.session_state.get("date_of_issue", datetime.date.today()))
-date_due = st.date_input("납기일 (Date Due)", value=st.session_state.get("date_due", datetime.date.today() + datetime.timedelta(days=7)))
+date_due = st.date_input("납기일 (Date Due)", value=st.session_state.get("date_due",
+    datetime.date.today() + datetime.timedelta(days=7)))
 
 # Amount Due 설정
 st.subheader("💰 결제 조건")
 use_custom_amount_text = st.checkbox(
-    "사용자 정의 결제 조건 사용", 
+    "사용자 정의 결제 조건 사용",
     value=True,  # 기본으로 체크되도록 설정
     key="use_custom_amount"
 )
 
 if use_custom_amount_text:
     # 기본 텍스트 설정
-    default_amount_text = st.session_state.get("amount_due_text", "") or "Payment due upon receipt of insurance settlement"
+    default_amount_text = st.session_state.get("amount_due_text",
+        "") or "Payment due upon receipt of insurance settlement"
     amount_due_text = st.text_input(
-        "Payment due upon receipt of depreciation amount from insurer", 
+        "Payment due upon receipt of depreciation amount from insurer",
         value=default_amount_text,
         placeholder="예: Payment due upon receipt of insurance settlement"
     )
@@ -222,7 +224,7 @@ st.subheader("👤 고객 정보")
 current_client_type = st.session_state.get("client_type", "individual")
 
 client_type = st.radio(
-    "고객 유형을 선택하세요:", 
+    "고객 유형을 선택하세요:",
     options=["individual", "company"],
     format_func=lambda x: "🧑 개인 고객" if x == "individual" else "🏢 회사 고객",
     horizontal=True,
@@ -241,19 +243,20 @@ if client_type == "company":
             client_company_index = company_options.index(current_client_company)
         except ValueError:
             client_company_index = 0
-            
+
         selected_client_company = st.selectbox(
             "🏢 고객 회사 선택",
             company_options,
             index=client_company_index,
             key="client_company_select"
         )
-    
+
     with cols[1]:
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
         if st.button("🔄 회사 정보 적용", key="apply_company_info"):
             if selected_client_company != "직접 입력":
-                selected_client_company_info = next((c for c in companies if c["name"] == selected_client_company), None)
+                selected_client_company_info = next((c for c in companies if c["name"] == selected_client_company),
+                    None)
                 if selected_client_company_info:
                     st.session_state.client_name = selected_client_company_info.get("name", "")
                     st.session_state.client_phone = selected_client_company_info.get("phone", "")
@@ -286,7 +289,8 @@ if use_insurance:
     insurance_company = st.text_input("보험 회사", value=st.session_state.get("insurance_company", ""))
     cols = st.columns([1, 1])
     with cols[0]:
-        insurance_policy_number = st.text_input("Policy Number", value=st.session_state.get("insurance_policy_number", ""))
+        insurance_policy_number = st.text_input("Policy Number", value=st.session_state.get("insurance_policy_number",
+            ""))
     with cols[1]:
         insurance_claim_number = st.text_input("Claim Number", value=st.session_state.get("insurance_claim_number", ""))
 else:
@@ -314,13 +318,14 @@ ALL_ITEMS = get_all_invoice_items()
 
 # 섹션 표시
 for i, section in enumerate(st.session_state.sections):
-    st.markdown(f"---")
+    st.markdown("---")
     cols = st.columns([2, 1, 1])
     with cols[0]:
-        new_title = st.text_input(f"📂 섹션 이름", value=section["title"], key=f"section-title-{i}")
+        new_title = st.text_input("📂 섹션 이름", value=section["title"], key=f"section-title-{i}")
         section["title"] = new_title
     with cols[1]:
-        section_amount = st.number_input(f"섹션 금액", value=section.get("amount", 0.0), step=0.01, key=f"section-amount-{i}")
+        section_amount = st.number_input("섹션 금액", value=section.get("amount", 0.0), step=0.01,
+            key=f"section-amount-{i}")
         section["amount"] = section_amount
     with cols[2]:
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
@@ -353,12 +358,13 @@ for i, section in enumerate(st.session_state.sections):
     # 항목 표시 및 편집
     for j, item in enumerate(section["items"]):
         st.markdown(f"**아이템 {j+1}**")
-        
+
         cols = st.columns([3, 2, 1])
         with cols[0]:
             item["name"] = st.text_input("아이템명", value=item.get("name", ""), key=f"name-{i}-{j}")
         with cols[1]:
-            item_amount = st.number_input("아이템 금액", value=item.get("amount", 0.0), step=0.01, key=f"item-amount-{i}-{j}")
+            item_amount = st.number_input("아이템 금액", value=item.get("amount", 0.0), step=0.01,
+                key=f"item-amount-{i}-{j}")
             item["amount"] = item_amount
         with cols[2]:
             st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
@@ -375,14 +381,14 @@ for i, section in enumerate(st.session_state.sections):
                 desc_text = "\n".join(item["description"])
             else:
                 desc_text = item.get("dec", "")  # 기존 dec 필드와의 호환성
-            
+
             description_text = st.text_area(
-                "작업 내역 (한 줄에 하나씩 입력)", 
-                value=desc_text, 
+                "작업 내역 (한 줄에 하나씩 입력)",
+                value=desc_text,
                 key=f"description-{i}-{j}",
                 help="각 줄이 하나의 작업 항목이 됩니다"
             )
-            
+
             # 텍스트를 리스트로 변환하여 저장
             item["description"] = [line.strip() for line in description_text.split('\n') if line.strip()]
             # 기존 dec 필드도 유지 (호환성)
@@ -391,7 +397,7 @@ for i, section in enumerate(st.session_state.sections):
     # 섹션 소계 계산 (기존 방식과 새로운 amount 방식 모두 고려)
     legacy_subtotal = round(sum(float(it.get("qty", 0)) * float(it.get("price", 0)) for it in section["items"]), 2)
     amount_subtotal = round(sum(float(it.get("amount", 0)) for it in section["items"]), 2)
-    
+
     # amount가 설정되어 있으면 amount를 사용, 아니면 legacy 방식 사용
     if section.get("amount", 0) > 0:
         section["subtotal"] = section["amount"]
@@ -399,8 +405,9 @@ for i, section in enumerate(st.session_state.sections):
         section["subtotal"] = amount_subtotal
     else:
         section["subtotal"] = legacy_subtotal
-    
-    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>", unsafe_allow_html=True)
+
+    st.markdown(f"<p style='text-align:right; font-weight:bold;'>Subtotal: ${section['subtotal']:,.2f}</p>",
+        unsafe_allow_html=True)
 
 # 총계 계산
 subtotal_total = round(sum(section["subtotal"] for section in st.session_state.sections), 2)
@@ -410,15 +417,15 @@ st.subheader("📊 추가 비용")
 cols = st.columns([1, 1])
 with cols[0]:
     line_item_total = st.number_input(
-        "Line Item Total", 
-        value=st.session_state.get("line_item_total", 0.0), 
+        "Line Item Total",
+        value=st.session_state.get("line_item_total", 0.0),
         step=0.01,
         key="line_item_total_input"
     )
 with cols[1]:
     material_sales_tax = st.number_input(
-        "Material Sales Tax", 
-        value=st.session_state.get("material_sales_tax", 0.0), 
+        "Material Sales Tax",
+        value=st.session_state.get("material_sales_tax", 0.0),
         step=0.01,
         key="material_sales_tax_input"
     )
@@ -476,8 +483,10 @@ st.markdown(f"<p style='text-align:right;'>Sections Subtotal: ${subtotal_total:,
 if line_item_total > 0:
     st.markdown(f"<p style='text-align:right;'>Line Item Total: ${line_item_total:,.2f}</p>", unsafe_allow_html=True)
 if material_sales_tax > 0:
-    st.markdown(f"<p style='text-align:right;'>Material Sales Tax: ${material_sales_tax:,.2f}</p>", unsafe_allow_html=True)
-st.markdown(f"<p style='text-align:right; font-weight:bold;'>Grand Total: ${grand_total:,.2f}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align:right;'>Material Sales Tax: ${material_sales_tax:,.2f}</p>",
+        unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:right; font-weight:bold;'>Grand Total: ${grand_total:,.2f}</p>",
+    unsafe_allow_html=True)
 st.markdown(f"<p style='text-align:right;'>Total Paid Amount: ${paid_total:,.2f}</p>", unsafe_allow_html=True)
 st.markdown(f"<h4 style='text-align:right;'>💰 Total Due: ${total:,.2f}</h4>", unsafe_allow_html=True)
 
@@ -500,19 +509,19 @@ if st.button("👁️ 미리보기로 이동"):
     st.session_state.client_state = client_state
     st.session_state.client_zip = client_zip
     st.session_state.client_type = client_type
-    
+
     # 보험 정보 저장
     st.session_state.insurance_company = insurance_company
     st.session_state.insurance_policy_number = insurance_policy_number
     st.session_state.insurance_claim_number = insurance_claim_number
-    
+
     # Amount due 텍스트 저장
     st.session_state.amount_due_text = amount_due_text
-    
+
     # Line Item Total 및 Material Sales Tax 저장
     st.session_state.line_item_total = line_item_total
     st.session_state.material_sales_tax = material_sales_tax
-    
+
     st.session_state.top_note_preview = top_note
     st.session_state.bottom_note_preview = bottom_note
     st.session_state.disclaimer_preview = disclaimer

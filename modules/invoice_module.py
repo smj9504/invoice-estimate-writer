@@ -62,7 +62,8 @@ def save_invoice(data: dict) -> bool:
 
 def get_latest_invoices() -> list[dict]:
     supabase = get_connection()
-    result = with_retries(lambda: supabase.table("invoices").select("*").eq("is_latest", True).order("created_at", desc=True).execute())
+    result = with_retries(lambda: supabase.table("invoices").select("*").eq("is_latest", True).order("created_at",
+        desc=True).execute())
     return result.data or []
 
 
