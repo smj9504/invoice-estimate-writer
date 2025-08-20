@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
   // Fetch companies
   const { data: companiesData } = useQuery({
     queryKey: ['companies'],
-    queryFn: companyService.getCompanies,
+    queryFn: () => companyService.getCompanies(),
   });
 
   // Update companies in store when data changes

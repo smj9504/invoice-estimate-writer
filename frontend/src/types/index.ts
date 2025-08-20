@@ -2,12 +2,32 @@
 export interface Company {
   id: string;
   name: string;
-  email?: string;
+  address: string;
+  city: string;
+  state: string;
+  zip?: string;
   phone?: string;
-  address?: string;
-  logo_url?: string;
-  created_at: string;
-  updated_at: string;
+  email?: string;
+  logo?: string; // Base64 encoded logo or URL
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CompanyFormData {
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zip?: string;
+  phone?: string;
+  email?: string;
+  logo?: string;
+}
+
+export interface CompanyFilter {
+  search?: string;
+  city?: string;
+  state?: string;
 }
 
 // Document Types

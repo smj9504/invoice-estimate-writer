@@ -1,59 +1,54 @@
-import { apiClient } from '../api/config';
-import { Company, ApiResponse } from '../types';
+import api from './api';
+import { Company, CompanyFormData } from '../types';
 
 export const companyService = {
-  // Get all companies
-  async getCompanies(): Promise<Company[]> {
-    const response = await apiClient.get<ApiResponse<Company[]>>('/companies');
-    return response.data.data || [];
+  // Get all companies with optional filters
+  getCompanies: async (search?: string, city?: string, state?: string): Promise<Company[]> => {
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    if (city) params.append('city', city);
+    if (state) params.append('state', state);
+    
+    const response = await api.get(`/companies?${params.toString()}`);
+    return response.data.data;
   },
 
-  // Get single company
-  async getCompany(id: string): Promise<Company> {
-    const response = await apiClient.get<ApiResponse<Company>>(`/companies/${id}`);
-    if (!response.data.data) {
-      throw new Error('Company not found');
-    }
+  // Get single company by ID
+  getCompany: async (id: string): Promise<Company> => {
+    const response = await api.get(`/companies/${id}`);
     return response.data.data;
   },
 
   // Create new company
-  async createCompany(company: Omit<Company, 'id' | 'created_at' | 'updated_at'>): Promise<Company> {
-    const response = await apiClient.post<ApiResponse<Company>>('/companies', company);
-    if (!response.data.data) {
-      throw new Error('Failed to create company');
-    }
+  createCompany: async (data: CompanyFormData): Promise<Company> => {
+    const response = await api.post('/companies', data);
     return response.data.data;
   },
 
-  // Update company
-  async updateCompany(id: string, company: Partial<Company>): Promise<Company> {
-    const response = await apiClient.put<ApiResponse<Company>>(`/companies/${id}`, company);
-    if (!response.data.data) {
-      throw new Error('Failed to update company');
-    }
+  // Update existing company
+  updateCompany: async (id: string, data: Partial<CompanyFormData>): Promise<Company> => {
+    const response = await api.put(`/companies/${id}`, data);
     return response.data.data;
   },
 
   // Delete company
-  async deleteCompany(id: string): Promise<void> {
-    await apiClient.delete(`/companies/${id}`);
+  deleteCompany: async (id: string): Promise<void> => {
+    console.log('Deleting company with ID:', id);
+    const response = await api.delete(`/companies/${id}`);
+    console.log('Delete response:', response);
+    return response.data;
   },
 
   // Upload company logo
-  async uploadLogo(id: string, file: File): Promise<string> {
+  uploadLogo: async (companyId: string, file: File): Promise<string> => {
     const formData = new FormData();
-    formData.append('logo', file);
+    formData.append('file', file);
     
-    const response = await apiClient.post<ApiResponse<{ url: string }>>(`/companies/${id}/logo`, formData, {
+    const response = await api.post(`/companies/${companyId}/logo`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    
-    if (!response.data.data?.url) {
-      throw new Error('Failed to upload logo');
-    }
-    return response.data.data.url;
+    return response.data.logo;
   },
 };

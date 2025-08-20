@@ -9,11 +9,14 @@ from datetime import datetime
 class CompanyBase(BaseModel):
     """Base company schema"""
     name: str
-    email: Optional[EmailStr] = None
+    address: str
+    city: str
+    state: str
+    zip: Optional[str] = None
     phone: Optional[str] = None
-    address: Optional[str] = None
-    logo_url: Optional[str] = None
-
+    email: Optional[EmailStr] = None
+    logo: Optional[str] = None  # Base64 encoded image
+    
 class CompanyCreate(CompanyBase):
     """Schema for creating a company"""
     pass
@@ -21,16 +24,19 @@ class CompanyCreate(CompanyBase):
 class CompanyUpdate(BaseModel):
     """Schema for updating a company"""
     name: Optional[str] = None
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = None
     address: Optional[str] = None
-    logo_url: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    zip: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[EmailStr] = None
+    logo: Optional[str] = None
 
 class Company(CompanyBase):
     """Company schema with all fields"""
     id: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         from_attributes = True
@@ -45,3 +51,9 @@ class CompaniesResponse(BaseModel):
     """Response schema for multiple companies"""
     data: list[Company]
     total: int
+
+class CompanyFilter(BaseModel):
+    """Filter parameters for companies"""
+    search: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None

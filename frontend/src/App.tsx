@@ -6,6 +6,7 @@ import koKR from 'antd/locale/ko_KR';
 import Layout from './components/common/Layout';
 import Dashboard from './pages/Dashboard';
 import DocumentList from './pages/DocumentList';
+import CompanyManagement from './pages/CompanyManagement';
 import 'antd/dist/reset.css';
 
 // Create a client
@@ -28,9 +29,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/companies" element={<CompanyManagement />} />
               <Route path="/documents" element={<DocumentList />} />
               <Route path="/documents/:type" element={<DocumentList />} />
-              {/* Todo: Add more routes for company management, document creation, etc. */}
+              {/* Todo: Add more routes for document creation, etc. */}
             </Routes>
           </Layout>
         </Router>
