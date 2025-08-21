@@ -457,8 +457,14 @@
         <!-- Amount Due Banner -->
         <div class="amount-due-banner">
             <span class="amount-due-text">
-                {% if paid_amount and paid_amount > 0 %}
-                ${{ '{:,.2f}'.format(total - paid_amount) }} USD due {{ due_date }}
+                {% if balance_due is defined %}
+                    {% if balance_due > 0 %}
+                    ${{ '{:,.2f}'.format(balance_due) }} USD due {{ due_date }}
+                    {% elif balance_due < 0 %}
+                    ${{ '{:,.2f}'.format(abs(balance_due)) }} USD overpaid
+                    {% else %}
+                    Paid in full
+                    {% endif %}
                 {% else %}
                 ${{ '{:,.2f}'.format(total) }} USD due {{ due_date }}
                 {% endif %}
@@ -542,17 +548,10 @@
                 </div>
                 {% endif %}
                 
-                {% if tax_rate and tax_rate > 0 %}
+                {% if tax_amount and tax_amount > 0 %}
                 <div class="total-row">
-                    <span class="total-label">Tax ({{ tax_rate }}%)</span>
+                    <span class="total-label">Tax{% if tax_method == 'percentage' and tax_rate %} ({{ tax_rate }}%){% endif %}</span>
                     <span class="total-value">${{ '{:,.2f}'.format(tax_amount) }}</span>
-                </div>
-                {% endif %}
-                
-                {% if shipping and shipping > 0 %}
-                <div class="total-row">
-                    <span class="total-label">Shipping</span>
-                    <span class="total-value">${{ '{:,.2f}'.format(shipping) }}</span>
                 </div>
                 {% endif %}
                 
@@ -561,15 +560,20 @@
                     <span class="total-value">${{ '{:,.2f}'.format(total) }}</span>
                 </div>
                 
-                {% if paid_amount and paid_amount > 0 %}
-                <div class="total-row">
-                    <span class="total-label">Paid</span>
-                    <span class="total-value">${{ '{:,.2f}'.format(paid_amount) }}</span>
-                </div>
-                <div class="total-row grand-total">
-                    <span class="total-label">Amount due</span>
-                    <span class="total-value">${{ '{:,.2f}'.format(total - paid_amount) }} USD</span>
-                </div>
+                {% if payments and payments|length > 0 %}
+                    {% for payment in payments %}
+                    <div class="total-row">
+                        <span class="total-label">
+                            Paid{% if show_payment_dates and payment.date %} ({{ payment.date }}){% endif %}
+                            {% if payment.method %} - {{ payment.method|title }}{% endif %}
+                        </span>
+                        <span class="total-value">${{ '{:,.2f}'.format(payment.amount) }}</span>
+                    </div>
+                    {% endfor %}
+                    <div class="total-row grand-total">
+                        <span class="total-label">Balance Due</span>
+                        <span class="total-value">${{ '{:,.2f}'.format(balance_due) }} USD</span>
+                    </div>
                 {% else %}
                 <div class="total-row grand-total">
                     <span class="total-label">Amount due</span>

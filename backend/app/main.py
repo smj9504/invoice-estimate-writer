@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 
 from app.api import companies, documents, estimates
-from app.api import invoices
+from app.api import invoices, plumber_reports
 from app.core.config import settings
 from app.database import init_db
 
@@ -38,6 +38,7 @@ app.include_router(companies.router, prefix="/api/companies", tags=["Companies"]
 app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
 app.include_router(estimates.router, prefix="/api/estimates", tags=["Estimates"])
 app.include_router(invoices.router, prefix="/api", tags=["Invoices"])
+app.include_router(plumber_reports.router, prefix="/api/plumber-reports", tags=["Plumber Reports"])
 
 # Root endpoint
 @app.get("/")

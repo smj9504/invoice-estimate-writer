@@ -1,0 +1,602 @@
+/* Plumber Report Standard Template Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #333;
+    background: #fff;
+}
+
+/* Page Layout */
+.report-container {
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.5in;
+}
+
+/* Header Styles */
+.report-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #1890ff;
+    position: relative;
+}
+
+.logo-container {
+    flex-shrink: 0;
+}
+
+.logo-left {
+    order: -1;
+    margin-right: 20px;
+}
+
+.logo-right {
+    order: 1;
+    margin-left: 20px;
+}
+
+.company-logo {
+    max-height: 80px;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.header-content {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.report-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1890ff;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.report-meta {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.report-number,
+.report-date,
+.report-status {
+    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 4px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.report-status {
+    color: #fff;
+}
+
+.status-draft { background-color: #6c757d; }
+.status-in_progress { background-color: #17a2b8; }
+.status-completed { background-color: #28a745; }
+.status-submitted { background-color: #6f42c1; }
+
+/* Section Styles */
+section {
+    margin-bottom: 25px;
+    page-break-inside: avoid;
+}
+
+h2 {
+    font-size: 18px;
+    color: #1890ff;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+h3 {
+    font-size: 16px;
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+/* Company Section */
+.company-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #1890ff;
+}
+
+.company-details h3 {
+    color: #1890ff;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.address {
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.contact div {
+    margin: 2px 0;
+}
+
+/* Client and Property Section */
+.client-property-section {
+    page-break-inside: avoid;
+}
+
+.section-row {
+    display: flex;
+    gap: 30px;
+}
+
+.client-info,
+.property-info {
+    flex: 1;
+}
+
+.info-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.info-card h3 {
+    color: #1890ff;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.property-type {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Cause and Report Content */
+.cause-section,
+.report-content-section {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.cause-content,
+.report-content {
+    white-space: pre-wrap;
+    line-height: 1.8;
+    font-size: 13px;
+}
+
+.report-content {
+    /* Rich text content styles */
+}
+
+.report-content strong,
+.report-content b {
+    font-weight: 600;
+}
+
+.report-content em,
+.report-content i {
+    font-style: italic;
+}
+
+.report-content u {
+    text-decoration: underline;
+}
+
+.report-content ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+.report-content ol {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+.report-content li {
+    margin: 5px 0;
+}
+
+/* Photos Section */
+.photos-section {
+    page-break-inside: avoid;
+}
+
+.photos-grid {
+    display: grid;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.photos-per-row-1 { grid-template-columns: 1fr; }
+.photos-per-row-2 { grid-template-columns: repeat(2, 1fr); }
+.photos-per-row-3 { grid-template-columns: repeat(3, 1fr); }
+.photos-per-row-4 { grid-template-columns: repeat(4, 1fr); }
+
+.photo-item {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-info {
+    padding: 10px;
+}
+
+.photo-category {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.category-before { background-color: #cce5ff; color: #0056b3; }
+.category-during { background-color: #ffe6e6; color: #b30000; }
+.category-after { background-color: #e6ffe6; color: #00b300; }
+.category-damage { background-color: #ffcccc; color: #cc0000; }
+.category-equipment { background-color: #f0e6ff; color: #6600cc; }
+
+.photo-caption {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Tables */
+.items-table,
+.totals-table,
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 11px;
+}
+
+.items-table th,
+.items-table td,
+.payments-table th,
+.payments-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    text-align: left;
+}
+
+.items-table th,
+.payments-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #495057;
+}
+
+.items-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.item-quantity,
+.item-rate,
+.item-amount {
+    text-align: right;
+}
+
+.total-row {
+    background-color: #e9ecef !important;
+    font-weight: bold;
+}
+
+.total-amount {
+    text-align: right;
+    font-weight: bold;
+}
+
+/* Materials and Equipment Section */
+.materials-table,
+.equipment-table {
+    margin-bottom: 25px;
+}
+
+.materials-table h3,
+.equipment-table h3 {
+    color: #495057;
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 2px solid #17a2b8;
+}
+
+/* Financial Summary */
+.financial-summary {
+    background: #f8f9fa;
+    border: 2px solid #1890ff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+}
+
+.summary-table {
+    max-width: 400px;
+    margin-left: auto;
+}
+
+.totals-table {
+    border: none;
+    font-size: 13px;
+}
+
+.totals-table td {
+    border: none;
+    padding: 8px 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.totals-table .amount {
+    text-align: right;
+    font-weight: 500;
+    min-width: 100px;
+}
+
+.subtotal-row td {
+    border-top: 2px solid #1890ff;
+    font-weight: bold;
+    padding-top: 12px;
+}
+
+.total-row td {
+    border-top: 2px solid #1890ff;
+    border-bottom: 2px solid #1890ff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 15px;
+}
+
+.total {
+    color: #1890ff;
+    font-size: 18px;
+}
+
+.paid {
+    color: #28a745;
+}
+
+.discount {
+    color: #dc3545;
+}
+
+.balance-due .amount {
+    color: #dc3545;
+}
+
+.balance-credit .amount {
+    color: #28a745;
+}
+
+/* Payment History */
+.payments-section {
+    page-break-inside: avoid;
+}
+
+.payment-amount {
+    text-align: right;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.payment-date {
+    text-align: center;
+}
+
+.payment-method {
+    text-transform: capitalize;
+}
+
+/* Additional Information */
+.additional-info {
+    border-top: 2px solid #e9ecef;
+    padding-top: 20px;
+}
+
+.work-performed,
+.recommendations,
+.notes {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.work-performed {
+    background-color: #f0f8ff;
+    border-left: 5px solid #17a2b8;
+}
+
+.recommendations {
+    background-color: #fff3cd;
+    border-left: 5px solid #ffc107;
+}
+
+.notes {
+    background-color: #f8f9fa;
+    border-left: 5px solid #6c757d;
+}
+
+.additional-info h3 {
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+.additional-info .content {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+/* Footer */
+.report-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.footer-logo.logo-left {
+    order: -1;
+}
+
+.footer-logo.logo-right {
+    order: 1;
+}
+
+.company-logo-footer {
+    max-height: 40px;
+    max-width: 100px;
+    object-fit: contain;
+}
+
+.footer-content {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.custom-footer {
+    margin-bottom: 5px;
+    font-style: italic;
+}
+
+.company-name {
+    font-weight: bold;
+}
+
+.page-number {
+    font-weight: bold;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        font-size: 11px;
+    }
+    
+    .report-header,
+    .report-footer {
+        position: fixed;
+    }
+    
+    .report-header {
+        top: 0;
+        width: 100%;
+    }
+    
+    .report-footer {
+        bottom: 0;
+        width: 100%;
+    }
+    
+    section {
+        page-break-inside: avoid;
+    }
+    
+    .photos-section,
+    .materials-equipment-section,
+    .financial-summary {
+        page-break-inside: auto;
+    }
+    
+    .photo-item {
+        page-break-inside: avoid;
+    }
+    
+    .items-table {
+        page-break-inside: auto;
+    }
+    
+    .items-table thead {
+        display: table-header-group;
+    }
+    
+    .items-table tfoot {
+        display: table-footer-group;
+    }
+}
+
+/* Mobile Responsive (for preview) */
+@media screen and (max-width: 768px) {
+    .section-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .photos-per-row-3,
+    .photos-per-row-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .report-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .items-table {
+        font-size: 10px;
+    }
+    
+    .items-table th,
+    .items-table td {
+        padding: 4px;
+    }
+}
+
+/* Color Theme Overrides (can be customized) */
+.theme-blue {
+    --primary-color: #1890ff;
+    --success-color: #52c41a;
+    --danger-color: #ff4d4f;
+    --warning-color: #faad14;
+}
+
+.theme-green {
+    --primary-color: #52c41a;
+    --success-color: #73d13d;
+    --danger-color: #ff4d4f;
+    --warning-color: #faad14;
+}
+
+.theme-purple {
+    --primary-color: #722ed1;
+    --success-color: #52c41a;
+    --danger-color: #ff4d4f;
+    --warning-color: #faad14;
+}

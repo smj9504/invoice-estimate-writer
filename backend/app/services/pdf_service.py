@@ -33,7 +33,7 @@ except Exception as e:
     CSS = None
 
 # Template directory for React backend
-TEMPLATE_DIR = Path(__file__).parent.parent / "templates" / "pdf"
+TEMPLATE_DIR = Path(__file__).parent.parent / "templates"
 TEMPLATE_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -357,6 +357,82 @@ class PDFService:
     def _generate_estimate_number(self) -> str:
         """Generate unique estimate number"""
         return f"EST-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    
+    @staticmethod
+    def generate_plumber_report_pdf(
+        report_data: Dict[str, Any],
+        include_photos: bool = True,
+        include_financial: bool = True
+    ) -> bytes:
+        """Generate PDF for Plumber's Report"""
+        if not WEASYPRINT_AVAILABLE:
+            raise RuntimeError("WeasyPrint is not available")
+        
+        # Setup template environment
+        template_dir = TEMPLATE_DIR / "plumber_report" / "standard"
+        env = Environment(loader=FileSystemLoader(str(template_dir)))
+        
+        # Register filters
+        def date_filter(value):
+            if isinstance(value, str):
+                try:
+                    dt = datetime.fromisoformat(value.replace('Z', '+00:00'))
+                    return dt.strftime("%B %d, %Y")
+                except:
+                    return value
+            return value
+        
+        def nl2br_filter(value):
+            if value:
+                return value.replace('\n', '<br>')
+            return value
+        
+        def safe_filter(value):
+            # Allow HTML tags for rich text
+            return value
+        
+        env.filters['date'] = date_filter
+        env.filters['nl2br'] = nl2br_filter
+        env.filters['safe'] = safe_filter
+        
+        # Prepare context
+        context = report_data.copy()
+        context['include_photos'] = include_photos
+        context['include_financial'] = include_financial
+        
+        # Load template
+        template = env.get_template('template.html')
+        html_content = template.render(**context)
+        
+        # Load CSS
+        css_path = template_dir / 'style.css'
+        stylesheets = []
+        if css_path.exists():
+            with open(css_path, 'r', encoding='utf-8') as f:
+                stylesheets.append(CSS(string=f.read()))
+        
+        # Add page numbering CSS
+        page_css = """
+        @page {
+            size: letter;
+            margin: 0.75in;
+            
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 9pt;
+                color: #666;
+            }
+        }
+        
+        .page:after { content: counter(page); }
+        .topage:after { content: counter(pages); }
+        """
+        stylesheets.append(CSS(string=page_css))
+        
+        # Generate PDF
+        pdf_document = HTML(string=html_content).write_pdf(stylesheets=stylesheets)
+        
+        return pdf_document
 
 
 # Singleton instance

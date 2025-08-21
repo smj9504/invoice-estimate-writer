@@ -43,6 +43,14 @@ interface InvoiceItem {
   unit: string;
   rate: number;
   amount?: number;
+  taxable?: boolean;
+}
+
+interface PaymentRecord {
+  amount: number;
+  date: dayjs.Dayjs;
+  method?: string;
+  reference?: string;
 }
 
 const InvoiceCreation: React.FC = () => {
@@ -57,6 +65,13 @@ const InvoiceCreation: React.FC = () => {
   const [editingItem, setEditingItem] = useState<InvoiceItem | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [itemForm] = Form.useForm();
+  const [taxMethod, setTaxMethod] = useState<'percentage' | 'specific'>('percentage');
+  const [specificTaxAmount, setSpecificTaxAmount] = useState(0);
+  const [payments, setPayments] = useState<PaymentRecord[]>([]);
+  const [showPaymentDates, setShowPaymentDates] = useState(true);
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
+  const [paymentForm] = Form.useForm();
+  const [useCustomCompany, setUseCustomCompany] = useState(false);
 
   useEffect(() => {
     loadCompanies();
@@ -85,18 +100,33 @@ const InvoiceCreation: React.FC = () => {
   };
 
   const handleCompanyChange = (companyId: string) => {
-    const company = companies.find(c => c.id === companyId);
-    if (company) {
-      setSelectedCompany(company);
+    if (companyId === 'custom') {
+      setUseCustomCompany(true);
+      setSelectedCompany(null);
       form.setFieldsValue({
-        company_name: company.name,
-        company_address: company.address,
-        company_city: company.city,
-        company_state: company.state,
-        company_zip: company.zip,
-        company_phone: company.phone,
-        company_email: company.email,
+        company_name: '',
+        company_address: '',
+        company_city: '',
+        company_state: '',
+        company_zip: '',
+        company_phone: '',
+        company_email: '',
       });
+    } else {
+      setUseCustomCompany(false);
+      const company = companies.find(c => c.id === companyId);
+      if (company) {
+        setSelectedCompany(company);
+        form.setFieldsValue({
+          company_name: company.name,
+          company_address: company.address,
+          company_city: company.city,
+          company_state: company.state,
+          company_zip: company.zip,
+          company_phone: company.phone,
+          company_email: company.email,
+        });
+      }
     }
   };
 
@@ -141,19 +171,63 @@ const InvoiceCreation: React.FC = () => {
     setItems(updatedItems);
   };
 
+  const handleAddPayment = () => {
+    paymentForm.resetFields();
+    paymentForm.setFieldsValue({
+      date: dayjs(),
+      method: '',
+    });
+    setPaymentModalVisible(true);
+  };
+
+  const handlePaymentSubmit = () => {
+    paymentForm.validateFields().then(values => {
+      const newPayment: PaymentRecord = {
+        amount: values.amount,
+        date: values.date,
+        method: values.method,
+        reference: values.reference,
+      };
+      setPayments([...payments, newPayment]);
+      setPaymentModalVisible(false);
+      paymentForm.resetFields();
+    });
+  };
+
+  const handleDeletePayment = (index: number) => {
+    const updatedPayments = payments.filter((_, i) => i !== index);
+    setPayments(updatedPayments);
+  };
+
   const calculateTotals = () => {
     const subtotal = items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
-    const taxRate = form.getFieldValue('tax_rate') || 0;
     const discount = form.getFieldValue('discount') || 0;
-    const shipping = form.getFieldValue('shipping') || 0;
     
-    const taxAmount = (subtotal - discount) * (taxRate / 100);
-    const total = subtotal - discount + taxAmount + shipping;
+    let taxAmount = 0;
+    if (taxMethod === 'percentage') {
+      const taxRate = form.getFieldValue('tax_rate') || 0;
+      // If items have taxable property, only tax taxable items
+      const taxableAmount = items.reduce((sum, item) => {
+        if (item.taxable !== false) { // Default to taxable if not specified
+          return sum + (item.quantity * item.rate);
+        }
+        return sum;
+      }, 0);
+      taxAmount = (taxableAmount - discount) * (taxRate / 100);
+    } else {
+      taxAmount = specificTaxAmount;
+    }
+    
+    const total = subtotal - discount + taxAmount;
+    const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
+    const balanceDue = total - totalPaid;
 
     return {
       subtotal,
       taxAmount,
       total,
+      totalPaid,
+      balanceDue,
     };
   };
 
@@ -162,6 +236,18 @@ const InvoiceCreation: React.FC = () => {
       const values = await form.validateFields();
       setLoading(true);
 
+      // Validate company information
+      let companyName = values.company_name;
+      if (!useCustomCompany && selectedCompany) {
+        companyName = selectedCompany.name;
+      }
+      
+      if (!companyName) {
+        message.error('Please select a company or enter custom company information');
+        setLoading(false);
+        return;
+      }
+
       const totals = calculateTotals();
       const invoiceData = {
         ...values,
@@ -169,14 +255,14 @@ const InvoiceCreation: React.FC = () => {
         due_date: values.due_date ? values.due_date.format('YYYY-MM-DD') : dayjs().add(30, 'days').format('YYYY-MM-DD'),
         status,
         company: {
-          name: values.company_name,
-          address: values.company_address,
-          city: values.company_city,
-          state: values.company_state,
-          zip: values.company_zip,
-          phone: values.company_phone,
-          email: values.company_email,
-          logo: selectedCompany?.logo,
+          name: companyName || '',
+          address: values.company_address || selectedCompany?.address || '',
+          city: values.company_city || selectedCompany?.city || '',
+          state: values.company_state || selectedCompany?.state || '',
+          zip: values.company_zip || selectedCompany?.zip || '',
+          phone: values.company_phone || selectedCompany?.phone || '',
+          email: values.company_email || selectedCompany?.email || '',
+          logo: selectedCompany?.logo || '',
         },
         client: {
           name: values.client_name,
@@ -195,12 +281,14 @@ const InvoiceCreation: React.FC = () => {
         } : null,
         items,
         subtotal: totals.subtotal,
-        tax_rate: values.tax_rate || 0,
+        tax_method: taxMethod,
+        tax_rate: taxMethod === 'percentage' ? (values.tax_rate || 0) : 0,
         tax_amount: totals.taxAmount,
         discount: values.discount || 0,
-        shipping: values.shipping || 0,
         total: totals.total,
-        paid_amount: values.paid_amount || 0,
+        payments: payments,
+        show_payment_dates: showPaymentDates,
+        balance_due: totals.balanceDue,
         payment_terms: values.payment_terms,
         notes: values.notes,
       };
@@ -220,6 +308,19 @@ const InvoiceCreation: React.FC = () => {
     try {
       setLoading(true);
       const values = await form.validateFields();
+      
+      // Validate company information
+      let companyName = values.company_name;
+      if (!useCustomCompany && selectedCompany) {
+        companyName = selectedCompany.name;
+      }
+      
+      if (!companyName) {
+        message.error('Please select a company or enter custom company information');
+        setLoading(false);
+        return;
+      }
+
       const totals = calculateTotals();
 
       const pdfData = {
@@ -227,14 +328,14 @@ const InvoiceCreation: React.FC = () => {
         date: values.date ? values.date.format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
         due_date: values.due_date ? values.due_date.format('YYYY-MM-DD') : dayjs().add(30, 'days').format('YYYY-MM-DD'),
         company: {
-          name: values.company_name,
-          address: values.company_address,
-          city: values.company_city,
-          state: values.company_state,
-          zip: values.company_zip,
-          phone: values.company_phone,
-          email: values.company_email,
-          logo: selectedCompany?.logo,
+          name: companyName || '',
+          address: values.company_address || selectedCompany?.address || '',
+          city: values.company_city || selectedCompany?.city || '',
+          state: values.company_state || selectedCompany?.state || '',
+          zip: values.company_zip || selectedCompany?.zip || '',
+          phone: values.company_phone || selectedCompany?.phone || '',
+          email: values.company_email || selectedCompany?.email || '',
+          logo: selectedCompany?.logo || '',
         },
         client: {
           name: values.client_name,
@@ -253,12 +354,14 @@ const InvoiceCreation: React.FC = () => {
         } : null,
         items,
         subtotal: totals.subtotal,
-        tax_rate: values.tax_rate || 0,
+        tax_method: taxMethod,
+        tax_rate: taxMethod === 'percentage' ? (values.tax_rate || 0) : 0,
         tax_amount: totals.taxAmount,
         discount: values.discount || 0,
-        shipping: values.shipping || 0,
         total: totals.total,
-        paid_amount: values.paid_amount || 0,
+        payments: payments,
+        show_payment_dates: showPaymentDates,
+        balance_due: totals.balanceDue,
         payment_terms: values.payment_terms,
         notes: values.notes,
       };
@@ -321,6 +424,24 @@ const InvoiceCreation: React.FC = () => {
       align: 'right' as const,
       render: (_: any, record: InvoiceItem) => `$${(record.quantity * record.rate).toFixed(2)}`,
     },
+    ...(taxMethod === 'percentage' ? [{
+      title: 'Taxable',
+      dataIndex: 'taxable',
+      key: 'taxable',
+      width: 80,
+      align: 'center' as const,
+      render: (value: boolean | undefined, record: InvoiceItem, index: number) => (
+        <Switch
+          size="small"
+          checked={value !== false}
+          onChange={(checked) => {
+            const updatedItems = [...items];
+            updatedItems[index] = { ...updatedItems[index], taxable: checked };
+            setItems(updatedItems);
+          }}
+        />
+      ),
+    }] : []),
     {
       title: 'Actions',
       key: 'actions',
@@ -364,16 +485,35 @@ const InvoiceCreation: React.FC = () => {
           due_date: dayjs().add(30, 'days'),
           tax_rate: 0,
           discount: 0,
-          shipping: 0,
-          paid_amount: 0,
         }}
       >
         <Row gutter={24}>
           {/* Invoice Details */}
-          <Col xs={24} lg={12}>
+          <Col xs={24}>
             <Card title="Invoice Details" style={{ marginBottom: 24 }}>
+              <Form.Item label="Select Company" style={{ marginBottom: 16 }}>
+                <Select
+                  value={useCustomCompany ? 'custom' : selectedCompany?.id}
+                  onChange={handleCompanyChange}
+                  placeholder="Select a company"
+                >
+                  {companies.map(company => (
+                    <Option key={company.id} value={company.id}>
+                      {company.name}
+                    </Option>
+                  ))}
+                  <Option value="custom">
+                    <Divider style={{ margin: '4px 0' }} />
+                    <Space>
+                      <EditOutlined />
+                      <span>Enter Custom Company</span>
+                    </Space>
+                  </Option>
+                </Select>
+              </Form.Item>
+              
               <Row gutter={16}>
-                <Col span={12}>
+                <Col xs={24} md={8}>
                   <Form.Item
                     name="invoice_number"
                     label="Invoice Number"
@@ -382,22 +522,7 @@ const InvoiceCreation: React.FC = () => {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name="status"
-                    label="Status"
-                    initialValue="draft"
-                  >
-                    <Select>
-                      <Option value="draft">Draft</Option>
-                      <Option value="sent">Sent</Option>
-                      <Option value="paid">Paid</Option>
-                      <Option value="overdue">Overdue</Option>
-                      <Option value="cancelled">Cancelled</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
+                <Col xs={24} md={8}>
                   <Form.Item
                     name="date"
                     label="Invoice Date"
@@ -406,7 +531,7 @@ const InvoiceCreation: React.FC = () => {
                     <DatePicker style={{ width: '100%' }} />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} md={8}>
                   <Form.Item
                     name="due_date"
                     label="Due Date"
@@ -416,70 +541,58 @@ const InvoiceCreation: React.FC = () => {
                   </Form.Item>
                 </Col>
               </Row>
+              
+              {useCustomCompany && (
+                <>
+                  <Divider orientation="left" style={{ margin: '16px 0' }}>Custom Company Information</Divider>
+                  <Row gutter={16}>
+                    <Col xs={24} md={12}>
+                      <Form.Item name="company_name" label="Company Name" rules={[{ required: true }]}>
+                        <Input placeholder="Enter company name" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item name="company_email" label="Company Email">
+                        <Input type="email" placeholder="Enter email" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item name="company_phone" label="Company Phone">
+                        <Input placeholder="Enter phone" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item name="company_address" label="Company Address">
+                        <Input placeholder="Enter address" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={8}>
+                      <Form.Item name="company_city" label="City">
+                        <Input placeholder="City" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={8}>
+                      <Form.Item name="company_state" label="State">
+                        <Input placeholder="State" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={8}>
+                      <Form.Item name="company_zip" label="ZIP">
+                        <Input placeholder="ZIP" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </>
+              )}
             </Card>
           </Col>
 
-          {/* Company Information */}
-          <Col xs={24} lg={12}>
-            <Card title="Company Information" style={{ marginBottom: 24 }}>
-              <Form.Item label="Select Company">
-                <Select
-                  value={selectedCompany?.id}
-                  onChange={handleCompanyChange}
-                  placeholder="Select a company"
-                >
-                  {companies.map(company => (
-                    <Option key={company.id} value={company.id}>
-                      {company.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Row gutter={16}>
-                <Col span={24}>
-                  <Form.Item name="company_name" label="Name" rules={[{ required: true }]}>
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={24}>
-                  <Form.Item name="company_address" label="Address">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="company_city" label="City">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="company_state" label="State">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="company_zip" label="ZIP">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="company_phone" label="Phone">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="company_email" label="Email">
-                    <Input type="email" />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
 
           {/* Client Information */}
-          <Col xs={24} lg={12}>
+          <Col xs={24}>
             <Card title="Client Information" style={{ marginBottom: 24 }}>
               <Row gutter={16}>
-                <Col span={24}>
+                <Col xs={24} md={12}>
                   <Form.Item
                     name="client_name"
                     label="Client Name"
@@ -488,74 +601,69 @@ const InvoiceCreation: React.FC = () => {
                     <Input />
                   </Form.Item>
                 </Col>
-                <Col span={24}>
-                  <Form.Item name="client_address" label="Address">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="client_city" label="City">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="client_state" label="State">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="client_zip" label="ZIP">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="client_phone" label="Phone">
-                    <Input />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
+                <Col xs={24} md={12}>
                   <Form.Item name="client_email" label="Email">
                     <Input type="email" />
                   </Form.Item>
                 </Col>
+                <Col xs={24} md={12}>
+                  <Form.Item name="client_address" label="Address">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={12}>
+                  <Form.Item name="client_phone" label="Phone">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={8}>
+                  <Form.Item name="client_city" label="City">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={8}>
+                  <Form.Item name="client_state" label="State">
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={8}>
+                  <Form.Item name="client_zip" label="ZIP">
+                    <Input />
+                  </Form.Item>
+                </Col>
               </Row>
-            </Card>
-          </Col>
-
-          {/* Insurance Information */}
-          <Col xs={24} lg={12}>
-            <Card 
-              title={
+              
+              <Divider orientation="left" style={{ margin: '16px 0' }}>
                 <Space>
                   <span>Insurance Information</span>
                   <Switch
+                    size="small"
                     checked={showInsurance}
                     onChange={setShowInsurance}
                     checkedChildren="Yes"
                     unCheckedChildren="No"
                   />
                 </Space>
-              }
-              style={{ marginBottom: 24 }}
-            >
+              </Divider>
+
               {showInsurance && (
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="insurance_company" label="Insurance Company">
                       <Input />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="insurance_policy_number" label="Policy Number">
                       <Input />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="insurance_claim_number" label="Claim Number">
                       <Input />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col xs={24} md={12}>
                     <Form.Item name="insurance_deductible" label="Deductible">
                       <InputNumber
                         style={{ width: '100%' }}
@@ -609,11 +717,17 @@ const InvoiceCreation: React.FC = () => {
         <Row gutter={24}>
           <Col xs={24} lg={12}>
             <Card title="Additional Information" style={{ marginBottom: 24 }}>
-              <Form.Item name="payment_terms" label="Payment Terms">
-                <TextArea rows={2} placeholder="Net 30 days" />
+              <Form.Item name="payment_terms">
+                <TextArea 
+                  rows={3} 
+                  placeholder="Payment terms (e.g., Net 30 days, Due on receipt, etc.)" 
+                />
               </Form.Item>
-              <Form.Item name="notes" label="Notes">
-                <TextArea rows={4} placeholder="Additional notes or instructions" />
+              <Form.Item name="notes">
+                <TextArea 
+                  rows={5} 
+                  placeholder="Additional notes, special instructions, or any other information..." 
+                />
               </Form.Item>
             </Card>
           </Col>
@@ -621,7 +735,7 @@ const InvoiceCreation: React.FC = () => {
           <Col xs={24} lg={12}>
             <Card title="Payment Summary" style={{ marginBottom: 24 }}>
               <Row gutter={16}>
-                <Col span={12}>
+                <Col span={24}>
                   <Form.Item name="discount" label="Discount">
                     <InputNumber
                       style={{ width: '100%' }}
@@ -631,38 +745,86 @@ const InvoiceCreation: React.FC = () => {
                     />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item name="tax_rate" label="Tax Rate (%)">
-                    <InputNumber
-                      style={{ width: '100%' }}
-                      min={0}
-                      max={100}
-                      formatter={value => `${value}%`}
-                      parser={value => value!.replace('%', '') as any}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="shipping" label="Shipping">
-                    <InputNumber
-                      style={{ width: '100%' }}
-                      min={0}
-                      formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      parser={value => value!.replace(/\$\s?|(,*)/g, '') as any}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name="paid_amount" label="Paid Amount">
-                    <InputNumber
-                      style={{ width: '100%' }}
-                      min={0}
-                      formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      parser={value => value!.replace(/\$\s?|(,*)/g, '') as any}
-                    />
-                  </Form.Item>
-                </Col>
               </Row>
+
+              <Divider orientation="left">Tax Settings</Divider>
+              <Row gutter={16}>
+                <Col span={24}>
+                  <Form.Item label="Tax Method">
+                    <Select value={taxMethod} onChange={setTaxMethod}>
+                      <Option value="percentage">Percentage of Subtotal</Option>
+                      <Option value="specific">Specific Amount</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                {taxMethod === 'percentage' ? (
+                  <Col span={24}>
+                    <Form.Item name="tax_rate" label="Tax Rate (%)">
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        min={0}
+                        max={100}
+                        formatter={value => `${value}%`}
+                        parser={value => value!.replace('%', '') as any}
+                      />
+                    </Form.Item>
+                  </Col>
+                ) : (
+                  <Col span={24}>
+                    <Form.Item label="Tax Amount">
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        min={0}
+                        value={specificTaxAmount}
+                        onChange={value => setSpecificTaxAmount(value || 0)}
+                        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={value => value!.replace(/\$\s?|(,*)/g, '') as any}
+                      />
+                    </Form.Item>
+                  </Col>
+                )}
+              </Row>
+
+              <Divider orientation="left">
+                <Space>
+                  <span>Payment Records</span>
+                  <Switch
+                    size="small"
+                    checked={showPaymentDates}
+                    onChange={setShowPaymentDates}
+                    checkedChildren="Show Dates"
+                    unCheckedChildren="Hide Dates"
+                  />
+                </Space>
+              </Divider>
+              
+              <Space direction="vertical" style={{ width: '100%' }}>
+                {payments.map((payment, index) => (
+                  <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Space>
+                      {showPaymentDates && (
+                        <span style={{ color: '#666' }}>{payment.date.format('MM/DD/YYYY')}</span>
+                      )}
+                      <span>${payment.amount.toFixed(2)}</span>
+                      {payment.method && <span>({payment.method})</span>}
+                    </Space>
+                    <Button
+                      size="small"
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => handleDeletePayment(index)}
+                    />
+                  </div>
+                ))}
+                <Button
+                  type="dashed"
+                  block
+                  icon={<PlusOutlined />}
+                  onClick={handleAddPayment}
+                >
+                  Add Payment
+                </Button>
+              </Space>
 
               <Divider />
 
@@ -679,14 +841,10 @@ const InvoiceCreation: React.FC = () => {
                 )}
                 {totals.taxAmount > 0 && (
                   <Row justify="space-between" style={{ marginBottom: 8 }}>
-                    <Col>Tax ({form.getFieldValue('tax_rate') || 0}%):</Col>
+                    <Col>
+                      Tax {taxMethod === 'percentage' ? `(${form.getFieldValue('tax_rate') || 0}%)` : ''}:
+                    </Col>
                     <Col>${totals.taxAmount.toFixed(2)}</Col>
-                  </Row>
-                )}
-                {form.getFieldValue('shipping') > 0 && (
-                  <Row justify="space-between" style={{ marginBottom: 8 }}>
-                    <Col>Shipping:</Col>
-                    <Col>${(form.getFieldValue('shipping') || 0).toFixed(2)}</Col>
                   </Row>
                 )}
                 <Divider />
@@ -694,15 +852,15 @@ const InvoiceCreation: React.FC = () => {
                   <Col>Total:</Col>
                   <Col>${totals.total.toFixed(2)}</Col>
                 </Row>
-                {form.getFieldValue('paid_amount') > 0 && (
+                {totals.totalPaid > 0 && (
                   <>
                     <Row justify="space-between" style={{ marginTop: 8 }}>
-                      <Col>Paid:</Col>
-                      <Col>${(form.getFieldValue('paid_amount') || 0).toFixed(2)}</Col>
+                      <Col>Total Paid:</Col>
+                      <Col>${totals.totalPaid.toFixed(2)}</Col>
                     </Row>
-                    <Row justify="space-between" style={{ fontWeight: 'bold', color: '#ff4d4f' }}>
+                    <Row justify="space-between" style={{ fontWeight: 'bold', color: totals.balanceDue > 0 ? '#ff4d4f' : '#52c41a' }}>
                       <Col>Balance Due:</Col>
-                      <Col>${(totals.total - (form.getFieldValue('paid_amount') || 0)).toFixed(2)}</Col>
+                      <Col>${totals.balanceDue.toFixed(2)}</Col>
                     </Row>
                   </>
                 )}
@@ -764,6 +922,7 @@ const InvoiceCreation: React.FC = () => {
             quantity: 1,
             unit: 'ea',
             rate: 0,
+            taxable: false,
           }}
         >
           <Form.Item
@@ -823,11 +982,94 @@ const InvoiceCreation: React.FC = () => {
               </Form.Item>
             </Col>
           </Row>
+          {taxMethod === 'percentage' && (
+            <Form.Item
+              name="taxable"
+              label="Taxable"
+              valuePropName="checked"
+            >
+              <Switch checkedChildren="Yes" unCheckedChildren="No" />
+            </Form.Item>
+          )}
           {itemForm.getFieldValue('quantity') && itemForm.getFieldValue('rate') ? (
             <div style={{ textAlign: 'right', fontSize: '16px', fontWeight: 'bold' }}>
               Total: ${(itemForm.getFieldValue('quantity') * itemForm.getFieldValue('rate')).toFixed(2)}
             </div>
           ) : null}
+        </Form>
+      </Modal>
+
+      {/* Payment Modal */}
+      <Modal
+        title="Add Payment"
+        open={paymentModalVisible}
+        onOk={handlePaymentSubmit}
+        onCancel={() => {
+          setPaymentModalVisible(false);
+          paymentForm.resetFields();
+        }}
+        width={500}
+      >
+        <Form
+          form={paymentForm}
+          layout="vertical"
+          initialValues={{
+            date: dayjs(),
+            method: '',
+          }}
+        >
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="amount"
+                label="Amount"
+                rules={[{ required: true, message: 'Please enter payment amount' }]}
+              >
+                <InputNumber
+                  style={{ width: '100%' }}
+                  min={0}
+                  step={0.01}
+                  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={((value: any) => parseFloat(value!.replace(/\$\s?|(,*)/g, '')) || 0) as any}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="date"
+                label="Payment Date"
+                rules={[{ required: true }]}
+              >
+                <DatePicker style={{ width: '100%' }} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="method"
+                label="Payment Method"
+              >
+                <Select placeholder="Select method (optional)" allowClear>
+                  <Option value="cash">Cash</Option>
+                  <Option value="check">Check</Option>
+                  <Option value="credit_card">Credit Card</Option>
+                  <Option value="debit_card">Debit Card</Option>
+                  <Option value="bank_transfer">Bank Transfer</Option>
+                  <Option value="paypal">PayPal</Option>
+                  <Option value="venmo">Venmo</Option>
+                  <Option value="zelle">Zelle</Option>
+                  <Option value="other">Other</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="reference"
+                label="Reference/Check #"
+              >
+                <Input placeholder="Optional" />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>

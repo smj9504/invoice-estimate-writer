@@ -17,7 +17,7 @@ class InvoiceService:
                 limit: Optional[int] = 50, offset: Optional[int] = 0) -> List[Dict[str, Any]]:
         """Get all invoices with optional filtering"""
         try:
-            query = self.db.table('invoice').select('*')
+            query = self.db.table('general_invoice').select('*')
             
             if company_id:
                 query = query.eq('company_id', company_id)
@@ -35,14 +35,14 @@ class InvoiceService:
         """Get invoice by ID with items"""
         try:
             # Get invoice
-            response = self.db.table('invoice').select('*').eq('id', invoice_id).execute()
+            response = self.db.table('general_invoice').select('*').eq('id', invoice_id).execute()
             if not response.data:
                 return None
             
             invoice = response.data[0]
             
             # Get invoice items
-            items_response = self.db.table('invoice_items').select('*').eq('invoice_id', invoice_id).execute()
+            items_response = self.db.table('general_invoice_items').select('*').eq('invoice_id', invoice_id).execute()
             invoice['items'] = items_response.data if items_response.data else []
             
             return invoice
@@ -60,7 +60,7 @@ class InvoiceService:
             data['created_at'] = datetime.utcnow().isoformat()
             
             # Create invoice
-            response = self.db.table('invoice').insert(data).execute()
+            response = self.db.table('general_invoice').insert(data).execute()
             if not response.data:
                 raise Exception("Failed to create invoice")
             
@@ -73,7 +73,7 @@ class InvoiceService:
                     item['invoice_id'] = invoice_id
                     item['created_at'] = datetime.utcnow().isoformat()
                 
-                items_response = self.db.table('invoice_items').insert(items).execute()
+                items_response = self.db.table('general_invoice_items').insert(items).execute()
                 invoice['items'] = items_response.data if items_response.data else []
             else:
                 invoice['items'] = []
@@ -93,7 +93,7 @@ class InvoiceService:
             data['updated_at'] = datetime.utcnow().isoformat()
             
             # Update invoice
-            response = self.db.table('invoice').update(data).eq('id', invoice_id).execute()
+            response = self.db.table('general_invoice').update(data).eq('id', invoice_id).execute()
             if not response.data:
                 return None
             
@@ -102,7 +102,7 @@ class InvoiceService:
             # Update items if provided
             if items is not None:
                 # Delete existing items
-                self.db.table('invoice_items').delete().eq('invoice_id', invoice_id).execute()
+                self.db.table('general_invoice_items').delete().eq('invoice_id', invoice_id).execute()
                 
                 # Insert new items
                 if items:
@@ -110,13 +110,13 @@ class InvoiceService:
                         item['invoice_id'] = invoice_id
                         item['created_at'] = datetime.utcnow().isoformat()
                     
-                    items_response = self.db.table('invoice_items').insert(items).execute()
+                    items_response = self.db.table('general_invoice_items').insert(items).execute()
                     invoice['items'] = items_response.data if items_response.data else []
                 else:
                     invoice['items'] = []
             else:
                 # Fetch existing items
-                items_response = self.db.table('invoice_items').select('*').eq('invoice_id', invoice_id).execute()
+                items_response = self.db.table('general_invoice_items').select('*').eq('invoice_id', invoice_id).execute()
                 invoice['items'] = items_response.data if items_response.data else []
             
             return invoice
@@ -128,10 +128,10 @@ class InvoiceService:
         """Delete invoice and its items"""
         try:
             # Delete items first
-            self.db.table('invoice_items').delete().eq('invoice_id', invoice_id).execute()
+            self.db.table('general_invoice_items').delete().eq('invoice_id', invoice_id).execute()
             
             # Delete invoice
-            self.db.table('invoice').delete().eq('id', invoice_id).execute()
+            self.db.table('general_invoice').delete().eq('id', invoice_id).execute()
             
             return True
         except Exception as e:
@@ -141,7 +141,7 @@ class InvoiceService:
     def get_by_company(self, company_id: str) -> List[Dict[str, Any]]:
         """Get all invoices for a company"""
         try:
-            response = self.db.table('invoice').select('*').eq('company_id', company_id).execute()
+            response = self.db.table('general_invoice').select('*').eq('company_id', company_id).execute()
             return response.data if response.data else []
         except Exception as e:
             print(f"Error fetching invoices for company {company_id}: {e}")
@@ -249,7 +249,7 @@ class InvoiceService:
     def get_item_suggestions(self, category: Optional[str] = None) -> List[Dict[str, Any]]:
         """Get invoice item suggestions from database"""
         try:
-            query = self.db.table('invoice_items').select('*')
+            query = self.db.table('general_invoice_items').select('*')
             if category:
                 query = query.eq('category', category)
             

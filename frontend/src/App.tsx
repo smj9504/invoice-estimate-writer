@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import DocumentList from './pages/DocumentList';
 import CompanyManagement from './pages/CompanyManagement';
 import InvoiceCreation from './pages/InvoiceCreation';
+import InvoiceList from './pages/InvoiceList';
+import PlumberReportCreation from './pages/PlumberReportCreation';
 import 'antd/dist/reset.css';
 
 // Create a client
@@ -35,9 +37,18 @@ function App() {
               <Route path="/documents/:type" element={<DocumentList />} />
               
               {/* Invoice Routes */}
-              <Route path="/invoices" element={<DocumentList />} />
+              <Route path="/invoices" element={<InvoiceList />} />
               <Route path="/invoices/create" element={<InvoiceCreation />} />
+              <Route path="/create/invoice" element={<InvoiceCreation />} />
               <Route path="/invoices/:id" element={<InvoiceCreation />} />
+              <Route path="/invoices/:id/edit" element={<InvoiceCreation />} />
+              
+              {/* Plumber Report Routes */}
+              <Route path="/create/plumber" element={<PlumberReportCreation />} />
+              <Route path="/plumber-reports" element={<PlumberReportCreation />} />
+              <Route path="/plumber-reports/new" element={<PlumberReportCreation />} />
+              <Route path="/plumber-reports/:id" element={<PlumberReportCreation />} />
+              <Route path="/plumber-reports/:id/edit" element={<PlumberReportCreation />} />
             </Routes>
           </Layout>
         </Router>

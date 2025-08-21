@@ -54,7 +54,8 @@ class DocumentFilter(BaseModel):
 
 class PaginatedDocuments(BaseModel):
     """Paginated documents response"""
-    data: List[Document]
+    items: List[dict]  # Changed from data to items and from Document to dict
     total: int
     page: int
-    pageSize: int
+    page_size: int  # Changed from pageSize to page_size
+    total_pages: int  # Added field

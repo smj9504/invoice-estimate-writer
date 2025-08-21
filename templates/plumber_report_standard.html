@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plumber Report - {{ report.report_number }}</title>
+    <link rel="stylesheet" href="plumber_report_standard.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="report-header">
+        {% if report.customizations.showCompanyLogo and report.company.logo and report.customizations.logoPosition in ['header-left', 'header-right'] %}
+        <div class="logo-container logo-{{ report.customizations.logoPosition.split('-')[1] }}">
+            <img src="{{ report.company.logo }}" alt="{{ report.company.name }} Logo" class="company-logo">
+        </div>
+        {% endif %}
+        
+        <div class="header-content">
+            <h1 class="report-title">PLUMBER REPORT</h1>
+            <div class="report-meta">
+                <div class="report-number">Report #{{ report.report_number }}</div>
+                <div class="report-date">{{ report.date|date('F j, Y') }}</div>
+                <div class="report-status status-{{ report.status }}">{{ report.status|title }}</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Company Information -->
+    <section class="company-section">
+        <h2>Company Information</h2>
+        <div class="company-info">
+            <div class="company-details">
+                <h3>{{ report.company.name }}</h3>
+                <div class="address">
+                    {{ report.company.address }}<br>
+                    {{ report.company.city }}, {{ report.company.state }} {{ report.company.zip }}
+                </div>
+                <div class="contact">
+                    <div>Phone: {{ report.company.phone }}</div>
+                    <div>Email: {{ report.company.email }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Client and Property Information -->
+    <section class="client-property-section">
+        <div class="section-row">
+            <div class="client-info">
+                <h2>Client Information</h2>
+                <div class="info-card">
+                    <h3>{{ report.client.name }}</h3>
+                    <div class="address">
+                        {{ report.client.address }}<br>
+                        {{ report.client.city }}, {{ report.client.state }} {{ report.client.zip }}
+                    </div>
+                    <div class="contact">
+                        <div>Phone: {{ report.client.phone }}</div>
+                        <div>Email: {{ report.client.email }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="property-info">
+                <h2>Property Information</h2>
+                <div class="info-card">
+                    <div class="property-address">
+                        <strong>Service Address:</strong><br>
+                        {{ report.property.address }}<br>
+                        {{ report.property.city }}, {{ report.property.state }} {{ report.property.zip }}
+                    </div>
+                    <div class="property-type">
+                        <strong>Property Type:</strong> {{ report.property.type|title }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cause of Damage -->
+    <section class="cause-section">
+        <h2>Cause of Damage</h2>
+        <div class="cause-content">
+            {{ report.cause_of_damage|nl2br }}
+        </div>
+    </section>
+
+    <!-- Report Content -->
+    <section class="report-content-section">
+        <h2>Report Details</h2>
+        <div class="report-content">
+            {{ report.report_content|safe }}
+        </div>
+    </section>
+
+    <!-- Photos Section -->
+    {% if report.photos and report.customizations.includePhotos %}
+    <section class="photos-section">
+        <h2>Documentation Photos</h2>
+        <div class="photos-grid photos-per-row-{{ report.customizations.photosPerRow }}">
+            {% for photo in report.photos %}
+            <div class="photo-item">
+                <img src="{{ photo.url }}" alt="{{ photo.name }}">
+                <div class="photo-info">
+                    <div class="photo-category category-{{ photo.category }}">{{ photo.category|title }}</div>
+                    {% if photo.caption %}
+                    <div class="photo-caption">{{ photo.caption }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Materials and Equipment -->
+    {% set materials = report.items|selectattr('category', 'eq', 'material')|list %}
+    {% set equipment = report.items|selectattr('category', 'eq', 'equipment')|list %}
+    
+    {% if (materials and report.customizations.includeMaterials) or (equipment and report.customizations.includeEquipment) %}
+    <section class="materials-equipment-section">
+        <h2>Materials & Equipment</h2>
+        
+        {% if materials and report.customizations.includeMaterials %}
+        <div class="materials-table">
+            <h3>Materials Used</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Unit</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in materials %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="item-name">{{ item.name }}</td>
+                        <td class="item-description">{{ item.description or '-' }}</td>
+                        <td class="item-quantity">{{ item.quantity }}</td>
+                        <td class="item-unit">{{ item.unit }}</td>
+                        <td class="item-rate">${{ "%.2f"|format(item.rate) }}</td>
+                        <td class="item-amount">${{ "%.2f"|format(item.amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="6"><strong>Materials Total:</strong></td>
+                        <td class="total-amount"><strong>${{ "%.2f"|format(report.totals.materialTotal) }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if equipment and report.customizations.includeEquipment %}
+        <div class="equipment-table">
+            <h3>Equipment Used</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Equipment</th>
+                        <th>Manufacturer</th>
+                        <th>Model</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in equipment %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="item-name">{{ item.name }}</td>
+                        <td class="item-manufacturer">{{ item.manufacturer or '-' }}</td>
+                        <td class="item-model">{{ item.model or '-' }}</td>
+                        <td class="item-quantity">{{ item.quantity }}</td>
+                        <td class="item-rate">${{ "%.2f"|format(item.rate) }}</td>
+                        <td class="item-amount">${{ "%.2f"|format(item.amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="6"><strong>Equipment Total:</strong></td>
+                        <td class="total-amount"><strong>${{ "%.2f"|format(report.totals.equipmentTotal) }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- Financial Summary -->
+    <section class="financial-summary">
+        <h2>Financial Summary</h2>
+        <div class="summary-table">
+            <table class="totals-table">
+                <tbody>
+                    {% if report.totals.materialTotal > 0 %}
+                    <tr>
+                        <td>Materials:</td>
+                        <td class="amount">${{ "%.2f"|format(report.totals.materialTotal) }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if report.totals.equipmentTotal > 0 %}
+                    <tr>
+                        <td>Equipment:</td>
+                        <td class="amount">${{ "%.2f"|format(report.totals.equipmentTotal) }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr class="subtotal-row">
+                        <td><strong>Subtotal:</strong></td>
+                        <td class="amount"><strong>${{ "%.2f"|format(report.totals.subtotal) }}</strong></td>
+                    </tr>
+                    {% if report.totals.discountAmount > 0 %}
+                    <tr class="discount-row">
+                        <td>Discount:</td>
+                        <td class="amount discount">-${{ "%.2f"|format(report.totals.discountAmount) }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if report.totals.taxAmount > 0 %}
+                    <tr>
+                        <td>Tax:</td>
+                        <td class="amount">${{ "%.2f"|format(report.totals.taxAmount) }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr class="total-row">
+                        <td><strong>Total Amount:</strong></td>
+                        <td class="amount total"><strong>${{ "%.2f"|format(report.totals.total) }}</strong></td>
+                    </tr>
+                    {% if report.totals.totalPaid > 0 %}
+                    <tr class="paid-row">
+                        <td>Amount Paid:</td>
+                        <td class="amount paid">${{ "%.2f"|format(report.totals.totalPaid) }}</td>
+                    </tr>
+                    <tr class="balance-row balance-{{ 'due' if report.totals.balanceDue > 0 else 'credit' }}">
+                        <td><strong>{% if report.totals.balanceDue > 0 %}Balance Due:{% elif report.totals.balanceDue < 0 %}Credit:{% else %}Paid in Full{% endif %}</strong></td>
+                        <td class="amount balance"><strong>${{ "%.2f"|format(report.totals.balanceDue|abs) }}</strong></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Payment History -->
+    {% if report.payments and report.customizations.includePayments %}
+    <section class="payments-section">
+        <h2>Payment History</h2>
+        <div class="payments-table">
+            <table class="payments-table">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        {% if report.show_payment_dates %}
+                        <th>Date</th>
+                        {% endif %}
+                        <th>Method</th>
+                        <th>Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in report.payments %}
+                    <tr>
+                        <td class="payment-amount">${{ "%.2f"|format(payment.amount) }}</td>
+                        {% if report.show_payment_dates %}
+                        <td class="payment-date">{{ payment.date|date('m/d/Y') }}</td>
+                        {% endif %}
+                        <td class="payment-method">{{ payment.method|title or '-' }}</td>
+                        <td class="payment-reference">{{ payment.reference or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Additional Information -->
+    {% if report.work_performed or report.recommendations or report.notes %}
+    <section class="additional-info">
+        {% if report.work_performed %}
+        <div class="work-performed">
+            <h3>Work Performed</h3>
+            <div class="content">{{ report.work_performed|nl2br }}</div>
+        </div>
+        {% endif %}
+
+        {% if report.recommendations %}
+        <div class="recommendations">
+            <h3>Recommendations</h3>
+            <div class="content">{{ report.recommendations|nl2br }}</div>
+        </div>
+        {% endif %}
+
+        {% if report.notes %}
+        <div class="notes">
+            <h3>Additional Notes</h3>
+            <div class="content">{{ report.notes|nl2br }}</div>
+        </div>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="report-footer">
+        {% if report.customizations.showCompanyLogo and report.company.logo and report.customizations.logoPosition in ['footer-left', 'footer-right'] %}
+        <div class="footer-logo logo-{{ report.customizations.logoPosition.split('-')[1] }}">
+            <img src="{{ report.company.logo }}" alt="{{ report.company.name }} Logo" class="company-logo-footer">
+        </div>
+        {% endif %}
+        
+        <div class="footer-content">
+            {% if report.customizations.customFooterText %}
+            <div class="custom-footer">{{ report.customizations.customFooterText }}</div>
+            {% endif %}
+            
+            <div class="footer-info">
+                <div class="company-name">{{ report.company.name }}</div>
+                <div class="report-generated">Report generated on {{ "now"|date('F j, Y g:i A') }}</div>
+            </div>
+        </div>
+        
+        {% if report.customizations.pageNumbering %}
+        <div class="page-number">
+            {% if report.customizations.pageNumberFormat == 'page-of-total' %}
+            Page <span class="page"></span> of <span class="total-pages"></span>
+            {% elif report.customizations.pageNumberFormat == 'page-only' %}
+            Page <span class="page"></span>
+            {% else %}
+            {{ report.customizations.pageNumberFormat }}
+            {% endif %}
+        </div>
+        {% endif %}
+    </footer>
+
+    <!-- Page break styling -->
+    <style>
+        @page {
+            margin: 1in;
+            @bottom-right {
+                content: counter(page);
+            }
+        }
+    </style>
+</body>
+</html>

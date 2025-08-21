@@ -83,6 +83,14 @@ class InvoiceBase(BaseModel):
 
 class InvoiceCreate(InvoiceBase):
     items: List[InvoiceItemCreate] = []
+    # Additional fields from frontend
+    subtotal: Optional[float] = None
+    tax_method: Optional[str] = None
+    tax_amount: Optional[float] = None
+    total: Optional[float] = None
+    payments: Optional[List[dict]] = []
+    show_payment_dates: Optional[bool] = True
+    balance_due: Optional[float] = None
 
 
 class InvoiceUpdate(BaseModel):
@@ -112,6 +120,7 @@ class InvoiceListResponse(BaseModel):
     date: date
     due_date: date
     status: str
+    company_name: str
     client_name: str
     total: float
     paid_amount: float

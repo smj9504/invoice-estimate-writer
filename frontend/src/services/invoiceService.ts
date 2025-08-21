@@ -60,6 +60,7 @@ export interface InvoiceResponse {
   date: string;
   due_date: string;
   status: string;
+  company_name: string;
   client_name: string;
   total: number;
   paid_amount: number;
@@ -68,7 +69,6 @@ export interface InvoiceResponse {
 }
 
 export interface InvoiceDetailResponse extends InvoiceResponse {
-  company_name: string;
   company_address?: string;
   company_city?: string;
   company_state?: string;
