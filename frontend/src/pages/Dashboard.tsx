@@ -5,9 +5,6 @@ import {
   FileTextOutlined,
   DollarOutlined,
   TeamOutlined,
-  PlusOutlined,
-  RiseOutlined,
-  FallOutlined,
 } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { documentService } from '../services/documentService';

@@ -56,7 +56,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   };
 
   const validateMessages = {
-    required: '\${label}을(를) 입력해주세요.',
+    required: '${label}을(를) 입력해주세요.',
     types: {
       email: '올바른 이메일 형식이 아닙니다.',
     },

@@ -63,7 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           label: '견적서 작성',
         },
         {
-          key: '/create/invoice',
+          key: '/invoices/create',
           label: '인보이스 작성',
         },
         {

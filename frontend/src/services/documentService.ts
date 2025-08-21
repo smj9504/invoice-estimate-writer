@@ -10,7 +10,7 @@ export const documentService = {
       pageSize,
     };
     
-    const response = await apiClient.get<PaginatedResponse<Document>>('/documents', { params });
+    const response = await apiClient.get<PaginatedResponse<Document>>('/documents/', { params });
     return response.data;
   },
 
@@ -25,7 +25,7 @@ export const documentService = {
 
   // Create new document
   async createDocument(document: Partial<Document>): Promise<Document> {
-    const response = await apiClient.post<ApiResponse<Document>>('/documents', document);
+    const response = await apiClient.post<ApiResponse<Document>>('/documents/', document);
     if (!response.data.data) {
       throw new Error('Failed to create document');
     }
@@ -70,7 +70,7 @@ export const documentService = {
 
   // Export documents to Excel
   async exportToExcel(filter?: DocumentFilter): Promise<Blob> {
-    const response = await apiClient.post('/documents/export', filter, {
+    const response = await apiClient.post('/documents/export/', filter, {
       responseType: 'blob',
     });
     return response.data;

@@ -7,6 +7,7 @@ import Layout from './components/common/Layout';
 import Dashboard from './pages/Dashboard';
 import DocumentList from './pages/DocumentList';
 import CompanyManagement from './pages/CompanyManagement';
+import InvoiceCreation from './pages/InvoiceCreation';
 import 'antd/dist/reset.css';
 
 // Create a client
@@ -32,7 +33,11 @@ function App() {
               <Route path="/companies" element={<CompanyManagement />} />
               <Route path="/documents" element={<DocumentList />} />
               <Route path="/documents/:type" element={<DocumentList />} />
-              {/* Todo: Add more routes for document creation, etc. */}
+              
+              {/* Invoice Routes */}
+              <Route path="/invoices" element={<DocumentList />} />
+              <Route path="/invoices/create" element={<InvoiceCreation />} />
+              <Route path="/invoices/:id" element={<InvoiceCreation />} />
             </Routes>
           </Layout>
         </Router>

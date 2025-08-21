@@ -16,6 +16,7 @@ if os.path.exists(gtk_path):
             pass
 
 try:
+    from weasyprint import HTML, CSS
     WEASYPRINT_AVAILABLE = True
 except Exception as e:
     WEASYPRINT_AVAILABLE = False

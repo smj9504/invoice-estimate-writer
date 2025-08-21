@@ -9,7 +9,6 @@ import {
   Card,
   Avatar,
   Modal,
-  message,
   Tooltip,
   Tag,
 } from 'antd';

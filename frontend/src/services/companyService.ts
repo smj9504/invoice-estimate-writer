@@ -9,7 +9,7 @@ export const companyService = {
     if (city) params.append('city', city);
     if (state) params.append('state', state);
     
-    const response = await api.get(`/companies?${params.toString()}`);
+    const response = await api.get(`/companies/?${params.toString()}`);
     return response.data.data;
   },
 
@@ -21,7 +21,7 @@ export const companyService = {
 
   // Create new company
   createCompany: async (data: CompanyFormData): Promise<Company> => {
-    const response = await api.post('/companies', data);
+    const response = await api.post('/companies/', data);
     return response.data.data;
   },
 
