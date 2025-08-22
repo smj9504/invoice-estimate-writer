@@ -152,7 +152,7 @@ class InvoiceService {
 
   async previewPDF(data: InvoiceData): Promise<Blob> {
     const response = await apiClient.post(
-      '/invoices/preview-pdf/',
+      '/invoices/preview-pdf',
       data,
       {
         responseType: 'blob',

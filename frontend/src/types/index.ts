@@ -9,6 +9,7 @@ export interface Company {
   phone?: string;
   email?: string;
   logo?: string; // Base64 encoded logo or URL
+  company_code?: string; // 4-character unique code
   created_at?: string;
   updated_at?: string;
 }
@@ -22,6 +23,7 @@ export interface CompanyFormData {
   phone?: string;
   email?: string;
   logo?: string;
+  company_code?: string;
 }
 
 export interface CompanyFilter {

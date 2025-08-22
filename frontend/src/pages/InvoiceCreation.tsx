@@ -249,50 +249,65 @@ const InvoiceCreation: React.FC = () => {
       }
 
       const totals = calculateTotals();
-      const invoiceData = {
-        ...values,
-        date: values.date ? values.date.format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
-        due_date: values.due_date ? values.due_date.format('YYYY-MM-DD') : dayjs().add(30, 'days').format('YYYY-MM-DD'),
+      
+      // Prepare invoice data based on company type
+      const invoiceData: any = {
+        invoice_number: values.invoice_number,
+        date: values.date ? values.date.format('MM-DD-YYYY') : dayjs().format('MM-DD-YYYY'),
+        due_date: values.due_date ? values.due_date.format('MM-DD-YYYY') : dayjs().add(30, 'days').format('MM-DD-YYYY'),
         status,
-        company: {
-          name: companyName || '',
-          address: values.company_address || selectedCompany?.address || '',
-          city: values.company_city || selectedCompany?.city || '',
-          state: values.company_state || selectedCompany?.state || '',
-          zip: values.company_zip || selectedCompany?.zip || '',
-          phone: values.company_phone || selectedCompany?.phone || '',
-          email: values.company_email || selectedCompany?.email || '',
-          logo: selectedCompany?.logo || '',
-        },
-        client: {
-          name: values.client_name,
-          address: values.client_address,
-          city: values.client_city,
-          state: values.client_state,
-          zip: values.client_zip,
-          phone: values.client_phone,
-          email: values.client_email,
-        },
-        insurance: showInsurance ? {
-          company: values.insurance_company,
-          policy_number: values.insurance_policy_number,
-          claim_number: values.insurance_claim_number,
-          deductible: values.insurance_deductible,
-        } : null,
-        items,
-        subtotal: totals.subtotal,
-        tax_method: taxMethod,
-        tax_rate: taxMethod === 'percentage' ? (values.tax_rate || 0) : 0,
-        tax_amount: totals.taxAmount,
-        discount: values.discount || 0,
-        total: totals.total,
-        payments: payments,
-        show_payment_dates: showPaymentDates,
-        balance_due: totals.balanceDue,
-        payment_terms: values.payment_terms,
-        notes: values.notes,
       };
+      
+      // Add company info based on type
+      if (!useCustomCompany && selectedCompany) {
+        // Using saved company - send company_id
+        invoiceData.company_id = selectedCompany.id;
+      } else {
+        // Using custom company - send full company info
+        invoiceData.company = {
+          name: values.company_name || '',
+          address: values.company_address || '',
+          city: values.company_city || '',
+          state: values.company_state || '',
+          zip: values.company_zip || '',
+          phone: values.company_phone || '',
+          email: values.company_email || '',
+          logo: '',
+        };
+      }
+      
+      // Add rest of the data
+      invoiceData.client = {
+        name: values.client_name,
+        address: values.client_address,
+        city: values.client_city,
+        state: values.client_state,
+        zip: values.client_zip,
+        phone: values.client_phone,
+        email: values.client_email,
+      };
+      
+      invoiceData.insurance = showInsurance ? {
+        company: values.insurance_company,
+        policy_number: values.insurance_policy_number,
+        claim_number: values.insurance_claim_number,
+        deductible: values.insurance_deductible,
+      } : null;
+      
+      invoiceData.items = items;
+      invoiceData.subtotal = totals.subtotal;
+      invoiceData.tax_method = taxMethod;
+      invoiceData.tax_rate = taxMethod === 'percentage' ? (values.tax_rate || 0) : 0;
+      invoiceData.tax_amount = totals.taxAmount;
+      invoiceData.discount = values.discount || 0;
+      invoiceData.total = totals.total;
+      invoiceData.payments = payments;
+      invoiceData.show_payment_dates = showPaymentDates;
+      invoiceData.balance_due = totals.balanceDue;
+      invoiceData.payment_terms = values.payment_terms;
+      invoiceData.notes = values.notes;
 
+      console.log('Sending invoice data:', invoiceData);
       const response = await invoiceService.createInvoice(invoiceData);
       message.success('Invoice saved successfully!');
       navigate(`/invoices/${response.id}`);
@@ -325,8 +340,8 @@ const InvoiceCreation: React.FC = () => {
 
       const pdfData = {
         invoice_number: values.invoice_number || `INV-${dayjs().format('YYYYMMDDHHmmss')}`,
-        date: values.date ? values.date.format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
-        due_date: values.due_date ? values.due_date.format('YYYY-MM-DD') : dayjs().add(30, 'days').format('YYYY-MM-DD'),
+        date: values.date ? values.date.format('MM-DD-YYYY') : dayjs().format('MM-DD-YYYY'),
+        due_date: values.due_date ? values.due_date.format('MM-DD-YYYY') : dayjs().add(30, 'days').format('MM-DD-YYYY'),
         company: {
           name: companyName || '',
           address: values.company_address || selectedCompany?.address || '',

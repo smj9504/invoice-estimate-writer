@@ -40,15 +40,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       label: '서류 목록',
       children: [
         {
-          key: '/documents/estimates',
+          key: '/documents/estimate',
           label: '견적서',
         },
         {
-          key: '/documents/invoices',
+          key: '/documents/invoice',
           label: '인보이스',
         },
         {
-          key: '/documents/insurance',
+          key: '/documents/insurance_estimate',
           label: '보험 견적서',
         },
       ],
@@ -63,7 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           label: '견적서 작성',
         },
         {
-          key: '/invoices/create',
+          key: '/create/invoice',
           label: '인보이스 작성',
         },
         {

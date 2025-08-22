@@ -38,7 +38,6 @@ function App() {
               
               {/* Invoice Routes */}
               <Route path="/invoices" element={<InvoiceList />} />
-              <Route path="/invoices/create" element={<InvoiceCreation />} />
               <Route path="/create/invoice" element={<InvoiceCreation />} />
               <Route path="/invoices/:id" element={<InvoiceCreation />} />
               <Route path="/invoices/:id/edit" element={<InvoiceCreation />} />

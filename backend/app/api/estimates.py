@@ -3,6 +3,7 @@ Estimate API endpoints
 """
 
 from fastapi import APIRouter, HTTPException, Depends
+from datetime import datetime
 from app.schemas.estimate import Estimate, EstimateCreate, EstimateUpdate, EstimateResponse
 from app.services.estimate_service import EstimateService
 from app.core.database import get_db
@@ -13,8 +14,34 @@ router = APIRouter()
 async def create_estimate(estimate: EstimateCreate, db=Depends(get_db)):
     """Create new estimate"""
     service = EstimateService(db)
+    
+    # Convert to dict
+    estimate_data = estimate.dict()
+    
+    # Get company code for estimate number generation
+    company_code = None
+    if estimate_data.get('company_id'):
+        try:
+            # Get company by ID to get the company_code
+            company_response = db.table('companies').select('company_code').eq('id', estimate_data['company_id']).execute()
+            if company_response.data and company_response.data[0].get('company_code'):
+                company_code = company_response.data[0]['company_code']
+        except Exception as e:
+            print(f"Error fetching company code: {e}")
+    
+    # Generate estimate number if not provided
+    if not estimate_data.get('estimate_number'):
+        if company_code and estimate_data.get('client_address'):
+            estimate_data['estimate_number'] = service.generate_estimate_number(
+                estimate_data['client_address'],
+                company_code
+            )
+        else:
+            # Fallback to timestamp-based number
+            estimate_data['estimate_number'] = f"EST-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    
     try:
-        new_estimate = service.create(estimate.dict())
+        new_estimate = service.create(estimate_data)
         return EstimateResponse(data=new_estimate, message="Estimate created successfully")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

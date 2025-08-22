@@ -237,14 +237,19 @@ const DocumentList: React.FC = () => {
       <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
         <Col>
           <Title level={2}>
-            {type === 'estimates' && '견적서 목록'}
-            {type === 'invoices' && '인보이스 목록'}
-            {type === 'insurance' && '보험 견적서 목록'}
+            {type === 'estimate' && '견적서 목록'}
+            {type === 'invoice' && '인보이스 목록'}
+            {type === 'insurance_estimate' && '보험 견적서 목록'}
+            {type === 'plumber_report' && '배관공 보고서 목록'}
             {!type && '전체 서류'}
           </Title>
         </Col>
         <Col>
-          <Button type="primary" onClick={() => navigate(`/create/${type?.slice(0, -1) || 'estimate'}`)}>
+          <Button type="primary" onClick={() => {
+            const createPath = type === 'plumber_report' ? '/create/plumber' :
+                               `/create/${type || 'estimate'}`;
+            navigate(createPath);
+          }}>
             새 서류 작성
           </Button>
         </Col>

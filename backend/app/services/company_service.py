@@ -7,6 +7,8 @@ from fastapi import UploadFile
 import uuid
 import os
 import base64
+import random
+import string
 from datetime import datetime
 from app.core.config import settings
 
@@ -15,6 +17,45 @@ class CompanyService:
     
     def __init__(self, db):
         self.db = db
+    
+    def generate_company_code(self, company_name: str) -> str:
+        """Generate a unique 4-character company code based on company name"""
+        # Extract uppercase letters from company name
+        name_letters = ''.join([c.upper() for c in company_name if c.isalpha()])
+        
+        # Generate code with mix of letters from name and random characters
+        code_chars = []
+        
+        # Try to use first 2 letters from company name
+        if len(name_letters) >= 2:
+            code_chars.extend(list(name_letters[:2]))
+        elif len(name_letters) == 1:
+            code_chars.append(name_letters[0])
+            # Add random letter
+            code_chars.append(random.choice(string.ascii_uppercase))
+        else:
+            # No letters in name, use random letters
+            code_chars.extend([random.choice(string.ascii_uppercase) for _ in range(2)])
+        
+        # Add 2 random digits or letters
+        for _ in range(2):
+            if random.choice([True, False]):
+                code_chars.append(random.choice(string.digits))
+            else:
+                code_chars.append(random.choice(string.ascii_uppercase))
+        
+        code = ''.join(code_chars)
+        
+        # Check if code already exists
+        try:
+            response = self.db.table('companies').select('company_code').eq('company_code', code).execute()
+            if response.data:
+                # Code exists, generate a new one recursively with more randomness
+                return self.generate_company_code(company_name + str(random.randint(1, 999)))
+        except:
+            pass
+        
+        return code
     
     def get_all(self, search: Optional[str] = None, city: Optional[str] = None, state: Optional[str] = None) -> List[Dict[str, Any]]:
         """Get all companies with optional filters"""
@@ -74,6 +115,10 @@ class CompanyService:
             # The companies table in Supabase doesn't have created_at/updated_at columns
             data.pop('created_at', None)
             data.pop('updated_at', None)
+            
+            # Generate company code if not provided
+            if not data.get('company_code'):
+                data['company_code'] = self.generate_company_code(data.get('name', ''))
             
             response = self.db.table('companies').insert(data).execute()
             return response.data[0] if response.data else {}

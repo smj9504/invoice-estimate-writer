@@ -137,6 +137,19 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
       ),
     },
     {
+      title: '회사 코드',
+      dataIndex: 'company_code',
+      key: 'company_code',
+      width: 100,
+      render: (code) => code ? (
+        <Tag color="purple" style={{ fontWeight: 'bold' }}>
+          {code}
+        </Tag>
+      ) : (
+        <span style={{ color: '#ccc' }}>-</span>
+      ),
+    },
+    {
       title: '연락처',
       dataIndex: 'phone',
       key: 'phone',

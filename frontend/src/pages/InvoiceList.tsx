@@ -286,7 +286,7 @@ const InvoiceList: React.FC = () => {
             type="primary"
             icon={<PlusOutlined />}
             size="large"
-            onClick={() => navigate('/invoices/create')}
+            onClick={() => navigate('/create/invoice')}
           >
             Create Invoice
           </Button>

@@ -5,13 +5,24 @@ Invoice service for business logic
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 from app.core.config import settings
+from app.services.document_number_service import DocumentNumberService
 import json
+import re
 
 class InvoiceService:
     """Service for invoice-related operations"""
     
     def __init__(self, db):
         self.db = db
+        self.doc_number_service = DocumentNumberService(db)
+    
+    def generate_invoice_number(self, client_address: str, company_code: str) -> str:
+        """Generate invoice number using common document number service"""
+        return self.doc_number_service.generate_document_number(
+            'invoice',
+            client_address,
+            company_code
+        )
     
     def get_all(self, company_id: Optional[str] = None, status: Optional[str] = None, 
                 limit: Optional[int] = 50, offset: Optional[int] = 0) -> List[Dict[str, Any]]:

@@ -15,7 +15,8 @@ from ..schemas.invoice import (
     InvoiceUpdate,
     InvoiceResponse,
     InvoiceListResponse,
-    InvoicePDFRequest
+    InvoicePDFRequest,
+    CompanyInfo
 )
 from ..services.pdf_service import pdf_service
 from ..services.invoice_service import InvoiceService
@@ -121,11 +122,53 @@ async def get_invoice(invoice_id: int, db=Depends(get_db)):
 @router.post("/", response_model=InvoiceResponse)
 async def create_invoice(invoice_data: InvoiceCreate, db=Depends(get_db)):
     """Create a new invoice"""
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"Received invoice data: {invoice_data.dict()}")
+    
     service = InvoiceService(db)
+    
+    # Determine if using saved company or custom company
+    company_code = None
+    company_name = None
+    
+    if invoice_data.company_id:
+        # Using saved company - get company details
+        try:
+            company_response = db.table('companies').select('*').eq('id', invoice_data.company_id).execute()
+            if company_response.data:
+                company = company_response.data[0]
+                company_code = company.get('company_code')
+                company_name = company.get('name')
+                # Set company info for storage
+                invoice_data.company = CompanyInfo(
+                    name=company['name'],
+                    address=company.get('address'),
+                    city=company.get('city'),
+                    state=company.get('state'),
+                    zip=company.get('zip'),
+                    phone=company.get('phone'),
+                    email=company.get('email'),
+                    logo=company.get('logo')
+                )
+        except Exception as e:
+            logger.error(f"Error fetching company: {e}")
+    elif invoice_data.company:
+        # Using custom company - generate temporary code
+        company_name = invoice_data.company.name
+        if company_name:
+            company_code = service.doc_number_service.generate_temp_company_code(company_name)
     
     # Generate invoice number if not provided
     if not invoice_data.invoice_number:
-        invoice_data.invoice_number = f"INV-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        if company_code and invoice_data.client.address:
+            invoice_data.invoice_number = service.generate_invoice_number(
+                invoice_data.client.address,
+                company_code
+            )
+        else:
+            # Fallback to timestamp-based number
+            invoice_data.invoice_number = f"INV-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     
     # Calculate totals
     subtotal = sum(item.quantity * item.rate for item in invoice_data.items)
@@ -137,8 +180,8 @@ async def create_invoice(invoice_data: InvoiceCreate, db=Depends(get_db)):
     # Prepare data for Supabase
     invoice_dict = {
         'invoice_number': invoice_data.invoice_number,
-        'date': (invoice_data.date or datetime.now().date()).isoformat(),
-        'due_date': (invoice_data.due_date or (datetime.now() + timedelta(days=30)).date()).isoformat(),
+        'date': invoice_data.date or datetime.now().date().isoformat(),
+        'due_date': invoice_data.due_date or (datetime.now() + timedelta(days=30)).date().isoformat(),
         'status': invoice_data.status or 'draft',
         'company_name': invoice_data.company.name,
         'company_address': invoice_data.company.address,
@@ -468,6 +511,10 @@ async def generate_invoice_pdf(invoice_id: int, db=Depends(get_db)):
 @router.post("/preview-pdf")
 async def preview_invoice_pdf(data: InvoicePDFRequest):
     """Generate a preview PDF from invoice data without saving"""
+    import logging
+    import traceback
+    logger = logging.getLogger(__name__)
+    
     if not pdf_service:
         raise HTTPException(status_code=500, detail="PDF service not available")
     
@@ -478,6 +525,7 @@ async def preview_invoice_pdf(data: InvoicePDFRequest):
     try:
         # Prepare data for PDF generation
         pdf_data = data.dict()
+        logger.info(f"Generating PDF preview with data keys: {pdf_data.keys()}")
         
         # Generate PDF
         pdf_path = pdf_service.generate_invoice_pdf(pdf_data, output_path)
@@ -499,6 +547,8 @@ async def preview_invoice_pdf(data: InvoicePDFRequest):
         )
     except Exception as e:
         # Clean up on error
+        logger.error(f"PDF generation error: {str(e)}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
         if os.path.exists(output_path):
             os.unlink(output_path)
         raise HTTPException(status_code=500, detail=str(e))

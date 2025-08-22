@@ -2,9 +2,9 @@
 Invoice Pydantic schemas
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import List, Optional
-from datetime import date, datetime
+from datetime import datetime
 
 
 # Nested schemas
@@ -64,11 +64,13 @@ class InvoiceItemResponse(InvoiceItemBase):
 # Main invoice schemas
 class InvoiceBase(BaseModel):
     invoice_number: Optional[str] = None
-    date: Optional[date] = None
-    due_date: Optional[date] = None
+    date: Optional[str] = None  # Accept string dates
+    due_date: Optional[str] = None  # Accept string dates
     status: Optional[str] = "draft"
     
-    company: CompanyInfo
+    # Either use company_id OR company info
+    company_id: Optional[str] = None  # For saved companies
+    company: Optional[CompanyInfo] = None  # For custom companies
     client: ClientInfo
     insurance: Optional[InsuranceInfo] = None
     
@@ -79,10 +81,31 @@ class InvoiceBase(BaseModel):
     
     payment_terms: Optional[str] = None
     notes: Optional[str] = None
+    
+    @validator('date', 'due_date', pre=True)
+    def convert_date_format(cls, v):
+        """Convert MM-DD-YYYY to YYYY-MM-DD for database storage"""
+        if v and isinstance(v, str):
+            # Check if it's MM-DD-YYYY format
+            if '-' in v and len(v.split('-')) == 3:
+                parts = v.split('-')
+                # If first part is 4 digits, it's already YYYY-MM-DD
+                if len(parts[0]) == 4:
+                    return v
+                # If first part is 2 digits, assume MM-DD-YYYY
+                elif len(parts[0]) == 2 and len(parts[2]) == 4:
+                    month, day, year = parts
+                    return f"{year}-{month}-{day}"
+            # Check if it's MM/DD/YYYY format
+            elif '/' in v and len(v.split('/')) == 3:
+                month, day, year = v.split('/')
+                return f"{year}-{month.zfill(2)}-{day.zfill(2)}"
+        return v
 
 
 class InvoiceCreate(InvoiceBase):
     items: List[InvoiceItemCreate] = []
+    
     # Additional fields from frontend
     subtotal: Optional[float] = None
     tax_method: Optional[str] = None
@@ -95,9 +118,29 @@ class InvoiceCreate(InvoiceBase):
 
 class InvoiceUpdate(BaseModel):
     invoice_number: Optional[str] = None
-    date: Optional[date] = None
-    due_date: Optional[date] = None
+    date: Optional[str] = None  # Changed to string
+    due_date: Optional[str] = None  # Changed to string
     status: Optional[str] = None
+    
+    @validator('date', 'due_date', pre=True)
+    def convert_date_format(cls, v):
+        """Convert MM-DD-YYYY to YYYY-MM-DD for database storage"""
+        if v and isinstance(v, str):
+            # Check if it's MM-DD-YYYY format
+            if '-' in v and len(v.split('-')) == 3:
+                parts = v.split('-')
+                # If first part is 4 digits, it's already YYYY-MM-DD
+                if len(parts[0]) == 4:
+                    return v
+                # If first part is 2 digits, assume MM-DD-YYYY
+                elif len(parts[0]) == 2 and len(parts[2]) == 4:
+                    month, day, year = parts
+                    return f"{year}-{month}-{day}"
+            # Check if it's MM/DD/YYYY format
+            elif '/' in v and len(v.split('/')) == 3:
+                month, day, year = v.split('/')
+                return f"{year}-{month.zfill(2)}-{day.zfill(2)}"
+        return v
     
     company: Optional[CompanyInfo] = None
     client: Optional[ClientInfo] = None
@@ -117,8 +160,8 @@ class InvoiceUpdate(BaseModel):
 class InvoiceListResponse(BaseModel):
     id: int
     invoice_number: str
-    date: date
-    due_date: date
+    date: str  # Changed to string
+    due_date: str  # Changed to string
     status: str
     company_name: str
     client_name: str
@@ -134,8 +177,8 @@ class InvoiceListResponse(BaseModel):
 class InvoiceResponse(BaseModel):
     id: int
     invoice_number: str
-    date: date
-    due_date: date
+    date: str  # Changed to string
+    due_date: str  # Changed to string
     status: str
     
     # Company info

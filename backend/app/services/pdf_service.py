@@ -73,13 +73,20 @@ class PDFService:
     
     @staticmethod
     def _format_date(value, format: str = "%B %d, %Y") -> str:
-        """Format date string"""
+        """Format date string - accepts YYYY-MM-DD or MM-DD-YYYY"""
         if isinstance(value, str):
             try:
+                # Try YYYY-MM-DD format first
                 dt = datetime.strptime(value, "%Y-%m-%d")
                 return dt.strftime(format)
             except:
-                return value
+                try:
+                    # Try MM-DD-YYYY format
+                    dt = datetime.strptime(value, "%m-%d-%Y")
+                    return dt.strftime(format)
+                except:
+                    # Return as-is if neither format works
+                    return value
         elif isinstance(value, datetime):
             return value.strftime(format)
         return str(value)
@@ -154,7 +161,7 @@ class PDFService:
         context = self._prepare_invoice_context(data)
         
         # Load template
-        template = self.env.get_template("invoice.html")
+        template = self.env.get_template("pdf/invoice.html")
         html_content = template.render(**context)
         
         # Don't load external CSS - use inline styles only

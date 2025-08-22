@@ -3,14 +3,20 @@ FastAPI Backend for MJ Estimate Generator
 Main application entry point
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from datetime import datetime
+import logging
 
 from app.api import companies, documents, estimates
 from app.api import invoices, plumber_reports
 from app.core.config import settings
 from app.database import init_db
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 # Initialize database
 init_db()
@@ -32,6 +38,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Custom validation error handler
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Custom handler for validation errors to provide more details"""
+    logger = logging.getLogger(__name__)
+    logger.error(f"Validation error: {exc.errors()}")
+    logger.error(f"Request body: {exc.body}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={
+            "detail": exc.errors(),
+            "body": str(exc.body),
+            "message": "Request validation failed"
+        }
+    )
 
 # Include routers
 app.include_router(companies.router, prefix="/api/companies", tags=["Companies"])

@@ -16,6 +16,7 @@ class CompanyBase(BaseModel):
     phone: Optional[str] = None
     email: Optional[EmailStr] = None
     logo: Optional[str] = None  # Base64 encoded image
+    company_code: Optional[str] = None  # 4-character unique code
     
 class CompanyCreate(CompanyBase):
     """Schema for creating a company"""
@@ -31,6 +32,7 @@ class CompanyUpdate(BaseModel):
     phone: Optional[str] = None
     email: Optional[EmailStr] = None
     logo: Optional[str] = None
+    company_code: Optional[str] = None
 
 class Company(CompanyBase):
     """Company schema with all fields"""
