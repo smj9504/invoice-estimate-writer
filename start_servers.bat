@@ -11,7 +11,7 @@ timeout /t 3 /nobreak > nul
 
 REM Start frontend React server
 echo [2/2] Starting Frontend React Server (Port 3000)...
-start cmd /k "cd /d %~dp0\frontend && set GENERATE_SOURCEMAP=false && npm start 2>nul"
+start cmd /k "cd /d %~dp0\frontend && set GENERATE_SOURCEMAP=false && set PORT=3000 && npm start 2>nul"
 
 echo.
 echo Both servers are starting...

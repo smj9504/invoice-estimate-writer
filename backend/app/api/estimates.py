@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from datetime import datetime
 from app.schemas.estimate import Estimate, EstimateCreate, EstimateUpdate, EstimateResponse
 from app.services.estimate_service import EstimateService
-from app.core.database import get_db
+from app.core.database_factory import get_db_session as get_db
 
 router = APIRouter()
 

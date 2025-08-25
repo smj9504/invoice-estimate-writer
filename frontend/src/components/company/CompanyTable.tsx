@@ -173,7 +173,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
             {address}
           </div>
           <div style={{ fontSize: '12px', color: '#666' }}>
-            {record.city}, {record.state} {record.zip}
+            {record.city}, {record.state} {record.zipcode}
           </div>
         </div>
       ),

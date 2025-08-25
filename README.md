@@ -47,15 +47,76 @@ pip freeze > requirements.txt
 
   🚀 실행 방법
 
-  # 간편 실행 (Windows)
+  ## 로컬 실행
+
+  ### 간편 실행 (Windows)
+  ```bash
   start_servers.bat
+  ```
 
-  # 또는 개별 실행
+  ### 개별 실행
+  ```bash
   # Backend
-  python backend_api.py
+  cd backend && uvicorn app.main:app --reload --port 8000
 
-  # Frontend
+  # Frontend  
   cd frontend && npm start
+  ```
+
+  ## Docker 실행
+
+  Docker를 사용하여 컨테이너 환경에서 실행할 수 있습니다.
+
+  ### 개발 환경 (docker-compose.dev.yml)
+  ```bash
+  # 개발 환경으로 실행
+  docker-compose -f docker-compose.dev.yml up
+
+  # 백그라운드 실행
+  docker-compose -f docker-compose.dev.yml up -d
+  ```
+
+  개발 환경 특징:
+  - Backend: 포트 8000
+  - Frontend: 포트 3000  
+  - 로컬 파일 변경사항 즉시 반영 (Hot Reload)
+  - 개발용 환경 변수 사용
+
+  ### 프로덕션 환경 (docker-compose.prod.yml)
+  ```bash
+  # 프로덕션 환경으로 실행
+  docker-compose -f docker-compose.prod.yml up
+
+  # 백그라운드 실행
+  docker-compose -f docker-compose.prod.yml up -d
+  ```
+
+  프로덕션 환경 특징:
+  - Backend: 포트 8000
+  - Frontend: 포트 80
+  - 프로덕션 최적화 설정
+  - 프로덕션 환경 변수 사용
+
+  ### Docker 관련 명령어
+  ```bash
+  # 컨테이너 중지
+  docker-compose -f docker-compose.dev.yml down
+
+  # 컨테이너 및 볼륨 제거
+  docker-compose -f docker-compose.dev.yml down -v
+
+  # 컨테이너 로그 확인
+  docker-compose -f docker-compose.dev.yml logs -f
+
+  # 특정 서비스만 실행
+  docker-compose -f docker-compose.dev.yml up backend
+  ```
+
+  ### Docker 사용 장점
+  - OS에 관계없이 동일한 개발/운영 환경
+  - 의존성 관리 간편화
+  - 팀원 간 일관된 환경 보장
+  - 배포 프로세스 단순화
 
   📝 다음 단계 권장사항
 

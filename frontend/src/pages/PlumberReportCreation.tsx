@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Form,
   Input,
@@ -19,8 +19,6 @@ import {
   Typography,
   Tooltip,
   Popconfirm,
-  Tabs,
-  Upload,
 } from 'antd';
 import {
   PlusOutlined,
@@ -28,12 +26,6 @@ import {
   SaveOutlined,
   EyeOutlined,
   EditOutlined,
-  UploadOutlined,
-  ToolOutlined,
-  ShoppingOutlined,
-  DollarOutlined,
-  FileTextOutlined,
-  PictureOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -51,7 +43,6 @@ import RichTextEditor from '../components/editor/RichTextEditor';
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 const { Option } = Select;
-const { TabPane } = Tabs;
 
 const PlumberReportCreation: React.FC = () => {
   const [form] = Form.useForm();
@@ -83,14 +74,7 @@ const PlumberReportCreation: React.FC = () => {
   // Property same as client toggle
   const [propertyDifferent, setPropertyDifferent] = useState(false);
 
-  useEffect(() => {
-    loadCompanies();
-    if (id) {
-      loadReport(id);
-    }
-  }, [id]);
-
-  const loadCompanies = async () => {
+  const loadCompanies = useCallback(async () => {
     try {
       const data = await companyService.getCompanies();
       setCompanies(data);
@@ -103,9 +87,9 @@ const PlumberReportCreation: React.FC = () => {
     } catch (error) {
       console.error('Failed to load companies:', error);
     }
-  };
+  }, [form, id]);
 
-  const loadReport = async (reportId: string) => {
+  const loadReport = useCallback(async (reportId: string) => {
     try {
       setLoading(true);
       const report = await plumberReportService.getReport(reportId);
@@ -115,7 +99,7 @@ const PlumberReportCreation: React.FC = () => {
         report.property.address !== report.client.address ||
         report.property.city !== report.client.city ||
         report.property.state !== report.client.state ||
-        report.property.zip !== report.client.zip;
+        report.property.zipcode !== report.client.zipcode;
       
       setPropertyDifferent(isDifferent);
       
@@ -131,7 +115,7 @@ const PlumberReportCreation: React.FC = () => {
         property_address: report.property.address,
         property_city: report.property.city,
         property_state: report.property.state,
-        property_zip: report.property.zip,
+        property_zipcode: report.property.zipcode,
         labor_cost: report.financial?.labor_cost,
         tax_amount: report.financial?.tax_amount,
         discount: report.financial?.discount,
@@ -165,7 +149,14 @@ const PlumberReportCreation: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [companies, form]);
+
+  useEffect(() => {
+    loadCompanies();
+    if (id) {
+      loadReport(id);
+    }
+  }, [id, loadCompanies, loadReport]);
 
   const handleCompanyChange = (companyId: string) => {
     const company = companies.find(c => c.id === companyId);
@@ -276,7 +267,7 @@ const PlumberReportCreation: React.FC = () => {
           address: values.address,
           city: values.city,
           state: values.state,
-          zip: values.zip,
+          zipcode: values.zipcode,
           phone: values.phone,
           email: values.email,
         },
@@ -284,7 +275,7 @@ const PlumberReportCreation: React.FC = () => {
           address: values.property_address || values.address,
           city: values.property_city || values.city,
           state: values.property_state || values.state,
-          zip: values.property_zip || values.zip,
+          zipcode: values.property_zipcode || values.zipcode,
         },
         service_date: values.service_date ? values.service_date.format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
         technician_name: values.technician_name,
@@ -335,7 +326,7 @@ const PlumberReportCreation: React.FC = () => {
           address: values.address,
           city: values.city,
           state: values.state,
-          zip: values.zip,
+          zipcode: values.zipcode,
           phone: values.phone,
           email: values.email,
         },
@@ -343,7 +334,7 @@ const PlumberReportCreation: React.FC = () => {
           address: values.property_address || values.address,
           city: values.property_city || values.city,
           state: values.property_state || values.state,
-          zip: values.property_zip || values.zip,
+          zipcode: values.property_zipcode || values.zipcode,
         },
         service_date: values.service_date ? values.service_date.format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
         technician_name: values.technician_name,
@@ -490,7 +481,7 @@ const PlumberReportCreation: React.FC = () => {
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={8}>
-                  <Form.Item name="zip" label="ZIP">
+                  <Form.Item name="zipcode" label="ZIP">
                     <Input />
                   </Form.Item>
                 </Col>
@@ -509,7 +500,7 @@ const PlumberReportCreation: React.FC = () => {
                           property_address: undefined,
                           property_city: undefined,
                           property_state: undefined,
-                          property_zip: undefined,
+                          property_zipcode: undefined,
                         });
                       }
                     }}
@@ -536,7 +527,7 @@ const PlumberReportCreation: React.FC = () => {
                     </Form.Item>
                   </Col>
                   <Col xs={24} md={4}>
-                    <Form.Item name="property_zip" label="ZIP">
+                    <Form.Item name="property_zipcode" label="ZIP">
                       <Input />
                     </Form.Item>
                   </Col>

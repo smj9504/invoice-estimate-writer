@@ -2,17 +2,20 @@
 Invoice database models
 """
 
-from sqlalchemy import Column, Integer, String, Float, Date, Text, ForeignKey, DateTime, Boolean
+from sqlalchemy import Column, String, Float, Date, Text, ForeignKey, DateTime, Boolean, Integer
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
+import uuid
 
-from ..database import Base
+from ..core.database_factory import Base
 
 
 class Invoice(Base):
     __tablename__ = "invoices"
+    __table_args__ = {'extend_existing': True}
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     invoice_number = Column(String(50), unique=True, index=True)
     date = Column(Date, nullable=False)
     due_date = Column(Date, nullable=False)
@@ -23,7 +26,7 @@ class Invoice(Base):
     company_address = Column(String(500))
     company_city = Column(String(100))
     company_state = Column(String(50))
-    company_zip = Column(String(20))
+    company_zipcode = Column(String(20))
     company_phone = Column(String(50))
     company_email = Column(String(200))
     company_logo = Column(Text)  # Base64 encoded or URL
@@ -33,7 +36,7 @@ class Invoice(Base):
     client_address = Column(String(500))
     client_city = Column(String(100))
     client_state = Column(String(50))
-    client_zip = Column(String(20))
+    client_zipcode = Column(String(20))
     client_phone = Column(String(50))
     client_email = Column(String(200))
     
@@ -66,9 +69,10 @@ class Invoice(Base):
 
 class InvoiceItem(Base):
     __tablename__ = "invoice_items"
+    __table_args__ = {'extend_existing': True}
     
-    id = Column(Integer, primary_key=True, index=True)
-    invoice_id = Column(Integer, ForeignKey("invoices.id", ondelete="CASCADE"))
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    invoice_id = Column(UUID(as_uuid=True), ForeignKey("invoices.id", ondelete="CASCADE"))
     
     name = Column(String(500), nullable=False)
     description = Column(Text)

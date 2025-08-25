@@ -1,8 +1,7 @@
 """
 Database models package
+(Using Supabase, not SQLAlchemy models)
 """
 
-from .invoice import Invoice, InvoiceItem
-from .company import Company
-
-__all__ = ["Invoice", "InvoiceItem", "Company"]
+# Models are defined in Supabase database
+# This package is kept for future use if needed

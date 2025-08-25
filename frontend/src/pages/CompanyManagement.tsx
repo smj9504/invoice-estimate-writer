@@ -179,7 +179,7 @@ const CompanyManagement: React.FC = () => {
         onCancel={handleCancel}
         footer={null}
         width={800}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={false}
       >
         <Divider style={{ margin: '16px 0 24px 0' }} />

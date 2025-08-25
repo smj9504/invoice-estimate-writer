@@ -9,6 +9,7 @@ import {
   UserOutlined,
   LogoutOutlined,
   SettingOutlined,
+  ProjectOutlined,
 } from '@ant-design/icons';
 import { useStore } from '../../store/useStore';
 
@@ -54,6 +55,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       ],
     },
     {
+      key: '/work-orders',
+      icon: <ProjectOutlined />,
+      label: '작업 지시서',
+    },
+    {
       key: '/create',
       icon: <PlusOutlined />,
       label: '서류 작성',
@@ -73,6 +79,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {
           key: '/create/plumber',
           label: '배관공 보고서 작성',
+        },
+        {
+          key: '/create/work-order',
+          label: '작업 지시서 작성',
         },
       ],
     },

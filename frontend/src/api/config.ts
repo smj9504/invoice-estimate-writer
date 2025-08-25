@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // API Base URL - will be replaced with environment variable
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+// Use empty string to use relative URLs (for proxy to work)
+const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+
+console.log('API Base URL configured:', API_BASE_URL || 'Using relative URLs (proxy mode)'); // Debug log
 
 // Create axios instance with default config
 export const apiClient = axios.create({
@@ -15,6 +18,11 @@ export const apiClient = axios.create({
 // Request interceptor for auth token
 apiClient.interceptors.request.use(
   (config) => {
+    // Force relative URLs to use proxy
+    if (config.url && !config.url.startsWith('http')) {
+      console.log('Making request to:', config.url); // Debug log
+      console.log('Using proxy for relative URL'); // Debug log
+    }
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

@@ -5,6 +5,7 @@ Invoice Pydantic schemas
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 from datetime import datetime
+from uuid import UUID
 
 
 # Nested schemas
@@ -13,7 +14,7 @@ class CompanyInfo(BaseModel):
     address: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
-    zip: Optional[str] = None
+    zipcode: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
     logo: Optional[str] = None
@@ -25,7 +26,7 @@ class ClientInfo(BaseModel):
     address: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
-    zip: Optional[str] = None
+    zipcode: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
 
@@ -50,12 +51,12 @@ class InvoiceItemCreate(InvoiceItemBase):
 
 
 class InvoiceItemResponse(InvoiceItemBase):
-    id: int
-    invoice_id: int
+    id: UUID
+    invoice_id: Optional[UUID] = None
     amount: float
-    order_index: int
-    created_at: datetime
-    updated_at: datetime
+    order_index: Optional[int] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         from_attributes = True
@@ -69,7 +70,7 @@ class InvoiceBase(BaseModel):
     status: Optional[str] = "draft"
     
     # Either use company_id OR company info
-    company_id: Optional[str] = None  # For saved companies
+    company_id: Optional[UUID] = None  # For saved companies
     company: Optional[CompanyInfo] = None  # For custom companies
     client: ClientInfo
     insurance: Optional[InsuranceInfo] = None
@@ -158,7 +159,7 @@ class InvoiceUpdate(BaseModel):
 
 
 class InvoiceListResponse(BaseModel):
-    id: int
+    id: UUID
     invoice_number: str
     date: str  # Changed to string
     due_date: str  # Changed to string
@@ -167,26 +168,28 @@ class InvoiceListResponse(BaseModel):
     client_name: str
     total: float
     paid_amount: float
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         from_attributes = True
 
 
 class InvoiceResponse(BaseModel):
-    id: int
+    id: UUID
     invoice_number: str
     date: str  # Changed to string
+    invoice_date: Optional[str] = None  # Added for compatibility
     due_date: str  # Changed to string
     status: str
     
     # Company info
+    company_id: Optional[UUID] = None  # Added company_id
     company_name: str
     company_address: Optional[str]
     company_city: Optional[str]
     company_state: Optional[str]
-    company_zip: Optional[str]
+    company_zipcode: Optional[str]
     company_phone: Optional[str]
     company_email: Optional[str]
     company_logo: Optional[str]
@@ -196,7 +199,7 @@ class InvoiceResponse(BaseModel):
     client_address: Optional[str]
     client_city: Optional[str]
     client_state: Optional[str]
-    client_zip: Optional[str]
+    client_zipcode: Optional[str]
     client_phone: Optional[str]
     client_email: Optional[str]
     
@@ -211,8 +214,10 @@ class InvoiceResponse(BaseModel):
     tax_rate: float
     tax_amount: float
     discount: float
+    discount_amount: Optional[float] = None  # Added for compatibility
     shipping: float
     total: float
+    total_amount: Optional[float] = None  # Added for compatibility
     paid_amount: float
     
     # Additional
@@ -222,8 +227,8 @@ class InvoiceResponse(BaseModel):
     # Relationships
     items: List[InvoiceItemResponse] = []
     
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     
     class Config:
         from_attributes = True

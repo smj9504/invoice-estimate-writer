@@ -5,6 +5,7 @@ Company schemas
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from uuid import UUID
 
 class CompanyBase(BaseModel):
     """Base company schema"""
@@ -12,7 +13,7 @@ class CompanyBase(BaseModel):
     address: str
     city: str
     state: str
-    zip: Optional[str] = None
+    zipcode: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[EmailStr] = None
     logo: Optional[str] = None  # Base64 encoded image
@@ -28,7 +29,7 @@ class CompanyUpdate(BaseModel):
     address: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
-    zip: Optional[str] = None
+    zipcode: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[EmailStr] = None
     logo: Optional[str] = None
@@ -36,7 +37,7 @@ class CompanyUpdate(BaseModel):
 
 class Company(CompanyBase):
     """Company schema with all fields"""
-    id: str
+    id: UUID
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     

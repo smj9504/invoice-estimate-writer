@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+    env_file:
+      - ./backend/.env.development
+    volumes:
+      - ./backend:/app
+    command: python run_dev.py
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_ENVIRONMENT=development
+    env_file:
+      - ./frontend/.env.development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run start:dev

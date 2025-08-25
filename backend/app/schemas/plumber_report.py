@@ -14,7 +14,7 @@ class ClientInfo(BaseModel):
     address: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
-    zip: Optional[str] = None
+    zipcode: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
 
@@ -24,7 +24,7 @@ class PropertyInfo(BaseModel):
     address: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
-    zip: Optional[str] = None
+    zipcode: Optional[str] = None
 
 
 class InvoiceItem(BaseModel):

@@ -28,7 +28,7 @@ class PlumberReport(Base):
     client_address = Column(String)
     client_city = Column(String)
     client_state = Column(String)
-    client_zip = Column(String)
+    client_zipcode = Column(String)
     client_phone = Column(String)
     client_email = Column(String)
     
@@ -36,7 +36,7 @@ class PlumberReport(Base):
     property_address = Column(String)
     property_city = Column(String)
     property_state = Column(String)
-    property_zip = Column(String)
+    property_zipcode = Column(String)
     
     # Report Details
     service_date = Column(DateTime, nullable=False)

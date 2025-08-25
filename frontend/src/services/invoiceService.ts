@@ -55,7 +55,7 @@ export interface InvoiceData {
 }
 
 export interface InvoiceResponse {
-  id: number;
+  id: string;
   invoice_number: string;
   date: string;
   due_date: string;
@@ -99,7 +99,7 @@ export interface InvoiceDetailResponse extends InvoiceResponse {
   notes?: string;
   
   items: Array<{
-    id: number;
+    id: string;
     name: string;
     description?: string;
     quantity: number;
@@ -116,32 +116,32 @@ class InvoiceService {
     client_name?: string;
     status?: string;
   }): Promise<InvoiceResponse[]> {
-    const response = await apiClient.get('/invoices/', { params });
+    const response = await apiClient.get('/api/invoices/', { params });
     return response.data;
   }
 
-  async getInvoice(id: number): Promise<InvoiceDetailResponse> {
-    const response = await apiClient.get(`/invoices/${id}`);
+  async getInvoice(id: string): Promise<InvoiceDetailResponse> {
+    const response = await apiClient.get(`/api/invoices/${id}`);
     return response.data;
   }
 
   async createInvoice(data: InvoiceData): Promise<InvoiceDetailResponse> {
-    const response = await apiClient.post('/invoices/', data);
+    const response = await apiClient.post('/api/invoices/', data);
     return response.data;
   }
 
-  async updateInvoice(id: number, data: Partial<InvoiceData>): Promise<InvoiceDetailResponse> {
-    const response = await apiClient.put(`/invoices/${id}`, data);
+  async updateInvoice(id: string, data: Partial<InvoiceData>): Promise<InvoiceDetailResponse> {
+    const response = await apiClient.put(`/api/invoices/${id}`, data);
     return response.data;
   }
 
-  async deleteInvoice(id: number): Promise<void> {
-    await apiClient.delete(`/invoices/${id}`);
+  async deleteInvoice(id: string): Promise<void> {
+    await apiClient.delete(`/api/invoices/${id}`);
   }
 
-  async generatePDF(id: number): Promise<Blob> {
+  async generatePDF(id: string): Promise<Blob> {
     const response = await apiClient.post(
-      `/invoices/${id}/pdf`,
+      `/api/invoices/${id}/pdf`,
       {},
       {
         responseType: 'blob',
@@ -152,7 +152,7 @@ class InvoiceService {
 
   async previewPDF(data: InvoiceData): Promise<Blob> {
     const response = await apiClient.post(
-      '/invoices/preview-pdf',
+      '/api/invoices/preview-pdf',
       data,
       {
         responseType: 'blob',
@@ -161,8 +161,8 @@ class InvoiceService {
     return response.data;
   }
 
-  async duplicateInvoice(id: number): Promise<InvoiceDetailResponse> {
-    const response = await apiClient.post(`/invoices/${id}/duplicate`);
+  async duplicateInvoice(id: string): Promise<InvoiceDetailResponse> {
+    const response = await apiClient.post(`/api/invoices/${id}/duplicate`);
     return response.data;
   }
 

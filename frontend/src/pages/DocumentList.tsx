@@ -191,7 +191,16 @@ const DocumentList: React.FC = () => {
             key: 'edit',
             icon: <EditOutlined />,
             label: '수정',
-            onClick: () => navigate(`/documents/${record.id}/edit`),
+            onClick: () => {
+              // Navigate to the appropriate edit page based on document type
+              if (record.type === 'invoice') {
+                navigate(`/invoices/${record.id}/edit`);
+              } else if (record.type === 'estimate') {
+                navigate(`/estimates/${record.id}/edit`);
+              } else if (record.type === 'plumber_report') {
+                navigate(`/plumber-reports/${record.id}/edit`);
+              }
+            },
           },
           {
             key: 'download',
@@ -325,7 +334,7 @@ const DocumentList: React.FC = () => {
       <Card>
         <Table
           columns={columns}
-          dataSource={data?.data}
+          dataSource={data?.items}  // Changed from data?.data to data?.items
           rowKey="id"
           loading={isLoading}
           pagination={{

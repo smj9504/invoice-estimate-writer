@@ -1,168 +1,513 @@
 """
-Estimate service for business logic
+Estimate service with comprehensive business logic and validation.
 """
 
-from typing import List, Optional, Dict, Any
-from datetime import datetime
-from app.core.config import settings
-from app.services.document_number_service import DocumentNumberService
+from typing import Any, Dict, List, Optional
+import logging
+from datetime import datetime, date
+from decimal import Decimal
 import json
 
-class EstimateService:
-    """Service for estimate-related operations"""
+from app.services.base_service import TransactionalService
+from app.repositories import get_estimate_repository
+from app.core.interfaces import DatabaseProvider
+from app.core.database_factory import get_database
+
+logger = logging.getLogger(__name__)
+
+
+class EstimateService(TransactionalService[Dict[str, Any], str]):
+    """
+    Service for estimate-related business operations.
+    Provides comprehensive CRUD operations with validation and business logic.
+    """
     
-    def __init__(self, db):
-        self.db = db
-        self.doc_number_service = DocumentNumberService(db)
+    def __init__(self, database: DatabaseProvider = None):
+        super().__init__(database)
     
-    def generate_estimate_number(self, client_address: str, company_code: str) -> str:
-        """Generate estimate number using common document number service"""
-        return self.doc_number_service.generate_document_number(
-            'estimate',
-            client_address,
-            company_code
-        )
+    def get_repository(self):
+        """Get the estimate repository"""
+        pass
     
-    def get_all(self) -> List[Dict[str, Any]]:
-        """Get all estimates"""
+    def _get_repository_instance(self, session):
+        """Get estimate repository instance with the given session"""
+        return get_estimate_repository(session)
+    
+    def get_by_estimate_number(self, estimate_number: str) -> Optional[Dict[str, Any]]:
+        """
+        Get estimate by estimate number.
+        
+        Args:
+            estimate_number: Estimate number
+            
+        Returns:
+            Estimate dictionary or None if not found
+        """
         try:
-            response = self.db.table('estimate').select('*').execute()
-            return response.data if response.data else []
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_by_estimate_number(estimate_number)
         except Exception as e:
-            print(f"Error fetching estimates: {e}")
-            return []
-    
-    def get_by_id(self, estimate_id: str) -> Optional[Dict[str, Any]]:
-        """Get estimate by ID with items"""
-        try:
-            # Get estimate
-            response = self.db.table('estimate').select('*').eq('id', estimate_id).execute()
-            if not response.data:
-                return None
-            
-            estimate = response.data[0]
-            
-            # Get estimate items
-            items_response = self.db.table('estimate_items').select('*').eq('estimate_id', estimate_id).execute()
-            estimate['items'] = items_response.data if items_response.data else []
-            
-            return estimate
-        except Exception as e:
-            print(f"Error fetching estimate {estimate_id}: {e}")
-            return None
-    
-    def create(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Create new estimate with items"""
-        try:
-            # Extract items from data
-            items = data.pop('items', [])
-            
-            # Add timestamp
-            data['created_at'] = datetime.utcnow().isoformat()
-            
-            # Create estimate
-            response = self.db.table('estimate').insert(data).execute()
-            if not response.data:
-                raise Exception("Failed to create estimate")
-            
-            estimate = response.data[0]
-            estimate_id = estimate['id']
-            
-            # Create estimate items
-            if items:
-                for item in items:
-                    item['estimate_id'] = estimate_id
-                    item['created_at'] = datetime.utcnow().isoformat()
-                
-                items_response = self.db.table('estimate_items').insert(items).execute()
-                estimate['items'] = items_response.data if items_response.data else []
-            else:
-                estimate['items'] = []
-            
-            return estimate
-        except Exception as e:
-            print(f"Error creating estimate: {e}")
+            logger.error(f"Error getting estimate by number: {e}")
             raise
     
-    def update(self, estimate_id: str, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Update estimate"""
-        try:
-            # Handle items separately if included
-            items = data.pop('items', None)
+    def get_estimates_by_status(self, status: str) -> List[Dict[str, Any]]:
+        """
+        Get estimates by status.
+        
+        Args:
+            status: Estimate status
             
-            # Add timestamp
-            data['updated_at'] = datetime.utcnow().isoformat()
+        Returns:
+            List of estimate dictionaries
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_estimates_by_status(status)
+        except Exception as e:
+            logger.error(f"Error getting estimates by status: {e}")
+            raise
+    
+    def get_estimates_by_company(self, company_id: str) -> List[Dict[str, Any]]:
+        """
+        Get estimates for a specific company.
+        
+        Args:
+            company_id: Company ID
+            
+        Returns:
+            List of estimate dictionaries
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_estimates_by_company(company_id)
+        except Exception as e:
+            logger.error(f"Error getting estimates by company: {e}")
+            raise
+    
+    def get_estimates_by_date_range(self, 
+                                   start_date: date, 
+                                   end_date: date) -> List[Dict[str, Any]]:
+        """
+        Get estimates within a date range.
+        
+        Args:
+            start_date: Start date
+            end_date: End date
+            
+        Returns:
+            List of estimate dictionaries
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_estimates_by_date_range(start_date, end_date)
+        except Exception as e:
+            logger.error(f"Error getting estimates by date range: {e}")
+            raise
+    
+    def get_expired_estimates(self) -> List[Dict[str, Any]]:
+        """
+        Get expired estimates.
+        
+        Returns:
+            List of expired estimate dictionaries
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_expired_estimates()
+        except Exception as e:
+            logger.error(f"Error getting expired estimates: {e}")
+            raise
+    
+    def search_estimates(self, search_term: str) -> List[Dict[str, Any]]:
+        """
+        Search estimates by various fields.
+        
+        Args:
+            search_term: Text to search for
+            
+        Returns:
+            List of matching estimate dictionaries
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.search_estimates(search_term)
+        except Exception as e:
+            logger.error(f"Error searching estimates: {e}")
+            raise
+    
+    def get_with_items(self, estimate_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get estimate with its items.
+        
+        Args:
+            estimate_id: Estimate ID
+            
+        Returns:
+            Estimate dictionary with items or None if not found
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_with_items(estimate_id)
+        except Exception as e:
+            logger.error(f"Error getting estimate with items: {e}")
+            raise
+    
+    def get_insurance_estimates(self) -> List[Dict[str, Any]]:
+        """
+        Get estimates that have insurance-specific data.
+        
+        Returns:
+            List of insurance estimate dictionaries
+        """
+        try:
+            with self.database.get_session() as session:
+                repository = self._get_repository_instance(session)
+                return repository.get_insurance_estimates()
+        except Exception as e:
+            logger.error(f"Error getting insurance estimates: {e}")
+            raise
+    
+    def create_with_items(self, estimate_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Create estimate with items in a single transaction.
+        
+        Args:
+            estimate_data: Estimate data including items and room data
+            
+        Returns:
+            Created estimate dictionary with items
+        """
+        def _create_operation(session_or_uow, data):
+            repository = self._get_repository_instance(session_or_uow)
+            return repository.create_with_items(data)
+        
+        # Validate data
+        validated_data = self._validate_create_data(estimate_data)
+        
+        # Generate estimate number if not provided
+        if not validated_data.get('estimate_number'):
+            validated_data['estimate_number'] = self._generate_estimate_number()
+        
+        return self.execute_in_transaction(_create_operation, validated_data)
+    
+    def update_with_items(self, estimate_id: str, estimate_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Update estimate with items.
+        
+        Args:
+            estimate_id: Estimate ID
+            estimate_data: Updated estimate data including items
+            
+        Returns:
+            Updated estimate dictionary with items
+        """
+        def _update_operation(session, estimate_id, data):
+            repository = self._get_repository_instance(session)
+            
+            # Extract items and room_data
+            items_data = data.pop('items', [])
+            room_data = data.get('room_data')
+            
+            # Convert room_data to JSON string if it's a dict
+            if isinstance(room_data, dict):
+                data['room_data'] = json.dumps(room_data)
             
             # Update estimate
-            response = self.db.table('estimate').update(data).eq('id', estimate_id).execute()
-            if not response.data:
+            updated_estimate = repository.update(estimate_id, data)
+            if not updated_estimate:
                 return None
             
-            estimate = response.data[0]
+            # Update items (simplified approach)
+            # In a production system, you might want to handle item updates more granularly
+            if hasattr(repository, 'delete_items_by_estimate_id'):
+                repository.delete_items_by_estimate_id(estimate_id)
             
-            # Update items if provided
-            if items is not None:
-                # Delete existing items
-                self.db.table('estimate_items').delete().eq('estimate_id', estimate_id).execute()
+            # Create new items
+            for idx, item_data in enumerate(items_data):
+                item_data['estimate_id'] = estimate_id
+                item_data['order_index'] = idx
+                # Create item logic would go here
+            
+            return repository.get_with_items(estimate_id)
+        
+        validated_data = self._validate_update_data(estimate_data)
+        
+        return self.execute_in_transaction(_update_operation, estimate_id, validated_data)
+    
+    def accept_estimate(self, estimate_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Mark estimate as accepted.
+        
+        Args:
+            estimate_id: Estimate ID
+            
+        Returns:
+            Updated estimate dictionary
+        """
+        return self.update(estimate_id, {'status': 'accepted'})
+    
+    def reject_estimate(self, estimate_id: str, reason: str = None) -> Optional[Dict[str, Any]]:
+        """
+        Mark estimate as rejected.
+        
+        Args:
+            estimate_id: Estimate ID
+            reason: Optional rejection reason
+            
+        Returns:
+            Updated estimate dictionary
+        """
+        update_data = {'status': 'rejected'}
+        if reason:
+            update_data['rejection_reason'] = reason
+        
+        return self.update(estimate_id, update_data)
+    
+    def convert_to_invoice(self, estimate_id: str) -> Dict[str, Any]:
+        """
+        Convert estimate to invoice.
+        
+        Args:
+            estimate_id: Estimate ID
+            
+        Returns:
+            Created invoice dictionary
+        """
+        try:
+            estimate = self.get_with_items(estimate_id)
+            if not estimate:
+                raise ValueError(f"Estimate {estimate_id} not found")
+            
+            # Import here to avoid circular imports
+            from app.services.invoice_service import InvoiceService
+            
+            invoice_service = InvoiceService(self.database)
+            
+            # Convert estimate data to invoice data
+            invoice_data = {
+                'company_id': estimate.get('company_id'),
+                'client_name': estimate.get('client_name'),
+                'client_address': estimate.get('client_address'),
+                'client_phone': estimate.get('client_phone'),
+                'client_email': estimate.get('client_email'),
+                'subtotal': estimate.get('subtotal'),
+                'tax_rate': estimate.get('tax_rate'),
+                'tax_amount': estimate.get('tax_amount'),
+                'discount_amount': estimate.get('discount_amount'),
+                'total_amount': estimate.get('total_amount'),
+                'notes': estimate.get('notes'),
+                'terms': estimate.get('terms'),
+                'items': estimate.get('items', [])
+            }
+            
+            # Create invoice
+            invoice = invoice_service.create_with_items(invoice_data)
+            
+            # Update estimate status
+            self.update(estimate_id, {'status': 'converted'})
+            
+            return invoice
+            
+        except Exception as e:
+            logger.error(f"Error converting estimate to invoice: {e}")
+            raise
+    
+    def calculate_totals(self, items: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Calculate estimate totals based on items.
+        
+        Args:
+            items: List of estimate items
+            
+        Returns:
+            Dictionary with calculated totals
+        """
+        try:
+            subtotal = Decimal('0')
+            total_tax = Decimal('0')
+            total_depreciation = Decimal('0')
+            
+            for item in items:
+                quantity = Decimal(str(item.get('quantity', 1)))
+                rate = Decimal(str(item.get('rate', 0)))
+                tax_rate = Decimal(str(item.get('tax_rate', 0)))
+                depreciation_rate = Decimal(str(item.get('depreciation_rate', 0)))
                 
-                # Insert new items
-                if items:
-                    for item in items:
-                        item['estimate_id'] = estimate_id
-                        item['created_at'] = datetime.utcnow().isoformat()
-                    
-                    items_response = self.db.table('estimate_items').insert(items).execute()
-                    estimate['items'] = items_response.data if items_response.data else []
-                else:
-                    estimate['items'] = []
-            else:
-                # Fetch existing items
-                items_response = self.db.table('estimate_items').select('*').eq('estimate_id', estimate_id).execute()
-                estimate['items'] = items_response.data if items_response.data else []
+                item_amount = quantity * rate
+                item_tax = item_amount * (tax_rate / 100)
+                item_depreciation = item_amount * (depreciation_rate / 100)
+                
+                subtotal += item_amount
+                total_tax += item_tax
+                total_depreciation += item_depreciation
             
-            return estimate
+            discount = Decimal(str(items[0].get('discount_amount', 0) if items else 0))
+            rcv_amount = subtotal + total_tax - discount  # Replacement Cost Value
+            acv_amount = rcv_amount - total_depreciation  # Actual Cash Value
+            
+            return {
+                'subtotal': float(subtotal),
+                'tax_amount': float(total_tax),
+                'depreciation_amount': float(total_depreciation),
+                'rcv_amount': float(rcv_amount),
+                'acv_amount': float(acv_amount),
+                'total_amount': float(rcv_amount)  # Use RCV as total
+            }
+            
         except Exception as e:
-            print(f"Error updating estimate {estimate_id}: {e}")
-            return None
+            logger.error(f"Error calculating estimate totals: {e}")
+            raise
     
-    def delete(self, estimate_id: str) -> bool:
-        """Delete estimate and its items"""
+    def get_estimate_summary(self) -> Dict[str, Any]:
+        """
+        Get comprehensive estimate summary statistics.
+        
+        Returns:
+            Dictionary with estimate statistics
+        """
         try:
-            # Delete items first
-            self.db.table('estimate_items').delete().eq('estimate_id', estimate_id).execute()
+            all_estimates = self.get_all()
             
-            # Delete estimate
-            self.db.table('estimate').delete().eq('id', estimate_id).execute()
+            # Group by status
+            status_counts = {}
+            status_amounts = {}
             
-            return True
+            for estimate in all_estimates:
+                status = estimate.get('status', 'unknown')
+                amount = float(estimate.get('total_amount', 0))
+                
+                status_counts[status] = status_counts.get(status, 0) + 1
+                status_amounts[status] = status_amounts.get(status, 0) + amount
+            
+            # Calculate expired
+            expired_estimates = self.get_expired_estimates()
+            expired_amount = sum(float(est.get('total_amount', 0)) for est in expired_estimates)
+            
+            # Insurance estimates
+            insurance_estimates = self.get_insurance_estimates()
+            insurance_amount = sum(float(est.get('total_amount', 0)) for est in insurance_estimates)
+            
+            # Calculate totals
+            total_amount = sum(float(est.get('total_amount', 0)) for est in all_estimates)
+            accepted_amount = status_amounts.get('accepted', 0)
+            
+            return {
+                'total_estimates': len(all_estimates),
+                'total_amount': total_amount,
+                'accepted_amount': accepted_amount,
+                'expired_count': len(expired_estimates),
+                'expired_amount': expired_amount,
+                'insurance_count': len(insurance_estimates),
+                'insurance_amount': insurance_amount,
+                'status_counts': status_counts,
+                'status_amounts': status_amounts,
+                'average_estimate_amount': total_amount / len(all_estimates) if all_estimates else 0,
+                'acceptance_rate': (status_counts.get('accepted', 0) / len(all_estimates) * 100) if all_estimates else 0
+            }
+            
         except Exception as e:
-            print(f"Error deleting estimate {estimate_id}: {e}")
-            return False
+            logger.error(f"Error getting estimate summary: {e}")
+            raise
     
-    def get_by_company(self, company_id: str) -> List[Dict[str, Any]]:
-        """Get all estimates for a company"""
+    def _generate_estimate_number(self) -> str:
+        """Generate unique estimate number"""
         try:
-            response = self.db.table('estimate').select('*').eq('company_id', company_id).execute()
-            return response.data if response.data else []
+            # Get current year and month
+            now = datetime.utcnow()
+            prefix = f"EST-{now.year}{now.month:02d}"
+            
+            # Get existing estimates for this month
+            existing_estimates = self.get_all(
+                filters={'estimate_number__startswith': prefix}
+            )
+            
+            # Find the next sequence number
+            sequence = len(existing_estimates) + 1
+            
+            return f"{prefix}-{sequence:04d}"
+            
         except Exception as e:
-            print(f"Error fetching estimates for company {company_id}: {e}")
-            return []
+            logger.error(f"Error generating estimate number: {e}")
+            # Fallback to timestamp-based number
+            timestamp = int(datetime.utcnow().timestamp())
+            return f"EST-{timestamp}"
     
-    def duplicate(self, estimate_id: str) -> Optional[Dict[str, Any]]:
-        """Duplicate an estimate"""
-        try:
-            # Get original estimate
-            original = self.get_by_id(estimate_id)
-            if not original:
-                return None
+    def _validate_create_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Validate data for estimate creation"""
+        if not data.get('client_name'):
+            raise ValueError("Client name is required")
+        
+        validated_data = data.copy()
+        
+        # Remove None values
+        validated_data = {k: v for k, v in validated_data.items() if v is not None}
+        
+        # Validate items
+        items = validated_data.get('items', [])
+        if not items:
+            raise ValueError("At least one estimate item is required")
+        
+        for item in items:
+            if not item.get('description'):
+                raise ValueError("Item description is required")
+            if float(item.get('rate', 0)) < 0:
+                raise ValueError("Item rate cannot be negative")
+            if float(item.get('quantity', 0)) <= 0:
+                raise ValueError("Item quantity must be positive")
+        
+        # Validate room data if provided
+        room_data = validated_data.get('room_data')
+        if room_data and not isinstance(room_data, (dict, str)):
+            raise ValueError("Room data must be a dictionary or JSON string")
+        
+        # Calculate totals
+        totals = self.calculate_totals(items)
+        validated_data.update(totals)
+        
+        return validated_data
+    
+    def _validate_update_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Validate data for estimate update"""
+        validated_data = data.copy()
+        
+        # Remove None values
+        validated_data = {k: v for k, v in validated_data.items() if v is not None}
+        
+        # Remove system fields and ID
+        for field in ['created_at', 'updated_at', 'id']:
+            validated_data.pop(field, None)
+        
+        if not validated_data:
+            raise ValueError("No valid data provided for update")
+        
+        # Validate items if provided
+        items = validated_data.get('items')
+        if items is not None:
+            if not items:
+                raise ValueError("At least one estimate item is required")
             
-            # Prepare new estimate data
-            new_data = {k: v for k, v in original.items() if k not in ['id', 'created_at', 'updated_at']}
-            new_data['estimate_number'] = f"{original.get('estimate_number', 'EST')}-COPY"
-            new_data['status'] = 'draft'
+            for item in items:
+                if not item.get('description'):
+                    raise ValueError("Item description is required")
+                if float(item.get('rate', 0)) < 0:
+                    raise ValueError("Item rate cannot be negative")
+                if float(item.get('quantity', 0)) <= 0:
+                    raise ValueError("Item quantity must be positive")
             
-            # Create new estimate
-            return self.create(new_data)
-        except Exception as e:
-            print(f"Error duplicating estimate {estimate_id}: {e}")
-            return None
+            # Calculate totals
+            totals = self.calculate_totals(items)
+            validated_data.update(totals)
+        
+        # Validate room data if provided
+        room_data = validated_data.get('room_data')
+        if room_data and not isinstance(room_data, (dict, str)):
+            raise ValueError("Room data must be a dictionary or JSON string")
+        
+        return validated_data

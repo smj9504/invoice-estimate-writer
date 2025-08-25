@@ -33,7 +33,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         address: initialData.address,
         city: initialData.city,
         state: initialData.state,
-        zip: initialData.zip,
+        zipcode: initialData.zipcode,
         phone: initialData.phone,
         email: initialData.email,
         logo: initialData.logo,
@@ -56,7 +56,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   };
 
   const validateMessages = {
-    required: '${label}을(를) 입력해주세요.',
+    required: '${label}을(를) 입력해주세요.', // eslint-disable-line no-template-curly-in-string
     types: {
       email: '올바른 이메일 형식이 아닙니다.',
     },
@@ -73,7 +73,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         address: '',
         city: '',
         state: '',
-        zip: '',
+        zipcode: '',
         phone: '',
         email: '',
         logo: '',
@@ -137,7 +137,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         </Col>
         <Col xs={24} md={12}>
           <Form.Item
-            name="zip"
+            name="zipcode"
             label="우편번호"
           >
             <Input

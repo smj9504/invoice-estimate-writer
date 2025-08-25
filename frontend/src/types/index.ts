@@ -5,7 +5,7 @@ export interface Company {
   address: string;
   city: string;
   state: string;
-  zip?: string;
+  zipcode?: string;
   phone?: string;
   email?: string;
   logo?: string; // Base64 encoded logo or URL
@@ -19,7 +19,7 @@ export interface CompanyFormData {
   address: string;
   city: string;
   state: string;
-  zip?: string;
+  zipcode?: string;
   phone?: string;
   email?: string;
   logo?: string;
@@ -92,6 +92,76 @@ export interface RoomItem {
   amount: number;
 }
 
+// Work Order Types
+export interface WorkOrder {
+  id: string;
+  work_order_number: string;
+  company_id: string;
+  document_type: DocumentType;
+  client_name: string;
+  client_phone?: string;
+  client_email?: string;
+  client_address?: string;
+  client_city?: string;
+  client_state?: string;
+  client_zipcode?: string;
+  trades: string[];
+  work_description?: string;
+  consultation_notes?: string;
+  base_cost: number;
+  credits_applied: number;
+  final_cost: number;
+  cost_override?: number;
+  status: 'draft' | 'pending' | 'approved' | 'in_progress' | 'completed' | 'cancelled';
+  created_by_staff_id?: string;
+  created_by_staff_name?: string;
+  assigned_to_staff_id?: string;
+  assigned_to_staff_name?: string;
+  created_at: string;
+  updated_at: string;
+  company?: Company;
+}
+
+export interface WorkOrderFormData {
+  company_id: string;
+  document_type: DocumentType;
+  client_name: string;
+  client_phone?: string;
+  client_email?: string;
+  client_address?: string;
+  client_city?: string;
+  client_state?: string;
+  client_zipcode?: string;
+  trades: string[];
+  work_description?: string;
+  consultation_notes?: string;
+  cost_override?: number;
+}
+
+export interface Trade {
+  id: string;
+  name: string;
+  base_cost: number;
+  description?: string;
+}
+
+export interface Credit {
+  id: string;
+  company_id: string;
+  amount: number;
+  description: string;
+  expiry_date?: string;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface CostBreakdown {
+  baseCost: number;
+  creditsApplied: number;
+  finalCost: number;
+  availableCredits: number;
+}
+
 // API Response Types
 export interface ApiResponse<T> {
   data?: T;
@@ -100,8 +170,9 @@ export interface ApiResponse<T> {
 }
 
 export interface PaginatedResponse<T> {
-  data: T[];
+  items: T[];  // Changed from 'data' to match backend
   total: number;
   page: number;
-  pageSize: number;
+  page_size: number;  // Changed from 'pageSize' to match backend
+  total_pages: number;  // Added to match backend
 }

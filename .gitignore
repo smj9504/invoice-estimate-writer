@@ -112,3 +112,5 @@ data/
 # Project specific
 nul
 rendered_report.html
+
+.claude

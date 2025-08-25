@@ -38,9 +38,9 @@ const Dashboard: React.FC = () => {
 
   const statistics = {
     totalDocuments: documentsData?.total || 0,
-    totalRevenue: documentsData?.data?.reduce((sum, doc) => sum + doc.total_amount, 0) || 0,
+    totalRevenue: documentsData?.items?.reduce((sum, doc) => sum + doc.total_amount, 0) || 0,  // Changed data to items
     totalCompanies: companies.length,
-    pendingDocuments: documentsData?.data?.filter(doc => doc.status === 'draft').length || 0,
+    pendingDocuments: documentsData?.items?.filter(doc => doc.status === 'draft').length || 0,  // Changed data to items
   };
 
   const quickActions = [
@@ -153,7 +153,7 @@ const Dashboard: React.FC = () => {
             title="최근 견적서" 
             extra={<Button type="link" onClick={() => navigate('/documents/estimate')}>전체 보기</Button>}
           >
-            {documentsData?.data?.filter(doc => doc.type === 'estimate').slice(0, 3).map(doc => (
+            {documentsData?.items?.filter(doc => doc.type === 'estimate').slice(0, 3).map(doc => (
               <Card.Grid key={doc.id} style={{ width: '100%', cursor: 'pointer' }} onClick={() => navigate(`/documents/${doc.id}`)}>
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>
@@ -171,7 +171,7 @@ const Dashboard: React.FC = () => {
             title="최근 인보이스"
             extra={<Button type="link" onClick={() => navigate('/documents/invoice')}>전체 보기</Button>}
           >
-            {documentsData?.data?.filter(doc => doc.type === 'invoice').slice(0, 3).map(doc => (
+            {documentsData?.items?.filter(doc => doc.type === 'invoice').slice(0, 3).map(doc => (
               <Card.Grid key={doc.id} style={{ width: '100%', cursor: 'pointer' }} onClick={() => navigate(`/documents/${doc.id}`)}>
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>

@@ -6,11 +6,10 @@ from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, Form
 from fastapi.responses import FileResponse, StreamingResponse
-from sqlalchemy.orm import Session
 import json
 import io
 
-from app.database import get_db
+from app.core.database_factory import get_db_session as get_db
 from app.schemas.plumber_report import (
     PlumberReportCreate,
     PlumberReportUpdate,
@@ -20,6 +19,7 @@ from app.schemas.plumber_report import (
 )
 from app.services.plumber_report_service import PlumberReportService
 from app.services.pdf_service import PDFService
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 

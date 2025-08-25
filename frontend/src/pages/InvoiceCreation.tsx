@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Form,
   Input,
@@ -27,7 +27,7 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { invoiceService } from '../services/invoiceService';
 import { companyService } from '../services/companyService';
 import { Company } from '../types';
@@ -56,6 +56,8 @@ interface PaymentRecord {
 const InvoiceCreation: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<InvoiceItem[]>([]);
   const [showInsurance, setShowInsurance] = useState(false);
@@ -73,23 +75,19 @@ const InvoiceCreation: React.FC = () => {
   const [paymentForm] = Form.useForm();
   const [useCustomCompany, setUseCustomCompany] = useState(false);
 
-  useEffect(() => {
-    loadCompanies();
-  }, []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  const loadCompanies = async () => {
+  const loadCompanies = useCallback(async () => {
     try {
       const data = await companyService.getCompanies();
       setCompanies(data);
-      if (data.length > 0) {
+      // Only set default company if not in edit mode
+      if (data.length > 0 && !isEditMode) {
         setSelectedCompany(data[0]);
         form.setFieldsValue({
           company_name: data[0].name,
           company_address: data[0].address,
           company_city: data[0].city,
           company_state: data[0].state,
-          company_zip: data[0].zip,
+          company_zipcode: data[0].zipcode,
           company_phone: data[0].phone,
           company_email: data[0].email,
         });
@@ -97,7 +95,98 @@ const InvoiceCreation: React.FC = () => {
     } catch (error) {
       console.error('Failed to load companies:', error);
     }
-  };
+  }, [form, isEditMode]);
+
+  const loadInvoice = useCallback(async () => {
+    if (!id) return;
+    
+    setLoading(true);
+    try {
+      console.log('Loading invoice with ID:', id);
+      const invoice = await invoiceService.getInvoice(id);
+      console.log('Invoice loaded:', invoice);
+      
+      // Set form values
+      const invoiceData = invoice as any;
+      form.setFieldsValue({
+        invoice_number: invoiceData.invoice_number,
+        date: invoiceData.invoice_date ? dayjs(invoiceData.invoice_date) : invoiceData.date ? dayjs(invoiceData.date) : dayjs(),
+        due_date: invoiceData.due_date ? dayjs(invoiceData.due_date) : undefined,
+        status: invoiceData.status,
+        company_id: invoiceData.company_id,
+        company_name: invoiceData.company_name,
+        company_address: invoiceData.company_address,
+        company_city: invoiceData.company_city,
+        company_state: invoiceData.company_state,
+        company_zipcode: invoiceData.company_zipcode,
+        company_phone: invoiceData.company_phone,
+        company_email: invoiceData.company_email,
+        client_name: invoiceData.client_name,
+        client_address: invoiceData.client_address,
+        client_city: invoiceData.client_city,
+        client_state: invoiceData.client_state,
+        client_zipcode: invoiceData.client_zipcode,
+        client_phone: invoiceData.client_phone,
+        client_email: invoiceData.client_email,
+        tax_rate: invoiceData.tax_rate || 0,
+        discount: invoiceData.discount_amount || invoiceData.discount || 0,
+        notes: invoiceData.notes,
+        terms: invoiceData.terms,
+        payment_terms: invoiceData.payment_terms,
+      });
+      
+      // Set items
+      if (invoiceData.items && invoiceData.items.length > 0) {
+        setItems(invoiceData.items.map((item: any) => ({
+          name: item.name || item.description,
+          description: item.description,
+          quantity: item.quantity,
+          unit: item.unit || 'EA',
+          rate: item.rate || item.unit_price,
+          amount: item.amount || item.total,
+          taxable: item.taxable !== false,
+        })));
+      }
+      
+      // Find and set the selected company
+      if (invoiceData.company_id) {
+        // If companies are loaded, find and set
+        if (companies.length > 0) {
+          const company = companies.find(c => c.id === invoiceData.company_id);
+          if (company) {
+            setSelectedCompany(company);
+          }
+        }
+        // If using custom company info from invoice
+        else if (invoiceData.company_name) {
+          setUseCustomCompany(true);
+        }
+      }
+    } catch (error: any) {
+      console.error('Failed to load invoice:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      message.error(`인보이스를 불러오는데 실패했습니다: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, form, companies]);
+
+  useEffect(() => {
+    loadCompanies();
+  }, [loadCompanies]);
+
+  useEffect(() => {
+    // Load invoice data when in edit mode
+    // Don't wait for companies if they're taking too long
+    if (isEditMode) {
+      // Give companies a chance to load first, but don't wait forever
+      const timer = setTimeout(() => {
+        loadInvoice();
+      }, companies.length > 0 ? 0 : 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isEditMode, companies.length, loadInvoice]);
 
   const handleCompanyChange = (companyId: string) => {
     if (companyId === 'custom') {
@@ -108,7 +197,7 @@ const InvoiceCreation: React.FC = () => {
         company_address: '',
         company_city: '',
         company_state: '',
-        company_zip: '',
+        company_zipcode: '',
         company_phone: '',
         company_email: '',
       });
@@ -122,7 +211,7 @@ const InvoiceCreation: React.FC = () => {
           company_address: company.address,
           company_city: company.city,
           company_state: company.state,
-          company_zip: company.zip,
+          company_zipcode: company.zipcode,
           company_phone: company.phone,
           company_email: company.email,
         });
@@ -146,23 +235,91 @@ const InvoiceCreation: React.FC = () => {
 
   const handleItemSubmit = () => {
     itemForm.validateFields().then(values => {
+      // Comprehensive validation with user-friendly error messages
+      
+      // Validate item name/description
+      if (!values.name || values.name.toString().trim() === '') {
+        message.error('Please enter a valid item name');
+        return;
+      }
+
+      // Validate quantity
+      if (!values.quantity || values.quantity <= 0) {
+        message.error('Please enter a valid quantity greater than 0');
+        return;
+      }
+
+      // Validate unit
+      if (!values.unit || values.unit.toString().trim() === '') {
+        message.error('Please select a unit for the item');
+        return;
+      }
+
+      // Validate rate
+      if (values.rate === null || values.rate === undefined || values.rate <= 0) {
+        message.error('Please enter a valid rate greater than $0');
+        return;
+      }
+
+      // Additional validation for numeric values
+      if (isNaN(values.quantity) || isNaN(values.rate)) {
+        message.error('Quantity and rate must be valid numbers');
+        return;
+      }
+
       const newItem: InvoiceItem = {
         ...values,
-        amount: values.quantity * values.rate,
+        name: values.name.toString().trim(),
+        description: values.description ? values.description.toString().trim() : '',
+        quantity: Number(values.quantity),
+        rate: Number(values.rate),
+        amount: Number(values.quantity) * Number(values.rate),
+        taxable: values.taxable !== false, // Default to taxable if not specified
       };
 
       if (editingIndex !== null) {
         const updatedItems = [...items];
         updatedItems[editingIndex] = newItem;
         setItems(updatedItems);
+        message.success('Item updated successfully');
       } else {
         setItems([...items, newItem]);
+        message.success('Item added successfully');
       }
 
       setItemModalVisible(false);
       itemForm.resetFields();
       setEditingItem(null);
       setEditingIndex(null);
+    }).catch(error => {
+      console.error('Item validation failed:', error);
+      
+      // Handle specific validation errors
+      if (error.errorFields && error.errorFields.length > 0) {
+        const firstError = error.errorFields[0];
+        if (firstError.name && firstError.name.length > 0) {
+          const fieldName = firstError.name[0];
+          const errorMessages = firstError.errors || [];
+          
+          if (fieldName === 'name') {
+            message.error('Please enter a valid item name');
+          } else if (fieldName === 'quantity') {
+            message.error('Please enter a valid quantity greater than 0');
+          } else if (fieldName === 'unit') {
+            message.error('Please select a unit for the item');
+          } else if (fieldName === 'rate') {
+            message.error('Please enter a valid rate greater than $0');
+          } else if (errorMessages.length > 0) {
+            message.error(errorMessages[0]);
+          } else {
+            message.error('Please fill in all required item information');
+          }
+        } else {
+          message.error('Please fill in all required item information');
+        }
+      } else {
+        message.error('Please fill in all required item information');
+      }
     });
   };
 
@@ -174,23 +331,41 @@ const InvoiceCreation: React.FC = () => {
   const handleAddPayment = () => {
     paymentForm.resetFields();
     paymentForm.setFieldsValue({
+      amount: undefined,
       date: dayjs(),
       method: '',
+      reference: '',
     });
     setPaymentModalVisible(true);
   };
 
   const handlePaymentSubmit = () => {
     paymentForm.validateFields().then(values => {
+      // Validate payment amount
+      if (!values.amount || values.amount <= 0) {
+        message.error('Please enter a valid payment amount greater than $0');
+        return;
+      }
+
+      // Validate date
+      if (!values.date) {
+        message.error('Please select a payment date');
+        return;
+      }
+
       const newPayment: PaymentRecord = {
         amount: values.amount,
         date: values.date,
-        method: values.method,
-        reference: values.reference,
+        method: values.method || '',
+        reference: values.reference || '',
       };
       setPayments([...payments, newPayment]);
       setPaymentModalVisible(false);
       paymentForm.resetFields();
+      message.success('Payment added successfully');
+    }).catch(error => {
+      console.error('Payment validation failed:', error);
+      message.error('Please fill in all required payment information');
     });
   };
 
@@ -269,7 +444,7 @@ const InvoiceCreation: React.FC = () => {
           address: values.company_address || '',
           city: values.company_city || '',
           state: values.company_state || '',
-          zip: values.company_zip || '',
+          zipcode: values.company_zipcode || '',
           phone: values.company_phone || '',
           email: values.company_email || '',
           logo: '',
@@ -282,7 +457,7 @@ const InvoiceCreation: React.FC = () => {
         address: values.client_address,
         city: values.client_city,
         state: values.client_state,
-        zip: values.client_zip,
+        zipcode: values.client_zipcode,
         phone: values.client_phone,
         email: values.client_email,
       };
@@ -308,9 +483,19 @@ const InvoiceCreation: React.FC = () => {
       invoiceData.notes = values.notes;
 
       console.log('Sending invoice data:', invoiceData);
-      const response = await invoiceService.createInvoice(invoiceData);
-      message.success('Invoice saved successfully!');
-      navigate(`/invoices/${response.id}`);
+      
+      let response;
+      if (isEditMode && id) {
+        // Update existing invoice
+        response = await invoiceService.updateInvoice(id, invoiceData);
+        message.success('인보이스가 수정되었습니다!');
+      } else {
+        // Create new invoice
+        response = await invoiceService.createInvoice(invoiceData);
+        message.success('인보이스가 저장되었습니다!');
+      }
+      
+      navigate(`/documents/invoice`);
     } catch (error) {
       message.error('Failed to save invoice');
       console.error(error);
@@ -347,7 +532,7 @@ const InvoiceCreation: React.FC = () => {
           address: values.company_address || selectedCompany?.address || '',
           city: values.company_city || selectedCompany?.city || '',
           state: values.company_state || selectedCompany?.state || '',
-          zip: values.company_zip || selectedCompany?.zip || '',
+          zipcode: values.company_zipcode || selectedCompany?.zipcode || '',
           phone: values.company_phone || selectedCompany?.phone || '',
           email: values.company_email || selectedCompany?.email || '',
           logo: selectedCompany?.logo || '',
@@ -357,7 +542,7 @@ const InvoiceCreation: React.FC = () => {
           address: values.client_address,
           city: values.client_city,
           state: values.client_state,
-          zip: values.client_zip,
+          zipcode: values.client_zipcode,
           phone: values.client_phone,
           email: values.client_email,
         },
@@ -489,7 +674,7 @@ const InvoiceCreation: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Title level={2}>Create Invoice</Title>
+      <Title level={2}>{isEditMode ? '인보이스 수정' : '인보이스 작성'}</Title>
       
       <Form
         form={form}
@@ -592,7 +777,7 @@ const InvoiceCreation: React.FC = () => {
                       </Form.Item>
                     </Col>
                     <Col xs={24} md={8}>
-                      <Form.Item name="company_zip" label="ZIP">
+                      <Form.Item name="company_zipcode" label="ZIP">
                         <Input placeholder="ZIP" />
                       </Form.Item>
                     </Col>
@@ -642,7 +827,7 @@ const InvoiceCreation: React.FC = () => {
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={8}>
-                  <Form.Item name="client_zip" label="ZIP">
+                  <Form.Item name="client_zipcode" label="ZIP">
                     <Input />
                   </Form.Item>
                 </Col>
@@ -893,7 +1078,7 @@ const InvoiceCreation: React.FC = () => {
               onClick={() => handleSave('draft')}
               loading={loading}
             >
-              Save as Draft
+              {isEditMode ? '수정하기' : '임시 저장'}
             </Button>
             <Button
               type="primary"
@@ -901,7 +1086,7 @@ const InvoiceCreation: React.FC = () => {
               onClick={() => handleSave('sent')}
               loading={loading}
             >
-              Save & Send
+              {isEditMode ? '수정 완료' : '저장 & 발송'}
             </Button>
             <Button
               icon={<EyeOutlined />}
@@ -943,33 +1128,52 @@ const InvoiceCreation: React.FC = () => {
           <Form.Item
             name="name"
             label="Item Name"
-            rules={[{ required: true, message: 'Please enter item name' }]}
+            rules={[
+              { required: true, message: 'Please enter item name' },
+              { whitespace: true, message: 'Item name cannot be empty or just whitespace' },
+              { min: 1, message: 'Item name is required' }
+            ]}
           >
-            <Input />
+            <Input placeholder="Enter item name" />
           </Form.Item>
           <Form.Item
             name="description"
             label="Description"
           >
-            <TextArea rows={3} />
+            <TextArea rows={3} placeholder="Optional description" />
           </Form.Item>
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
                 name="quantity"
                 label="Quantity"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: 'Please enter quantity' },
+                  { 
+                    type: 'number',
+                    min: 0.01,
+                    message: 'Quantity must be greater than 0'
+                  }
+                ]}
               >
-                <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                <InputNumber 
+                  style={{ width: '100%' }} 
+                  min={0.01} 
+                  step={1} 
+                  precision={2}
+                  placeholder="Enter quantity"
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="unit"
                 label="Unit"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: 'Please select unit' }
+                ]}
               >
-                <Select>
+                <Select placeholder="Select unit">
                   <Option value="ea">Each</Option>
                   <Option value="hr">Hour</Option>
                   <Option value="day">Day</Option>
@@ -985,14 +1189,26 @@ const InvoiceCreation: React.FC = () => {
               <Form.Item
                 name="rate"
                 label="Rate"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: 'Please enter rate' },
+                  { 
+                    type: 'number',
+                    min: 0.01,
+                    message: 'Rate must be greater than $0'
+                  }
+                ]}
               >
                 <InputNumber
                   style={{ width: '100%' }}
-                  min={0}
+                  min={0.01}
                   step={0.01}
+                  precision={2}
+                  placeholder="Enter rate"
                   formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={((value: any) => parseFloat(value!.replace(/\$\s?|(,*)/g, '')) || 0) as any}
+                  parser={((value: any) => {
+                    const parsed = parseFloat(value!.replace(/\$\s?|(,*)/g, ''));
+                    return isNaN(parsed) ? undefined : parsed;
+                  }) as any}
                 />
               </Form.Item>
             </Col>
@@ -1029,8 +1245,10 @@ const InvoiceCreation: React.FC = () => {
           form={paymentForm}
           layout="vertical"
           initialValues={{
+            amount: undefined,
             date: dayjs(),
             method: '',
+            reference: '',
           }}
         >
           <Row gutter={16}>
@@ -1038,14 +1256,26 @@ const InvoiceCreation: React.FC = () => {
               <Form.Item
                 name="amount"
                 label="Amount"
-                rules={[{ required: true, message: 'Please enter payment amount' }]}
+                rules={[
+                  { required: true, message: 'Please enter payment amount' },
+                  { 
+                    type: 'number',
+                    min: 0.01,
+                    message: 'Payment amount must be greater than $0'
+                  }
+                ]}
               >
                 <InputNumber
                   style={{ width: '100%' }}
-                  min={0}
+                  min={0.01}
                   step={0.01}
+                  precision={2}
+                  placeholder="Enter amount"
                   formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={((value: any) => parseFloat(value!.replace(/\$\s?|(,*)/g, '')) || 0) as any}
+                  parser={((value: any) => {
+                    const parsed = parseFloat(value!.replace(/\$\s?|(,*)/g, ''));
+                    return isNaN(parsed) ? undefined : parsed;
+                  }) as any}
                 />
               </Form.Item>
             </Col>
@@ -1053,9 +1283,9 @@ const InvoiceCreation: React.FC = () => {
               <Form.Item
                 name="date"
                 label="Payment Date"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: 'Please select payment date' }]}
               >
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker style={{ width: '100%' }} placeholder="Select date" />
               </Form.Item>
             </Col>
             <Col span={12}>

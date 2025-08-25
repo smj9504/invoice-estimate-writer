@@ -1,8 +1,12 @@
 import axios from 'axios';
 
 // Create axios instance with base configuration
+// Use empty string to use relative URLs (for proxy to work)
+const baseURL = process.env.REACT_APP_API_URL || '';
+console.log('API Base URL:', baseURL || 'Using relative URLs (proxy mode)'); // Debug log
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000/api',
+  baseURL: baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

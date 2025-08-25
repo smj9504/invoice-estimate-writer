@@ -2,13 +2,12 @@
 Document API endpoints (combined estimates and invoices)
 """
 
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from typing import Optional
 import io
 from app.schemas.document import Document, DocumentFilter, PaginatedDocuments
 from app.services.document_service import DocumentService
-from app.core.database import get_db
 
 router = APIRouter()
 
@@ -21,46 +20,67 @@ async def get_documents(
     date_to: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
     page: int = Query(1, ge=1),
-    pageSize: int = Query(20, ge=1, le=100),
-    db=Depends(get_db)
+    pageSize: int = Query(20, ge=1, le=100)
 ):
     """Get documents with filters and pagination"""
-    service = DocumentService(db)
+    import logging
+    logger = logging.getLogger(__name__)
     
-    filter_params = DocumentFilter(
-        type=type,
-        status=status,
-        company_id=company_id,
-        date_from=date_from,
-        date_to=date_to,
-        search=search
-    )
-    
-    result = service.get_documents(filter_params, page, pageSize)
-    return result
+    try:
+        logger.info(f"Getting documents with filters: type={type}, status={status}, page={page}, pageSize={pageSize}")
+        # Don't pass db to DocumentService, it will get its own database provider
+        service = DocumentService()
+        
+        filter_params = DocumentFilter(
+            type=type,
+            status=status,
+            company_id=company_id,
+            date_from=date_from,
+            date_to=date_to,
+            search=search
+        )
+        
+        result = service.get_documents(filter_params, page, pageSize)
+        logger.info(f"Documents retrieved: total={result.total}, items={len(result.items)}")
+        return result
+    except Exception as e:
+        logger.error(f"Error getting documents: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        raise
 
 @router.get("/{document_id}")
-async def get_document(document_id: str, db=Depends(get_db)):
+async def get_document(document_id: str):
     """Get single document by ID"""
-    service = DocumentService(db)
+    # Check if document_id is actually a document type filter
+    # Document types: estimate, invoice, insurance_estimate, plumber_report
+    if document_id in ['estimate', 'invoice', 'insurance_estimate', 'plumber_report']:
+        # This is actually a type filter, redirect to the list endpoint
+        # Return 404 as this is not a valid document ID endpoint
+        raise HTTPException(
+            status_code=404, 
+            detail=f"Invalid endpoint. Use /api/documents/?type={document_id} to filter by type"
+        )
+    
+    service = DocumentService()
     document = service.get_document(document_id)
     if not document:
         raise HTTPException(status_code=404, detail="Document not found")
     return {"data": document}
 
 @router.delete("/{document_id}")
-async def delete_document(document_id: str, db=Depends(get_db)):
+async def delete_document(document_id: str):
     """Delete document"""
-    service = DocumentService(db)
+    service = DocumentService()
     success = service.delete_document(document_id)
     if not success:
         raise HTTPException(status_code=404, detail="Document not found")
     return {"message": "Document deleted successfully"}
 
 @router.post("/{document_id}/duplicate")
-async def duplicate_document(document_id: str, db=Depends(get_db)):
+async def duplicate_document(document_id: str):
     """Duplicate document"""
-    service = DocumentService(db)
+    service = DocumentService()
     try:
         new_document = service.duplicate_document(document_id)
         if not new_document:
@@ -70,9 +90,9 @@ async def duplicate_document(document_id: str, db=Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/{document_id}/pdf")
-async def generate_pdf(document_id: str, db=Depends(get_db)):
+async def generate_pdf(document_id: str):
     """Generate PDF for document"""
-    service = DocumentService(db)
+    service = DocumentService()
     
     try:
         pdf_bytes = service.generate_pdf(document_id)
@@ -90,9 +110,9 @@ async def generate_pdf(document_id: str, db=Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/{document_id}/send")
-async def send_document(document_id: str, email: str, db=Depends(get_db)):
+async def send_document(document_id: str, email: str):
     """Send document via email"""
-    service = DocumentService(db)
+    service = DocumentService()
     try:
         success = service.send_document(document_id, email)
         if not success:
@@ -102,9 +122,9 @@ async def send_document(document_id: str, email: str, db=Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/export")
-async def export_documents(filter_params: DocumentFilter, db=Depends(get_db)):
+async def export_documents(filter_params: DocumentFilter):
     """Export documents to Excel"""
-    service = DocumentService(db)
+    service = DocumentService()
     try:
         excel_bytes = service.export_to_excel(filter_params)
         

@@ -7,7 +7,7 @@ export interface ClientInfo {
   address?: string;
   city?: string;
   state?: string;
-  zip?: string;
+  zipcode?: string;
   phone?: string;
   email?: string;
 }
@@ -16,7 +16,7 @@ export interface PropertyInfo {
   address?: string;
   city?: string;
   state?: string;
-  zip?: string;
+  zipcode?: string;
 }
 
 export interface InvoiceItem {
@@ -202,7 +202,7 @@ class PlumberReportService {
   }
 
   generateReportNumber(): string {
-    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '').slice(0, 14);
+    const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);
     return `PLR-${timestamp}`;
   }
 }

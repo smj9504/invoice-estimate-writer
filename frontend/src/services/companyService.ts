@@ -9,32 +9,34 @@ export const companyService = {
     if (city) params.append('city', city);
     if (state) params.append('state', state);
     
-    const response = await api.get(`/companies/?${params.toString()}`);
+    const url = `/api/companies/?${params.toString()}`;
+    console.log('Requesting companies from:', url);
+    const response = await api.get(url);
     return response.data.data;
   },
 
   // Get single company by ID
   getCompany: async (id: string): Promise<Company> => {
-    const response = await api.get(`/companies/${id}`);
+    const response = await api.get(`/api/companies/${id}`);
     return response.data.data;
   },
 
   // Create new company
   createCompany: async (data: CompanyFormData): Promise<Company> => {
-    const response = await api.post('/companies/', data);
+    const response = await api.post('/api/companies/', data);
     return response.data.data;
   },
 
   // Update existing company
   updateCompany: async (id: string, data: Partial<CompanyFormData>): Promise<Company> => {
-    const response = await api.put(`/companies/${id}`, data);
+    const response = await api.put(`/api/companies/${id}`, data);
     return response.data.data;
   },
 
   // Delete company
   deleteCompany: async (id: string): Promise<void> => {
     console.log('Deleting company with ID:', id);
-    const response = await api.delete(`/companies/${id}`);
+    const response = await api.delete(`/api/companies/${id}`);
     console.log('Delete response:', response);
     return response.data;
   },
@@ -44,7 +46,7 @@ export const companyService = {
     const formData = new FormData();
     formData.append('file', file);
     
-    const response = await api.post(`/companies/${companyId}/logo`, formData, {
+    const response = await api.post(`/api/companies/${companyId}/logo`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
