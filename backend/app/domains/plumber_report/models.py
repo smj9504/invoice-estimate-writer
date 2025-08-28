@@ -2,7 +2,7 @@
 Plumber Report model for database
 """
 
-from sqlalchemy import Column, String, Text, Float, Boolean, DateTime, JSON, Integer, ForeignKey
+from sqlalchemy import Column, String, Text, Float, Boolean, DateTime, JSON, Integer, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -14,9 +14,15 @@ from app.core.database_factory import Base
 class PlumberReport(Base):
     """Plumber Report model"""
     __tablename__ = "plumber_reports"
+    __table_args__ = (
+        Index('ix_report_number_version', 'report_number', 'version'),
+        {'extend_existing': True}
+    )
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    report_number = Column(String, unique=True, nullable=False)
+    report_number = Column(String, nullable=False, index=True)
+    version = Column(Integer, default=1, nullable=False)
+    is_latest = Column(Boolean, default=True, nullable=False)
     template_type = Column(String, default="standard")  # For future customization
     status = Column(String, default="draft")  # draft, final, sent
     

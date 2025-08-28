@@ -17,15 +17,17 @@ class DocumentNumberService:
             'invoice': 'INV',
             'estimate': 'EST',
             'plumber_report': 'PLM',
-            'insurance_estimate': 'INS'
+            'insurance_estimate': 'INS',
+            'work_order': 'WO'
         }
         
         # Map document types to their database tables
         self.TABLE_MAP = {
-            'invoice': 'general_invoice',
-            'estimate': 'estimate',  # Corrected table name
+            'invoice': 'invoices',
+            'estimate': 'estimates',
             'plumber_report': 'plumber_reports',
-            'insurance_estimate': 'insurance_estimates'
+            'insurance_estimate': 'estimates',  # Uses estimates table
+            'work_order': 'work_orders'
         }
     
     def extract_street_number(self, address: str) -> str:
@@ -73,7 +75,8 @@ class DocumentNumberService:
             'invoice': 'invoice_number',
             'estimate': 'estimate_number',
             'plumber_report': 'report_number',
-            'insurance_estimate': 'estimate_number'
+            'insurance_estimate': 'estimate_number',
+            'work_order': 'work_order_number'
         }
         return field_map.get(document_type, 'document_number')
     
@@ -116,7 +119,7 @@ class DocumentNumberService:
         return document_number
     
     def _number_exists(self, document_type: str, document_number: str) -> bool:
-        """Check if a document number already exists"""
+        """Check if a document number already exists (considering latest version only)"""
         try:
             table_name = self.TABLE_MAP.get(document_type)
             if not table_name:
@@ -127,11 +130,55 @@ class DocumentNumberService:
             response = self.db.table(table_name).select('id').eq(
                 number_field, 
                 document_number
-            ).execute()
+            ).eq('is_latest', True).execute()
             
             return bool(response.data)
         except:
             return False
+    
+    def get_latest_version(self, document_type: str, document_number: str) -> int:
+        """Get the latest version number for a document"""
+        try:
+            table_name = self.TABLE_MAP.get(document_type)
+            if not table_name:
+                return 0
+                
+            number_field = self._get_number_field(document_type)
+            
+            response = self.db.table(table_name).select('version').eq(
+                number_field, 
+                document_number
+            ).order('version', desc=True).limit(1).execute()
+            
+            if response.data and len(response.data) > 0:
+                return response.data[0].get('version', 0)
+            return 0
+        except Exception as e:
+            print(f"Error getting latest version for {document_type} {document_number}: {e}")
+            return 0
+    
+    def create_new_version(self, document_type: str, document_number: str) -> int:
+        """Create a new version for an existing document number"""
+        try:
+            # Get current latest version
+            current_version = self.get_latest_version(document_type, document_number)
+            new_version = current_version + 1
+            
+            # Update all existing versions to is_latest=False
+            table_name = self.TABLE_MAP.get(document_type)
+            if table_name:
+                number_field = self._get_number_field(document_type)
+                
+                # Update existing records
+                self.db.table(table_name).update({'is_latest': False}).eq(
+                    number_field,
+                    document_number
+                ).execute()
+            
+            return new_version
+        except Exception as e:
+            print(f"Error creating new version for {document_type} {document_number}: {e}")
+            return 1
     
     def get_company_code(self, company_name: str) -> Optional[str]:
         """Get company code by company name"""

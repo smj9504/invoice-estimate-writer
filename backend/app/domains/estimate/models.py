@@ -2,16 +2,23 @@
 Estimate domain models
 """
 
-from sqlalchemy import Column, String, Integer, DateTime, Text, ForeignKey, DECIMAL, JSON
+from sqlalchemy import Column, String, Integer, DateTime, Text, ForeignKey, DECIMAL, JSON, Boolean, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from app.core.database_factory import Base
 from app.core.base_models import BaseModel
 
 
-class Estimate(BaseModel):
+class Estimate(Base, BaseModel):
     __tablename__ = "estimates"
+    __table_args__ = (
+        Index('ix_estimate_number_version', 'estimate_number', 'version'),
+        {'extend_existing': True}
+    )
 
-    estimate_number = Column(String(50), unique=True, nullable=False)
+    estimate_number = Column(String(50), nullable=False, index=True)
+    version = Column(Integer, default=1, nullable=False)
+    is_latest = Column(Boolean, default=True, nullable=False)
     company_id = Column(String, ForeignKey("companies.id"))
     client_name = Column(String(255), nullable=False)
     client_address = Column(Text)
@@ -50,7 +57,7 @@ class Estimate(BaseModel):
     items = relationship("EstimateItem", back_populates="estimate", cascade="all, delete-orphan")
 
 
-class EstimateItem(BaseModel):
+class EstimateItem(Base, BaseModel):
     __tablename__ = "estimate_items"
 
     estimate_id = Column(String, ForeignKey("estimates.id"))

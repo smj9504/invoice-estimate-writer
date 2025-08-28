@@ -2,16 +2,23 @@
 Invoice domain models
 """
 
-from sqlalchemy import Column, String, Integer, DateTime, Text, ForeignKey, DECIMAL
+from sqlalchemy import Column, String, Integer, DateTime, Text, ForeignKey, DECIMAL, Boolean, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from app.core.database_factory import Base
 from app.core.base_models import BaseModel
 
 
-class Invoice(BaseModel):
+class Invoice(Base, BaseModel):
     __tablename__ = "invoices"
+    __table_args__ = (
+        Index('ix_invoice_number_version', 'invoice_number', 'version'),
+        {'extend_existing': True}
+    )
 
-    invoice_number = Column(String(50), unique=True, nullable=False)
+    invoice_number = Column(String(50), nullable=False, index=True)
+    version = Column(Integer, default=1, nullable=False)
+    is_latest = Column(Boolean, default=True, nullable=False)
     company_id = Column(String, ForeignKey("companies.id"))
     client_name = Column(String(255), nullable=False)
     client_address = Column(Text)
@@ -40,7 +47,7 @@ class Invoice(BaseModel):
     items = relationship("InvoiceItem", back_populates="invoice", cascade="all, delete-orphan")
 
 
-class InvoiceItem(BaseModel):
+class InvoiceItem(Base, BaseModel):
     __tablename__ = "invoice_items"
 
     invoice_id = Column(String, ForeignKey("invoices.id"))

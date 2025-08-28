@@ -2,7 +2,7 @@
 Work Order database models
 """
 
-from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum
+from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum, Integer, Index
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -34,12 +34,17 @@ class DocumentType(str, enum.Enum):
 class WorkOrder(Base):
     """Work Order model"""
     __tablename__ = "work_orders"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = (
+        Index('ix_work_order_number_version', 'work_order_number', 'version'),
+        {'extend_existing': True}
+    )
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     
     # Work Order Information
-    work_order_number = Column(String(50), unique=True, nullable=False, index=True)
+    work_order_number = Column(String(50), nullable=False, index=True)
+    version = Column(Integer, default=1, nullable=False)
+    is_latest = Column(Boolean, default=True, nullable=False)
     
     # Company relationship
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
