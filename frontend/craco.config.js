@@ -1,17 +1,21 @@
-// Use environment variable or default to localhost:8000
-const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+const path = require('path');
 
 module.exports = {
-  devServer: {
-    proxy: {
-      '/api': {
-        target: API_URL,
-        changeOrigin: true,
-      },
+  // Webpack configuration
+  webpack: {
+    configure: (webpackConfig) => {
+      // Set public path for proper routing
+      webpackConfig.output.publicPath = '/';
+      return webpackConfig;
     },
-    setupMiddlewares: (middlewares, devServer) => {
-      // Custom middleware configuration here if needed
-      return middlewares;
+  },
+  // Dev server configuration
+  devServer: {
+    port: 3000,
+    hot: true,
+    historyApiFallback: {
+      index: '/index.html',
+      disableDotRule: true,
     },
   },
 };

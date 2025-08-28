@@ -27,6 +27,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 
 import { companyService } from '../services/companyService';
 import { workOrderService } from '../services/workOrderService';
+import documentTypeService from '../services/documentTypeService';
 import CompanySelector from '../components/work-order/CompanySelector';
 import CostCalculationPanel from '../components/work-order/CostCalculationPanel';
 import RichTextEditor from '../components/editor/RichTextEditor';
@@ -74,16 +75,16 @@ const WorkOrderCreation: React.FC = () => {
     }
   }, [companiesError]);
 
-  // Load available trades (using mock data for now)
+  // Load available trades from backend
   const { data: trades = [] } = useQuery({
     queryKey: ['trades'],
-    queryFn: () => Promise.resolve(workOrderService.getMockTrades()),
+    queryFn: () => documentTypeService.getTrades(),
   });
 
-  // Load document types (using mock data for now)
+  // Load document types from backend
   const { data: documentTypes = [] } = useQuery({
     queryKey: ['documentTypes'],
-    queryFn: () => Promise.resolve(workOrderService.getMockDocumentTypes()),
+    queryFn: () => documentTypeService.getDocumentTypes(),
   });
 
   // Create work order mutation
@@ -222,7 +223,7 @@ const WorkOrderCreation: React.FC = () => {
                 <Select placeholder="Select document type" size="large">
                   {documentTypes.map(type => (
                     <Option key={type.id} value={type.id}>
-                      {type.name} {type.base_cost > 0 && `(Base: $${type.base_cost})`}
+                      {type.name} {parseFloat(type.base_price) > 0 && `(Base: $${parseFloat(type.base_price).toFixed(2)})`}
                     </Option>
                   ))}
                 </Select>
@@ -243,13 +244,15 @@ const WorkOrderCreation: React.FC = () => {
                   }
                 >
                   {trades.map(trade => (
-                    <Option key={trade.id} value={trade.name.toLowerCase()}>
+                    <Option key={trade.id} value={trade.id}>
                       <Space>
                         <ToolOutlined />
                         {trade.name}
-                        <span style={{ color: '#666', fontSize: '12px' }}>
-                          (+${trade.base_cost})
-                        </span>
+                        {trade.category && (
+                          <span style={{ color: '#666', fontSize: '11px' }}>
+                            ({trade.category})
+                          </span>
+                        )}
                       </Space>
                     </Option>
                   ))}

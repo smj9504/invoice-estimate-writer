@@ -11,16 +11,21 @@ import {
   Tag,
   Tooltip,
   Alert,
-  Spin
+  Spin,
+  Checkbox
 } from 'antd';
 import {
   DollarOutlined,
   CreditCardOutlined,
   CalculatorOutlined,
   InfoCircleOutlined,
-  EditOutlined
+  EditOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
+import documentTypeService from '../../services/documentTypeService';
 import { CostBreakdown, Credit } from '../../types';
+import type { DocumentType } from '../../types/documentTypes';
 
 const { Title, Text } = Typography;
 

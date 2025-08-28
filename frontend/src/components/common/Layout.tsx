@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout as AntLayout, Menu, Avatar, Dropdown, Space } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -10,8 +10,12 @@ import {
   LogoutOutlined,
   SettingOutlined,
   ProjectOutlined,
+  BarChartOutlined,
+  ToolOutlined,
+  DatabaseOutlined,
 } from '@ant-design/icons';
 import { useStore } from '../../store/useStore';
+import { useAuth } from '../../contexts/AuthContext';
 
 const { Header, Sider, Content } = AntLayout;
 
@@ -23,70 +27,112 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { selectedCompany } = useStore();
+  const { user, logout, isAdmin, isManager } = useAuth();
 
-  const menuItems = [
-    {
-      key: '/dashboard',
-      icon: <DashboardOutlined />,
-      label: '대시보드',
-    },
-    {
-      key: '/companies',
-      icon: <TeamOutlined />,
-      label: '회사 관리',
-    },
-    {
-      key: '/documents',
-      icon: <FileTextOutlined />,
-      label: '서류 목록',
-      children: [
-        {
-          key: '/documents/estimate',
-          label: '견적서',
-        },
-        {
-          key: '/documents/invoice',
-          label: '인보이스',
-        },
-        {
-          key: '/documents/insurance_estimate',
-          label: '보험 견적서',
-        },
-      ],
-    },
-    {
-      key: '/work-orders',
-      icon: <ProjectOutlined />,
-      label: '작업 지시서',
-    },
-    {
-      key: '/create',
-      icon: <PlusOutlined />,
-      label: '서류 작성',
-      children: [
-        {
-          key: '/create/estimate',
-          label: '견적서 작성',
-        },
-        {
-          key: '/create/invoice',
-          label: '인보이스 작성',
-        },
-        {
-          key: '/create/insurance',
-          label: '보험 견적서 작성',
-        },
-        {
-          key: '/create/plumber',
-          label: '배관공 보고서 작성',
-        },
-        {
-          key: '/create/work-order',
-          label: '작업 지시서 작성',
-        },
-      ],
-    },
-  ];
+  const menuItems = useMemo(() => {
+    const items = [
+      {
+        key: '/dashboard',
+        icon: <DashboardOutlined />,
+        label: '대시보드',
+      },
+      {
+        key: '/documents',
+        icon: <FileTextOutlined />,
+        label: '서류 목록',
+        children: [
+          {
+            key: '/documents/estimate',
+            label: '견적서',
+          },
+          {
+            key: '/documents/invoice',
+            label: '인보이스',
+          },
+          {
+            key: '/documents/insurance_estimate',
+            label: '보험 견적서',
+          },
+        ],
+      },
+      {
+        key: '/work-orders',
+        icon: <ProjectOutlined />,
+        label: '작업 지시서',
+      },
+      {
+        key: '/create',
+        icon: <PlusOutlined />,
+        label: '서류 작성',
+        children: [
+          {
+            key: '/create/estimate',
+            label: '견적서 작성',
+          },
+          {
+            key: '/create/invoice',
+            label: '인보이스 작성',
+          },
+          {
+            key: '/create/insurance',
+            label: '보험 견적서 작성',
+          },
+          {
+            key: '/create/plumber',
+            label: '배관공 보고서 작성',
+          },
+          {
+            key: '/create/work-order',
+            label: '작업 지시서 작성',
+          },
+        ],
+      },
+    ];
+
+    // Add admin menus only for admin users
+    if (isAdmin()) {
+      items.push({
+        key: '/admin',
+        icon: <SettingOutlined />,
+        label: '관리자',
+        children: [
+          {
+            key: '/admin/dashboard',
+            label: '관리자 대시보드',
+          },
+          {
+            key: '/admin/database',
+            label: '데이터베이스 관리',
+          },
+          {
+            key: '/admin/document-types',
+            label: '문서 유형 관리',
+          },
+          {
+            key: '/admin/trades',
+            label: '업종 관리',
+          },
+          {
+            key: '/admin/users',
+            label: '사용자 관리',
+          },
+          {
+            key: '/companies',
+            label: '회사 관리',
+          },
+        ],
+      });
+    } else if (isManager()) {
+      // Managers can manage companies but not system settings
+      items.push({
+        key: '/companies',
+        icon: <TeamOutlined />,
+        label: '회사 관리',
+      });
+    }
+
+    return items;
+  }, [isAdmin, isManager]);
 
   const userMenuItems = [
     {
@@ -111,8 +157,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'logout') {
-      // Handle logout
-      localStorage.removeItem('auth_token');
+      logout();
       navigate('/login');
     } else if (key === 'profile') {
       navigate('/profile');
@@ -176,7 +221,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Dropdown menu={{ items: userMenuItems, onClick: handleMenuClick }} placement="bottomRight">
             <Space style={{ cursor: 'pointer' }}>
               <Avatar icon={<UserOutlined />} />
-              <span>사용자</span>
+              <span>{user?.full_name || user?.username || '사용자'}</span>
             </Space>
           </Dropdown>
         </Header>

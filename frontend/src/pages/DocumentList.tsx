@@ -154,7 +154,7 @@ const DocumentList: React.FC = () => {
       dataIndex: 'total_amount',
       key: 'total_amount',
       width: 120,
-      render: (amount: number) => `₩${amount.toLocaleString()}`,
+      render: (amount: number) => `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     },
     {
       title: '상태',

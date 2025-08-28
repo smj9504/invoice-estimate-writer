@@ -6,16 +6,20 @@ from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Query
 from typing import List, Optional
 import logging
 
-from app.schemas.company import Company, CompanyCreate, CompanyUpdate, CompanyResponse, CompaniesResponse
-from app.services.service_factory import get_company_service_dependency
-from app.services.company_service import CompanyService
+from app.domains.company.schemas import CompanyCreate, CompanyUpdate, CompanyResponse, CompanyPaginatedResponse
+from app.domains.company.service import CompanyService
+from app.core.database_factory import get_database
+
+def get_company_service():
+    """Get company service instance"""
+    return CompanyService(get_database())
 from app.core.interfaces import DatabaseException, ValidationError
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.get("/", response_model=CompaniesResponse)
+@router.get("/", response_model=CompanyPaginatedResponse)
 async def get_companies(
     search: Optional[str] = Query(None, description="Search term for name, address, email, or phone"),
     city: Optional[str] = Query(None, description="Filter by city"),
@@ -23,7 +27,7 @@ async def get_companies(
     limit: Optional[int] = Query(None, description="Maximum number of results", ge=1, le=1000),
     offset: Optional[int] = Query(None, description="Number of results to skip", ge=0),
     include_stats: bool = Query(False, description="Include statistics for each company"),
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Get all companies with optional search, filters, and pagination.
@@ -54,7 +58,7 @@ async def get_companies(
             if limit:
                 companies = companies[:limit]
             
-            return CompaniesResponse(data=companies, total=len(companies))
+            return CompanyPaginatedResponse(data=companies, total=len(companies))
         else:
             result = service.get_companies_with_filters(
                 search=search,
@@ -63,7 +67,7 @@ async def get_companies(
                 limit=limit,
                 offset=offset
             )
-            return CompaniesResponse(
+            return CompanyPaginatedResponse(
                 data=result['companies'],
                 total=result['total'],
                 count=result['count']
@@ -77,11 +81,11 @@ async def get_companies(
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@router.get("/search", response_model=CompaniesResponse)
+@router.get("/search", response_model=CompanyPaginatedResponse)
 async def search_companies(
     q: str = Query(..., description="Search query", min_length=1),
     limit: Optional[int] = Query(50, description="Maximum number of results", ge=1, le=1000),
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Search companies by name, address, email, or phone.
@@ -96,7 +100,7 @@ async def search_companies(
         if limit and len(companies) > limit:
             companies = companies[:limit]
         
-        return CompaniesResponse(data=companies, total=len(companies))
+        return CompanyPaginatedResponse(data=companies, total=len(companies))
         
     except DatabaseException as e:
         logger.error(f"Database error in search_companies: {e}")
@@ -110,7 +114,7 @@ async def search_companies(
 async def get_company(
     company_id: str,
     include_summary: bool = Query(False, description="Include comprehensive summary with statistics"),
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Get single company by ID.
@@ -142,7 +146,7 @@ async def get_company(
 @router.get("/by-email/{email}", response_model=CompanyResponse)
 async def get_company_by_email(
     email: str,
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Get company by email address.
@@ -170,7 +174,7 @@ async def get_company_by_email(
 @router.post("/", response_model=CompanyResponse)
 async def create_company(
     company: CompanyCreate,
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Create new company.
@@ -211,7 +215,7 @@ async def create_company(
 async def update_company(
     company_id: str,
     company: CompanyUpdate,
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Update company.
@@ -253,7 +257,7 @@ async def update_company(
 async def delete_company(
     company_id: str,
     force: bool = Query(False, description="Force delete even with dependent records"),
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Delete company.
@@ -289,7 +293,7 @@ async def delete_company(
 async def upload_logo(
     company_id: str,
     file: UploadFile = File(...),
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Upload company logo as base64.
@@ -315,7 +319,7 @@ async def upload_logo(
 
 @router.get("/stats/summary")
 async def get_companies_summary(
-    service: CompanyService = Depends(get_company_service_dependency)
+    service: CompanyService = Depends(get_company_service)
 ):
     """
     Get summary statistics for all companies.

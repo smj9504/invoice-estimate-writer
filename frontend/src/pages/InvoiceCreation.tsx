@@ -1075,18 +1075,10 @@ const InvoiceCreation: React.FC = () => {
             <Button
               type="primary"
               icon={<SaveOutlined />}
-              onClick={() => handleSave('draft')}
-              loading={loading}
-            >
-              {isEditMode ? '수정하기' : '임시 저장'}
-            </Button>
-            <Button
-              type="primary"
-              icon={<SaveOutlined />}
               onClick={() => handleSave('sent')}
               loading={loading}
             >
-              {isEditMode ? '수정 완료' : '저장 & 발송'}
+              {isEditMode ? '수정 완료' : '저장하기'}
             </Button>
             <Button
               icon={<EyeOutlined />}

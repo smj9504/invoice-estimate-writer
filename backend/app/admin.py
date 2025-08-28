@@ -9,10 +9,12 @@ from starlette.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import secrets
 
-from app.models.sqlalchemy_models import (
-    Company, Invoice, InvoiceItem, 
-    Estimate, EstimateItem, PlumberReport, Document
-)
+from app.domains.company.models import Company
+from app.domains.invoice.models import Invoice, InvoiceItem
+from app.domains.estimate.models import Estimate, EstimateItem
+from app.domains.plumber_report.models import PlumberReport
+from app.domains.document.models import Document
+from app.document_types.models import DocumentType, Trade
 
 # Simple authentication for admin panel (you can enhance this later)
 class AdminAuth(AuthenticationBackend):
@@ -362,6 +364,99 @@ class DocumentAdmin(ModelView, model=Document):
         }.get(m.document_type, m.document_type)
     }
     page_size = 50
+
+
+class DocumentTypeAdmin(ModelView, model=DocumentType):
+    name = "문서 유형"
+    name_plural = "문서 유형 목록"
+    icon = "fa-solid fa-file-contract"
+    
+    column_list = [
+        DocumentType.id,
+        DocumentType.name,
+        DocumentType.code,
+        DocumentType.category,
+        DocumentType.base_price,
+        DocumentType.is_active,
+        DocumentType.display_order
+    ]
+    
+    column_labels = {
+        "id": "ID",
+        "name": "문서 유형명",
+        "code": "코드",
+        "description": "설명",
+        "category": "카테고리",
+        "base_price": "기본 가격",
+        "pricing_rules": "가격 규칙",
+        "requires_measurement_report": "측정 보고서 필요",
+        "measurement_report_providers": "측정 보고서 제공자",
+        "template_name": "템플릿 이름",
+        "is_active": "활성화",
+        "is_available_online": "온라인 가능",
+        "display_order": "표시 순서",
+        "created_at": "생성일",
+        "updated_at": "수정일",
+        "created_by": "생성자",
+        "updated_by": "수정자"
+    }
+    
+    column_searchable_list = [DocumentType.name, DocumentType.code]
+    column_sortable_list = [DocumentType.name, DocumentType.base_price, DocumentType.display_order]
+    column_default_sort = [(DocumentType.display_order, False)]
+    column_formatters = {
+        DocumentType.base_price: lambda m, a: f"${m.base_price:,.2f}" if m.base_price else "$0.00",
+        DocumentType.is_active: lambda m, a: "✅ 활성" if m.is_active else "❌ 비활성"
+    }
+    page_size = 50
+    
+    form_excluded_columns = ['created_at', 'updated_at']
+    
+
+class TradeAdmin(ModelView, model=Trade):
+    name = "업종"
+    name_plural = "업종 목록"
+    icon = "fa-solid fa-tools"
+    
+    column_list = [
+        Trade.id,
+        Trade.name,
+        Trade.code,
+        Trade.category,
+        Trade.is_active,
+        Trade.requires_license,
+        Trade.requires_insurance,
+        Trade.display_order
+    ]
+    
+    column_labels = {
+        "id": "ID",
+        "name": "업종명",
+        "code": "코드",
+        "description": "설명",
+        "category": "카테고리",
+        "is_active": "활성화",
+        "requires_license": "면허 필요",
+        "requires_insurance": "보험 필요",
+        "license_type": "면허 유형",
+        "display_order": "표시 순서",
+        "created_at": "생성일",
+        "updated_at": "수정일",
+        "created_by": "생성자",
+        "updated_by": "수정자"
+    }
+    
+    column_searchable_list = [Trade.name, Trade.code, Trade.category]
+    column_sortable_list = [Trade.name, Trade.category, Trade.display_order]
+    column_default_sort = [(Trade.display_order, False)]
+    column_formatters = {
+        Trade.is_active: lambda m, a: "✅ 활성" if m.is_active else "❌ 비활성",
+        Trade.requires_license: lambda m, a: "✅ 필요" if m.requires_license else "➖",
+        Trade.requires_insurance: lambda m, a: "✅ 필요" if m.requires_insurance else "➖"
+    }
+    page_size = 50
+    
+    form_excluded_columns = ['created_at', 'updated_at']
 
 
 def setup_admin(app, engine):

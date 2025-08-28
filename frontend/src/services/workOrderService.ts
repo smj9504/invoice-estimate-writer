@@ -97,33 +97,71 @@ export const workOrderService = {
   },
 
   // Status updates
-  async updateWorkOrderStatus(id: string, status: WorkOrder['status']): Promise<WorkOrder> {
-    const response = await api.patch(`/api/work-orders/${id}`, { status });
+  async updateWorkOrderStatus(id: string, status: WorkOrder['status'], comment?: string): Promise<WorkOrder> {
+    const response = await api.patch(`/api/work-orders/${id}`, { 
+      status,
+      ...(comment && { status_change_comment: comment })
+    });
     return response.data;
   },
 
-  // Mock data for development (can be removed when backend is ready)
-  getMockTrades(): Trade[] {
-    return [
-      { id: '1', name: 'Plumbing', base_cost: 150, description: 'General plumbing work' },
-      { id: '2', name: 'Electrical', base_cost: 200, description: 'Electrical installations and repairs' },
-      { id: '3', name: 'HVAC', base_cost: 300, description: 'Heating, ventilation, and air conditioning' },
-      { id: '4', name: 'Carpentry', base_cost: 120, description: 'Carpentry and woodwork' },
-      { id: '5', name: 'Painting', base_cost: 80, description: 'Interior and exterior painting' },
-      { id: '6', name: 'Roofing', base_cost: 400, description: 'Roof repairs and installation' },
-      { id: '7', name: 'Flooring', base_cost: 250, description: 'Floor installation and repair' },
-      { id: '8', name: 'Drywall', base_cost: 100, description: 'Drywall installation and repair' }
-    ];
+  // Activity and comments
+  async getWorkOrderActivities(workOrderId: string): Promise<any[]> {
+    const response = await api.get(`/api/work-orders/${workOrderId}/activities`);
+    return response.data;
   },
 
-  getMockDocumentTypes() {
-    return [
-      { id: 'estimate', name: 'Estimate', base_cost: 50 },
-      { id: 'invoice', name: 'Invoice', base_cost: 0 },
-      { id: 'insurance_estimate', name: 'Insurance Estimate', base_cost: 100 },
-      { id: 'plumber_report', name: 'Plumber\'s Report', base_cost: 200 }
-    ];
-  }
+  async addComment(workOrderId: string, comment: string): Promise<any> {
+    const response = await api.post(`/api/work-orders/${workOrderId}/comments`, {
+      comment,
+    });
+    return response.data;
+  },
+
+  // Payment management
+  async getWorkOrderPayments(workOrderId: string): Promise<any[]> {
+    const response = await api.get(`/api/work-orders/${workOrderId}/payments`);
+    return response.data;
+  },
+
+  async addPayment(workOrderId: string, paymentData: {
+    amount: number;
+    payment_method: string;
+    payment_date: string;
+    reference_number?: string;
+    notes?: string;
+    status: string;
+  }): Promise<any> {
+    const response = await api.post(`/api/work-orders/${workOrderId}/payments`, paymentData);
+    return response.data;
+  },
+
+  async updatePayment(paymentId: string, paymentData: Partial<{
+    amount: number;
+    payment_method: string;
+    payment_date: string;
+    reference_number?: string;
+    notes?: string;
+    status: string;
+  }>): Promise<any> {
+    const response = await api.patch(`/api/payments/${paymentId}`, paymentData);
+    return response.data;
+  },
+
+  async deletePayment(paymentId: string): Promise<void> {
+    await api.delete(`/api/payments/${paymentId}`);
+  },
+
+  // Notifications
+  async sendNotification(workOrderId: string, notificationType: 'email' | 'sms', recipientType: 'client' | 'staff', message?: string): Promise<any> {
+    const response = await api.post(`/api/work-orders/${workOrderId}/notifications`, {
+      type: notificationType,
+      recipient_type: recipientType,
+      message,
+    });
+    return response.data;
+  },
+
 };
 
 export default workOrderService;

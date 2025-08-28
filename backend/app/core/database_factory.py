@@ -305,7 +305,18 @@ class SQLiteDatabase(DatabaseProvider):
     def init_database(self):
         """Create all tables if they don't exist"""
         try:
-            from app.models.sqlalchemy_models import Base
+            # Import all models to ensure they are registered with Base
+            import app.domains.auth.models
+            import app.domains.company.models
+            import app.domains.invoice.models
+            import app.domains.estimate.models
+            import app.domains.document.models
+            import app.domains.plumber_report.models
+            import app.domains.document_types.models
+            import app.domains.work_order.models
+            import app.domains.payment.models
+            import app.domains.credit.models
+            import app.domains.staff.models
             from sqlalchemy import inspect
             
             # Check if tables already exist
@@ -399,7 +410,18 @@ class PostgreSQLDatabase(DatabaseProvider):
     def init_database(self):
         """Create all tables if they don't exist"""
         try:
-            from app.models.sqlalchemy_models import Base
+            # Import all models to ensure they are registered with Base
+            import app.domains.auth.models
+            import app.domains.company.models
+            import app.domains.invoice.models
+            import app.domains.estimate.models
+            import app.domains.document.models
+            import app.domains.plumber_report.models
+            import app.domains.document_types.models
+            import app.domains.work_order.models
+            import app.domains.payment.models
+            import app.domains.credit.models
+            import app.domains.staff.models
             from sqlalchemy import inspect
             
             # Check if tables already exist

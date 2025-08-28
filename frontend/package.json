@@ -2,7 +2,9 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/",
   "dependencies": {
+    "@ant-design/charts": "^2.6.2",
     "@ant-design/icons": "^6.0.0",
     "@tanstack/react-query": "^5.85.5",
     "@testing-library/dom": "^10.4.1",
@@ -21,6 +23,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.8.1",
     "react-scripts": "5.0.1",
+    "recharts": "^3.1.2",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5",
@@ -36,6 +39,7 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:8000",
   "eslintConfig": {
     "extends": [
       "react-app",

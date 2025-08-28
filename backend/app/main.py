@@ -5,24 +5,33 @@ Main application entry point with comprehensive database abstraction system
 
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from datetime import datetime
 import logging
 import sys
+import os
+from pathlib import Path
 from contextlib import asynccontextmanager
 
 # API and core imports
 from app.api import companies_modular
-from app.api import companies, documents, estimates, invoices
-from app.work_order import api as work_order_api
-from app.payment import api as payment_api
-from app.credit import api as credit_api
-from app.staff import api as staff_api
+from app.domains.company.api import router as company_router
+from app.domains.invoice.api import router as invoice_router
+from app.domains.estimate.api import router as estimate_router
+from app.domains.plumber_report.api import router as plumber_report_router
+from app.domains.document.api import router as document_router
+from app.domains.work_order.api import router as work_order_router
+from app.domains.payment.api import router as payment_router
+from app.domains.credit.api import router as credit_router
+from app.domains.staff.api import router as staff_router
+from app.domains.document_types.api import router as document_types_router
+from app.domains.auth.api import router as auth_router
 from app.core.config import settings
 from app.core.database_factory import get_database, db_factory
-from app.services.service_factory import get_service_factory
+# Service factory removed - using direct service instantiation
 from app.core.interfaces import DatabaseException, ConnectionError, ConfigurationError
 
 # Configure logging
@@ -57,9 +66,7 @@ async def lifespan(app: FastAPI):
         else:
             logger.warning("Database health check failed, but continuing...")
         
-        # Initialize service factory
-        service_factory = get_service_factory()
-        service_factory.set_database(database)
+        # Services now use database directly via dependency injection
         
         # Initialize database tables
         if hasattr(database, 'init_database'):
@@ -83,7 +90,7 @@ async def lifespan(app: FastAPI):
         logger.info("Shutting down application...")
         try:
             db_factory.reset()
-            get_service_factory().reset()
+            # Services cleanup handled individually
             logger.info("Application shutdown completed")
         except Exception as e:
             logger.error(f"Error during shutdown: {e}")
@@ -183,43 +190,50 @@ async def configuration_exception_handler(request: Request, exc: ConfigurationEr
 
 # Setup SQLAdmin directly on the FastAPI app
 # This must happen AFTER middleware setup
-database = get_database()
-if hasattr(database, 'engine'):
-    try:
-        from sqladmin import Admin
-        from app.admin import (
-            AdminAuth, CompanyAdmin, InvoiceAdmin, InvoiceItemAdmin, 
-            EstimateAdmin, EstimateItemAdmin, PlumberReportAdmin, DocumentAdmin
-        )
-        
-        # Create authentication backend
-        authentication_backend = AdminAuth(secret_key=settings.SECRET_KEY)
-        
-        # Create admin instance directly on the FastAPI app
-        # Do NOT specify base_url parameter
-        admin = Admin(
-            app, 
-            database.engine,
-            title="MJ Estimate Database Admin",
-            authentication_backend=authentication_backend
-        )
-        
-        # Add all model views
-        admin.add_view(CompanyAdmin)
-        admin.add_view(InvoiceAdmin)
-        admin.add_view(InvoiceItemAdmin)
-        admin.add_view(EstimateAdmin)
-        admin.add_view(EstimateItemAdmin)
-        admin.add_view(PlumberReportAdmin)
-        admin.add_view(DocumentAdmin)
-        
-        logger.info("SQLAdmin successfully initialized at /admin")
-    except Exception as e:
-        logger.error(f"Failed to initialize SQLAdmin: {e}", exc_info=True)
-else:
-    logger.warning("Database does not have engine attribute - SQLAdmin not initialized")
+# Temporarily disabled due to SQLAlchemy model compatibility issues
+# database = get_database()
+# if hasattr(database, 'engine'):
+#     try:
+#         from sqladmin import Admin
+#         from app.admin import (
+#             AdminAuth, CompanyAdmin, InvoiceAdmin, InvoiceItemAdmin, 
+#             EstimateAdmin, EstimateItemAdmin, PlumberReportAdmin, DocumentAdmin,
+#             DocumentTypeAdmin, TradeAdmin
+#         )
+#         
+#         # Create authentication backend
+#         authentication_backend = AdminAuth(secret_key=settings.SECRET_KEY)
+#         
+#         # Create admin instance directly on the FastAPI app
+#         # Do NOT specify base_url parameter
+#         admin = Admin(
+#             app, 
+#             database.engine,
+#             title="MJ Estimate Database Admin",
+#             authentication_backend=authentication_backend
+#         )
+#         
+#         # Add all model views
+#         admin.add_view(CompanyAdmin)
+#         admin.add_view(InvoiceAdmin)
+#         admin.add_view(InvoiceItemAdmin)
+#         admin.add_view(EstimateAdmin)
+#         admin.add_view(EstimateItemAdmin)
+#         admin.add_view(PlumberReportAdmin)
+#         admin.add_view(DocumentAdmin)
+#         admin.add_view(DocumentTypeAdmin)
+#         admin.add_view(TradeAdmin)
+#         
+#         logger.info("SQLAdmin successfully initialized at /admin")
+#     except Exception as e:
+#         logger.error(f"Failed to initialize SQLAdmin: {e}", exc_info=True)
+# else:
+#     logger.warning("Database does not have engine attribute - SQLAdmin not initialized")
 
 # Include routers AFTER SQLAdmin setup
+# Authentication endpoints
+app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+
 # New modular endpoints
 app.include_router(
     companies_modular.router, 
@@ -227,17 +241,28 @@ app.include_router(
     tags=["Companies (Modular)"]
 )
 
-# Legacy endpoints (for backward compatibility)
-app.include_router(companies.router, prefix="/api/companies", tags=["Companies (Legacy)"])
-app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
-app.include_router(estimates.router, prefix="/api/estimates", tags=["Estimates"])
-app.include_router(invoices.router, prefix="/api/invoices", tags=["Invoices"])
+# New domain-driven endpoints
+app.include_router(company_router, prefix="/api/companies", tags=["Companies"])
+app.include_router(invoice_router, prefix="/api/invoices", tags=["Invoices"])
+app.include_router(estimate_router, prefix="/api/estimates", tags=["Estimates"])
+app.include_router(plumber_report_router, prefix="/api/plumber-reports", tags=["Plumber Reports"])
+app.include_router(document_router, prefix="/api/documents", tags=["Documents"])
 
 # New Work Order System endpoints
-app.include_router(work_order_api.router, prefix="/api/work-orders", tags=["Work Orders"])
-app.include_router(payment_api.router, prefix="/api/payments", tags=["Payments & Billing"])
-app.include_router(credit_api.router, prefix="/api/credits", tags=["Credits & Discounts"])
-app.include_router(staff_api.router, prefix="/api/staff", tags=["Staff Management"])
+app.include_router(work_order_router, prefix="/api/work-orders", tags=["Work Orders"])
+app.include_router(payment_router, prefix="/api/payments", tags=["Payments & Billing"])
+app.include_router(credit_router, prefix="/api/credits", tags=["Credits & Discounts"])
+app.include_router(staff_router, prefix="/api/staff", tags=["Staff Management"])
+
+# Document Types and Trades endpoints
+app.include_router(document_types_router, prefix="/api", tags=["Document Types & Trades"])
+
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    """Simple health check endpoint"""
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
 
 # System information endpoints
@@ -265,8 +290,8 @@ async def health_check():
         database = get_database()
         db_healthy = database.health_check()
         
-        service_factory = get_service_factory()
-        service_info = service_factory.get_service_info()
+        # Services are domain-based now
+        service_info = {"status": "domain-based", "healthy": True}
         
         return {
             "status": "healthy" if db_healthy else "degraded",
@@ -304,7 +329,7 @@ async def system_info():
     """Get detailed system information"""
     try:
         database = get_database()
-        service_factory = get_service_factory()
+        # Services are domain-based now
         
         return {
             "application": {
@@ -314,7 +339,7 @@ async def system_info():
                 "debug": settings.DEBUG
             },
             "database": db_factory.get_database_info(),
-            "services": service_factory.get_service_info(),
+            "services": {"status": "domain-based", "healthy": True},
             "configuration": {
                 "cors_origins": settings.CORS_ORIGINS,
                 "log_level": settings.LOG_LEVEL,
@@ -322,7 +347,7 @@ async def system_info():
             },
             "features": {
                 "modular_database": True,
-                "service_factory": True,
+                "service_factory": False,
                 "error_handling": True,
                 "connection_pooling": True,
                 "retry_mechanisms": True,
@@ -354,8 +379,7 @@ async def switch_database_provider(provider: str):
         
         # Create new database with specified provider
         database = db_factory.create_database(provider)
-        service_factory = get_service_factory()
-        service_factory.set_database(database)
+        # Services now use database directly via dependency injection
         
         return {
             "message": f"Successfully switched to {provider} database",
@@ -376,6 +400,46 @@ async def switch_database_provider(provider: str):
         )
 
 
+# Serve React build files in production (optional)
+# Check if frontend build directory exists
+frontend_build_path = Path(__file__).parent.parent.parent / "frontend" / "build"
+frontend_static_path = frontend_build_path / "static"
+
+# Log the actual paths being checked for debugging
+logger.info(f"Looking for frontend build at: {frontend_build_path.absolute()}")
+logger.info(f"Frontend build exists: {frontend_build_path.exists()}")
+logger.info(f"Frontend static exists: {frontend_static_path.exists()}")
+
+if frontend_build_path.exists() and frontend_static_path.exists():
+    logger.info(f"Serving static files from {frontend_build_path}")
+    
+    # Mount static files for assets
+    app.mount("/static", StaticFiles(directory=str(frontend_static_path)), name="static")
+    
+    # Serve index.html for all non-API routes (React Router support)
+    # IMPORTANT: This catch-all route should be registered AFTER all API routes
+    # Temporarily commenting out to fix API routing issues
+    # @app.get("/{full_path:path}")
+    # async def serve_react_app(full_path: str):
+    #     """Serve React app for all non-API routes"""
+    #     # Don't serve React app for API routes
+    #     if full_path.startswith("api/"):
+    #         raise HTTPException(status_code=404, detail="API endpoint not found")
+    #     
+    #     # Check if it's a specific file request
+    #     file_path = frontend_build_path / full_path
+    #     if file_path.exists() and file_path.is_file():
+    #         return FileResponse(str(file_path))
+    #     
+    #     # For all other routes, serve index.html (React Router will handle it)
+    #     index_path = frontend_build_path / "index.html"
+    #     if index_path.exists():
+    #         return FileResponse(str(index_path))
+    #     else:
+    #         raise HTTPException(status_code=404, detail="React app not found")
+else:
+    logger.info(f"Frontend build directory not found at {frontend_build_path}")
+    logger.info("Running in API-only mode. To serve the React app from FastAPI, run 'npm run build' in the frontend directory")
 
 
 if __name__ == "__main__":
