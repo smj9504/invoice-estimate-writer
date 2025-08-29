@@ -35,7 +35,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
   loading = false,
   height = 400,
   showComparison = true,
-  title = '매출 추이'
+  title = 'Revenue Trend'
 }) => {
   const [chartType, setChartType] = useState<ChartType>('area');
   const [timeRange, setTimeRange] = useState<TimeRange>('daily');
@@ -101,11 +101,11 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
 
   const formatCurrency = (value: number) => {
     if (value >= 1000000) {
-      return `₩${(value / 1000000).toFixed(1)}M`;
+      return `$${(value / 1000000).toFixed(1)}M`;
     } else if (value >= 1000) {
-      return `₩${(value / 1000).toFixed(0)}K`;
+      return `$${(value / 1000).toFixed(0)}K`;
     }
-    return `₩${value.toLocaleString()}`;
+    return `$${value.toLocaleString()}`;
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -123,7 +123,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
             {data.displayDate}
           </p>
           <p style={{ margin: '4px 0', color: '#1890ff' }}>
-            매출: {formatCurrency(data.revenue)}
+            Revenue: {formatCurrency(data.revenue)}
           </p>
           <p style={{ margin: 0, color: '#52c41a' }}>
             주문수: {data.work_orders}건
@@ -174,7 +174,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
               stroke="#1890ff"
               strokeWidth={3}
               dot={{ fill: '#1890ff', r: 4 }}
-              name="매출"
+              name="Revenue"
             />
             {showComparison && (
               <Line
@@ -236,7 +236,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
               fillOpacity={1}
               fill="url(#colorRevenue)"
               strokeWidth={2}
-              name="매출"
+              name="Revenue"
             />
             {showComparison && (
               <Area
@@ -283,7 +283,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
               yAxisId="revenue"
               dataKey="revenue"
               fill="#1890ff"
-              name="매출"
+              name="Revenue"
               radius={[4, 4, 0, 0]}
             />
             {showComparison && (
@@ -367,7 +367,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
             {formatCurrency(totalRevenue)}
           </Text>
           <br />
-          <Text type="secondary">총 매출</Text>
+          <Text type="secondary">Total Revenue</Text>
         </div>
         <div style={{ textAlign: 'center' }}>
           <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
@@ -381,7 +381,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
             {formatCurrency(averageOrderValue)}
           </Text>
           <br />
-          <Text type="secondary">평균 주문 금액</Text>
+          <Text type="secondary">Average Order Amount</Text>
         </div>
       </div>
 

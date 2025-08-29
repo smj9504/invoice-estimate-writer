@@ -422,7 +422,7 @@ const AdminDashboard: React.FC = () => {
           <MetricCard
             title="이달 매출"
             value={stats?.revenue_this_month || 0}
-            prefix="₩"
+            prefix="$"
             precision={0}
             color="#52c41a"
             loading={dashboardLoading}
@@ -430,7 +430,7 @@ const AdminDashboard: React.FC = () => {
               value: stats?.revenue_trend || 0,
               label: "지난달 대비"
             }}
-            formatter={(value) => `₩${Number(value).toLocaleString()}`}
+            formatter={(value) => `$${Number(value).toLocaleString()}`}
             tooltip="현재 월의 총 매출액"
           />
         </Col>
@@ -553,7 +553,7 @@ const AdminDashboard: React.FC = () => {
                     <Text type="secondary">{item.count}건</Text>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <Text strong>₩{item.revenue.toLocaleString()}</Text>
+                    <Text strong>${item.revenue.toLocaleString()}</Text>
                   </div>
                 </div>
               ))}
@@ -594,7 +594,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <Text strong>₩{item.revenue.toLocaleString()}</Text>
+                    <Text strong>${item.revenue.toLocaleString()}</Text>
                     <br />
                     <Tag color={item.trend === 'up' ? 'green' : item.trend === 'down' ? 'red' : 'blue'}>
                       {item.trend === 'up' ? '상승' : item.trend === 'down' ? '하락' : '안정'}
@@ -699,7 +699,7 @@ const AdminDashboard: React.FC = () => {
                           </Badge>
                         }
                         title={staff.staff_name}
-                        description={`완료: ${staff.completed_orders}건 • 매출: ₩${staff.revenue_generated.toLocaleString()}`}
+                        description={`완료: ${staff.completed_orders}건 • 매출: $${staff.revenue_generated.toLocaleString()}`}
                       />
                       <div>
                         <Tooltip title="평점">

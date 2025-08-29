@@ -12,25 +12,29 @@ export const companyService = {
     const url = `/api/companies/?${params.toString()}`;
     console.log('Requesting companies from:', url);
     const response = await api.get(url);
-    return response.data.data;
+    // Backend returns PaginatedResponse with 'items' field
+    return response.data.items || [];
   },
 
   // Get single company by ID
   getCompany: async (id: string): Promise<Company> => {
     const response = await api.get(`/api/companies/${id}`);
-    return response.data.data;
+    // Backend returns CompanyResponse directly
+    return response.data;
   },
 
   // Create new company
   createCompany: async (data: CompanyFormData): Promise<Company> => {
     const response = await api.post('/api/companies/', data);
-    return response.data.data;
+    // Backend returns CompanyResponse directly
+    return response.data;
   },
 
   // Update existing company
   updateCompany: async (id: string, data: Partial<CompanyFormData>): Promise<Company> => {
     const response = await api.put(`/api/companies/${id}`, data);
-    return response.data.data;
+    // Backend returns CompanyResponse directly
+    return response.data;
   },
 
   // Delete company

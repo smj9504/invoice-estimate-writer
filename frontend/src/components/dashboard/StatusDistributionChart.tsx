@@ -271,10 +271,10 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
           onChange={(e) => setChartType(e.target.value)}
           size="small"
         >
-          <Radio.Button value="donut">도넛</Radio.Button>
-          <Radio.Button value="pie">원형</Radio.Button>
-          <Radio.Button value="bar">막대</Radio.Button>
-          <Radio.Button value="list">목록</Radio.Button>
+          <Radio.Button value="donut">Donut</Radio.Button>
+          <Radio.Button value="pie">Pie</Radio.Button>
+          <Radio.Button value="bar">Bar</Radio.Button>
+          <Radio.Button value="list">List</Radio.Button>
         </Radio.Group>
       }
     >

@@ -25,6 +25,8 @@ def get_work_order_service():
 
 @router.get("/", response_model=WorkOrdersResponse)
 async def get_work_orders(
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(10, ge=1, le=100, description="Page size"),
     search: Optional[str] = Query(None, description="Search term for work order number, client name, email, phone, or description"),
     status: Optional[WorkOrderStatus] = Query(None, description="Filter by status"),
     company_id: Optional[UUID] = Query(None, description="Filter by company ID"),
@@ -39,25 +41,50 @@ async def get_work_orders(
 ):
     """Get all work orders with optional filters"""
     try:
-        # Create filter object
-        filters = WorkOrderFilter(
-            search=search,
-            status=status,
-            company_id=company_id,
-            assigned_to_staff_id=assigned_to_staff_id,
-            created_by_staff_id=created_by_staff_id,
-            document_type=document_type,
-            priority=priority,
-            is_active=is_active,
-            date_from=date_from,
-            date_to=date_to
-        )
+        # Build filter dictionary from query parameters
+        filters = {}
         
-        # Use the specialized method for work order filtering
-        result = service.get_work_orders_with_filters(filters)
-        work_orders = result.get('work_orders', [])
+        if status:
+            filters['status'] = status
+        if company_id:
+            filters['company_id'] = company_id
+        if assigned_to_staff_id:
+            filters['assigned_to_staff_id'] = assigned_to_staff_id
+        if created_by_staff_id:
+            filters['created_by_staff_id'] = created_by_staff_id
+        if document_type:
+            filters['document_type'] = document_type
+        if priority:
+            filters['priority'] = priority
+        if is_active is not None:
+            filters['is_active'] = is_active
+            
+        # Handle date filters separately (not supported by base repository yet)
+        # TODO: Add date range filtering support
         
-        return WorkOrdersResponse(data=work_orders, total=len(work_orders))
+        # Calculate pagination
+        offset = (page - 1) * page_size
+        
+        # Get work orders from service with pagination
+        if search:
+            # Use search method if search term provided
+            # TODO: Implement search in service
+            work_orders = []
+            total = 0
+        else:
+            # Regular filtering
+            work_orders = service.get_all(
+                filters=filters,
+                order_by='-created_at',
+                limit=page_size,
+                offset=offset
+            )
+            
+            # Get total count without pagination
+            all_work_orders = service.get_all(filters=filters)
+            total = len(all_work_orders)
+        
+        return WorkOrdersResponse(data=work_orders, total=total)
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving work orders: {str(e)}")

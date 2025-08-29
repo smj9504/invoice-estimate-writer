@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
             <Statistic
               title="총 매출"
               value={statistics.totalRevenue}
-              prefix="₩"
+              prefix="$"
               precision={0}
               valueStyle={{ color: '#52c41a' }}
             />
@@ -158,7 +158,7 @@ const Dashboard: React.FC = () => {
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                     <span>{doc.document_number}</span>
-                    <span>₩{doc.total_amount.toLocaleString()}</span>
+                    <span>${doc.total_amount.toLocaleString()}</span>
                   </Space>
                   <span style={{ color: '#999', fontSize: '12px' }}>{doc.client_name}</span>
                 </Space>
@@ -176,7 +176,7 @@ const Dashboard: React.FC = () => {
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                     <span>{doc.document_number}</span>
-                    <span>₩{doc.total_amount.toLocaleString()}</span>
+                    <span>${doc.total_amount.toLocaleString()}</span>
                   </Space>
                   <span style={{ color: '#999', fontSize: '12px' }}>{doc.client_name}</span>
                 </Space>

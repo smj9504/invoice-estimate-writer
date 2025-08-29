@@ -11,6 +11,7 @@ export const documentService = {
     };
     
     const response = await apiClient.get<PaginatedResponse<Document>>('/api/documents/', { params });
+    // Backend returns PaginatedDocuments with 'items' field directly
     return response.data;
   },
 

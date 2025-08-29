@@ -185,7 +185,8 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
                 # Convert Pydantic filter to dict, excluding None values
                 filter_dict = filters.dict(exclude_none=True)
                 
-                work_orders = repository.get_with_filters(filter_dict)
+                # Use get_all with filters
+                work_orders = repository.get_all(filters=filter_dict)
                 
                 return {
                     'work_orders': work_orders,

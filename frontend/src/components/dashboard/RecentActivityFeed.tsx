@@ -71,20 +71,20 @@ const ACTIVITY_COLORS = {
 };
 
 const ACTIVITY_LABELS = {
-  work_order_created: '작업 지시서 생성',
-  status_changed: '상태 변경',
-  payment_received: '결제 완료',
-  staff_activity: '직원 활동',
-  document_created: '문서 생성',
-  document_updated: '문서 수정',
-  document_deleted: '문서 삭제',
-  system_alert: '시스템 알림'
+  work_order_created: 'Work Order Created',
+  status_changed: 'Status Changed',
+  payment_received: 'Payment Received',
+  staff_activity: 'Staff Activity',
+  document_created: 'Document Created',
+  document_updated: 'Document Updated',
+  document_deleted: 'Document Deleted',
+  system_alert: 'System Alert'
 };
 
 const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
   data = [],
   loading = false,
-  title = '최근 활동',
+  title = 'Recent Activity',
   maxItems = 10,
   showRefresh = true,
   onRefresh,
@@ -104,7 +104,7 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
   };
 
   const formatCurrency = (amount: number) => {
-    return `₩${amount.toLocaleString()}`;
+    return `$${amount.toLocaleString()}`;
   };
 
   const getActivityIcon = (type: string) => {

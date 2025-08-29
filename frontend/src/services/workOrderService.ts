@@ -7,22 +7,26 @@ export const workOrderService = {
     const response = await api.get('/api/work-orders/', {
       params: { page, page_size: pageSize }
     });
+    // Backend returns WorkOrdersResponse with 'data' and 'total' fields
     return response.data;
   },
 
   async getWorkOrder(id: string): Promise<WorkOrder> {
     const response = await api.get(`/api/work-orders/${id}`);
-    return response.data;
+    // Backend returns WorkOrderResponse with 'data' field
+    return response.data.data;
   },
 
   async createWorkOrder(workOrderData: WorkOrderFormData): Promise<WorkOrder> {
     const response = await api.post('/api/work-orders/', workOrderData);
-    return response.data;
+    // Backend returns WorkOrderResponse with 'data' field
+    return response.data.data;
   },
 
   async updateWorkOrder(id: string, workOrderData: Partial<WorkOrderFormData>): Promise<WorkOrder> {
     const response = await api.patch(`/api/work-orders/${id}`, workOrderData);
-    return response.data;
+    // Backend returns WorkOrderResponse with 'data' field
+    return response.data.data;
   },
 
   async deleteWorkOrder(id: string): Promise<void> {

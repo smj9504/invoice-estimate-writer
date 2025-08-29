@@ -67,18 +67,18 @@ interface PaymentModalProps {
 }
 
 const paymentMethodLabels = {
-  cash: '현금',
-  check: '수표',
-  credit_card: '신용카드',
-  bank_transfer: '계좌이체',
-  other: '기타',
+  cash: 'Cash',
+  check: 'Check',
+  credit_card: 'Credit Card',
+  bank_transfer: 'Bank Transfer',
+  other: 'Other',
 };
 
 const paymentStatusConfig = {
-  pending: { color: 'warning', label: '대기중', icon: <ClockCircleOutlined /> },
-  completed: { color: 'success', label: '완료', icon: <CheckCircleOutlined /> },
-  failed: { color: 'error', label: '실패', icon: <ExclamationCircleOutlined /> },
-  refunded: { color: 'default', label: '환불됨', icon: <ExclamationCircleOutlined /> },
+  pending: { color: 'warning', label: 'Pending', icon: <ClockCircleOutlined /> },
+  completed: { color: 'success', label: 'Completed', icon: <CheckCircleOutlined /> },
+  failed: { color: 'error', label: 'Failed', icon: <ExclamationCircleOutlined /> },
+  refunded: { color: 'default', label: 'Refunded', icon: <ExclamationCircleOutlined /> },
 };
 
 const PaymentModal: React.FC<PaymentModalProps> = ({
@@ -96,14 +96,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         ? workOrderService.updatePayment(editingPayment.id, data)
         : workOrderService.addPayment(workOrder.id, data),
     onSuccess: () => {
-      message.success(editingPayment ? '결제 정보가 수정되었습니다.' : '결제가 기록되었습니다.');
+      message.success(editingPayment ? 'Payment information has been updated.' : 'Payment has been recorded.');
       queryClient.invalidateQueries({ queryKey: ['work-order', workOrder.id] });
       queryClient.invalidateQueries({ queryKey: ['work-order-payments', workOrder.id] });
       form.resetFields();
       onCancel();
     },
     onError: (error: any) => {
-      message.error(error.message || '결제 처리에 실패했습니다.');
+      message.error(error.message || 'Failed to process payment.');
     },
   });
 
@@ -137,13 +137,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   return (
     <Modal
-      title={editingPayment ? '결제 정보 수정' : '결제 기록 추가'}
+      title={editingPayment ? 'Edit Payment Information' : 'Add Payment Record'}
       open={visible}
       onCancel={onCancel}
       onOk={handleSubmit}
       confirmLoading={paymentMutation.isPending}
-      okText={editingPayment ? '수정' : '기록'}
-      cancelText="취소"
+      okText={editingPayment ? 'Update' : 'Record'}
+      cancelText="Cancel"
       width={600}
     >
       <Form
@@ -159,10 +159,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <Col span={12}>
             <Form.Item
               name="amount"
-              label="결제 금액"
+              label="Payment Amount"
               rules={[
-                { required: true, message: '결제 금액을 입력해주세요.' },
-                { type: 'number', min: 0.01, message: '0보다 큰 금액을 입력해주세요.' },
+                { required: true, message: 'Please enter payment amount.' },
+                { type: 'number', min: 0.01, message: 'Please enter an amount greater than 0.' },
               ]}
             >
               <InputNumber
@@ -177,10 +177,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <Col span={12}>
             <Form.Item
               name="payment_method"
-              label="결제 방법"
-              rules={[{ required: true, message: '결제 방법을 선택해주세요.' }]}
+              label="Payment Method"
+              rules={[{ required: true, message: 'Please select payment method.' }]}
             >
-              <Select placeholder="결제 방법 선택">
+              <Select placeholder="Select payment method">
                 {Object.entries(paymentMethodLabels).map(([value, label]) => (
                   <Select.Option key={value} value={value}>
                     {label}
@@ -195,8 +195,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <Col span={12}>
             <Form.Item
               name="payment_date"
-              label="결제일"
-              rules={[{ required: true, message: '결제일을 선택해주세요.' }]}
+              label="Payment Date"
+              rules={[{ required: true, message: 'Please select payment date.' }]}
             >
               <DatePicker style={{ width: '100%' }} />
             </Form.Item>
@@ -204,10 +204,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <Col span={12}>
             <Form.Item
               name="status"
-              label="결제 상태"
-              rules={[{ required: true, message: '결제 상태를 선택해주세요.' }]}
+              label="Payment Status"
+              rules={[{ required: true, message: 'Please select payment status.' }]}
             >
-              <Select placeholder="상태 선택">
+              <Select placeholder="Select status">
                 {Object.entries(paymentStatusConfig).map(([value, config]) => (
                   <Select.Option key={value} value={value}>
                     <Space>
@@ -223,18 +223,18 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
         <Form.Item
           name="reference_number"
-          label="참조 번호"
+          label="Reference Number"
         >
-          <Input placeholder="거래 번호, 수표 번호 등" />
+          <Input placeholder="Transaction number, check number, etc." />
         </Form.Item>
 
         <Form.Item
           name="notes"
-          label="메모"
+          label="Notes"
         >
           <TextArea
             rows={3}
-            placeholder="결제에 대한 추가 정보나 메모를 입력하세요"
+            placeholder="Enter any additional information or notes about the payment"
             maxLength={500}
             showCount
           />
@@ -245,17 +245,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         <div style={{ marginTop: 16, padding: 16, backgroundColor: '#f5f5f5', borderRadius: 6 }}>
           <Row gutter={16}>
             <Col span={8}>
-              <Text type="secondary">작업 총 비용:</Text>
+              <Text type="secondary">Total Cost:</Text>
               <br />
               <Text strong>${workOrder.final_cost.toLocaleString()}</Text>
             </Col>
             <Col span={8}>
-              <Text type="secondary">기존 결제:</Text>
+              <Text type="secondary">Existing Payments:</Text>
               <br />
               <Text strong>$0.00</Text> {/* This would be calculated */}
             </Col>
             <Col span={8}>
-              <Text type="secondary">잔여 금액:</Text>
+              <Text type="secondary">Remaining Amount:</Text>
               <br />
               <Text strong style={{ color: '#fa541c' }}>
                 ${remainingAmount.toLocaleString()}
@@ -281,12 +281,12 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
   const deletePaymentMutation = useMutation({
     mutationFn: workOrderService.deletePayment,
     onSuccess: () => {
-      message.success('결제 기록이 삭제되었습니다.');
+      message.success('Payment record has been deleted.');
       queryClient.invalidateQueries({ queryKey: ['work-order', workOrder.id] });
       queryClient.invalidateQueries({ queryKey: ['work-order-payments', workOrder.id] });
     },
     onError: (error: any) => {
-      message.error(error.message || '삭제에 실패했습니다.');
+      message.error(error.message || 'Failed to delete.');
     },
   });
 
@@ -310,26 +310,26 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
 
   const paymentColumns: ColumnsType<PaymentRecord> = [
     {
-      title: '결제일',
+      title: 'Payment Date',
       dataIndex: 'payment_date',
       key: 'payment_date',
-      render: (date: string) => new Date(date).toLocaleDateString('ko-KR'),
+      render: (date: string) => new Date(date).toLocaleDateString('en-US'),
     },
     {
-      title: '금액',
+      title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
       render: (amount: number) => `$${amount.toLocaleString()}`,
       align: 'right',
     },
     {
-      title: '방법',
+      title: 'Method',
       dataIndex: 'payment_method',
       key: 'payment_method',
       render: (method: keyof typeof paymentMethodLabels) => paymentMethodLabels[method],
     },
     {
-      title: '상태',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       render: (status: keyof typeof paymentStatusConfig) => {
@@ -342,17 +342,17 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
       },
     },
     {
-      title: '참조 번호',
+      title: 'Reference Number',
       dataIndex: 'reference_number',
       key: 'reference_number',
       render: (ref: string) => ref || '-',
     },
     {
-      title: '작업',
+      title: 'Actions',
       key: 'actions',
       render: (_, record: PaymentRecord) => (
         <Space>
-          <Tooltip title="수정">
+          <Tooltip title="Edit">
             <Button
               type="text"
               size="small"
@@ -361,13 +361,13 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             />
           </Tooltip>
           <Popconfirm
-            title="결제 기록 삭제"
-            description="이 결제 기록을 삭제하시겠습니까?"
+            title="Delete Payment Record"
+            description="Are you sure you want to delete this payment record?"
             onConfirm={() => handleDeletePayment(record.id)}
-            okText="삭제"
-            cancelText="취소"
+            okText="Delete"
+            cancelText="Cancel"
           >
-            <Tooltip title="삭제">
+            <Tooltip title="Delete">
               <Button
                 type="text"
                 size="small"
@@ -387,7 +387,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
         title={
           <Space>
             <DollarOutlined />
-            비용 및 결제 정보
+            Cost and Payment Information
           </Space>
         }
         extra={
@@ -401,7 +401,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             }}
             disabled={remainingAmount <= 0}
           >
-            결제 기록
+            Record Payment
           </Button>
         }
         style={{ marginBottom: 24 }}
@@ -412,7 +412,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <DollarOutlined style={{ fontSize: 24, color: '#1890ff', marginBottom: 8 }} />
               <div>
-                <Text type="secondary" style={{ fontSize: '12px' }}>기본 비용</Text>
+                <Text type="secondary" style={{ fontSize: '12px' }}>Base Cost</Text>
                 <div>
                   <Text strong style={{ fontSize: '18px' }}>
                     ${workOrder.base_cost.toLocaleString()}
@@ -425,7 +425,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <FileTextOutlined style={{ fontSize: 24, color: '#52c41a', marginBottom: 8 }} />
               <div>
-                <Text type="secondary" style={{ fontSize: '12px' }}>적용된 크레딧</Text>
+                <Text type="secondary" style={{ fontSize: '12px' }}>Credits Applied</Text>
                 <div>
                   <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
                     -${workOrder.credits_applied.toLocaleString()}
@@ -438,7 +438,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <CreditCardOutlined style={{ fontSize: 24, color: '#fa541c', marginBottom: 8 }} />
               <div>
-                <Text type="secondary" style={{ fontSize: '12px' }}>최종 비용</Text>
+                <Text type="secondary" style={{ fontSize: '12px' }}>Final Cost</Text>
                 <div>
                   <Text strong style={{ fontSize: '20px', color: '#fa541c' }}>
                     ${workOrder.final_cost.toLocaleString()}
@@ -454,7 +454,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
         {/* Payment Progress */}
         <div style={{ marginBottom: 24 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <Text strong>결제 진행률</Text>
+            <Text strong>Payment Progress</Text>
             <Text>{paymentProgress}%</Text>
           </div>
           <Progress
@@ -467,11 +467,11 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
             <Space>
-              <Text type="secondary">완료 결제:</Text>
+              <Text type="secondary">Completed Payments:</Text>
               <Text strong>${totalPaid.toLocaleString()}</Text>
             </Space>
             <Space>
-              <Text type="secondary">잔여 금액:</Text>
+              <Text type="secondary">Remaining Amount:</Text>
               <Text strong style={{ color: remainingAmount > 0 ? '#fa541c' : '#52c41a' }}>
                 ${remainingAmount.toLocaleString()}
               </Text>
@@ -485,10 +485,10 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             <Space>
               <ExclamationCircleOutlined style={{ color: '#fa541c' }} />
               <div>
-                <Text strong>비용 재조정</Text>
+                <Text strong>Cost Override</Text>
                 <br />
                 <Text type="secondary" style={{ fontSize: '12px' }}>
-                  원래 계산된 비용에서 수동으로 조정되었습니다.
+                  The cost has been manually adjusted from the original calculation.
                 </Text>
               </div>
             </Space>
@@ -498,8 +498,8 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
         {/* Payment History */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <Text strong>결제 내역</Text>
-            <Tag color="blue">{payments.length}건</Tag>
+            <Text strong>Payment History</Text>
+            <Tag color="blue">{payments.length} records</Tag>
           </div>
           
           {payments.length > 0 ? (
@@ -514,9 +514,9 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
           ) : (
             <div style={{ textAlign: 'center', padding: '40px 0', color: '#bfbfbf' }}>
               <CreditCardOutlined style={{ fontSize: 48, marginBottom: 16 }} />
-              <div>아직 결제 기록이 없습니다</div>
+              <div>No payment records yet</div>
               <Text type="secondary" style={{ fontSize: '12px' }}>
-                결제가 완료되면 여기에 기록됩니다
+                Payment records will appear here when completed
               </Text>
             </div>
           )}
