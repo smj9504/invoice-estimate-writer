@@ -3,7 +3,7 @@ Work Order Pydantic schemas
 """
 
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import datetime
 from uuid import UUID
 from .models import WorkOrderStatus, DocumentType
@@ -21,7 +21,7 @@ class WorkOrderBase(BaseModel):
     client_state: Optional[str] = None
     client_zipcode: Optional[str] = None
     client_phone: Optional[str] = None
-    client_email: Optional[EmailStr] = None
+    client_email: Optional[str] = None
     
     # Job Information
     job_site_address: Optional[str] = None
@@ -57,6 +57,20 @@ class WorkOrderBase(BaseModel):
     is_billable: Optional[bool] = True
     requires_permit: Optional[bool] = False
 
+    @field_validator('client_email')
+    @classmethod
+    def validate_client_email(cls, v):
+        """Allow any string for draft saves, but clean up empty/whitespace values"""
+        if not v:
+            return None
+        # Clean up whitespace
+        v = str(v).strip()
+        if not v:
+            return None
+        # For draft saves, we accept any non-empty string
+        # Email validation can be done on the frontend or when finalizing
+        return v
+
 
 class WorkOrderCreate(WorkOrderBase):
     """Schema for creating a work order"""
@@ -75,7 +89,7 @@ class WorkOrderUpdate(BaseModel):
     client_state: Optional[str] = None
     client_zipcode: Optional[str] = None
     client_phone: Optional[str] = None
-    client_email: Optional[EmailStr] = None
+    client_email: Optional[str] = None
     
     # Job Information
     job_site_address: Optional[str] = None
