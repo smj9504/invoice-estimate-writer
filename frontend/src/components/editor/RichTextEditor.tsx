@@ -30,17 +30,79 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const editorRef = useRef<HTMLDivElement>(null);
   const isInternalChange = useRef(false);
 
+  // Function to save cursor position
+  const saveCursorPosition = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0 && editorRef.current?.contains(selection.anchorNode)) {
+      return {
+        start: selection.getRangeAt(0).startOffset,
+        end: selection.getRangeAt(0).endOffset,
+        anchorNode: selection.anchorNode,
+      };
+    }
+    return null;
+  };
+
+  // Function to restore cursor position
+  const restoreCursorPosition = (cursorData: any) => {
+    if (cursorData && editorRef.current) {
+      try {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        
+        if (cursorData.anchorNode && editorRef.current.contains(cursorData.anchorNode)) {
+          range.setStart(cursorData.anchorNode, Math.min(cursorData.start, cursorData.anchorNode.textContent?.length || 0));
+          range.setEnd(cursorData.anchorNode, Math.min(cursorData.end, cursorData.anchorNode.textContent?.length || 0));
+          
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        } else {
+          // Fallback: place cursor at the end
+          range.selectNodeContents(editorRef.current);
+          range.collapse(false);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        }
+      } catch (e) {
+        // Ignore cursor restoration errors
+      }
+    }
+  };
+
+  // Initial setup
+  useEffect(() => {
+    if (editorRef.current && value && !editorRef.current.innerHTML) {
+      editorRef.current.innerHTML = value;
+    }
+  }, []);
+
   useEffect(() => {
     if (editorRef.current && value !== editorRef.current.innerHTML && !isInternalChange.current) {
+      const cursorData = saveCursorPosition();
       editorRef.current.innerHTML = value;
+      
+      // Restore cursor position after a microtask
+      setTimeout(() => {
+        if (cursorData) {
+          restoreCursorPosition(cursorData);
+        }
+      }, 0);
     }
     isInternalChange.current = false;
   }, [value]);
 
   const handleCommand = (command: string, value?: string) => {
-    document.execCommand(command, false, value);
-    editorRef.current?.focus();
-    handleChange();
+    if (editorRef.current) {
+      editorRef.current.focus();
+      const cursorData = saveCursorPosition();
+      document.execCommand(command, false, value);
+      setTimeout(() => {
+        handleChange();
+        if (cursorData) {
+          restoreCursorPosition(cursorData);
+        }
+      }, 0);
+    }
   };
 
   const handleChange = () => {
@@ -158,7 +220,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           minHeight: `${minHeight}px`,
           maxHeight: `${maxHeight}px`,
         }}
-        dangerouslySetInnerHTML={{ __html: value }}
+        suppressContentEditableWarning={true}
       />
     </div>
   );

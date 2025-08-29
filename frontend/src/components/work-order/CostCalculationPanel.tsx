@@ -11,21 +11,18 @@ import {
   Tag,
   Tooltip,
   Alert,
-  Spin,
-  Checkbox
+  Spin
 } from 'antd';
 import {
   DollarOutlined,
   CreditCardOutlined,
   CalculatorOutlined,
   InfoCircleOutlined,
-  EditOutlined,
-  PlusOutlined
+  EditOutlined
 } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import documentTypeService from '../../services/documentTypeService';
 import { CostBreakdown, Credit } from '../../types';
-import type { DocumentType } from '../../types/documentTypes';
 
 const { Title, Text } = Typography;
 
@@ -54,41 +51,39 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
   });
   const [manualOverride, setManualOverride] = useState(false);
   const [overrideCost, setOverrideCost] = useState<number>(0);
-  const [selectedCredits, setSelectedCredits] = useState<string[]>([]);
   const [calculating, setCalculating] = useState(false);
 
-  // Mock base costs for document types
-  const documentTypeCosts = {
-    estimate: 50,
-    invoice: 0,
-    insurance_estimate: 100,
-    plumber_report: 200
-  };
+  // Load document types from backend
+  const { data: documentTypes = [] } = useQuery({
+    queryKey: ['documentTypes'],
+    queryFn: () => documentTypeService.getDocumentTypes(),
+  });
 
-  // Mock trade costs
-  const tradeCosts = {
-    plumbing: 150,
-    electrical: 200,
-    hvac: 300,
-    carpentry: 120,
-    painting: 80,
-    roofing: 400,
-    flooring: 250,
-    drywall: 100
-  };
+  // Load trades from backend
+  const { data: trades = [] } = useQuery({
+    queryKey: ['trades'],
+    queryFn: () => documentTypeService.getTrades(),
+  });
+
+  // Find selected document type
+  const selectedDocumentType = documentTypes.find(dt => dt.id === documentType);
+  
+  // Find selected trades
+  const selectedTradeObjects = trades.filter(trade => selectedTrades.includes(trade.id));
 
   // Calculate costs when inputs change
   useEffect(() => {
-    if (!documentType) return;
+    if (!documentType || !selectedDocumentType) return;
 
     setCalculating(true);
 
     // Simulate API delay
     const timer = setTimeout(() => {
-      const baseDocumentCost = documentTypeCosts[documentType as keyof typeof documentTypeCosts] || 0;
-      const tradesCost = selectedTrades.reduce((total, trade) => {
-        return total + (tradeCosts[trade.toLowerCase() as keyof typeof tradeCosts] || 0);
-      }, 0);
+      // Get base cost from document type
+      const baseDocumentCost = parseFloat(selectedDocumentType.base_price) || 0;
+      
+      // Calculate total trade costs (for now we'll use 0 since trades don't have individual prices)
+      const tradesCost = 0; // Trades are included in document type pricing
       
       const totalBaseCost = baseDocumentCost + tradesCost;
       
@@ -115,7 +110,7 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [documentType, selectedTrades, availableCredits, manualOverride, overrideCost, companyId, onCostChange]);
+  }, [documentType, selectedTrades, availableCredits, manualOverride, overrideCost, companyId, onCostChange, selectedDocumentType]);
 
   const handleManualOverride = (enabled: boolean) => {
     setManualOverride(enabled);
@@ -170,23 +165,25 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
                 <div style={{ background: '#f5f5f5', padding: '12px', borderRadius: '6px' }}>
                   <Row justify="space-between" style={{ marginBottom: 4 }}>
                     <Col>
-                      <Text style={{ fontSize: '12px' }}>Document Type ({documentType}):</Text>
+                      <Text style={{ fontSize: '12px' }}>
+                        Document Type ({selectedDocumentType?.name || 'Unknown'}):
+                      </Text>
                     </Col>
                     <Col>
                       <Text style={{ fontSize: '12px' }}>
-                        ${documentTypeCosts[documentType as keyof typeof documentTypeCosts] || 0}
+                        ${selectedDocumentType ? parseFloat(selectedDocumentType.base_price).toFixed(2) : '0.00'}
                       </Text>
                     </Col>
                   </Row>
                   
-                  {selectedTrades.map(trade => (
-                    <Row key={trade} justify="space-between" style={{ marginBottom: 4 }}>
+                  {selectedTradeObjects.map(trade => (
+                    <Row key={trade.id} justify="space-between" style={{ marginBottom: 4 }}>
                       <Col>
-                        <Text style={{ fontSize: '12px' }}>{trade}:</Text>
+                        <Text style={{ fontSize: '12px' }}>{trade.name}:</Text>
                       </Col>
                       <Col>
                         <Text style={{ fontSize: '12px' }}>
-                          ${tradeCosts[trade.toLowerCase() as keyof typeof tradeCosts] || 0}
+                          $0.00
                         </Text>
                       </Col>
                     </Row>

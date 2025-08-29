@@ -11,7 +11,7 @@ from .models import WorkOrderStatus, DocumentType
 
 class WorkOrderBase(BaseModel):
     """Base work order schema"""
-    work_order_number: str
+    work_order_number: Optional[str] = None
     company_id: UUID
     
     # Client Information
@@ -60,7 +60,7 @@ class WorkOrderBase(BaseModel):
 
 class WorkOrderCreate(WorkOrderBase):
     """Schema for creating a work order"""
-    created_by_staff_id: UUID
+    created_by_staff_id: Optional[UUID] = None
 
 
 class WorkOrderUpdate(BaseModel):
