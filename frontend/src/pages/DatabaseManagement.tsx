@@ -57,17 +57,17 @@ const DatabaseManagement: React.FC = () => {
   const tables: Record<string, TableConfig> = {
     companies: {
       name: 'companies',
-      displayName: '회사',
+      displayName: 'Companies',
       endpoint: '/api/companies',
       columns: [
         { title: 'ID', dataIndex: 'id', key: 'id', width: 200 },
-        { title: '회사명', dataIndex: 'name', key: 'name' },
-        { title: '코드', dataIndex: 'company_code', key: 'company_code' },
-        { title: '전화번호', dataIndex: 'phone', key: 'phone' },
-        { title: '이메일', dataIndex: 'email', key: 'email' },
-        { title: '도시', dataIndex: 'city', key: 'city' },
+        { title: 'Company Name', dataIndex: 'name', key: 'name' },
+        { title: 'Code', dataIndex: 'company_code', key: 'company_code' },
+        { title: 'Phone', dataIndex: 'phone', key: 'phone' },
+        { title: 'Email', dataIndex: 'email', key: 'email' },
+        { title: 'City', dataIndex: 'city', key: 'city' },
         {
-          title: '작업',
+          title: 'Actions',
           key: 'actions',
           width: 120,
           render: (_, record) => (
@@ -78,7 +78,7 @@ const DatabaseManagement: React.FC = () => {
                 onClick={() => handleEdit(record)}
               />
               <Popconfirm
-                title="삭제하시겠습니까?"
+                title="Are you sure you want to delete?"
                 onConfirm={() => handleDelete(record.id)}
               >
                 <Button type="link" danger icon={<DeleteOutlined />} />
@@ -88,34 +88,34 @@ const DatabaseManagement: React.FC = () => {
         },
       ],
       formFields: [
-        { name: 'name', label: '회사명', type: 'text', required: true },
-        { name: 'company_code', label: '회사 코드', type: 'text' },
-        { name: 'address', label: '주소', type: 'text' },
-        { name: 'city', label: '도시', type: 'text' },
-        { name: 'state', label: '주/도', type: 'text' },
-        { name: 'zipcode', label: '우편번호', type: 'text' },
-        { name: 'phone', label: '전화번호', type: 'text' },
-        { name: 'email', label: '이메일', type: 'email' },
-        { name: 'website', label: '웹사이트', type: 'text' },
-        { name: 'license_number', label: '사업자 번호', type: 'text' },
+        { name: 'name', label: 'Company Name', type: 'text', required: true },
+        { name: 'company_code', label: 'Company Code', type: 'text' },
+        { name: 'address', label: 'Address', type: 'text' },
+        { name: 'city', label: 'City', type: 'text' },
+        { name: 'state', label: 'State', type: 'text' },
+        { name: 'zipcode', label: 'ZIP Code', type: 'text' },
+        { name: 'phone', label: 'Phone', type: 'text' },
+        { name: 'email', label: 'Email', type: 'email' },
+        { name: 'website', label: 'Website', type: 'text' },
+        { name: 'license_number', label: 'License Number', type: 'text' },
       ],
     },
     invoices: {
       name: 'invoices',
-      displayName: '송장',
+      displayName: 'Invoices',
       endpoint: '/api/invoices',
       columns: [
         { title: 'ID', dataIndex: 'id', key: 'id', width: 200 },
-        { title: '송장 번호', dataIndex: 'invoice_number', key: 'invoice_number' },
-        { title: '고객명', dataIndex: 'client_name', key: 'client_name' },
+        { title: 'Invoice Number', dataIndex: 'invoice_number', key: 'invoice_number' },
+        { title: 'Client Name', dataIndex: 'client_name', key: 'client_name' },
         {
-          title: '총액',
+          title: 'Total Amount',
           dataIndex: 'total_amount',
           key: 'total_amount',
           render: (amount: number) => `$${amount?.toFixed(2) || '0.00'}`,
         },
         {
-          title: '상태',
+          title: 'Status',
           dataIndex: 'status',
           key: 'status',
           render: (status: string) => {
@@ -128,9 +128,9 @@ const DatabaseManagement: React.FC = () => {
             return <Tag color={colors[status] || 'default'}>{status}</Tag>;
           },
         },
-        { title: '날짜', dataIndex: 'invoice_date', key: 'invoice_date' },
+        { title: 'Date', dataIndex: 'invoice_date', key: 'invoice_date' },
         {
-          title: '작업',
+          title: 'Actions',
           key: 'actions',
           width: 120,
           render: (_, record) => (
@@ -141,7 +141,7 @@ const DatabaseManagement: React.FC = () => {
                 onClick={() => handleEdit(record)}
               />
               <Popconfirm
-                title="삭제하시겠습니까?"
+                title="Are you sure you want to delete?"
                 onConfirm={() => handleDelete(record.id)}
               >
                 <Button type="link" danger icon={<DeleteOutlined />} />
@@ -158,26 +158,26 @@ const DatabaseManagement: React.FC = () => {
         { name: 'client_email', label: '고객 이메일', type: 'email' },
         {
           name: 'status',
-          label: '상태',
+          label: 'Status',
           type: 'select',
           options: [
-            { value: 'pending', label: '대기중' },
-            { value: 'paid', label: '지불완료' },
-            { value: 'overdue', label: '연체' },
-            { value: 'cancelled', label: '취소됨' },
+            { value: 'pending', label: 'Pending' },
+            { value: 'paid', label: 'Paid' },
+            { value: 'overdue', label: 'Overdue' },
+            { value: 'cancelled', label: 'Cancelled' },
           ],
         },
-        { name: 'total_amount', label: '총액', type: 'number' },
-        { name: 'notes', label: '메모', type: 'textarea' },
+        { name: 'total_amount', label: 'Total Amount', type: 'number' },
+        { name: 'notes', label: 'Notes', type: 'textarea' },
       ],
     },
     estimates: {
       name: 'estimates',
-      displayName: '견적서',
+      displayName: 'Estimates',
       endpoint: '/api/estimates',
       columns: [
         { title: 'ID', dataIndex: 'id', key: 'id', width: 200 },
-        { title: '견적 번호', dataIndex: 'estimate_number', key: 'estimate_number' },
+        { title: 'Estimate Number', dataIndex: 'estimate_number', key: 'estimate_number' },
         { title: '고객명', dataIndex: 'client_name', key: 'client_name' },
         {
           title: '총액',
@@ -202,7 +202,7 @@ const DatabaseManagement: React.FC = () => {
         },
         { title: '날짜', dataIndex: 'estimate_date', key: 'estimate_date' },
         {
-          title: '작업',
+          title: 'Actions',
           key: 'actions',
           width: 120,
           render: (_, record) => (
@@ -213,7 +213,7 @@ const DatabaseManagement: React.FC = () => {
                 onClick={() => handleEdit(record)}
               />
               <Popconfirm
-                title="삭제하시겠습니까?"
+                title="Are you sure you want to delete?"
                 onConfirm={() => handleDelete(record.id)}
               >
                 <Button type="link" danger icon={<DeleteOutlined />} />
@@ -223,25 +223,25 @@ const DatabaseManagement: React.FC = () => {
         },
       ],
       formFields: [
-        { name: 'estimate_number', label: '견적 번호', type: 'text', required: true },
-        { name: 'client_name', label: '고객명', type: 'text', required: true },
-        { name: 'client_address', label: '고객 주소', type: 'text' },
-        { name: 'client_phone', label: '고객 전화번호', type: 'text' },
-        { name: 'client_email', label: '고객 이메일', type: 'email' },
+        { name: 'estimate_number', label: 'Estimate Number', type: 'text', required: true },
+        { name: 'client_name', label: 'Client Name', type: 'text', required: true },
+        { name: 'client_address', label: 'Client Address', type: 'text' },
+        { name: 'client_phone', label: 'Client Phone', type: 'text' },
+        { name: 'client_email', label: 'Client Email', type: 'email' },
         {
           name: 'status',
-          label: '상태',
+          label: 'Status',
           type: 'select',
           options: [
-            { value: 'draft', label: '초안' },
-            { value: 'sent', label: '발송됨' },
-            { value: 'accepted', label: '승인됨' },
-            { value: 'rejected', label: '거절됨' },
-            { value: 'expired', label: '만료됨' },
+            { value: 'draft', label: 'Draft' },
+            { value: 'sent', label: 'Sent' },
+            { value: 'accepted', label: 'Accepted' },
+            { value: 'rejected', label: 'Rejected' },
+            { value: 'expired', label: 'Expired' },
           ],
         },
-        { name: 'total_amount', label: '총액', type: 'number' },
-        { name: 'notes', label: '메모', type: 'textarea' },
+        { name: 'total_amount', label: 'Total Amount', type: 'number' },
+        { name: 'notes', label: 'Notes', type: 'textarea' },
       ],
     },
   };
@@ -249,11 +249,27 @@ const DatabaseManagement: React.FC = () => {
   const currentTable = tables[activeTab];
 
   // Fetch data
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, refetch, error } = useQuery({
     queryKey: ['database', activeTab],
     queryFn: async () => {
-      const response = await axios.get(currentTable.endpoint);
-      return response.data;
+      try {
+        const response = await axios.get(currentTable.endpoint);
+        // Convert API response to array format if needed
+        const responseData = response.data;
+        if (Array.isArray(responseData)) {
+          return responseData;
+        } else if (responseData?.items && Array.isArray(responseData.items)) {
+          return responseData.items;
+        } else if (responseData?.data && Array.isArray(responseData.data)) {
+          return responseData.data;
+        }
+        console.warn('API response format is different than expected:', responseData);
+        return [];
+      } catch (error) {
+        console.error('Failed to load data:', error);
+        message.error('Failed to load data.');
+        return [];
+      }
     },
   });
 
@@ -266,12 +282,12 @@ const DatabaseManagement: React.FC = () => {
       return axios.post(currentTable.endpoint, values);
     },
     onSuccess: () => {
-      message.success(`${currentTable.displayName} ${editingRecord ? '수정' : '생성'}됨`);
+      message.success(`${currentTable.displayName} ${editingRecord ? 'updated' : 'created'} successfully`);
       queryClient.invalidateQueries({ queryKey: ['database', activeTab] });
       handleCloseModal();
     },
     onError: (error: any) => {
-      message.error(error.response?.data?.detail || '작업 실패');
+      message.error(error.response?.data?.detail || 'Operation failed');
     },
   });
 
@@ -281,11 +297,11 @@ const DatabaseManagement: React.FC = () => {
       return axios.delete(`${currentTable.endpoint}/${id}`);
     },
     onSuccess: () => {
-      message.success(`${currentTable.displayName} 삭제됨`);
+      message.success(`${currentTable.displayName} deleted successfully`);
       queryClient.invalidateQueries({ queryKey: ['database', activeTab] });
     },
     onError: (error: any) => {
-      message.error(error.response?.data?.detail || '삭제 실패');
+      message.error(error.response?.data?.detail || 'Delete failed');
     },
   });
 
@@ -326,13 +342,13 @@ const DatabaseManagement: React.FC = () => {
         title={
           <Space>
             <DatabaseOutlined />
-            <span>데이터베이스 관리</span>
+            <span>Database Management</span>
           </Space>
         }
       >
         <Alert
-          message="데이터베이스 직접 관리"
-          description="이 페이지에서는 데이터베이스 테이블을 직접 조회, 생성, 수정, 삭제할 수 있습니다. 주의하여 작업하세요."
+          message="Direct Database Management"
+          description="This page allows you to directly view, create, update, and delete database records. Please work carefully."
           type="warning"
           showIcon
           style={{ marginBottom: 16 }}
@@ -347,22 +363,22 @@ const DatabaseManagement: React.FC = () => {
                   icon={<PlusOutlined />}
                   onClick={handleAdd}
                 >
-                  새 {config.displayName} 추가
+                  Add New {config.displayName}
                 </Button>
                 <Button icon={<ReloadOutlined />} onClick={() => refetch()}>
-                  새로고침
+                  Refresh
                 </Button>
               </Space>
 
               <Table
                 columns={config.columns}
-                dataSource={data}
+                dataSource={data || []}
                 rowKey="id"
                 loading={isLoading}
                 pagination={{
                   pageSize: 10,
                   showSizeChanger: true,
-                  showTotal: (total) => `총 ${total}개`,
+                  showTotal: (total) => `Total ${total} items`,
                 }}
               />
             </TabPane>
@@ -370,7 +386,7 @@ const DatabaseManagement: React.FC = () => {
         </Tabs>
 
         <Modal
-          title={`${editingRecord ? '수정' : '추가'} ${currentTable.displayName}`}
+          title={`${editingRecord ? 'Edit' : 'Add'} ${currentTable.displayName}`}
           open={isModalOpen}
           onOk={handleSubmit}
           onCancel={handleCloseModal}
@@ -386,7 +402,7 @@ const DatabaseManagement: React.FC = () => {
                 rules={[
                   {
                     required: field.required,
-                    message: `${field.label}을(를) 입력하세요`,
+                    message: `Please enter ${field.label}`,
                   },
                 ]}
               >

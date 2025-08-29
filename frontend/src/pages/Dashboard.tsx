@@ -45,25 +45,25 @@ const Dashboard: React.FC = () => {
 
   const quickActions = [
     {
-      title: '견적서 작성',
+      title: 'Create Estimate',
       icon: <FileTextOutlined />,
       color: '#1890ff',
       onClick: () => navigate('/create/estimate'),
     },
     {
-      title: '인보이스 작성',
+      title: 'Create Invoice',
       icon: <DollarOutlined />,
       color: '#52c41a',
       onClick: () => navigate('/create/invoice'),
     },
     {
-      title: '보험 견적서 작성',
+      title: 'Create Insurance Estimate',
       icon: <FileTextOutlined />,
       color: '#722ed1',
       onClick: () => navigate('/create/insurance'),
     },
     {
-      title: '회사 추가',
+      title: 'Add Company',
       icon: <TeamOutlined />,
       color: '#fa8c16',
       onClick: () => navigate('/companies/new'),
@@ -72,14 +72,14 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <Title level={2}>대시보드</Title>
+      <Title level={2}>Dashboard</Title>
       
       {/* Statistics Cards */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="전체 서류"
+              title="Total Documents"
               value={statistics.totalDocuments}
               prefix={<FileTextOutlined />}
               valueStyle={{ color: '#1890ff' }}
@@ -89,7 +89,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="총 매출"
+              title="Total Revenue"
               value={statistics.totalRevenue}
               prefix="$"
               precision={0}
@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="등록 회사"
+              title="Registered Companies"
               value={statistics.totalCompanies}
               prefix={<TeamOutlined />}
               valueStyle={{ color: '#722ed1' }}
@@ -110,7 +110,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="대기중 서류"
+              title="Pending Documents"
               value={statistics.pendingDocuments}
               valueStyle={{ color: '#fa8c16' }}
             />
@@ -119,7 +119,7 @@ const Dashboard: React.FC = () => {
       </Row>
 
       {/* Quick Actions */}
-      <Card title="빠른 작업" style={{ marginBottom: 24 }}>
+      <Card title="Quick Actions" style={{ marginBottom: 24 }}>
         <Row gutter={[16, 16]}>
           {quickActions.map((action, index) => (
             <Col xs={24} sm={12} lg={6} key={index}>
@@ -150,8 +150,8 @@ const Dashboard: React.FC = () => {
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
           <Card 
-            title="최근 견적서" 
-            extra={<Button type="link" onClick={() => navigate('/documents/estimate')}>전체 보기</Button>}
+            title="Recent Estimates" 
+            extra={<Button type="link" onClick={() => navigate('/documents/estimate')}>View All</Button>}
           >
             {documentsData?.items?.filter(doc => doc.type === 'estimate').slice(0, 3).map(doc => (
               <Card.Grid key={doc.id} style={{ width: '100%', cursor: 'pointer' }} onClick={() => navigate(`/documents/${doc.id}`)}>
@@ -168,8 +168,8 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col xs={24} lg={12}>
           <Card 
-            title="최근 인보이스"
-            extra={<Button type="link" onClick={() => navigate('/documents/invoice')}>전체 보기</Button>}
+            title="Recent Invoices"
+            extra={<Button type="link" onClick={() => navigate('/documents/invoice')}>View All</Button>}
           >
             {documentsData?.items?.filter(doc => doc.type === 'invoice').slice(0, 3).map(doc => (
               <Card.Grid key={doc.id} style={{ width: '100%', cursor: 'pointer' }} onClick={() => navigate(`/documents/${doc.id}`)}>

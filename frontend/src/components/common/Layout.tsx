@@ -34,56 +34,56 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {
         key: '/dashboard',
         icon: <DashboardOutlined />,
-        label: '대시보드',
+        label: 'Dashboard',
       },
       {
         key: '/documents',
         icon: <FileTextOutlined />,
-        label: '서류 목록',
+        label: 'Documents',
         children: [
           {
             key: '/documents/estimate',
-            label: '견적서',
+            label: 'Estimates',
           },
           {
             key: '/documents/invoice',
-            label: '인보이스',
+            label: 'Invoices',
           },
           {
             key: '/documents/insurance_estimate',
-            label: '보험 견적서',
+            label: 'Insurance Estimates',
           },
         ],
       },
       {
         key: '/work-orders',
         icon: <ProjectOutlined />,
-        label: '작업 지시서',
+        label: 'Work Orders',
       },
       {
         key: '/create',
         icon: <PlusOutlined />,
-        label: '서류 작성',
+        label: 'Create Documents',
         children: [
           {
             key: '/create/estimate',
-            label: '견적서 작성',
+            label: 'Create Estimate',
           },
           {
             key: '/create/invoice',
-            label: '인보이스 작성',
+            label: 'Create Invoice',
           },
           {
             key: '/create/insurance',
-            label: '보험 견적서 작성',
+            label: 'Create Insurance Estimate',
           },
           {
             key: '/create/plumber',
-            label: '배관공 보고서 작성',
+            label: 'Create Plumber Report',
           },
           {
             key: '/create/work-order',
-            label: '작업 지시서 작성',
+            label: 'Create Work Order',
           },
         ],
       },
@@ -94,31 +94,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       items.push({
         key: '/admin',
         icon: <SettingOutlined />,
-        label: '관리자',
+        label: 'Admin',
         children: [
           {
             key: '/admin/dashboard',
-            label: '관리자 대시보드',
+            label: 'Admin Dashboard',
           },
           {
             key: '/admin/database',
-            label: '데이터베이스 관리',
+            label: 'Database Management',
           },
           {
             key: '/admin/document-types',
-            label: '문서 유형 관리',
+            label: 'Document Type Management',
           },
           {
             key: '/admin/trades',
-            label: '업종 관리',
+            label: 'Trade Management',
           },
           {
             key: '/admin/users',
-            label: '사용자 관리',
+            label: 'User Management',
           },
           {
             key: '/companies',
-            label: '회사 관리',
+            label: 'Company Management',
           },
         ],
       });
@@ -127,7 +127,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       items.push({
         key: '/companies',
         icon: <TeamOutlined />,
-        label: '회사 관리',
+        label: 'Company Management',
       });
     }
 
@@ -138,12 +138,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: '프로필',
+      label: 'Profile',
     },
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: '설정',
+      label: 'Settings',
     },
     {
       type: 'divider' as const,
@@ -151,7 +151,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: '로그아웃',
+      label: 'Logout',
     },
   ];
 
@@ -213,7 +213,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div>
             {selectedCompany && (
               <Space>
-                <span>현재 회사:</span>
+                <span>Current Company:</span>
                 <strong>{selectedCompany.name}</strong>
               </Space>
             )}
@@ -221,7 +221,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Dropdown menu={{ items: userMenuItems, onClick: handleMenuClick }} placement="bottomRight">
             <Space style={{ cursor: 'pointer' }}>
               <Avatar icon={<UserOutlined />} />
-              <span>{user?.full_name || user?.username || '사용자'}</span>
+              <span>{user?.full_name || user?.username || 'User'}</span>
             </Space>
           </Dropdown>
         </Header>

@@ -23,7 +23,7 @@ const Login: React.FC = () => {
       await login(values.username, values.password);
       navigate(from, { replace: true });
     } catch (err: any) {
-      setError(err.response?.data?.detail || '로그인에 실패했습니다.');
+      setError(err.response?.data?.detail || 'Login failed.');
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
             <Title level={2}>MJ Estimate</Title>
-            <Text type="secondary">계정에 로그인하세요</Text>
+            <Text type="secondary">Sign in to your account</Text>
           </div>
 
           {error && (
@@ -79,23 +79,23 @@ const Login: React.FC = () => {
           >
             <Form.Item
               name="username"
-              rules={[{ required: true, message: '사용자명을 입력해주세요' }]}
+              rules={[{ required: true, message: 'Please enter your username' }]}
             >
               <Input 
                 size="large"
                 prefix={<UserOutlined />} 
-                placeholder="사용자명 또는 이메일" 
+                placeholder="Username or Email" 
               />
             </Form.Item>
 
             <Form.Item
               name="password"
-              rules={[{ required: true, message: '비밀번호를 입력해주세요' }]}
+              rules={[{ required: true, message: 'Please enter your password' }]}
             >
               <Input.Password 
                 size="large"
                 prefix={<LockOutlined />} 
-                placeholder="비밀번호" 
+                placeholder="Password" 
               />
             </Form.Item>
 
@@ -107,27 +107,27 @@ const Login: React.FC = () => {
                 loading={loading} 
                 block
               >
-                로그인
+                Sign In
               </Button>
             </Form.Item>
           </Form>
 
           <div style={{ textAlign: 'center' }}>
             <Space split="|">
-              <Link onClick={() => navigate('/register')}>회원가입</Link>
-              <Link onClick={() => navigate('/forgot-password')}>비밀번호 찾기</Link>
+              <Link onClick={() => navigate('/register')}>Sign Up</Link>
+              <Link onClick={() => navigate('/forgot-password')}>Forgot Password</Link>
             </Space>
           </div>
 
           {/* Development only: Initialize admin button */}
           {process.env.NODE_ENV === 'development' && (
             <Alert
-              message="개발 모드"
+              message="Development Mode"
               description={
                 <Space direction="vertical" style={{ width: '100%' }}>
-                  <Text>초기 관리자 계정 생성 (최초 1회만 가능)</Text>
+                  <Text>Initialize admin account (only once)</Text>
                   <Button size="small" onClick={handleInitAdmin}>
-                    관리자 초기화
+                    Initialize Admin
                   </Button>
                   <Text type="secondary">
                     Username: admin / Password: admin123

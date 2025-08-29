@@ -4,142 +4,228 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MJ Estimate Generator is a Streamlit-based web application for creating professional insurance estimates, invoices, and floor plans. The system integrates with Supabase for data persistence and uses WeasyPrint for PDF generation.
+MJ Estimate Generator is a comprehensive invoice and estimate management system with both legacy Streamlit and modern React/FastAPI implementations. The system supports creating professional insurance estimates, invoices, plumber reports, and work orders with PDF generation capabilities. Data persistence is handled through Supabase integration.
 
 ## Development Commands
 
 ### Environment Setup
 ```bash
-# Activate virtual environment (Windows)
+# Create and activate virtual environment (Windows)
+python -m venv venv
 venv\Scripts\activate
 
-# Install dependencies
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Install frontend dependencies (if working with React frontend)
+cd frontend && npm install
+cd ..
+
+# Install backend dependencies (specific versions for FastAPI backend)
+cd backend && pip install -r requirements.txt
+cd ..
+```
+
+### Running Applications
+
+#### Quick Start (All Servers)
+```bash
+# Windows - starts both FastAPI backend and React frontend
+start_servers.bat
+
+# Manual equivalent
+# Terminal 1: Backend (port 8000)
+venv\Scripts\activate && cd backend && uvicorn app.main:app --reload --port 8000
+
+# Terminal 2: Frontend (port 3000) 
+cd frontend && npm start
+```
+
+#### Legacy Streamlit Application
+```bash
+# Start Streamlit server (legacy interface)
+venv\Scripts\activate
+streamlit run app.py
 
 # Convert .env to Streamlit secrets format
 python utils/convert_env_to_secrets.py
 ```
 
-### Running the Application
+#### Docker Deployment
 ```bash
-# Start Streamlit server
-streamlit run app.py
-# or
-python -m streamlit run app.py
+# Development environment
+docker-compose -f docker-compose.dev.yml up
+
+# Production environment  
+docker-compose -f docker-compose.prod.yml up
 ```
 
-### Testing
+### Testing & Quality
 ```bash
-# Run tests
+# Python tests (both Streamlit and FastAPI modules)
 pytest
 
-# Test floor plan generation
+# Test specific components
 python test_floor_plan.py
-
-# Test PDF generation
 python test_pdf_generation.py
+
+# Frontend tests (React application)
+cd frontend && npm test
+
+# Build frontend for production
+cd frontend && npm run build
 ```
 
-### Dependency Management
+### Development Workflows
 ```bash
-# Update requirements file
+# Backend development with hot reload
+cd backend && uvicorn app.main:app --reload
+
+# Frontend development with hot reload
+cd frontend && npm start
+
+# Update Python dependencies
 pip freeze > requirements.txt
+
+# Update frontend dependencies  
+cd frontend && npm update
 ```
 
 ## Architecture Overview
 
-### Core Components
+This project contains two parallel implementations:
 
-1. **Main Application (`app.py`)**: Entry point with navigation to estimate and invoice builders
+### 1. FastAPI Backend + React Frontend (Modern Stack)
 
-2. **PDF Generation System (`pdf_generator.py`)**:
-   - Template-based PDF generation using Jinja2 and WeasyPrint
-   - Supports multiple document types: estimates, invoices, insurance estimates
-   - Handles floor plan integration for insurance estimates
-   - GTK+ runtime dependency for Windows environments
+**Backend Architecture (`backend/app/`)**:
+- **Domain-Driven Design**: Organized by business domains (company, invoice, estimate, work_order, etc.)
+- **Layered Architecture**: API → Service → Repository → Database
+- **Core Infrastructure**: 
+  - `core/database.py`: Supabase connection management
+  - `core/config.py`: Environment-based configuration  
+  - `common/base_repository.py`: Shared database operations
+- **Domain Modules**: Each domain contains `api.py`, `models.py`, `schemas.py`, `service.py`, `repository.py`
+- **Authentication**: JWT-based auth system in `domains/auth/`
 
-3. **Floor Plan Generator (`floor_plan_generator.py`)**:
-   - Creates SVG floor plans for rooms with measurements
-   - Automatic scaling and centering
-   - Integration with insurance estimate PDFs
+**Key Backend Domains**:
+- `company/`: Company management with logo upload
+- `invoice/`, `estimate/`: Document creation and management  
+- `work_order/`: Work order lifecycle management
+- `plumber_report/`: Specialized reporting system
+- `staff/`: User and permission management
+- `document_types/`: Document template configuration
 
-4. **Database Layer (`utils/db.py`)**:
-   - Supabase integration with connection management
-   - Retry logic for network resilience
-   - Session-based connection caching for Streamlit
+**Frontend Architecture (`frontend/src/`)**:
+- **React 18 + TypeScript**: Component-based architecture
+- **State Management**: Zustand for global state, React Query for server state
+- **UI Framework**: Ant Design 5.x with Korean localization
+- **Routing**: React Router v7 with protected routes
+- **Key Components**:
+  - `pages/`: Main application pages (Dashboard, DocumentList, etc.)
+  - `components/`: Reusable UI components organized by domain
+  - `services/`: API integration layer
+  - `contexts/`: Authentication and global state
 
-5. **Module System (`modules/`)**:
-   - `company_module.py`: Company data CRUD operations
-   - `estimate_module.py`: Estimate management
-   - `invoice_module.py`: Invoice management
-   - `estimate_item_module.py`: Line item management for estimates
-   - `invoice_item_module.py`: Line item management for invoices
+### 2. Legacy Streamlit Application
 
-### Page Components (`pages/`)
+**Core Components**:
+- **Main Application (`app.py`)**: Entry point with navigation
+- **PDF Generation System (`pdf_generator.py`)**:
+  - Template-based generation using Jinja2 and WeasyPrint
+  - Supports estimates, invoices, insurance estimates with floor plans
+  - GTK+ runtime dependency for Windows environments
+- **Floor Plan Generator (`floor_plan_generator.py`)**:
+  - SVG-based room floor plans with automatic scaling
+  - Integration with insurance estimate PDFs
+- **Module System (`modules/`)**:
+  - CRUD operations for companies, estimates, invoices
+  - Shared data models and business logic
+- **Page Components (`pages/`)**: Streamlit-specific UI pages
 
-Key pages include:
-- `insurance_estimate_editor.py`: Complex insurance estimate creation with floor plans
-- `build_estimate.py`: General estimate builder
-- `build_invoice.py`: Invoice builder
-- `xlsx_to_pdf.py`: Excel to PDF conversion
-- `generate_from_json.py`: JSON-based document generation
+### Shared Infrastructure
 
-### Template System (`templates/`)
+**Database Layer (`utils/db.py`)**:
+- Supabase integration with connection management
+- Retry logic and session-based caching
+- Used by both Streamlit and FastAPI applications
 
-HTML/CSS templates for different document types:
-- `insurance_estimate_with_plans.html`: Insurance estimates with integrated floor plans
-- `general_estimate.html`: Standard estimates
-- `general_invoice.html`: Standard invoices
-- Associated CSS files for styling
+**Template System (`templates/`)**:
+- HTML/CSS templates for PDF generation
+- Shared between both application stacks
+- Support for insurance estimates with integrated floor plans
 
 ## Key Technical Considerations
 
-### WeasyPrint & GTK+ Configuration
-The application requires GTK+ runtime for WeasyPrint on Windows. The `pdf_generator.py` automatically adds GTK+ to PATH if installed at the standard location (`C:\Program Files\GTK3-Runtime Win64\bin`).
+### FastAPI Backend Development
+- **Domain Structure**: Each domain follows the pattern `api.py` → `service.py` → `repository.py` → database
+- **Database Factory**: `core/database_factory.py` provides abstraction over Supabase connections
+- **Error Handling**: Custom exceptions in `core/interfaces.py` for consistent error responses
+- **Authentication**: JWT tokens with role-based permissions via `domains/auth/`
+- **API Documentation**: Available at `/docs` (Swagger UI) and `/redoc` when server runs
 
-### Data Safety
-- All numeric conversions use safe conversion functions (`safe_float_conversion`, `safe_decimal_conversion`)
-- NaN values are handled throughout the codebase
-- Decimal precision for financial calculations
+### React Frontend Development  
+- **Component Organization**: Components grouped by domain (`company/`, `work-order/`, etc.)
+- **API Integration**: Centralized in `services/` directory using axios + React Query
+- **State Management**: Zustand for client state, React Query for server state caching
+- **Routing**: Protected routes require authentication, automatic redirects
+- **Build System**: CRACO for customized Create React App configuration
+- **Proxy Configuration**: Development proxy to backend on `localhost:8000`
 
-### Supabase Integration
-- Connection caching using Streamlit's `@st.cache_resource`
-- Automatic retry logic for database operations
-- Secrets stored in `.streamlit/secrets.toml` (use `convert_env_to_secrets.py` to convert from `.env`)
+### PDF Generation & WeasyPrint
+- **GTK+ Dependency**: Required for WeasyPrint on Windows at `C:\Program Files\GTK3-Runtime Win64\bin`
+- **Template System**: Jinja2 templates in `templates/` directory with CSS styling
+- **Floor Plan Integration**: SVG generation via `floor_plan_generator.py` for insurance estimates
+- **Document Types**: Support for estimates, invoices, insurance estimates with floor plans
 
-### Floor Plan Generation
-- SVG-based room floor plans with automatic scaling
-- Dimension labels and area calculations
-- Integration with PDF generation for insurance estimates
+### Database & Supabase Integration
+- **Connection Management**: Shared `utils/db.py` with retry logic and session caching
+- **Environment Configuration**: Different database configs for development vs. production
+- **Schema**: Tables for companies, invoices, estimates, work_orders, plumber_reports, staff
+- **Data Safety**: Safe numeric conversion functions, NaN handling, decimal precision
 
-### JSON Data Structure
-The system expects specific JSON structures for estimates:
-- Room data with dimensions, area, and measurements
-- Line items with quantities, rates, and calculations
-- Company and client information
-- Support for depreciation and insurance-specific fields
+### Development Dependencies & Common Issues
+- **Backend Missing Dependencies**: Common missing packages are `itsdangerous`, `bcrypt`, `email-validator`
+- **Frontend Compilation**: Uses CRACO instead of standard react-scripts
+- **WeasyPrint Warnings**: GTK+ warnings are expected and don't affect functionality
+- **CORS**: Configured for development (localhost:3000) and production
+
+## Project Structure Integration
+
+### Adding New Features
+1. **Backend**: Create new domain in `backend/app/domains/` with full API → Service → Repository pattern
+2. **Frontend**: Add corresponding pages in `frontend/src/pages/` and components in `frontend/src/components/`
+3. **Database**: Update Supabase schema and modify shared modules in `modules/`
+
+### Working with PDF Templates
+1. Create HTML template in `templates/` directory
+2. Add corresponding CSS file for styling  
+3. Update `TEMPLATE_MAP` in `pdf_generator.py`
+4. Test with both Streamlit and React frontends
+
+### Database Schema Changes
+1. Update Supabase database schema
+2. Modify domain models in backend (`backend/app/domains/*/models.py`)
+3. Update Pydantic schemas in backend (`backend/app/domains/*/schemas.py`) 
+4. Modify legacy modules in `modules/` for Streamlit compatibility
+5. Update frontend TypeScript types in `frontend/src/types/`
 
 ## Important Files & Directories
 
-- `data/insurance_estimate/`: Storage for generated PDFs, HTML, and JSON files
-- `data/xlsx_json/`: JSON files converted from Excel
-- `statics/`: Static HTML intake forms
-- `measurement/`: Sample JSON data for floor plans and room measurements
+**Modern Stack**:
+- `backend/app/main.py`: FastAPI application entry point
+- `backend/app/domains/*/`: Domain-driven design structure  
+- `frontend/src/App.tsx`: React application root with routing
+- `frontend/src/pages/`: Main application pages
+- `start_servers.bat`: Quick start script for both servers
 
-## Common Operations
+**Legacy & Shared**:
+- `app.py`: Streamlit application entry point
+- `modules/`: Shared business logic modules  
+- `templates/`: Jinja2 templates for PDF generation
+- `utils/db.py`: Supabase connection management
+- `pdf_generator.py`: PDF generation system
 
-### Adding New Document Types
-1. Create HTML template in `templates/`
-2. Add CSS file for styling
-3. Update `TEMPLATE_MAP` in `pdf_generator.py`
-4. Create corresponding page in `pages/`
-
-### Modifying Database Schema
-1. Update Supabase tables
-2. Modify relevant module in `modules/`
-3. Update data conversion functions if needed
-
-### Debugging PDF Generation
-1. Check GTK+ installation and PATH
-2. Enable HTML output for debugging (`save_html=True` in generation functions)
-3. Review generated HTML in `data/insurance_estimate/html/`
+**Data & Configuration**:
+- `data/`: Generated PDFs, JSON files, Excel conversions
+- `docker-compose.dev.yml` / `docker-compose.prod.yml`: Container deployment
+- Multiple `requirements.txt` files: Root (Streamlit), `backend/` (FastAPI), `frontend/package.json` (React)

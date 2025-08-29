@@ -39,10 +39,10 @@ class AdminAuth(AuthenticationBackend):
         return token is not None
 
 
-# Custom Model Views with Korean labels and better display
+# Custom Model Views with English labels and better display
 class CompanyAdmin(ModelView, model=Company):
-    name = "회사"
-    name_plural = "회사 목록"
+    name = "Company"
+    name_plural = "Companies"
     icon = "fa-solid fa-building"
     
     column_list = [
@@ -57,19 +57,19 @@ class CompanyAdmin(ModelView, model=Company):
     
     column_labels = {
         "id": "ID",
-        "name": "회사명",
-        "address": "주소",
-        "phone": "전화번호",
-        "email": "이메일",
-        "website": "웹사이트",
-        "city": "도시",
-        "state": "주/도",
-        "zipcode": "우편번호",
-        "company_code": "회사 코드",
-        "license_number": "사업자 번호",
-        "insurance_info": "보험 정보",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "name": "Company Name",
+        "address": "Address",
+        "phone": "Phone",
+        "email": "Email",
+        "website": "Website",
+        "city": "City",
+        "state": "State",
+        "zipcode": "ZIP Code",
+        "company_code": "Company Code",
+        "license_number": "License Number",
+        "insurance_info": "Insurance Info",
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [Company.name, Company.company_code, Company.email]
@@ -79,8 +79,8 @@ class CompanyAdmin(ModelView, model=Company):
 
 
 class InvoiceAdmin(ModelView, model=Invoice):
-    name = "송장"
-    name_plural = "송장 목록"
+    name = "Invoice"
+    name_plural = "Invoices"
     icon = "fa-solid fa-file-invoice"
     
     column_list = [
@@ -96,8 +96,8 @@ class InvoiceAdmin(ModelView, model=Invoice):
     column_labels = {
         "id": "ID",
         "invoice_number": "송장 번호",
-        "company_id": "회사 ID",
-        "client_name": "고객명",
+        "company_id": "Company ID",
+        "client_name": "Client Name",
         "client_address": "고객 주소",
         "client_phone": "고객 전화번호",
         "client_email": "고객 이메일",
@@ -112,8 +112,8 @@ class InvoiceAdmin(ModelView, model=Invoice):
         "notes": "메모",
         "terms": "조건",
         "payment_terms": "지불 조건",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [Invoice.invoice_number, Invoice.client_name]
@@ -122,18 +122,18 @@ class InvoiceAdmin(ModelView, model=Invoice):
     column_formatters = {
         Invoice.total_amount: lambda m, a: f"${m.total_amount:,.2f}" if m.total_amount else "$0.00",
         Invoice.status: lambda m, a: {
-            "pending": "⏳ 대기중",
-            "paid": "✅ 지불완료",
-            "overdue": "⚠️ 연체",
-            "cancelled": "❌ 취소됨"
+            "pending": "⏳ Pending",
+            "paid": "✅ Paid",
+            "overdue": "⚠️ Overdue",
+            "cancelled": "❌ Cancelled"
         }.get(m.status, m.status)
     }
     page_size = 50
 
 
 class InvoiceItemAdmin(ModelView, model=InvoiceItem):
-    name = "송장 항목"
-    name_plural = "송장 항목 목록"
+    name = "Invoice Item"
+    name_plural = "Invoice Items"
     icon = "fa-solid fa-list"
     
     column_list = [
@@ -148,16 +148,16 @@ class InvoiceItemAdmin(ModelView, model=InvoiceItem):
     column_labels = {
         "id": "ID",
         "invoice_id": "송장 ID",
-        "description": "설명",
-        "quantity": "수량",
-        "unit": "단위",
-        "rate": "단가",
-        "amount": "금액",
+        "description": "Description",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "rate": "Rate",
+        "amount": "Amount",
         "tax_rate": "세율",
         "tax_amount": "세금",
         "order_index": "순서",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [InvoiceItem.description]
@@ -170,8 +170,8 @@ class InvoiceItemAdmin(ModelView, model=InvoiceItem):
 
 
 class EstimateAdmin(ModelView, model=Estimate):
-    name = "견적서"
-    name_plural = "견적서 목록"
+    name = "Estimate"
+    name_plural = "Estimates"
     icon = "fa-solid fa-calculator"
     
     column_list = [
@@ -186,8 +186,8 @@ class EstimateAdmin(ModelView, model=Estimate):
     column_labels = {
         "id": "ID",
         "estimate_number": "견적 번호",
-        "company_id": "회사 ID",
-        "client_name": "고객명",
+        "company_id": "Company ID",
+        "client_name": "Client Name",
         "client_address": "고객 주소",
         "client_phone": "고객 전화번호",
         "client_email": "고객 이메일",
@@ -208,8 +208,8 @@ class EstimateAdmin(ModelView, model=Estimate):
         "acv_amount": "실제 현금 가치",
         "rcv_amount": "교체 비용 가치",
         "room_data": "룸 데이터",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [Estimate.estimate_number, Estimate.client_name, Estimate.claim_number]
@@ -218,19 +218,19 @@ class EstimateAdmin(ModelView, model=Estimate):
     column_formatters = {
         Estimate.total_amount: lambda m, a: f"${m.total_amount:,.2f}" if m.total_amount else "$0.00",
         Estimate.status: lambda m, a: {
-            "draft": "📝 초안",
-            "sent": "📧 발송됨",
-            "accepted": "✅ 승인됨",
-            "rejected": "❌ 거절됨",
-            "expired": "⏰ 만료됨"
+            "draft": "📝 Draft",
+            "sent": "📧 Sent",
+            "accepted": "✅ Accepted",
+            "rejected": "❌ Rejected",
+            "expired": "⏰ Expired"
         }.get(m.status, m.status)
     }
     page_size = 50
 
 
 class EstimateItemAdmin(ModelView, model=EstimateItem):
-    name = "견적 항목"
-    name_plural = "견적 항목 목록"
+    name = "Estimate Item"
+    name_plural = "Estimate Items"
     icon = "fa-solid fa-list-ol"
     
     column_list = [
@@ -247,11 +247,11 @@ class EstimateItemAdmin(ModelView, model=EstimateItem):
         "id": "ID",
         "estimate_id": "견적 ID",
         "room": "룸",
-        "description": "설명",
-        "quantity": "수량",
-        "unit": "단위",
-        "rate": "단가",
-        "amount": "금액",
+        "description": "Description",
+        "quantity": "Quantity",
+        "unit": "Unit",
+        "rate": "Rate",
+        "amount": "Amount",
         "tax_rate": "세율",
         "tax_amount": "세금",
         "depreciation_rate": "감가상각률",
@@ -260,8 +260,8 @@ class EstimateItemAdmin(ModelView, model=EstimateItem):
         "rcv_amount": "RCV",
         "order_index": "순서",
         "category": "카테고리",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [EstimateItem.description, EstimateItem.room, EstimateItem.category]
@@ -274,8 +274,8 @@ class EstimateItemAdmin(ModelView, model=EstimateItem):
 
 
 class PlumberReportAdmin(ModelView, model=PlumberReport):
-    name = "배관공 보고서"
-    name_plural = "배관공 보고서 목록"
+    name = "Plumber Report"
+    name_plural = "Plumber Reports"
     icon = "fa-solid fa-wrench"
     
     column_list = [
@@ -290,8 +290,8 @@ class PlumberReportAdmin(ModelView, model=PlumberReport):
     column_labels = {
         "id": "ID",
         "report_number": "보고서 번호",
-        "company_id": "회사 ID",
-        "client_name": "고객명",
+        "company_id": "Company ID",
+        "client_name": "Client Name",
         "client_address": "고객 주소",
         "client_phone": "고객 전화번호",
         "client_email": "고객 이메일",
@@ -306,8 +306,8 @@ class PlumberReportAdmin(ModelView, model=PlumberReport):
         "recommendations": "권고사항",
         "inspection_areas": "검사 구역",
         "attachments": "첨부파일",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [PlumberReport.report_number, PlumberReport.client_name]
@@ -315,8 +315,8 @@ class PlumberReportAdmin(ModelView, model=PlumberReport):
     column_default_sort = [(PlumberReport.report_date, True)]
     column_formatters = {
         PlumberReport.status: lambda m, a: {
-            "draft": "📝 초안",
-            "completed": "✅ 완료",
+            "draft": "📝 Draft",
+            "completed": "✅ Completed",
             "sent": "📧 발송됨"
         }.get(m.status, m.status)
     }
@@ -324,8 +324,8 @@ class PlumberReportAdmin(ModelView, model=PlumberReport):
 
 
 class DocumentAdmin(ModelView, model=Document):
-    name = "문서"
-    name_plural = "문서 목록"
+    name = "Document"
+    name_plural = "Documents"
     icon = "fa-solid fa-file"
     
     column_list = [
@@ -343,13 +343,13 @@ class DocumentAdmin(ModelView, model=Document):
         "document_type": "문서 유형",
         "document_id": "문서 ID",
         "document_number": "문서 번호",
-        "client_name": "고객명",
+        "client_name": "Client Name",
         "total_amount": "총액",
         "status": "상태",
         "created_date": "생성일자",
         "pdf_url": "PDF URL",
-        "created_at": "생성일",
-        "updated_at": "수정일"
+        "created_at": "Created At",
+        "updated_at": "Updated At"
     }
     
     column_searchable_list = [Document.document_number, Document.client_name]
@@ -367,8 +367,8 @@ class DocumentAdmin(ModelView, model=Document):
 
 
 class DocumentTypeAdmin(ModelView, model=DocumentType):
-    name = "문서 유형"
-    name_plural = "문서 유형 목록"
+    name = "Document Type"
+    name_plural = "Document Types"
     icon = "fa-solid fa-file-contract"
     
     column_list = [
@@ -385,7 +385,7 @@ class DocumentTypeAdmin(ModelView, model=DocumentType):
         "id": "ID",
         "name": "문서 유형명",
         "code": "코드",
-        "description": "설명",
+        "description": "Description",
         "category": "카테고리",
         "base_price": "기본 가격",
         "pricing_rules": "가격 규칙",
@@ -395,8 +395,8 @@ class DocumentTypeAdmin(ModelView, model=DocumentType):
         "is_active": "활성화",
         "is_available_online": "온라인 가능",
         "display_order": "표시 순서",
-        "created_at": "생성일",
-        "updated_at": "수정일",
+        "created_at": "Created At",
+        "updated_at": "Updated At",
         "created_by": "생성자",
         "updated_by": "수정자"
     }
@@ -414,8 +414,8 @@ class DocumentTypeAdmin(ModelView, model=DocumentType):
     
 
 class TradeAdmin(ModelView, model=Trade):
-    name = "업종"
-    name_plural = "업종 목록"
+    name = "Trade"
+    name_plural = "Trades"
     icon = "fa-solid fa-tools"
     
     column_list = [
@@ -433,15 +433,15 @@ class TradeAdmin(ModelView, model=Trade):
         "id": "ID",
         "name": "업종명",
         "code": "코드",
-        "description": "설명",
+        "description": "Description",
         "category": "카테고리",
         "is_active": "활성화",
         "requires_license": "면허 필요",
         "requires_insurance": "보험 필요",
         "license_type": "면허 유형",
         "display_order": "표시 순서",
-        "created_at": "생성일",
-        "updated_at": "수정일",
+        "created_at": "Created At",
+        "updated_at": "Updated At",
         "created_by": "생성자",
         "updated_by": "수정자"
     }
