@@ -17,7 +17,6 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 
 # API and core imports
-from app.api import companies_modular
 from app.domains.company.api import router as company_router
 from app.domains.invoice.api import router as invoice_router
 from app.domains.estimate.api import router as estimate_router
@@ -29,6 +28,7 @@ from app.domains.credit.api import router as credit_router
 from app.domains.staff.api import router as staff_router
 from app.domains.document_types.api import router as document_types_router
 from app.domains.auth.api import router as auth_router
+from app.domains.dashboard.api import router as dashboard_router
 from app.core.config import settings
 from app.core.database_factory import get_database, db_factory
 # Service factory removed - using direct service instantiation
@@ -234,12 +234,7 @@ async def configuration_exception_handler(request: Request, exc: ConfigurationEr
 # Authentication endpoints
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 
-# New modular endpoints
-app.include_router(
-    companies_modular.router, 
-    prefix="/api/v2/companies", 
-    tags=["Companies (Modular)"]
-)
+# Removed old modular endpoints - migrated to domain-driven structure
 
 # New domain-driven endpoints
 app.include_router(company_router, prefix="/api/companies", tags=["Companies"])
@@ -253,6 +248,9 @@ app.include_router(work_order_router, prefix="/api/work-orders", tags=["Work Ord
 app.include_router(payment_router, prefix="/api/payments", tags=["Payments & Billing"])
 app.include_router(credit_router, prefix="/api/credits", tags=["Credits & Discounts"])
 app.include_router(staff_router, prefix="/api/staff", tags=["Staff Management"])
+
+# Dashboard and Analytics endpoints
+app.include_router(dashboard_router, tags=["Dashboard & Analytics"])
 
 # Document Types and Trades endpoints
 app.include_router(document_types_router, prefix="/api", tags=["Document Types & Trades"])

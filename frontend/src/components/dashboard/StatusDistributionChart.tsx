@@ -58,21 +58,21 @@ const STATUS_ICONS = {
 };
 
 const STATUS_LABELS = {
-  pending: '승인 대기',
-  approved: '승인됨',
-  in_progress: '진행 중',
-  completed: '완료',
-  cancelled: '취소됨',
-  on_hold: '보류',
-  draft: '임시저장',
-  rejected: '거부됨'
+  pending: 'Pending Approval',
+  approved: 'Approved',
+  in_progress: 'In Progress',
+  completed: 'Completed',
+  cancelled: 'Cancelled',
+  on_hold: 'On Hold',
+  draft: 'Draft',
+  rejected: 'Rejected'
 };
 
 const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
   data = [],
   loading = false,
   height = 300,
-  title = '작업 상태 분포',
+  title = 'Task Status Distribution',
   showLegend = true,
   showList = true
 }) => {
@@ -102,10 +102,10 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
             {data.name}
           </p>
           <p style={{ margin: '4px 0', color: data.color }}>
-            개수: {data.count}건
+            Count: {data.count} items
           </p>
           <p style={{ margin: 0, color: '#666' }}>
-            비율: {data.percentage.toFixed(1)}%
+            Ratio: {data.percentage.toFixed(1)}%
           </p>
         </div>
       );
@@ -206,7 +206,7 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
               dominantBaseline="central"
               style={{ fontSize: '12px', fill: '#999' }}
             >
-              총 작업
+              Total Tasks
             </text>
           </PieChart>
         );
@@ -255,7 +255,7 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
     return (
       <Card title={title}>
         <Empty 
-          description="데이터가 없습니다"
+          description="No data available"
           style={{ padding: '40px 0' }}
         />
       </Card>
@@ -293,7 +293,7 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
                 title={
                   <Space>
                     <span>{item.name}</span>
-                    <Tag color={item.color}>{item.count}건</Tag>
+                    <Tag color={item.color}>{item.count} items</Tag>
                   </Space>
                 }
                 description={
@@ -336,7 +336,7 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
           backgroundColor: '#fafafa',
           borderRadius: '6px'
         }}>
-          <Title level={5} style={{ margin: '0 0 12px 0' }}>상태별 상세</Title>
+          <Title level={5} style={{ margin: '0 0 12px 0' }}>Status Details</Title>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
             {processedData.map((item, index) => (
               <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -350,7 +350,7 @@ const StatusDistributionChart: React.FC<StatusDistributionChartProps> = ({
                   }}
                 />
                 <span style={{ fontSize: '14px' }}>
-                  {item.name}: <strong>{item.count}건</strong> ({item.percentage.toFixed(1)}%)
+                  {item.name}: <strong>{item.count} items</strong> ({item.percentage.toFixed(1)}%)
                 </span>
               </div>
             ))}

@@ -86,13 +86,13 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
       <Col xs={24} sm={12} lg={6}>
         <Card>
           <Statistic
-            title="총 작업지시서"
+            title="Total Work Orders"
             value={stats.total}
             prefix={<FileTextOutlined style={{ color: '#1890ff' }} />}
-            suffix="개"
+            suffix=" items"
           />
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            전체 작업지시서 수
+            Total number of work orders
           </Text>
         </Card>
       </Col>
@@ -101,14 +101,14 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
       <Col xs={24} sm={12} lg={6}>
         <Card>
           <Statistic
-            title="승인 대기"
+            title="Pending Approval"
             value={stats.pendingCount}
             prefix={<ClockCircleOutlined style={{ color: '#faad14' }} />}
-            suffix="개"
+            suffix=" items"
             valueStyle={{ color: stats.pendingCount > 0 ? '#faad14' : undefined }}
           />
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            즉시 처리 필요
+            Requires immediate processing
           </Text>
         </Card>
       </Col>
@@ -117,14 +117,14 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
       <Col xs={24} sm={12} lg={6}>
         <Card>
           <Statistic
-            title="이번 주 작업"
+            title="This Week's Orders"
             value={stats.thisWeekCount}
             prefix={<CalendarOutlined style={{ color: '#13c2c2' }} />}
-            suffix="개"
+            suffix=" items"
             valueStyle={{ color: '#13c2c2' }}
           />
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            최근 7일간 생성
+            Created in the last 7 days
           </Text>
         </Card>
       </Col>
@@ -133,30 +133,30 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
       <Col xs={24} sm={12} lg={6}>
         <Card>
           <Statistic
-            title="총 수익"
+            title="Total Revenue"
             value={stats.totalRevenue}
             prefix={<DollarOutlined style={{ color: '#52c41a' }} />}
             precision={0}
             valueStyle={{ color: '#52c41a' }}
           />
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            완료된 작업 기준
+            Based on completed work orders
           </Text>
         </Card>
       </Col>
 
       {/* Status Distribution */}
       <Col xs={24}>
-        <Card title="상태별 분포" size="small">
+        <Card title="Status Distribution" size="small">
           <Row gutter={8}>
             {Object.entries(stats.statusCounts).map(([status, count]) => {
               const statusLabels = {
-                draft: '초안',
-                pending: '승인 대기',
-                approved: '승인됨',
-                in_progress: '진행중',
-                completed: '완료',
-                cancelled: '취소됨',
+                draft: 'Draft',
+                pending: 'Pending',
+                approved: 'Approved',
+                in_progress: 'In Progress',
+                completed: 'Completed',
+                cancelled: 'Cancelled',
               };
 
               return (
@@ -191,7 +191,7 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
           <Col xs={24} sm={8}>
             <Card size="small">
               <Statistic
-                title="평균 주문 가치"
+                title="Average Order Value"
                 value={stats.avgOrderValue}
                 prefix="$"
                 precision={0}
@@ -204,7 +204,7 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
           <Col xs={24} sm={8}>
             <Card size="small">
               <Statistic
-                title="완료율"
+                title="Completion Rate"
                 value={
                   stats.total > 0
                     ? ((stats.statusCounts.completed || 0) / stats.total) * 100
@@ -222,12 +222,12 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
           <Col xs={24} sm={8}>
             <Card size="small">
               <Statistic
-                title="진행 중인 작업"
+                title="Active Orders"
                 value={
                   (stats.statusCounts.approved || 0) + 
                   (stats.statusCounts.in_progress || 0)
                 }
-                suffix="개"
+                suffix=" items"
                 valueStyle={{ fontSize: '16px', color: '#1890ff' }}
                 prefix={<ExclamationCircleOutlined />}
               />

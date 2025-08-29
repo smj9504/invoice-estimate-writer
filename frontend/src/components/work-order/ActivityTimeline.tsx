@@ -40,7 +40,7 @@ const activityConfig = {
   status_change: {
     icon: <CheckCircleOutlined />,
     color: '#1890ff',
-    getTitle: (item: ActivityItem) => '상태 변경',
+    getTitle: (item: ActivityItem) => 'Status Changed',
     getDescription: (item: ActivityItem) => 
       item.metadata?.from && item.metadata?.to 
         ? `${item.metadata.from} → ${item.metadata.to}`
@@ -49,40 +49,40 @@ const activityConfig = {
   comment: {
     icon: <MessageOutlined />,
     color: '#52c41a',
-    getTitle: (item: ActivityItem) => '코멘트 추가',
+    getTitle: (item: ActivityItem) => 'Comment Added',
     getDescription: (item: ActivityItem) => item.description,
   },
   email_sent: {
     icon: <MailOutlined />,
     color: '#722ed1',
-    getTitle: (item: ActivityItem) => '이메일 발송',
+    getTitle: (item: ActivityItem) => 'Email Sent',
     getDescription: (item: ActivityItem) => 
-      `${item.metadata?.recipient || '고객'}에게 ${item.metadata?.type || '알림'} 이메일 발송`,
+      `${item.metadata?.type || 'Notification'} email sent to ${item.metadata?.recipient || 'customer'}`,
   },
   phone_call: {
     icon: <PhoneOutlined />,
     color: '#fa8c16',
-    getTitle: (item: ActivityItem) => '전화 상담',
+    getTitle: (item: ActivityItem) => 'Phone Consultation',
     getDescription: (item: ActivityItem) => item.description,
   },
   document_generated: {
     icon: <FileTextOutlined />,
     color: '#13c2c2',
-    getTitle: (item: ActivityItem) => '문서 생성',
+    getTitle: (item: ActivityItem) => 'Document Generated',
     getDescription: (item: ActivityItem) => 
-      `${item.metadata?.document_type || 'PDF'} 문서가 생성되었습니다`,
+      `${item.metadata?.document_type || 'PDF'} document has been generated`,
   },
   payment: {
     icon: <CreditCardOutlined />,
     color: '#52c41a',
-    getTitle: (item: ActivityItem) => '결제 처리',
+    getTitle: (item: ActivityItem) => 'Payment Processed',
     getDescription: (item: ActivityItem) => 
-      `${item.metadata?.amount ? `$${item.metadata.amount}` : ''} ${item.metadata?.payment_method || ''} 결제`,
+      `${item.metadata?.amount ? `$${item.metadata.amount}` : ''} payment ${item.metadata?.payment_method || ''}`,
   },
   system: {
     icon: <BuildOutlined />,
     color: '#8c8c8c',
-    getTitle: (item: ActivityItem) => '시스템',
+    getTitle: (item: ActivityItem) => 'System',
     getDescription: (item: ActivityItem) => item.description,
   },
 } as const;
@@ -111,7 +111,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
 
   if (isLoading) {
     return (
-      <Card title="활동 내역" style={{ height: '400px' }}>
+      <Card title="Activity History" style={{ height: '400px' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
           <Spin size="large" />
         </div>
@@ -121,10 +121,10 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
 
   if (error) {
     return (
-      <Card title="활동 내역">
+      <Card title="Activity History">
         <Alert
-          message="오류"
-          description="활동 내역을 불러오는데 실패했습니다."
+          message="Error"
+          description="Failed to load activity history."
           type="error"
           showIcon
         />
@@ -134,10 +134,10 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
 
   if (activities.length === 0) {
     return (
-      <Card title="활동 내역">
+      <Card title="Activity History">
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="활동 내역이 없습니다"
+          description="No activity history available"
         />
       </Card>
     );
@@ -154,11 +154,11 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
     
     if (diffInHours < 1) {
       const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-      return diffInMinutes < 1 ? '방금 전' : `${diffInMinutes}분 전`;
+      return diffInMinutes < 1 ? 'just now' : `${diffInMinutes} minutes ago`;
     } else if (diffInHours < 24) {
-      return `${diffInHours}시간 전`;
+      return `${diffInHours} hours ago`;
     } else {
-      return date.toLocaleDateString('ko-KR');
+      return date.toLocaleDateString('en-US');
     }
   };
 
@@ -219,7 +219,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
                     icon={<UserOutlined />}
                   />
                   <Text type="secondary" style={{ fontSize: '12px' }}>
-                    {activity.user_name || '시스템'}
+                    {activity.user_name || 'System'}
                   </Text>
                 </Space>
               </div>
@@ -232,7 +232,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
               {activity.metadata.reason && (
                 <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px', marginTop: 8 }}>
                   <Text style={{ fontSize: '13px', fontStyle: 'italic' }}>
-                    사유: {activity.metadata.reason}
+                    Reason: {activity.metadata.reason}
                   </Text>
                 </div>
               )}
@@ -260,7 +260,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ workOrderId }) => {
       title={
         <Space>
           <ClockCircleOutlined />
-          활동 내역
+          Activity History
           <Tag color="blue">{activities.length}</Tag>
         </Space>
       }

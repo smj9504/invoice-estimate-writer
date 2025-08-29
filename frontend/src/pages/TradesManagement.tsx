@@ -122,6 +122,13 @@ const TradesManagement: React.FC = () => {
 
   const columns: ColumnsType<Trade> = [
     {
+      title: 'No',
+      dataIndex: 'display_order',
+      key: 'display_order',
+      width: 100,
+      sorter: (a, b) => a.display_order - b.display_order,
+    },
+    {
       title: 'Trade Name',
       dataIndex: 'name',
       key: 'name',
@@ -178,13 +185,6 @@ const TradesManagement: React.FC = () => {
           )}
         </Space>
       ),
-    },
-    {
-      title: 'Order',
-      dataIndex: 'display_order',
-      key: 'display_order',
-      width: 80,
-      sorter: (a, b) => a.display_order - b.display_order,
     },
     {
       title: 'Actions',

@@ -95,7 +95,11 @@ const AdminDashboard: React.FC = () => {
     refetch: refetchDashboard 
   } = useQuery({
     queryKey: ['dashboard', filters],
-    queryFn: () => dashboardService.getMockDashboardData(), // Switch to real API when ready
+    queryFn: () => dashboardService.getDashboardData({
+      company_id: selectedCompany || undefined,
+      date_from: dateRange[0].format('YYYY-MM-DD'),
+      date_to: dateRange[1].format('YYYY-MM-DD')
+    }),
     refetchInterval: autoRefresh ? refreshInterval * 1000 : false,
     staleTime: 60 * 1000, // 1 minute
   });
@@ -127,9 +131,9 @@ const AdminDashboard: React.FC = () => {
   const handleRefresh = async () => {
     try {
       await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      message.success('대시보드가 새로고침되었습니다');
+      message.success('Dashboard refreshed successfully');
     } catch (error) {
-      message.error('새로고침 중 오류가 발생했습니다');
+      message.error('Error occurred while refreshing');
     }
   };
 
@@ -144,29 +148,29 @@ const AdminDashboard: React.FC = () => {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      message.success(`${type.toUpperCase()} 파일이 다운로드되었습니다`);
+      message.success(`${type.toUpperCase()} file downloaded successfully`);
     } catch (error) {
-      message.error('내보내기 중 오류가 발생했습니다');
+      message.error('Error occurred during export');
     }
   };
 
   const handleBulkApprove = async () => {
     if (selectedWorkOrders.length === 0) {
-      message.warning('승인할 작업 지시서를 선택해주세요');
+      message.warning('Please select work orders to approve');
       return;
     }
 
     Modal.confirm({
-      title: '일괄 승인',
-      content: `선택한 ${selectedWorkOrders.length}개의 작업 지시서를 승인하시겠습니까?`,
+      title: 'Bulk Approval',
+      content: `Do you want to approve ${selectedWorkOrders.length} selected work orders?`,
       onOk: async () => {
         try {
           await dashboardService.approveMultipleOrders(selectedWorkOrders);
-          message.success('작업 지시서가 일괄 승인되었습니다');
+          message.success('Work orders approved in bulk successfully');
           setSelectedWorkOrders([]);
           refetchDashboard();
         } catch (error) {
-          message.error('일괄 승인 중 오류가 발생했습니다');
+          message.error('Error occurred during bulk approval');
         }
       }
     });
@@ -178,12 +182,12 @@ const AdminDashboard: React.FC = () => {
     return (
       <div>
         <Alert
-          message="데이터 로딩 오류"
-          description="대시보드 데이터를 불러오는 중 오류가 발생했습니다. 새로고침을 시도해주세요."
+          message="Data Loading Error"
+          description="An error occurred while loading dashboard data. Please try refreshing."
           type="error"
           action={
             <Button size="small" danger onClick={handleRefresh}>
-              새로고침
+              Refresh
             </Button>
           }
         />
@@ -203,10 +207,10 @@ const AdminDashboard: React.FC = () => {
       }}>
         <div>
           <Title level={2} style={{ margin: 0 }}>
-            관리자 대시보드
+            Admin Dashboard
           </Title>
           <Text type="secondary">
-            작업 지시서 시스템 현황 및 분석
+            Work Order System Status and Analytics
           </Text>
         </div>
 
@@ -221,7 +225,7 @@ const AdminDashboard: React.FC = () => {
 
           {/* Company Filter */}
           <Select
-            placeholder="회사 선택"
+            placeholder="Select Company"
             style={{ width: 200 }}
             value={selectedCompany}
             onChange={setSelectedCompany}
@@ -235,7 +239,7 @@ const AdminDashboard: React.FC = () => {
 
           {/* Auto Refresh */}
           <Space>
-            <Text>자동 새로고침:</Text>
+            <Text>Auto Refresh:</Text>
             <Switch
               checked={autoRefresh}
               onChange={setAutoRefresh}
@@ -251,7 +255,7 @@ const AdminDashboard: React.FC = () => {
               onClick={handleRefresh}
               loading={dashboardLoading}
             >
-              새로고침
+              Refresh
             </Button>
 
             <Dropdown
@@ -259,13 +263,13 @@ const AdminDashboard: React.FC = () => {
                 items: [
                   {
                     key: 'excel',
-                    label: 'Excel 내보내기',
+                    label: 'Export Excel',
                     icon: <DownloadOutlined />,
                     onClick: () => handleExport('excel')
                   },
                   {
                     key: 'pdf',
-                    label: 'PDF 내보내기',
+                    label: 'Export PDF',
                     icon: <DownloadOutlined />,
                     onClick: () => handleExport('pdf')
                   }
@@ -273,7 +277,7 @@ const AdminDashboard: React.FC = () => {
               }}
             >
               <Button icon={<DownloadOutlined />}>
-                내보내기
+                Export
               </Button>
             </Dropdown>
 
@@ -282,7 +286,7 @@ const AdminDashboard: React.FC = () => {
               icon={<PlusOutlined />}
               onClick={() => navigate('/work-orders/new')}
             >
-              작업 지시서 생성
+              Create Work Order
             </Button>
           </Space>
         </Space>
@@ -297,7 +301,7 @@ const AdminDashboard: React.FC = () => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <AlertOutlined style={{ color: '#fa8c16', marginRight: 8 }} />
                   <Title level={4} style={{ margin: 0 }}>
-                    알림 및 경고
+                    Alerts and Warnings
                   </Title>
                   <Badge count={dashboardData.alerts.length} style={{ marginLeft: 12 }} />
                 </div>
@@ -306,7 +310,7 @@ const AdminDashboard: React.FC = () => {
                   size="small"
                   onClick={() => setAlertsVisible(false)}
                 >
-                  닫기
+                  Close
                 </Button>
               </div>
 
@@ -351,7 +355,7 @@ const AdminDashboard: React.FC = () => {
               {dashboardData.alerts.length > 3 && (
                 <div style={{ textAlign: 'center', marginTop: 16 }}>
                   <Button type="link" size="small">
-                    모든 알림 보기 ({dashboardData.alerts.length - 3}개 더)
+                    View All Alerts ({dashboardData.alerts.length - 3} more)
                   </Button>
                 </div>
               )}
@@ -367,7 +371,7 @@ const AdminDashboard: React.FC = () => {
             title={
               <Space>
                 <SettingOutlined />
-                <span>빠른 관리 메뉴</span>
+                <span>Quick Management Menu</span>
               </Space>
             }
             size="small"
@@ -378,26 +382,26 @@ const AdminDashboard: React.FC = () => {
                 icon={<FileTextOutlined />}
                 onClick={() => navigate('/admin/document-types')}
               >
-                문서 유형 관리
+                Document Types
               </Button>
               <Button 
                 type="primary" 
                 icon={<ToolOutlined />}
                 onClick={() => navigate('/admin/trades')}
               >
-                업종 관리
+                Trades
               </Button>
               <Button 
                 icon={<TeamOutlined />}
                 onClick={() => navigate('/companies')}
               >
-                회사 관리
+                Companies
               </Button>
               <Button 
                 icon={<UserOutlined />}
                 onClick={() => navigate('/staff')}
               >
-                직원 관리
+                Staff
               </Button>
             </Space>
           </Card>
@@ -408,19 +412,19 @@ const AdminDashboard: React.FC = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} lg={6}>
           <MetricCard
-            title="전체 작업 지시서"
+            title="Total Work Orders"
             value={stats?.total_work_orders || 0}
             prefix={<FileTextOutlined />}
             color="#1890ff"
             loading={dashboardLoading}
             onClick={() => navigate('/work-orders')}
-            tooltip="시스템에 등록된 총 작업 지시서 수"
+            tooltip="Total number of work orders registered in the system"
           />
         </Col>
         
         <Col xs={24} sm={12} lg={6}>
           <MetricCard
-            title="이달 매출"
+            title="This Month Revenue"
             value={stats?.revenue_this_month || 0}
             prefix="$"
             precision={0}
@@ -428,34 +432,34 @@ const AdminDashboard: React.FC = () => {
             loading={dashboardLoading}
             trend={{
               value: stats?.revenue_trend || 0,
-              label: "지난달 대비"
+              label: "vs Last Month"
             }}
             formatter={(value) => `$${Number(value).toLocaleString()}`}
-            tooltip="현재 월의 총 매출액"
+            tooltip="Total revenue for current month"
           />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
           <MetricCard
-            title="승인 대기"
+            title="Pending Approval"
             value={stats?.pending_approvals || 0}
             prefix={<ClockCircleOutlined />}
             color="#fa8c16"
             loading={dashboardLoading}
             onClick={() => navigate('/work-orders?status=pending')}
-            tooltip="승인이 필요한 작업 지시서 수"
+            tooltip="Number of work orders requiring approval"
           />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
           <MetricCard
-            title="진행 중"
+            title="In Progress"
             value={stats?.active_work_orders || 0}
             prefix={<CheckCircleOutlined />}
             color="#722ed1"
             loading={dashboardLoading}
             onClick={() => navigate('/work-orders?status=in_progress')}
-            tooltip="현재 진행 중인 작업 지시서 수"
+            tooltip="Number of work orders currently in progress"
           />
         </Col>
       </Row>
@@ -464,7 +468,7 @@ const AdminDashboard: React.FC = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} lg={8}>
           <MetricCard
-            title="완료율"
+            title="Completion Rate"
             value={stats?.completion_rate || 0}
             suffix="%"
             precision={1}
@@ -474,25 +478,25 @@ const AdminDashboard: React.FC = () => {
               percent: stats?.completion_rate || 0,
               status: (stats?.completion_rate || 0) >= 80 ? 'success' : 'normal'
             }}
-            tooltip="전체 작업 지시서 중 완료된 비율"
+            tooltip="Percentage of completed work orders"
           />
         </Col>
 
         <Col xs={24} sm={12} lg={8}>
           <MetricCard
-            title="평균 처리 시간"
+            title="Avg Processing Time"
             value={stats?.average_processing_time || 0}
-            suffix="일"
+            suffix=" days"
             precision={1}
             color="#1890ff"
             loading={dashboardLoading}
-            tooltip="작업 지시서 생성부터 완료까지의 평균 소요 시간"
+            tooltip="Average time from work order creation to completion"
           />
         </Col>
 
         <Col xs={24} sm={12} lg={8}>
           <MetricCard
-            title="크레딧 사용률"
+            title="Credit Usage Rate"
             value={dashboardData?.credit_usage?.utilization_rate || 0}
             suffix="%"
             precision={1}
@@ -502,7 +506,7 @@ const AdminDashboard: React.FC = () => {
               percent: dashboardData?.credit_usage?.utilization_rate || 0,
               status: (dashboardData?.credit_usage?.utilization_rate || 0) >= 90 ? 'exception' : 'normal'
             }}
-            tooltip="발급된 크레딧 대비 사용 비율"
+            tooltip="Percentage of issued credits used"
           />
         </Col>
       </Row>
@@ -531,9 +535,9 @@ const AdminDashboard: React.FC = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={12}>
           <Card 
-            title="문서 유형별 분포"
+            title="Document Type Distribution"
             loading={dashboardLoading}
-            extra={<Button type="link" size="small">더 보기</Button>}
+            extra={<Button type="link" size="small">View More</Button>}
           >
             <div style={{ height: 300 }}>
               {dashboardData?.document_type_distribution?.map((item, index) => (
@@ -550,7 +554,7 @@ const AdminDashboard: React.FC = () => {
                   <div>
                     <Text strong>{item.document_type}</Text>
                     <br />
-                    <Text type="secondary">{item.count}건</Text>
+                    <Text type="secondary">{item.count} items</Text>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <Text strong>${item.revenue.toLocaleString()}</Text>
@@ -563,9 +567,9 @@ const AdminDashboard: React.FC = () => {
 
         <Col xs={24} lg={12}>
           <Card 
-            title="인기 업종"
+            title="Popular Trades"
             loading={dashboardLoading}
-            extra={<Button type="link" size="small">더 보기</Button>}
+            extra={<Button type="link" size="small">View More</Button>}
           >
             <div style={{ height: 300 }}>
               {dashboardData?.trade_popularity?.map((item, index) => (
@@ -590,14 +594,14 @@ const AdminDashboard: React.FC = () => {
                     <div style={{ marginLeft: 12 }}>
                       <Text strong>{item.trade_name}</Text>
                       <br />
-                      <Text type="secondary">{item.count}건</Text>
+                      <Text type="secondary">{item.count} items</Text>
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <Text strong>${item.revenue.toLocaleString()}</Text>
                     <br />
                     <Tag color={item.trend === 'up' ? 'green' : item.trend === 'down' ? 'red' : 'blue'}>
-                      {item.trend === 'up' ? '상승' : item.trend === 'down' ? '하락' : '안정'}
+                      {item.trend === 'up' ? 'Rising' : item.trend === 'down' ? 'Falling' : 'Stable'}
                     </Tag>
                   </div>
                 </div>
@@ -628,7 +632,7 @@ const AdminDashboard: React.FC = () => {
           <Row gutter={[16, 16]}>
             {/* Quick Actions */}
             <Col span={24}>
-              <Card title="빠른 작업">
+              <Card title="Quick Actions">
                 <Row gutter={[16, 16]}>
                   <Col xs={12} sm={8}>
                     <Button
@@ -639,7 +643,7 @@ const AdminDashboard: React.FC = () => {
                       onClick={() => navigate('/work-orders/new')}
                       style={{ height: 60, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
                     >
-                      새 작업 지시서
+                      New Work Order
                     </Button>
                   </Col>
 
@@ -652,7 +656,7 @@ const AdminDashboard: React.FC = () => {
                       onClick={handleBulkApprove}
                       style={{ height: 60, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
                     >
-                      일괄 승인
+                      Bulk Approve
                     </Button>
                   </Col>
 
@@ -665,7 +669,7 @@ const AdminDashboard: React.FC = () => {
                       onClick={() => navigate('/settings')}
                       style={{ height: 60, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
                     >
-                      시스템 설정
+                      System Settings
                     </Button>
                   </Col>
                 </Row>
@@ -678,10 +682,10 @@ const AdminDashboard: React.FC = () => {
                 title={
                   <Space>
                     <TrophyOutlined style={{ color: '#faad14' }} />
-                    우수 직원
+                    Top Staff
                   </Space>
                 }
-                extra={<Button type="link" size="small">더 보기</Button>}
+                extra={<Button type="link" size="small">View More</Button>}
               >
                 <List
                   dataSource={dashboardData?.staff_performance?.slice(0, 3) || []}
@@ -699,10 +703,10 @@ const AdminDashboard: React.FC = () => {
                           </Badge>
                         }
                         title={staff.staff_name}
-                        description={`완료: ${staff.completed_orders}건 • 매출: $${staff.revenue_generated.toLocaleString()}`}
+                        description={`Completed: ${staff.completed_orders} • Revenue: $${staff.revenue_generated.toLocaleString()}`}
                       />
                       <div>
-                        <Tooltip title="평점">
+                        <Tooltip title="Rating">
                           <Text strong style={{ color: '#faad14' }}>
                             ★{staff.rating}
                           </Text>

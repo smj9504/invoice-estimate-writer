@@ -151,7 +151,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
             showInfo={false}
           />
           <Text style={{ fontSize: '12px', color: '#999' }}>
-            {progress.percent}% 목표 달성
+            {progress.percent}% Target Achieved
           </Text>
         </div>
       )}

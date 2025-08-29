@@ -106,6 +106,11 @@ class WorkOrder(Base):
     is_billable = Column(Boolean, default=True)
     requires_permit = Column(Boolean, default=False)
     
+    # Revision Tracking
+    revision_count = Column(Integer, default=0, nullable=False)
+    revision_requested = Column(Boolean, default=False, nullable=False)
+    last_revision_date = Column(DateTime)
+    
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

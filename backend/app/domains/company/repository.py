@@ -78,6 +78,14 @@ class CompanyRepositoryMixin:
     def get_companies_with_stats(self) -> List[Dict[str, Any]]:
         """Get companies with additional statistics"""
         raise NotImplementedError("Subclasses must implement get_companies_with_stats")
+    
+    def get_company_by_email(self, email: str) -> Optional[Dict[str, Any]]:
+        """Get company by email address - alias for get_by_email for compatibility"""
+        return self.get_by_email(email)
+    
+    def get_companies_summary_stats(self) -> Dict[str, Any]:
+        """Get companies statistics summary"""
+        raise NotImplementedError("Subclasses must implement get_companies_summary_stats")
 
 
 class CompanySQLAlchemyRepository(SQLAlchemyRepository, CompanyRepositoryMixin):
@@ -142,6 +150,29 @@ class CompanySQLAlchemyRepository(SQLAlchemyRepository, CompanyRepositoryMixin):
         except Exception as e:
             logger.error(f"Error getting companies with stats: {e}")
             return self.get_all()
+    
+    def get_companies_summary_stats(self) -> Dict[str, Any]:
+        """Get companies statistics summary"""
+        try:
+            total_companies = self.db_session.query(Company).count()
+            active_companies = self.db_session.query(Company).filter(Company.is_active == True).count()
+            inactive_companies = total_companies - active_companies
+            default_companies = self.db_session.query(Company).filter(Company.is_default == True).count()
+            
+            return {
+                'total_companies': total_companies,
+                'active_companies': active_companies,
+                'inactive_companies': inactive_companies,
+                'default_companies': default_companies
+            }
+        except Exception as e:
+            logger.error(f"Error getting companies summary stats: {e}")
+            return {
+                'total_companies': 0,
+                'active_companies': 0,
+                'inactive_companies': 0,
+                'default_companies': 0
+            }
 
 
 class CompanySupabaseRepository(SupabaseRepository, CompanyRepositoryMixin):
@@ -208,6 +239,30 @@ class CompanySupabaseRepository(SupabaseRepository, CompanyRepositoryMixin):
         except Exception as e:
             logger.error(f"Error getting companies with stats in Supabase: {e}")
             return self.get_all()
+    
+    def get_companies_summary_stats(self) -> Dict[str, Any]:
+        """Get companies statistics summary"""
+        try:
+            companies = self.get_all()
+            total_companies = len(companies)
+            active_companies = len([c for c in companies if c.get('is_active', True)])
+            inactive_companies = total_companies - active_companies
+            default_companies = len([c for c in companies if c.get('is_default', False)])
+            
+            return {
+                'total_companies': total_companies,
+                'active_companies': active_companies,
+                'inactive_companies': inactive_companies,
+                'default_companies': default_companies
+            }
+        except Exception as e:
+            logger.error(f"Error getting companies summary stats: {e}")
+            return {
+                'total_companies': 0,
+                'active_companies': 0,
+                'inactive_companies': 0,
+                'default_companies': 0
+            }
 
 
 class CompanyRepository:

@@ -42,20 +42,20 @@ const { confirm } = Modal;
 
 // Status configuration
 const statusConfig = {
-  draft: { color: 'default', label: '초안' },
-  pending: { color: 'warning', label: '승인 대기' },
-  approved: { color: 'blue', label: '승인됨' },
-  in_progress: { color: 'processing', label: '진행중' },
-  completed: { color: 'success', label: '완료' },
-  cancelled: { color: 'error', label: '취소됨' },
+  draft: { color: 'default', label: 'Draft' },
+  pending: { color: 'warning', label: 'Pending Approval' },
+  approved: { color: 'blue', label: 'Approved' },
+  in_progress: { color: 'processing', label: 'In Progress' },
+  completed: { color: 'success', label: 'Completed' },
+  cancelled: { color: 'error', label: 'Cancelled' },
 } as const;
 
 // Document type labels
 const documentTypeLabels: Record<DocumentType, string> = {
-  estimate: '견적서',
-  invoice: '인보이스',
-  insurance_estimate: '보험 견적서',
-  plumber_report: '배관공 보고서',
+  estimate: 'Estimate',
+  invoice: 'Invoice',
+  insurance_estimate: 'Insurance Estimate',
+  plumber_report: 'Plumber Report',
 };
 
 interface WorkOrderListFilters {
@@ -100,12 +100,12 @@ const WorkOrderList: React.FC = () => {
   const deleteMutation = useMutation({
     mutationFn: workOrderService.deleteWorkOrder,
     onSuccess: () => {
-      message.success('작업 지시서가 삭제되었습니다.');
+      message.success('Work order has been deleted.');
       queryClient.invalidateQueries({ queryKey: ['work-orders'] });
       setSelectedRowKeys([]);
     },
     onError: (error: any) => {
-      message.error(error.message || '삭제에 실패했습니다.');
+      message.error(error.message || 'Failed to delete.');
     },
   });
 
@@ -114,11 +114,11 @@ const WorkOrderList: React.FC = () => {
     mutationFn: ({ id, status }: { id: string; status: WorkOrder['status'] }) =>
       workOrderService.updateWorkOrderStatus(id, status),
     onSuccess: () => {
-      message.success('상태가 업데이트되었습니다.');
+      message.success('Status has been updated.');
       queryClient.invalidateQueries({ queryKey: ['work-orders'] });
     },
     onError: (error: any) => {
-      message.error(error.message || '상태 업데이트에 실패했습니다.');
+      message.error(error.message || 'Failed to update status.');
     },
   });
 
@@ -156,11 +156,11 @@ const WorkOrderList: React.FC = () => {
 
   const handleDelete = useCallback((id: string) => {
     confirm({
-      title: '작업 지시서를 삭제하시겠습니까?',
-      content: '이 작업은 되돌릴 수 없습니다.',
-      okText: '삭제',
+      title: 'Are you sure you want to delete this work order?',
+      content: 'This action cannot be undone.',
+      okText: 'Delete',
       okType: 'danger',
-      cancelText: '취소',
+      cancelText: 'Cancel',
       onOk: () => deleteMutation.mutate(id),
     });
   }, [deleteMutation]);
@@ -172,28 +172,28 @@ const WorkOrderList: React.FC = () => {
   // Export to Excel
   const handleExport = useCallback(() => {
     if (workOrders.length === 0) {
-      message.warning('내보낼 데이터가 없습니다.');
+      message.warning('No data to export.');
       return;
     }
 
     const exportData = workOrders.map(order => ({
-      '작업지시서번호': order.work_order_number,
-      '회사명': getCompanyName(order.company_id),
-      '문서타입': documentTypeLabels[order.document_type],
-      '고객명': order.client_name,
-      '상태': statusConfig[order.status].label,
-      '최종비용': order.final_cost,
-      '생성일': new Date(order.created_at).toLocaleDateString('ko-KR'),
-      '생성자': order.created_by_staff_name || '-',
+      'Work Order Number': order.work_order_number,
+      'Company Name': getCompanyName(order.company_id),
+      'Document Type': documentTypeLabels[order.document_type],
+      'Client Name': order.client_name,
+      'Status': statusConfig[order.status].label,
+      'Final Cost': order.final_cost,
+      'Created Date': new Date(order.created_at).toLocaleDateString('en-US'),
+      'Created By': order.created_by_staff_name || '-',
     }));
 
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, '작업지시서목록');
+    XLSX.utils.book_append_sheet(wb, ws, 'Work Order List');
     
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    saveAs(blob, `작업지시서목록_${new Date().toISOString().split('T')[0]}.xlsx`);
+    saveAs(blob, `work_order_list_${new Date().toISOString().split('T')[0]}.xlsx`);
   }, [workOrders, getCompanyName]);
 
   // Status dropdown items
@@ -212,7 +212,7 @@ const WorkOrderList: React.FC = () => {
   // Table columns
   const columns: ColumnsType<WorkOrder> = [
     {
-      title: '작업지시서 번호',
+      title: 'Work Order Number',
       dataIndex: 'work_order_number',
       key: 'work_order_number',
       fixed: 'left',
@@ -228,14 +228,14 @@ const WorkOrderList: React.FC = () => {
       ),
     },
     {
-      title: '회사명',
+      title: 'Company Name',
       dataIndex: 'company_id',
       key: 'company_id',
       width: 150,
       render: (companyId: string) => getCompanyName(companyId),
     },
     {
-      title: '문서 타입',
+      title: 'Document Type',
       dataIndex: 'document_type',
       key: 'document_type',
       width: 120,
@@ -244,13 +244,13 @@ const WorkOrderList: React.FC = () => {
       ),
     },
     {
-      title: '고객명',
+      title: 'Client Name',
       dataIndex: 'client_name',
       key: 'client_name',
       width: 150,
     },
     {
-      title: '상태',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       width: 120,
@@ -269,7 +269,7 @@ const WorkOrderList: React.FC = () => {
       ),
     },
     {
-      title: '최종 비용',
+      title: 'Final Cost',
       dataIndex: 'final_cost',
       key: 'final_cost',
       width: 120,
@@ -277,41 +277,41 @@ const WorkOrderList: React.FC = () => {
       render: (cost: number) => `$${cost.toLocaleString()}`,
     },
     {
-      title: '생성일',
+      title: 'Created Date',
       dataIndex: 'created_at',
       key: 'created_at',
       width: 120,
-      render: (date: string) => new Date(date).toLocaleDateString('ko-KR'),
+      render: (date: string) => new Date(date).toLocaleDateString('en-US'),
     },
     {
-      title: '생성자',
+      title: 'Created By',
       dataIndex: 'created_by_staff_name',
       key: 'created_by_staff_name',
       width: 100,
       render: (name: string) => name || '-',
     },
     {
-      title: '작업',
+      title: 'Actions',
       key: 'actions',
       fixed: 'right',
       width: 120,
       render: (_, record: WorkOrder) => (
         <Space size="small">
-          <Tooltip title="보기">
+          <Tooltip title="View">
             <Button
               type="text"
               icon={<EyeOutlined />}
               onClick={() => handleView(record)}
             />
           </Tooltip>
-          <Tooltip title="편집">
+          <Tooltip title="Edit">
             <Button
               type="text"
               icon={<EditOutlined />}
               onClick={() => handleEdit(record)}
             />
           </Tooltip>
-          <Tooltip title="삭제">
+          <Tooltip title="Delete">
             <Button
               type="text"
               danger
@@ -325,13 +325,13 @@ const WorkOrderList: React.FC = () => {
                 {
                   key: 'send',
                   icon: <SendOutlined />,
-                  label: '발송',
+                  label: 'Send',
                   disabled: record.status === 'draft',
                 },
                 {
                   key: 'duplicate',
                   icon: <FileTextOutlined />,
-                  label: '복제',
+                  label: 'Duplicate',
                 },
               ],
             }}
@@ -352,10 +352,10 @@ const WorkOrderList: React.FC = () => {
             <FileTextOutlined style={{ fontSize: 24, marginRight: 12, color: '#1890ff' }} />
             <div>
               <Title level={2} style={{ margin: 0 }}>
-                작업 지시서 목록
+                Work Order List
               </Title>
               <p style={{ margin: '4px 0 0 0', color: '#666' }}>
-                모든 작업 지시서를 관리하고 추적합니다.
+                Manage and track all work orders.
               </p>
             </div>
           </div>
@@ -365,14 +365,14 @@ const WorkOrderList: React.FC = () => {
               onClick={handleExport}
               disabled={workOrders.length === 0}
             >
-              Excel 내보내기
+              Export to Excel
             </Button>
             <Button
               type="primary"
               icon={<PlusOutlined />}
               onClick={() => navigate('/work-orders/new')}
             >
-              새 작업 지시서
+              New Work Order
             </Button>
           </Space>
         </div>
@@ -402,7 +402,7 @@ const WorkOrderList: React.FC = () => {
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]} / 총 ${total}개`,
+              `${range[0]}-${range[1]} of ${total} total`,
             pageSizeOptions: ['10', '20', '50', '100'],
           }}
           onChange={handleTableChange}
@@ -433,20 +433,20 @@ const WorkOrderList: React.FC = () => {
           }}
         >
           <Space>
-            <span>{selectedRowKeys.length}개 선택됨</span>
+            <span>{selectedRowKeys.length} selected</span>
             <Button size="small" onClick={() => setSelectedRowKeys([])}>
-              선택 해제
+              Clear Selection
             </Button>
             <Button
               size="small"
               danger
               onClick={() => {
                 confirm({
-                  title: `${selectedRowKeys.length}개의 작업 지시서를 삭제하시겠습니까?`,
-                  content: '이 작업은 되돌릴 수 없습니다.',
-                  okText: '삭제',
+                  title: `Are you sure you want to delete ${selectedRowKeys.length} work orders?`,
+                  content: 'This action cannot be undone.',
+                  okText: 'Delete',
                   okType: 'danger',
-                  cancelText: '취소',
+                  cancelText: 'Cancel',
                   onOk: async () => {
                     for (const id of selectedRowKeys) {
                       await deleteMutation.mutateAsync(id as string);
@@ -456,7 +456,7 @@ const WorkOrderList: React.FC = () => {
                 });
               }}
             >
-              선택 항목 삭제
+              Delete Selected Items
             </Button>
           </Space>
         </Card>

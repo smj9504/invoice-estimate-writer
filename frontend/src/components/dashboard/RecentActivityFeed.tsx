@@ -29,10 +29,10 @@ import {
 import { RecentActivity } from '../../services/dashboardService';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/ko';
+import 'dayjs/locale/en';
 
 dayjs.extend(relativeTime);
-dayjs.locale('ko');
+dayjs.locale('en');
 
 const { Text, Title } = Typography;
 
@@ -260,7 +260,7 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
     return (
       <Card title={title}>
         <Empty 
-          description="최근 활동이 없습니다"
+          description="No recent activity"
           style={{ padding: '40px 0' }}
         />
       </Card>
@@ -283,10 +283,10 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
             onChange={(e) => setFilter(e.target.value)}
             size="small"
           >
-            <Radio.Button value="all">전체</Radio.Button>
-            <Radio.Button value="work_order_created">생성</Radio.Button>
-            <Radio.Button value="status_changed">상태</Radio.Button>
-            <Radio.Button value="payment_received">결제</Radio.Button>
+            <Radio.Button value="all">All</Radio.Button>
+            <Radio.Button value="work_order_created">Created</Radio.Button>
+            <Radio.Button value="status_changed">Status</Radio.Button>
+            <Radio.Button value="payment_received">Payment</Radio.Button>
           </Radio.Group>
 
           {/* View mode toggle */}
@@ -295,13 +295,13 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
             onChange={(e) => setViewMode(e.target.value)}
             size="small"
           >
-            <Radio.Button value="timeline">타임라인</Radio.Button>
-            <Radio.Button value="list">목록</Radio.Button>
+            <Radio.Button value="timeline">Timeline</Radio.Button>
+            <Radio.Button value="list">List</Radio.Button>
           </Radio.Group>
 
           {/* Refresh button */}
           {showRefresh && onRefresh && (
-            <Tooltip title="새로고침">
+            <Tooltip title="Refresh">
               <Button 
                 type="text" 
                 icon={<ReloadOutlined />} 
@@ -316,7 +316,7 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
     >
       {displayData.length === 0 ? (
         <Empty 
-          description={`필터된 활동이 없습니다`}
+          description={`No filtered activities`}
           style={{ padding: '20px 0' }}
         />
       ) : viewMode === 'timeline' ? (
@@ -331,7 +331,7 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
       {filteredData.length > maxItems && (
         <div style={{ textAlign: 'center', marginTop: 16, padding: viewMode === 'list' ? 16 : 0 }}>
           <Button type="link" size="small">
-            더 보기 ({filteredData.length - maxItems}개 더)
+            Show More ({filteredData.length - maxItems} more)
           </Button>
         </div>
       )}
@@ -347,9 +347,9 @@ const RecentActivityFeed: React.FC<RecentActivityFeedProps> = ({
           color: '#666'
         }}>
           <Space split={<span>•</span>}>
-            <span>전체 활동: {data.length}건</span>
-            <span>표시 중: {displayData.length}건</span>
-            <span>마지막 업데이트: {formatRelativeTime(data[0]?.timestamp || new Date().toISOString())}</span>
+            <span>Total Activities: {data.length} items</span>
+            <span>Showing: {displayData.length} items</span>
+            <span>Last Updated: {formatRelativeTime(data[0]?.timestamp || new Date().toISOString())}</span>
           </Space>
         </div>
       )}

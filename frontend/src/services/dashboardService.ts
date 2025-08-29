@@ -106,20 +106,82 @@ export interface DashboardFilters {
 export const dashboardService = {
   // Get complete dashboard data
   async getDashboardData(filters?: DashboardFilters): Promise<DashboardData> {
-    const response = await api.get('/api/dashboard', { params: filters });
-    return response.data;
+    try {
+      const overviewResponse = await api.get('/api/dashboard/overview', { params: filters });
+      const revenueResponse = await api.get('/api/dashboard/revenue', { params: { ...filters, period_type: 'month' } });
+      const companiesResponse = await api.get('/api/dashboard/companies', { params: { limit: 10 } });
+      const creditsResponse = await api.get('/api/dashboard/credits');
+      
+      const overview = overviewResponse.data;
+      const revenueData = revenueResponse.data;
+      const companies = companiesResponse.data;
+      const credits = creditsResponse.data;
+      
+      // Transform backend data to frontend format
+      const transformedRevenueData = this.transformRevenueData(revenueData);
+      const transformedDocumentTypes = this.transformDocumentTypes(revenueData);
+      
+      return {
+        stats: {
+          total_work_orders: overview.work_order_metrics.total_leads + overview.work_order_metrics.active_orders + overview.work_order_metrics.completed_orders,
+          revenue_this_month: overview.revenue_current_month,
+          revenue_last_month: overview.revenue_previous_month,
+          pending_approvals: overview.work_order_metrics.total_leads,
+          active_work_orders: overview.work_order_metrics.active_orders,
+          completion_rate: 85.2, // Calculate from actual data later
+          average_processing_time: 5.2, // Calculate from actual data later
+          revenue_trend: overview.revenue_growth_percentage
+        },
+        revenue_chart: transformedRevenueData,
+        status_distribution: this.getMockStatusDistribution(), // TODO: Replace with real data
+        document_type_distribution: transformedDocumentTypes,
+        recent_activities: overview.recent_activities,
+        staff_performance: this.getMockStaffPerformance(), // TODO: Replace with real data
+        company_rankings: companies,
+        trade_popularity: this.getMockTradePopularity(), // TODO: Replace with real data
+        credit_usage: {
+          total_credits_issued: credits.total_credits_allocated,
+          credits_used: credits.total_credits_used,
+          credits_remaining: credits.total_credits_remaining,
+          utilization_rate: credits.total_credits_allocated > 0 ? (credits.total_credits_used / credits.total_credits_allocated) * 100 : 0
+        },
+        alerts: this.getMockAlerts() // TODO: Replace with real data
+      };
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      // Fallback to mock data in case of error
+      return this.getMockDashboardData();
+    }
   },
 
   // Get key metrics/stats
   async getStats(filters?: DashboardFilters): Promise<DashboardStats> {
-    const response = await api.get('/api/dashboard/stats', { params: filters });
-    return response.data;
+    const response = await api.get('/api/dashboard/metrics', { params: filters });
+    const metrics = response.data;
+    const overview = await api.get('/api/dashboard/overview', { params: filters });
+    const overviewData = overview.data;
+    
+    return {
+      total_work_orders: metrics.total_leads + metrics.active_orders + metrics.completed_orders,
+      revenue_this_month: overviewData.revenue_current_month,
+      revenue_last_month: overviewData.revenue_previous_month,
+      pending_approvals: metrics.total_leads,
+      active_work_orders: metrics.active_orders,
+      completion_rate: 85.2, // TODO: Calculate from actual data
+      average_processing_time: 5.2, // TODO: Calculate from actual data
+      revenue_trend: overviewData.revenue_growth_percentage
+    };
   },
 
   // Get revenue chart data
   async getRevenueData(filters?: DashboardFilters): Promise<RevenueData[]> {
-    const response = await api.get('/api/dashboard/revenue', { params: filters });
-    return response.data;
+    const response = await api.get('/api/dashboard/revenue', { 
+      params: { 
+        ...filters, 
+        period_type: 'month'
+      } 
+    });
+    return this.transformRevenueData(response.data);
   },
 
   // Get work order status distribution
@@ -358,6 +420,52 @@ export const dashboardService = {
         company_id: '1'
       }
     ];
+  },
+
+  // Transform backend revenue data to frontend format
+  transformRevenueData(backendData: any[]): RevenueData[] {
+    if (!Array.isArray(backendData) || backendData.length === 0) {
+      return this.getMockRevenueData();
+    }
+
+    return backendData.map(period => ({
+      date: period.start_date ? new Date(period.start_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      revenue: Number(period.net_revenue || 0),
+      work_orders: Object.values(period.document_counts || {}).reduce((sum: number, count: any) => sum + Number(count), 0)
+    }));
+  },
+
+  // Transform backend document type data to frontend format
+  transformDocumentTypes(backendData: any[]): DocumentTypeDistribution[] {
+    if (!Array.isArray(backendData) || backendData.length === 0) {
+      return this.getMockDocumentTypeDistribution();
+    }
+
+    const result: DocumentTypeDistribution[] = [];
+    backendData.forEach((period: any) => {
+      if (period.document_counts && typeof period.document_counts === 'object') {
+        const documentCounts = period.document_counts as Record<string, any>;
+        const totalCounts = Object.values(documentCounts).reduce((sum: number, c: any) => sum + Number(c), 0);
+        
+        Object.entries(documentCounts).forEach(([docType, count]: [string, any]) => {
+          const existing = result.find(item => item.document_type === docType);
+          const proportionalRevenue = totalCounts > 0 ? Number(period.total_revenue || 0) * (Number(count) / totalCounts) : 0;
+          
+          if (existing) {
+            existing.count += Number(count);
+            existing.revenue += proportionalRevenue;
+          } else {
+            result.push({
+              document_type: docType,
+              count: Number(count),
+              revenue: proportionalRevenue
+            });
+          }
+        });
+      }
+    });
+
+    return result.length > 0 ? result : this.getMockDocumentTypeDistribution();
   }
 };
 

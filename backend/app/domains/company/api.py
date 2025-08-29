@@ -172,6 +172,70 @@ async def set_default_company(
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/search", response_model=CompanyPaginatedResponse)
+async def search_companies(
+    q: str = Query(..., description="Search term for name, address, email, or phone"),
+    city: Optional[str] = Query(None, description="Filter by city"),
+    state: Optional[str] = Query(None, description="Filter by state"),
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(10, ge=1, le=100, description="Items per page"),
+    service: CompanyService = Depends(get_company_service)
+):
+    """Search companies with filters and pagination"""
+    
+    # Calculate offset
+    offset = (page - 1) * per_page
+    
+    # Create filter params
+    filter_params = CompanyFilter(
+        search=q,
+        city=city,
+        state=state
+    )
+    
+    try:
+        companies, total = service.get_companies_paginated(filter_params, per_page, offset)
+        total_pages = (total + per_page - 1) // per_page
+        
+        return CompanyPaginatedResponse(
+            items=companies,
+            total=total,
+            page=page,
+            pages=total_pages
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/by-email/{email}", response_model=CompanyResponse)
+async def get_company_by_email(
+    email: str,
+    service: CompanyService = Depends(get_company_service)
+):
+    """Get company by email address"""
+    try:
+        company = service.get_company_by_email(email)
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+        return CompanyResponse(**company)
+    except Exception as e:
+        if "not found" in str(e).lower():
+            raise HTTPException(status_code=404, detail="Company not found")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/stats/summary", response_model=dict)
+async def get_companies_stats_summary(
+    service: CompanyService = Depends(get_company_service)
+):
+    """Get companies statistics summary"""
+    try:
+        stats = service.get_companies_summary_stats()
+        return stats
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @router.get("/stats", response_model=list[dict])
 async def get_companies_with_stats(
     service: CompanyService = Depends(get_company_service)

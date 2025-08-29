@@ -58,48 +58,48 @@ const { confirm } = Modal;
 const statusConfig = {
   draft: { 
     color: 'default', 
-    label: '초안', 
+    label: 'Draft', 
     icon: <FileAddOutlined />,
-    description: '작업 지시서가 작성 중입니다.'
+    description: 'Work order is being drafted.'
   },
   pending: { 
     color: 'warning', 
-    label: '승인 대기', 
+    label: 'Pending Approval', 
     icon: <ClockCircleOutlined />,
-    description: '고객의 승인을 기다리고 있습니다.'
+    description: 'Waiting for customer approval.'
   },
   approved: { 
     color: 'blue', 
-    label: '승인됨', 
+    label: 'Approved', 
     icon: <CheckCircleOutlined />,
-    description: '고객이 작업을 승인했습니다.'
+    description: 'Customer has approved the work.'
   },
   in_progress: { 
     color: 'processing', 
-    label: '진행중', 
+    label: 'In Progress', 
     icon: <BuildOutlined />,
-    description: '작업이 진행되고 있습니다.'
+    description: 'Work is currently in progress.'
   },
   completed: { 
     color: 'success', 
-    label: '완료', 
+    label: 'Completed', 
     icon: <CheckCircleOutlined />,
-    description: '작업이 완료되었습니다.'
+    description: 'Work has been completed.'
   },
   cancelled: { 
     color: 'error', 
-    label: '취소됨', 
+    label: 'Cancelled', 
     icon: <ExclamationCircleOutlined />,
-    description: '작업이 취소되었습니다.'
+    description: 'Work has been cancelled.'
   },
 } as const;
 
 // Document type labels
 const documentTypeLabels: Record<DocumentType, string> = {
-  estimate: '견적서',
-  invoice: '인보이스',
-  insurance_estimate: '보험 견적서',
-  plumber_report: '배관공 보고서',
+  estimate: 'Estimate',
+  invoice: 'Invoice',
+  insurance_estimate: 'Insurance Estimate',
+  plumber_report: 'Plumber Report',
 };
 
 interface CommentModalProps {
@@ -119,7 +119,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
   const handleSubmit = () => {
     if (!comment.trim()) {
-      message.warning('코멘트를 입력해주세요.');
+      message.warning('Please enter a comment.');
       return;
     }
     onSubmit(comment.trim());
@@ -128,18 +128,18 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
   return (
     <Modal
-      title="코멘트 추가"
+      title="Add Comment"
       open={visible}
       onCancel={onCancel}
       onOk={handleSubmit}
       confirmLoading={loading}
-      okText="추가"
-      cancelText="취소"
+      okText="Add"
+      cancelText="Cancel"
     >
       <TextArea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder="코멘트를 입력하세요..."
+        placeholder="Enter your comment..."
         rows={4}
         maxLength={500}
         showCount
@@ -180,12 +180,12 @@ const WorkOrderDetail: React.FC = () => {
     mutationFn: ({ status, comment }: { status: WorkOrder['status']; comment?: string }) =>
       workOrderService.updateWorkOrderStatus(id!, status, comment),
     onSuccess: () => {
-      message.success('상태가 업데이트되었습니다.');
+      message.success('Status has been updated.');
       queryClient.invalidateQueries({ queryKey: ['work-order', id] });
       setStatusChangeVisible(false);
     },
     onError: (error: any) => {
-      message.error(error.message || '상태 업데이트에 실패했습니다.');
+      message.error(error.message || 'Failed to update status.');
     },
   });
 
@@ -193,11 +193,11 @@ const WorkOrderDetail: React.FC = () => {
   const deleteMutation = useMutation({
     mutationFn: workOrderService.deleteWorkOrder,
     onSuccess: () => {
-      message.success('작업 지시서가 삭제되었습니다.');
+      message.success('Work order has been deleted.');
       navigate('/work-orders');
     },
     onError: (error: any) => {
-      message.error(error.message || '삭제에 실패했습니다.');
+      message.error(error.message || 'Failed to delete.');
     },
   });
 
@@ -206,13 +206,13 @@ const WorkOrderDetail: React.FC = () => {
     mutationFn: (comment: string) =>
       workOrderService.addComment(id!, comment),
     onSuccess: () => {
-      message.success('코멘트가 추가되었습니다.');
+      message.success('Comment has been added.');
       queryClient.invalidateQueries({ queryKey: ['work-order', id] });
       queryClient.invalidateQueries({ queryKey: ['work-order-activities', id] });
       setCommentModalVisible(false);
     },
     onError: (error: any) => {
-      message.error(error.message || '코멘트 추가에 실패했습니다.');
+      message.error(error.message || 'Failed to add comment.');
     },
   });
 
@@ -227,12 +227,12 @@ const WorkOrderDetail: React.FC = () => {
 
   const handleDelete = useCallback(() => {
     confirm({
-      title: '작업 지시서를 삭제하시겠습니까?',
-      content: '이 작업은 되돌릴 수 없습니다.',
+      title: 'Are you sure you want to delete this work order?',
+      content: 'This action cannot be undone.',
       icon: <ExclamationCircleOutlined />,
-      okText: '삭제',
+      okText: 'Delete',
       okType: 'danger',
-      cancelText: '취소',
+      cancelText: 'Cancel',
       onOk: () => deleteMutation.mutate(id!),
     });
   }, [deleteMutation, id]);
@@ -242,11 +242,11 @@ const WorkOrderDetail: React.FC = () => {
   }, []);
 
   const handleSendNotification = useCallback(() => {
-    message.info('알림 발송 기능은 곧 구현될 예정입니다.');
+    message.info('Notification sending feature will be implemented soon.');
   }, []);
 
   const handleGeneratePDF = useCallback(() => {
-    message.info('PDF 생성 기능은 곧 구현될 예정입니다.');
+    message.info('PDF generation feature will be implemented soon.');
   }, []);
 
   // Get available status transitions
@@ -262,20 +262,20 @@ const WorkOrderDetail: React.FC = () => {
     {
       key: 'pdf',
       icon: <FileTextOutlined />,
-      label: 'PDF 생성',
+      label: 'Generate PDF',
       onClick: handleGeneratePDF,
     },
     {
       key: 'send',
       icon: <SendOutlined />,
-      label: '알림 발송',
+      label: 'Send Notification',
       onClick: handleSendNotification,
       disabled: workOrder?.status === 'draft',
     },
     {
       key: 'comment',
       icon: <MailOutlined />,
-      label: '코멘트 추가',
+      label: 'Add Comment',
       onClick: () => setCommentModalVisible(true),
     },
     {
@@ -284,8 +284,8 @@ const WorkOrderDetail: React.FC = () => {
     {
       key: 'duplicate',
       icon: <FileAddOutlined />,
-      label: '복제하기',
-      onClick: () => message.info('복제 기능은 곧 구현될 예정입니다.'),
+      label: 'Duplicate',
+      onClick: () => message.info('Duplicate feature will be implemented soon.'),
     },
   ];
 
@@ -300,13 +300,13 @@ const WorkOrderDetail: React.FC = () => {
   if (error || !workOrder) {
     return (
       <Alert
-        message="오류"
-        description="작업 지시서를 불러오는데 실패했습니다."
+        message="Error"
+        description="Failed to load work order."
         type="error"
         showIcon
         action={
           <Button onClick={() => navigate('/work-orders')}>
-            목록으로 돌아가기
+            Back to List
           </Button>
         }
       />
@@ -326,7 +326,7 @@ const WorkOrderDetail: React.FC = () => {
                 icon={<ArrowLeftOutlined />}
                 onClick={() => navigate('/work-orders')}
               >
-                목록으로
+                Back to List
               </Button>
               <Divider type="vertical" />
               <Space direction="vertical" size={0}>
@@ -354,7 +354,7 @@ const WorkOrderDetail: React.FC = () => {
                 value={workOrder.status}
                 onChange={handleStatusChange}
                 style={{ width: 120 }}
-                placeholder="상태 변경"
+                placeholder="Change Status"
               >
                 {getAvailableStatuses(workOrder.status).map(status => (
                   <Select.Option key={status} value={status}>
@@ -369,23 +369,23 @@ const WorkOrderDetail: React.FC = () => {
                 icon={<EditOutlined />}
                 onClick={() => navigate(`/work-orders/${id}/edit`)}
               >
-                편집
+                Edit
               </Button>
               <Button
                 icon={<PrinterOutlined />}
                 onClick={handlePrint}
               >
-                인쇄
+                Print
               </Button>
               <Dropdown menu={{ items: actionMenuItems }}>
                 <Button icon={<MoreOutlined />} />
               </Dropdown>
               <Popconfirm
-                title="삭제 확인"
-                description="정말로 이 작업 지시서를 삭제하시겠습니까?"
+                title="Confirm Delete"
+                description="Are you sure you want to delete this work order?"
                 onConfirm={handleDelete}
-                okText="삭제"
-                cancelText="취소"
+                okText="Delete"
+                cancelText="Cancel"
                 okType="danger"
               >
                 <Button danger icon={<DeleteOutlined />} />
@@ -400,7 +400,7 @@ const WorkOrderDetail: React.FC = () => {
         {/* Left Column */}
         <Col xs={24} lg={16}>
           {/* Company Information */}
-          <Card title="회사 정보" style={{ marginBottom: 24 }}>
+          <Card title="Company Information" style={{ marginBottom: 24 }}>
             <Row gutter={16}>
               <Col span={4}>
                 <Avatar
@@ -412,13 +412,13 @@ const WorkOrderDetail: React.FC = () => {
               </Col>
               <Col span={20}>
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label="회사명">
+                  <Descriptions.Item label="Company Name">
                     <Text strong>{company?.name || 'Unknown Company'}</Text>
                   </Descriptions.Item>
-                  <Descriptions.Item label="회사코드">
+                  <Descriptions.Item label="Company Code">
                     {company?.company_code || '-'}
                   </Descriptions.Item>
-                  <Descriptions.Item label="연락처" span={2}>
+                  <Descriptions.Item label="Contact" span={2}>
                     <Space split={<Divider type="vertical" />}>
                       {company?.phone && (
                         <Space>
@@ -434,7 +434,7 @@ const WorkOrderDetail: React.FC = () => {
                       )}
                     </Space>
                   </Descriptions.Item>
-                  <Descriptions.Item label="주소" span={2}>
+                  <Descriptions.Item label="Address" span={2}>
                     <Space>
                       <HomeOutlined />
                       <Text>
@@ -450,12 +450,12 @@ const WorkOrderDetail: React.FC = () => {
           </Card>
 
           {/* Client Information */}
-          <Card title="고객 정보" style={{ marginBottom: 24 }}>
+          <Card title="Client Information" style={{ marginBottom: 24 }}>
             <Descriptions column={2} size="small">
-              <Descriptions.Item label="고객명">
+              <Descriptions.Item label="Client Name">
                 <Text strong>{workOrder.client_name}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="연락처">
+              <Descriptions.Item label="Contact">
                 <Space split={<Divider type="vertical" />}>
                   {workOrder.client_phone && (
                     <Space>
@@ -471,7 +471,7 @@ const WorkOrderDetail: React.FC = () => {
                   )}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="서비스 주소" span={2}>
+              <Descriptions.Item label="Service Address" span={2}>
                 <Space>
                   <HomeOutlined />
                   <Text>
@@ -488,12 +488,12 @@ const WorkOrderDetail: React.FC = () => {
           </Card>
 
           {/* Work Details */}
-          <Card title="작업 상세" style={{ marginBottom: 24 }}>
+          <Card title="Work Details" style={{ marginBottom: 24 }}>
             <Descriptions column={1} size="small">
-              <Descriptions.Item label="문서 타입">
+              <Descriptions.Item label="Document Type">
                 <Tag color="blue">{documentTypeLabels[workOrder.document_type]}</Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="선택된 업종">
+              <Descriptions.Item label="Selected Trades">
                 <Space wrap>
                   {workOrder.trades.map((trade, index) => (
                     <Tag key={index} color="green">{trade}</Tag>
@@ -501,14 +501,14 @@ const WorkOrderDetail: React.FC = () => {
                 </Space>
               </Descriptions.Item>
               {workOrder.work_description && (
-                <Descriptions.Item label="작업 설명">
+                <Descriptions.Item label="Work Description">
                   <Paragraph>
                     <div dangerouslySetInnerHTML={{ __html: workOrder.work_description }} />
                   </Paragraph>
                 </Descriptions.Item>
               )}
               {workOrder.consultation_notes && (
-                <Descriptions.Item label="전화 상담 메모">
+                <Descriptions.Item label="Phone Consultation Notes">
                   <Paragraph>
                     {workOrder.consultation_notes}
                   </Paragraph>
@@ -524,24 +524,24 @@ const WorkOrderDetail: React.FC = () => {
         {/* Right Column */}
         <Col xs={24} lg={8}>
           {/* Quick Info */}
-          <Card title="요약 정보" style={{ marginBottom: 24 }}>
+          <Card title="Summary Information" style={{ marginBottom: 24 }}>
             <Space direction="vertical" style={{ width: '100%' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>최종 비용:</Text>
+                <Text>Final Cost:</Text>
                 <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
                   ${workOrder.final_cost.toLocaleString()}
                 </Text>
               </div>
               <Divider style={{ margin: '12px 0' }} />
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>생성일:</Text>
+                <Text>Created Date:</Text>
                 <Space>
                   <CalendarOutlined />
-                  <Text>{new Date(workOrder.created_at).toLocaleDateString('ko-KR')}</Text>
+                  <Text>{new Date(workOrder.created_at).toLocaleDateString('en-US')}</Text>
                 </Space>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>생성자:</Text>
+                <Text>Created By:</Text>
                 <Space>
                   <UserOutlined />
                   <Text>{workOrder.created_by_staff_name || '-'}</Text>
@@ -549,7 +549,7 @@ const WorkOrderDetail: React.FC = () => {
               </div>
               {workOrder.assigned_to_staff_name && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Text>담당자:</Text>
+                  <Text>Assigned To:</Text>
                   <Space>
                     <UserOutlined />
                     <Text>{workOrder.assigned_to_staff_name}</Text>
@@ -557,9 +557,9 @@ const WorkOrderDetail: React.FC = () => {
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>최종 수정:</Text>
+                <Text>Last Updated:</Text>
                 <Text type="secondary">
-                  {new Date(workOrder.updated_at).toLocaleDateString('ko-KR')}
+                  {new Date(workOrder.updated_at).toLocaleDateString('en-US')}
                 </Text>
               </div>
             </Space>
@@ -572,18 +572,18 @@ const WorkOrderDetail: React.FC = () => {
 
       {/* Status Change Modal */}
       <Modal
-        title="상태 변경"
+        title="Change Status"
         open={statusChangeVisible}
         onCancel={() => setStatusChangeVisible(false)}
         onOk={() => handleStatusConfirm()}
         confirmLoading={statusMutation.isPending}
-        okText="변경"
-        cancelText="취소"
+        okText="Change"
+        cancelText="Cancel"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Text>상태를 다음으로 변경하시겠습니까?</Text>
+          <Text>Do you want to change the status to the following?</Text>
           <Space>
-            <Text>현재:</Text>
+            <Text>Current:</Text>
             <Tag color={statusConfig[workOrder.status].color}>
               {statusConfig[workOrder.status].label}
             </Tag>
@@ -593,7 +593,7 @@ const WorkOrderDetail: React.FC = () => {
             </Tag>
           </Space>
           <TextArea
-            placeholder="변경 사유를 입력하세요 (선택사항)"
+            placeholder="Enter reason for change (optional)"
             rows={3}
             onChange={(e) => {
               // Handle comment if needed

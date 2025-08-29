@@ -155,6 +155,13 @@ const DocumentTypesManagement: React.FC = () => {
 
   const columns: ColumnsType<DocumentType> = [
     {
+      title: 'No',
+      dataIndex: 'display_order',
+      key: 'display_order',
+      width: 100,
+      sorter: (a, b) => a.display_order - b.display_order,
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
@@ -227,13 +234,6 @@ const DocumentTypesManagement: React.FC = () => {
           )}
         </Space>
       ),
-    },
-    {
-      title: 'Order',
-      dataIndex: 'display_order',
-      key: 'display_order',
-      width: 80,
-      sorter: (a, b) => a.display_order - b.display_order,
     },
     {
       title: 'Actions',

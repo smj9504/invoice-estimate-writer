@@ -66,7 +66,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
           date,
           revenue: totals.revenue,
           work_orders: totals.work_orders,
-          displayDate: `${dayjs(date).format('MM/DD')} 주`
+          displayDate: `${dayjs(date).format('MM/DD')} Week`
         }));
       }
 
@@ -87,7 +87,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
           date,
           revenue: totals.revenue,
           work_orders: totals.work_orders,
-          displayDate: dayjs(date).format('YYYY년 MM월')
+          displayDate: dayjs(date).format('YYYY-MM')
         }));
       }
 
@@ -126,7 +126,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
             Revenue: {formatCurrency(data.revenue)}
           </p>
           <p style={{ margin: 0, color: '#52c41a' }}>
-            주문수: {data.work_orders}건
+            Orders: {data.work_orders} items
           </p>
         </div>
       );
@@ -184,7 +184,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
                 stroke="#52c41a"
                 strokeWidth={2}
                 dot={{ fill: '#52c41a', r: 3 }}
-                name="작업 지시서"
+                name="Work Orders"
               />
             )}
           </LineChart>
@@ -247,7 +247,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
                 fillOpacity={1}
                 fill="url(#colorOrders)"
                 strokeWidth={2}
-                name="작업 지시서"
+                name="Work Orders"
               />
             )}
           </AreaChart>
@@ -291,7 +291,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
                 yAxisId="orders"
                 dataKey="work_orders"
                 fill="#52c41a"
-                name="작업 지시서"
+                name="Work Orders"
                 radius={[4, 4, 0, 0]}
               />
             )}
@@ -319,7 +319,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
     return (
       <Card title={title}>
         <Empty 
-          description="데이터가 없습니다"
+          description="No data available"
           style={{ padding: '40px 0' }}
         />
       </Card>
@@ -336,9 +336,9 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
             onChange={(e) => setTimeRange(e.target.value)}
             size="small"
           >
-            <Radio.Button value="daily">일별</Radio.Button>
-            <Radio.Button value="weekly">주별</Radio.Button>
-            <Radio.Button value="monthly">월별</Radio.Button>
+            <Radio.Button value="daily">Daily</Radio.Button>
+            <Radio.Button value="weekly">Weekly</Radio.Button>
+            <Radio.Button value="monthly">Monthly</Radio.Button>
           </Radio.Group>
           
           <Radio.Group
@@ -346,9 +346,9 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
             onChange={(e) => setChartType(e.target.value)}
             size="small"
           >
-            <Radio.Button value="area">영역</Radio.Button>
-            <Radio.Button value="line">선형</Radio.Button>
-            <Radio.Button value="bar">막대</Radio.Button>
+            <Radio.Button value="area">Area</Radio.Button>
+            <Radio.Button value="line">Line</Radio.Button>
+            <Radio.Button value="bar">Bar</Radio.Button>
           </Radio.Group>
         </Space>
       }
@@ -371,10 +371,10 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
         </div>
         <div style={{ textAlign: 'center' }}>
           <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
-            {totalOrders.toLocaleString()}건
+            {totalOrders.toLocaleString()} items
           </Text>
           <br />
-          <Text type="secondary">총 주문수</Text>
+          <Text type="secondary">Total Orders</Text>
         </div>
         <div style={{ textAlign: 'center' }}>
           <Text strong style={{ fontSize: '18px', color: '#722ed1' }}>

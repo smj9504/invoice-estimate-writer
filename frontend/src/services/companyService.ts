@@ -57,4 +57,46 @@ export const companyService = {
     });
     return response.data.logo;
   },
+
+  // Search companies with pagination
+  searchCompanies: async (
+    q: string, 
+    city?: string, 
+    state?: string, 
+    page: number = 1, 
+    perPage: number = 10
+  ): Promise<{ items: Company[], total: number, page: number, pages: number }> => {
+    const params = new URLSearchParams();
+    params.append('q', q);
+    if (city) params.append('city', city);
+    if (state) params.append('state', state);
+    params.append('page', page.toString());
+    params.append('per_page', perPage.toString());
+    
+    const response = await api.get(`/api/companies/search?${params.toString()}`);
+    return response.data;
+  },
+
+  // Get company by email
+  getCompanyByEmail: async (email: string): Promise<Company> => {
+    const response = await api.get(`/api/companies/by-email/${encodeURIComponent(email)}`);
+    return response.data;
+  },
+
+  // Get companies with statistics
+  getCompaniesWithStats: async (): Promise<any[]> => {
+    const response = await api.get('/api/companies/stats');
+    return response.data;
+  },
+
+  // Get companies summary statistics
+  getCompaniesSummaryStats: async (): Promise<{
+    total_companies: number;
+    active_companies: number;
+    inactive_companies: number;
+    default_companies: number;
+  }> => {
+    const response = await api.get('/api/companies/stats/summary');
+    return response.data;
+  },
 };

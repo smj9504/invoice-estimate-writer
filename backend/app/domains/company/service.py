@@ -327,3 +327,42 @@ class CompanyService(BaseService[Dict[str, Any], str]):
         except Exception as e:
             logger.error(f"Error setting default company: {e}")
             raise
+    
+    def get_company_by_email(self, email: str) -> Optional[Dict[str, Any]]:
+        """
+        Get company by email address.
+        
+        Args:
+            email: Email address to search for
+            
+        Returns:
+            Company dictionary or None if not found
+        """
+        try:
+            session = self.database.get_session()
+            try:
+                repository = self._get_repository_instance(session)
+                return repository.get_company_by_email(email)
+            finally:
+                session.close()
+        except Exception as e:
+            logger.error(f"Error getting company by email {email}: {e}")
+            raise
+    
+    def get_companies_summary_stats(self) -> Dict[str, Any]:
+        """
+        Get companies statistics summary including total count, active count, etc.
+        
+        Returns:
+            Dictionary with summary statistics
+        """
+        try:
+            session = self.database.get_session()
+            try:
+                repository = self._get_repository_instance(session)
+                return repository.get_companies_summary_stats()
+            finally:
+                session.close()
+        except Exception as e:
+            logger.error(f"Error getting companies summary stats: {e}")
+            raise

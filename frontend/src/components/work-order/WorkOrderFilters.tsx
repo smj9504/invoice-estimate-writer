@@ -24,20 +24,20 @@ const { Option } = Select;
 
 // Status options
 const statusOptions = [
-  { value: 'draft', label: '초안' },
-  { value: 'pending', label: '승인 대기' },
-  { value: 'approved', label: '승인됨' },
-  { value: 'in_progress', label: '진행중' },
-  { value: 'completed', label: '완료' },
-  { value: 'cancelled', label: '취소됨' },
+  { value: 'draft', label: 'Draft' },
+  { value: 'pending', label: 'Pending Approval' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
 ];
 
 // Document type options
 const documentTypeOptions = [
-  { value: 'estimate', label: '견적서' },
-  { value: 'invoice', label: '인보이스' },
-  { value: 'insurance_estimate', label: '보험 견적서' },
-  { value: 'plumber_report', label: '배관공 보고서' },
+  { value: 'estimate', label: 'Estimate' },
+  { value: 'invoice', label: 'Invoice' },
+  { value: 'insurance_estimate', label: 'Insurance Estimate' },
+  { value: 'plumber_report', label: 'Plumber Report' },
 ];
 
 interface WorkOrderFiltersProps {
@@ -136,7 +136,7 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
           <Col xs={24} sm={12} md={8} lg={6}>
             <Form.Item name="search" style={{ marginBottom: 0 }}>
               <Input
-                placeholder="작업지시서 번호 또는 고객명 검색..."
+                placeholder="Search by work order number or client name..."
                 prefix={<SearchOutlined />}
                 allowClear
                 onChange={(e) => {
@@ -156,7 +156,7 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
           <Col xs={24} sm={12} md={8} lg={6}>
             <Form.Item name="status" style={{ marginBottom: 0 }}>
               <Select
-                placeholder="상태 선택"
+                placeholder="Select status"
                 allowClear
                 onChange={() => form.submit()}
               >
@@ -176,9 +176,9 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
                 <Button
                   icon={<ClearOutlined />}
                   onClick={handleClearFilters}
-                  title="필터 초기화"
+                  title="Clear Filters"
                 >
-                  초기화
+                  Reset
                 </Button>
               )}
               <Button
@@ -186,7 +186,7 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
                 icon={<FilterOutlined />}
                 onClick={() => setIsExpanded(!isExpanded)}
               >
-                고급 필터 {isExpanded ? '접기' : '열기'}
+                {isExpanded ? 'Hide' : 'Show'} Advanced Filters
               </Button>
             </Space>
           </Col>
@@ -200,9 +200,9 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
             <Row gutter={16}>
               {/* Company Filter */}
               <Col xs={24} sm={12} md={8} lg={6}>
-                <Form.Item label="회사" name="company_id">
+                <Form.Item label="Company" name="company_id">
                   <Select
-                    placeholder="회사 선택"
+                    placeholder="Select company"
                     allowClear
                     showSearch
                     optionFilterProp="children"
@@ -221,8 +221,8 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
 
               {/* Document Type Filter */}
               <Col xs={24} sm={12} md={8} lg={6}>
-                <Form.Item label="문서 타입" name="document_type">
-                  <Select placeholder="문서 타입 선택" allowClear>
+                <Form.Item label="Document Type" name="document_type">
+                  <Select placeholder="Select document type" allowClear>
                     {documentTypeOptions.map(option => (
                       <Option key={option.value} value={option.value}>
                         {option.label}
@@ -234,10 +234,10 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
 
               {/* Date Range Filter */}
               <Col xs={24} sm={12} md={8} lg={8}>
-                <Form.Item label="생성일 범위" name="dateRange">
+                <Form.Item label="Date Range" name="dateRange">
                   <RangePicker
                     format="YYYY-MM-DD"
-                    placeholder={['시작일', '종료일']}
+                    placeholder={['Start date', 'End date']}
                     style={{ width: '100%' }}
                   />
                 </Form.Item>
@@ -248,7 +248,7 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
                 <Form.Item label=" " style={{ marginBottom: 0 }}>
                   <Space style={{ width: '100%' }}>
                     <Button type="primary" htmlType="submit" block>
-                      필터 적용
+                      Apply Filters
                     </Button>
                   </Space>
                 </Form.Item>
@@ -264,30 +264,30 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
           <Divider style={{ margin: '12px 0' }} />
           <div style={{ fontSize: '12px', color: '#666' }}>
             <Space wrap>
-              <span>적용된 필터:</span>
+              <span>Applied Filters:</span>
               {filters.search && (
                 <span style={{ color: '#1890ff' }}>
-                  검색: "{filters.search}"
+                  Search: "{filters.search}"
                 </span>
               )}
               {filters.status && (
                 <span style={{ color: '#1890ff' }}>
-                  상태: {statusOptions.find(s => s.value === filters.status)?.label}
+                  Status: {statusOptions.find(s => s.value === filters.status)?.label}
                 </span>
               )}
               {filters.company_id && (
                 <span style={{ color: '#1890ff' }}>
-                  회사: {companies.find(c => c.id === filters.company_id)?.name}
+                  Company: {companies.find(c => c.id === filters.company_id)?.name}
                 </span>
               )}
               {filters.document_type && (
                 <span style={{ color: '#1890ff' }}>
-                  문서타입: {documentTypeOptions.find(d => d.value === filters.document_type)?.label}
+                  Document Type: {documentTypeOptions.find(d => d.value === filters.document_type)?.label}
                 </span>
               )}
               {filters.date_from && filters.date_to && (
                 <span style={{ color: '#1890ff' }}>
-                  기간: {filters.date_from} ~ {filters.date_to}
+                  Period: {filters.date_from} ~ {filters.date_to}
                 </span>
               )}
             </Space>

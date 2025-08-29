@@ -178,15 +178,15 @@ const DatabaseManagement: React.FC = () => {
       columns: [
         { title: 'ID', dataIndex: 'id', key: 'id', width: 200 },
         { title: 'Estimate Number', dataIndex: 'estimate_number', key: 'estimate_number' },
-        { title: '고객명', dataIndex: 'client_name', key: 'client_name' },
+        { title: 'Client Name', dataIndex: 'client_name', key: 'client_name' },
         {
-          title: '총액',
+          title: 'Total Amount',
           dataIndex: 'total_amount',
           key: 'total_amount',
           render: (amount: number) => `$${amount?.toFixed(2) || '0.00'}`,
         },
         {
-          title: '상태',
+          title: 'Status',
           dataIndex: 'status',
           key: 'status',
           render: (status: string) => {

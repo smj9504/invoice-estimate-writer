@@ -52,19 +52,19 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
 
   const handleDelete = (company: Company) => {
     confirm({
-      title: '회사 삭제',
+      title: 'Delete Company',
       icon: <ExclamationCircleOutlined />,
       content: (
         <div>
-          <p>정말로 <strong>{company.name}</strong>을(를) 삭제하시겠습니까?</p>
+          <p>Are you sure you want to delete <strong>{company.name}</strong>?</p>
           <p style={{ color: '#ff4d4f', fontSize: '12px' }}>
-            ⚠️ 이 작업은 되돌릴 수 없습니다.
+            ⚠️ This action cannot be undone.
           </p>
         </div>
       ),
-      okText: '삭제',
+      okText: 'Delete',
       okType: 'danger',
-      cancelText: '취소',
+      cancelText: 'Cancel',
       onOk: async () => {
         setDeleteLoading(company.id);
         try {
@@ -267,7 +267,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
           showSizeChanger: true,
           showQuickJumper: true,
           showTotal: (total, range) =>
-            `${range[0]}-${range[1]} / 총 ${total}개`,
+            `${range[0]}-${range[1]} of ${total} total`,
         }}
         scroll={{ x: 800 }}
         size="middle"

@@ -56,11 +56,11 @@ const DocumentList: React.FC = () => {
   const deleteMutation = useMutation({
     mutationFn: documentService.deleteDocument,
     onSuccess: () => {
-      message.success('서류가 삭제되었습니다');
+      message.success('Document has been deleted');
       queryClient.invalidateQueries({ queryKey: ['documents'] });
     },
     onError: () => {
-      message.error('삭제 중 오류가 발생했습니다');
+      message.error('An error occurred during deletion');
     },
   });
 
@@ -68,20 +68,20 @@ const DocumentList: React.FC = () => {
   const duplicateMutation = useMutation({
     mutationFn: documentService.duplicateDocument,
     onSuccess: () => {
-      message.success('서류가 복제되었습니다');
+      message.success('Document has been duplicated');
       queryClient.invalidateQueries({ queryKey: ['documents'] });
     },
     onError: () => {
-      message.error('복제 중 오류가 발생했습니다');
+      message.error('An error occurred during duplication');
     },
   });
 
   const handleDelete = (id: string) => {
     Modal.confirm({
-      title: '서류 삭제',
-      content: '이 서류를 삭제하시겠습니까?',
-      okText: '삭제',
-      cancelText: '취소',
+      title: 'Delete Document',
+      content: 'Are you sure you want to delete this document?',
+      okText: 'Delete',
+      cancelText: 'Cancel',
       okType: 'danger',
       onOk: () => deleteMutation.mutate(id),
     });
@@ -97,7 +97,7 @@ const DocumentList: React.FC = () => {
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      message.error('PDF 다운로드 중 오류가 발생했습니다');
+      message.error('An error occurred during PDF download');
     }
   };
 
@@ -113,51 +113,51 @@ const DocumentList: React.FC = () => {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'draft': return '임시저장';
-      case 'sent': return '발송됨';
-      case 'paid': return '결제완료';
-      case 'cancelled': return '취소됨';
+      case 'draft': return 'Draft';
+      case 'sent': return 'Sent';
+      case 'paid': return 'Paid';
+      case 'cancelled': return 'Cancelled';
       default: return status;
     }
   };
 
   const columns = [
     {
-      title: '문서번호',
+      title: 'Document Number',
       dataIndex: 'document_number',
       key: 'document_number',
       width: 150,
     },
     {
-      title: '유형',
+      title: 'Type',
       dataIndex: 'type',
       key: 'type',
       width: 100,
       render: (type: DocumentType) => {
         const typeMap = {
-          estimate: '견적서',
-          invoice: '인보이스',
-          insurance_estimate: '보험 견적서',
-          plumber_report: '배관공 보고서',
+          estimate: 'Estimate',
+          invoice: 'Invoice',
+          insurance_estimate: 'Insurance Estimate',
+          plumber_report: 'Plumber Report',
         };
         return typeMap[type] || type;
       },
     },
     {
-      title: '고객명',
+      title: 'Client Name',
       dataIndex: 'client_name',
       key: 'client_name',
       width: 150,
     },
     {
-      title: '금액',
+      title: 'Amount',
       dataIndex: 'total_amount',
       key: 'total_amount',
       width: 120,
       render: (amount: number) => `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     },
     {
-      title: '상태',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       width: 100,
@@ -168,14 +168,14 @@ const DocumentList: React.FC = () => {
       ),
     },
     {
-      title: '생성일',
+      title: 'Created Date',
       dataIndex: 'created_at',
       key: 'created_at',
       width: 120,
       render: (date: string) => dayjs(date).format('YYYY-MM-DD'),
     },
     {
-      title: '작업',
+      title: 'Actions',
       key: 'action',
       width: 120,
       fixed: 'right' as const,
@@ -184,13 +184,13 @@ const DocumentList: React.FC = () => {
           {
             key: 'view',
             icon: <EyeOutlined />,
-            label: '보기',
+            label: 'View',
             onClick: () => navigate(`/documents/${record.id}`),
           },
           {
             key: 'edit',
             icon: <EditOutlined />,
-            label: '수정',
+            label: 'Edit',
             onClick: () => {
               // Navigate to the appropriate edit page based on document type
               if (record.type === 'invoice') {
@@ -205,19 +205,19 @@ const DocumentList: React.FC = () => {
           {
             key: 'download',
             icon: <DownloadOutlined />,
-            label: 'PDF 다운로드',
+            label: 'Download PDF',
             onClick: () => handleDownloadPDF(record.id),
           },
           {
             key: 'send',
             icon: <MailOutlined />,
-            label: '이메일 발송',
+            label: 'Send Email',
             onClick: () => navigate(`/documents/${record.id}/send`),
           },
           {
             key: 'duplicate',
             icon: <CopyOutlined />,
-            label: '복제',
+            label: 'Duplicate',
             onClick: () => duplicateMutation.mutate(record.id),
           },
           {
@@ -226,7 +226,7 @@ const DocumentList: React.FC = () => {
           {
             key: 'delete',
             icon: <DeleteOutlined />,
-            label: '삭제',
+            label: 'Delete',
             danger: true,
             onClick: () => handleDelete(record.id),
           },
@@ -246,11 +246,11 @@ const DocumentList: React.FC = () => {
       <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
         <Col>
           <Title level={2}>
-            {type === 'estimate' && '견적서 목록'}
-            {type === 'invoice' && '인보이스 목록'}
-            {type === 'insurance_estimate' && '보험 견적서 목록'}
-            {type === 'plumber_report' && '배관공 보고서 목록'}
-            {!type && '전체 서류'}
+            {type === 'estimate' && 'Estimate List'}
+            {type === 'invoice' && 'Invoice List'}
+            {type === 'insurance_estimate' && 'Insurance Estimate List'}
+            {type === 'plumber_report' && 'Plumber Report List'}
+            {!type && 'All Documents'}
           </Title>
         </Col>
         <Col>
@@ -259,7 +259,7 @@ const DocumentList: React.FC = () => {
                                `/create/${type || 'estimate'}`;
             navigate(createPath);
           }}>
-            새 서류 작성
+            Create New Document
           </Button>
         </Col>
       </Row>
@@ -269,7 +269,7 @@ const DocumentList: React.FC = () => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={6}>
             <Input
-              placeholder="검색어 입력"
+              placeholder="Enter search term"
               prefix={<SearchOutlined />}
               value={filter.search}
               onChange={(e) => setFilter({ ...filter, search: e.target.value })}
@@ -277,16 +277,16 @@ const DocumentList: React.FC = () => {
           </Col>
           <Col xs={24} sm={12} md={6}>
             <Select
-              placeholder="상태 선택"
+              placeholder="Select status"
               style={{ width: '100%' }}
               allowClear
               value={filter.status}
               onChange={(value) => setFilter({ ...filter, status: value })}
             >
-              <Select.Option value="draft">임시저장</Select.Option>
-              <Select.Option value="sent">발송됨</Select.Option>
-              <Select.Option value="paid">결제완료</Select.Option>
-              <Select.Option value="cancelled">취소됨</Select.Option>
+              <Select.Option value="draft">Draft</Select.Option>
+              <Select.Option value="sent">Sent</Select.Option>
+              <Select.Option value="paid">Paid</Select.Option>
+              <Select.Option value="cancelled">Cancelled</Select.Option>
             </Select>
           </Col>
           <Col xs={24} sm={12} md={8}>
@@ -315,7 +315,7 @@ const DocumentList: React.FC = () => {
                 icon={<FilterOutlined />}
                 onClick={() => setCurrentPage(1)}
               >
-                필터 적용
+                Apply Filter
               </Button>
               <Button 
                 onClick={() => {
@@ -323,7 +323,7 @@ const DocumentList: React.FC = () => {
                   setCurrentPage(1);
                 }}
               >
-                초기화
+                Reset
               </Button>
             </Space>
           </Col>
@@ -342,7 +342,7 @@ const DocumentList: React.FC = () => {
             pageSize: pageSize,
             total: data?.total,
             showSizeChanger: true,
-            showTotal: (total) => `총 ${total}개`,
+            showTotal: (total) => `${total} total`,
             onChange: (page, size) => {
               setCurrentPage(page);
               setPageSize(size || 20);
