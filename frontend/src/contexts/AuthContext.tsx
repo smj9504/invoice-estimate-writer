@@ -7,9 +7,14 @@ export interface User {
   username: string;
   email: string;
   full_name?: string;
-  role: 'admin' | 'manager' | 'user';
+  first_name?: string;
+  last_name?: string;
+  role: 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'staff' | 'sales' | 'customer_service' | 'accountant' | 'viewer';
+  staff_number?: string;
   is_active: boolean;
-  is_verified: boolean;
+  is_verified?: boolean;
+  can_login?: boolean;
+  email_verified?: boolean;
   created_at: string;
 }
 
@@ -22,7 +27,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<void>;
   isAdmin: () => boolean;
   isManager: () => boolean;
-  hasPermission: (requiredRole: 'admin' | 'manager' | 'user') => boolean;
+  hasPermission: (requiredRole: string) => boolean;
 }
 
 interface RegisterData {
@@ -113,23 +118,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const isAdmin = () => {
-    return user?.role === 'admin';
+    return user?.role === 'admin' || user?.role === 'super_admin';
   };
 
   const isManager = () => {
-    return user?.role === 'manager' || user?.role === 'admin';
+    return user?.role === 'manager' || user?.role === 'supervisor' || isAdmin();
   };
 
-  const hasPermission = (requiredRole: 'admin' | 'manager' | 'user') => {
+  const hasPermission = (requiredRole: string) => {
     if (!user) return false;
     
-    const roleHierarchy = {
-      admin: 3,
-      manager: 2,
-      user: 1,
+    const roleHierarchy: Record<string, number> = {
+      super_admin: 10,
+      admin: 9,
+      manager: 8,
+      supervisor: 7,
+      sales: 6,
+      technician: 5,
+      staff: 4,
+      customer_service: 3,
+      accountant: 3,
+      viewer: 1,
     };
     
-    return roleHierarchy[user.role] >= roleHierarchy[requiredRole];
+    const userLevel = roleHierarchy[user.role] || 0;
+    const requiredLevel = roleHierarchy[requiredRole] || 0;
+    
+    return userLevel >= requiredLevel;
   };
 
   const value = {

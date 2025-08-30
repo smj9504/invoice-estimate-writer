@@ -27,7 +27,7 @@ def get_document_types(
     if category:
         query = query.filter(models.DocumentType.category == category)
     
-    return query.order_by(models.DocumentType.display_order, models.DocumentType.name).offset(skip).limit(limit).all()
+    return query.order_by(models.DocumentType.name).offset(skip).limit(limit).all()
 
 
 def get_document_type(db: Session, document_type_id: UUID) -> Optional[models.DocumentType]:
@@ -102,7 +102,7 @@ def get_trades(
     if category:
         query = query.filter(models.Trade.category == category)
     
-    return query.order_by(models.Trade.display_order, models.Trade.name).offset(skip).limit(limit).all()
+    return query.order_by(models.Trade.name).offset(skip).limit(limit).all()
 
 
 def get_trade(db: Session, trade_id: UUID) -> Optional[models.Trade]:

@@ -14,15 +14,16 @@ from app.core.database_factory import Base
 
 class StaffRole(str, enum.Enum):
     """Staff role enumeration"""
-    SUPER_ADMIN = "super_admin"
-    ADMIN = "admin"
-    MANAGER = "manager"
-    SUPERVISOR = "supervisor"
-    TECHNICIAN = "technician"
-    SALES = "sales"
-    CUSTOMER_SERVICE = "customer_service"
-    ACCOUNTANT = "accountant"
-    VIEWER = "viewer"
+    super_admin = "super_admin"
+    admin = "admin"
+    manager = "manager"
+    supervisor = "supervisor"
+    technician = "technician"
+    staff = "staff"  # Regular staff role
+    sales = "sales"
+    customer_service = "customer_service"
+    accountant = "accountant"
+    viewer = "viewer"
 
 
 class PermissionLevel(str, enum.Enum):
@@ -44,8 +45,7 @@ class Staff(Base):
     # Staff Information
     staff_number = Column(String(50), unique=True, nullable=False, index=True)
     
-    # Relationships
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    # Relationships removed - Staff doesn't need company association
     
     # Personal Information
     first_name = Column(String(100), nullable=False)

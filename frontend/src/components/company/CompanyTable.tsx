@@ -11,6 +11,7 @@ import {
   Modal,
   Tooltip,
   Tag,
+  Badge,
 } from 'antd';
 import {
   EditOutlined,
@@ -22,6 +23,10 @@ import {
   MailOutlined,
   EnvironmentOutlined,
   BuildOutlined,
+  FileTextOutlined,
+  SafetyOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { Company, CompanyFilter } from '../../types';
@@ -113,14 +118,14 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
 
   const columns: ColumnsType<Company> = [
     {
-      title: '로고',
+      title: 'Logo',
       dataIndex: 'logo',
       key: 'logo',
       width: 80,
       render: (logo, record) => renderLogo(logo, record.name),
     },
     {
-      title: '회사명',
+      title: 'Company Name',
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
@@ -137,7 +142,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
       ),
     },
     {
-      title: '회사 코드',
+      title: 'Company Code',
       dataIndex: 'company_code',
       key: 'company_code',
       width: 100,
@@ -150,7 +155,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
       ),
     },
     {
-      title: '연락처',
+      title: 'Contact',
       dataIndex: 'phone',
       key: 'phone',
       width: 150,
@@ -163,7 +168,57 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
       ),
     },
     {
-      title: '주소',
+      title: 'Compliance',
+      key: 'compliance',
+      width: 150,
+      render: (_, record: any) => {
+        const licenses = record.licenses || [];
+        const insurancePolicies = record.insurance_policies || [];
+        
+        // Count active licenses
+        const activeLicenses = licenses.filter((l: any) => {
+          const expirationDate = new Date(l.expiration_date);
+          return l.status === 'active' && expirationDate > new Date();
+        }).length;
+        
+        // Count active insurance policies
+        const activeInsurance = insurancePolicies.filter((p: any) => {
+          const expirationDate = new Date(p.expiration_date);
+          const effectiveDate = new Date(p.effective_date);
+          const now = new Date();
+          return p.status === 'active' && effectiveDate <= now && expirationDate > now;
+        }).length;
+        
+        // Check for expiring licenses/insurance (within 30 days)
+        const hasExpiring = [...licenses, ...insurancePolicies].some((item: any) => {
+          const expirationDate = new Date(item.expiration_date);
+          const daysUntilExpiration = Math.floor((expirationDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+          return daysUntilExpiration >= 0 && daysUntilExpiration <= 30;
+        });
+        
+        return (
+          <Space>
+            <Tooltip title={`${activeLicenses} active license(s)`}>
+              <Badge count={activeLicenses} showZero color={activeLicenses > 0 ? '#52c41a' : '#d9d9d9'}>
+                <FileTextOutlined style={{ fontSize: 16 }} />
+              </Badge>
+            </Tooltip>
+            <Tooltip title={`${activeInsurance} active insurance polic${activeInsurance === 1 ? 'y' : 'ies'}`}>
+              <Badge count={activeInsurance} showZero color={activeInsurance > 0 ? '#52c41a' : '#d9d9d9'}>
+                <SafetyOutlined style={{ fontSize: 16 }} />
+              </Badge>
+            </Tooltip>
+            {hasExpiring && (
+              <Tooltip title="Has expiring documents">
+                <WarningOutlined style={{ color: '#faad14', fontSize: 16 }} />
+              </Tooltip>
+            )}
+          </Space>
+        );
+      },
+    },
+    {
+      title: 'Address',
       dataIndex: 'address',
       key: 'address',
       render: (address, record) => (
@@ -179,12 +234,12 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
       ),
     },
     {
-      title: '작업',
+      title: 'Actions',
       key: 'actions',
       width: 120,
       render: (_, record) => (
         <Space size="small">
-          <Tooltip title="수정">
+          <Tooltip title="Edit">
             <Button
               type="text"
               icon={<EditOutlined />}
@@ -192,7 +247,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
               size="small"
             />
           </Tooltip>
-          <Tooltip title="삭제">
+          <Tooltip title="Delete">
             <Button
               type="text"
               danger
@@ -231,13 +286,13 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
     <Card
       title={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>등록된 회사 목록</span>
+          <span>Registered Companies</span>
           <Button
             type="primary"
             icon={<PlusOutlined />}
             onClick={onAdd}
           >
-            새 회사 등록
+            Register New Company
           </Button>
         </div>
       }
@@ -246,7 +301,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({
       <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
         <Col xs={24}>
           <Search
-            placeholder="회사명, 주소, 이메일, 전화번호 검색"
+            placeholder="Search by company name, address, email, phone"
             value={filter.search}
             onChange={(e) => onFilterChange({ ...filter, search: e.target.value })}
             onSearch={(value) => onFilterChange({ ...filter, search: value })}

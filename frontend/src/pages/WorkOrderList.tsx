@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Card,
@@ -122,7 +122,7 @@ const WorkOrderList: React.FC = () => {
     },
   });
 
-  const workOrders = workOrdersData?.items || [];
+  const workOrders = useMemo(() => workOrdersData?.items || [], [workOrdersData?.items]);
   const total = workOrdersData?.total || 0;
 
   // Get company name by ID

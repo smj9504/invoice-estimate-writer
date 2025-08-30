@@ -1,371 +1,499 @@
 """
-Dashboard service layer
+Dashboard service for generating dashboard data
 """
 
-from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, func, text
-from datetime import datetime, timedelta
-from decimal import Decimal
-from typing import List, Dict, Optional
-import calendar
-
-from app.domains.work_order.models import WorkOrder, WorkOrderStatus, DocumentType
-from app.domains.company.models import Company
-from app.domains.payment.models import Payment, PaymentStatus
-from app.domains.credit.models import CustomerCredit, CreditTransaction
-from app.domains.document_types.models import DocumentType as DocType
-
-from .schemas import (
-    WorkOrderMetrics,
-    RevenueByPeriod,
-    CompanyStats,
-    CreditUsageStats,
-    DashboardOverview,
-    WorkOrderStatusCount,
-    PeriodFilter
+from typing import Dict, List, Optional, Any
+from datetime import datetime, timedelta, date
+import logging
+from app.core.database_factory import get_database
+from app.domains.dashboard.schemas import (
+    Priority, TimePeriod, WorkOrderSummary, DocumentCompletionStats,
+    RevisionRequiredDocument, UserDashboardData, ManagerDashboardData,
+    AdminDashboardData, TeamMemberStats, DashboardFilterParams
 )
+from app.domains.work_order.service import WorkOrderService
+from app.domains.invoice.service import InvoiceService
+from app.domains.estimate.service import EstimateService
+from app.domains.staff.service import StaffService
+
+logger = logging.getLogger(__name__)
 
 
 class DashboardService:
-    """Dashboard business logic"""
+    """Service for dashboard operations"""
     
-    def __init__(self, db: Session):
-        self.db = db
+    def __init__(self):
+        self.database = get_database()
+        self.work_order_service = WorkOrderService(self.database)
+        self.invoice_service = InvoiceService(self.database)
+        self.estimate_service = EstimateService(self.database)
+        self.staff_service = StaffService(self.database)
     
-    def get_work_order_metrics(
-        self, 
-        company_id: Optional[str] = None,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None
-    ) -> WorkOrderMetrics:
-        """Get key work order metrics"""
+    def calculate_priority(self, created_at: datetime) -> Priority:
+        """
+        Calculate priority based on age of work order in hours
+        - Low: < 3 hours old
+        - Medium: 3-12 hours old  
+        - High: 12-24 hours old
+        - Urgent: > 24 hours old
+        """
+        now = datetime.utcnow()
+        age = now - created_at
+        hours_old = age.total_seconds() / 3600  # Convert to hours
         
-        # Base query
-        query = self.db.query(WorkOrder).filter(WorkOrder.is_active == True)
-        
-        # Apply filters
-        if company_id:
-            query = query.filter(WorkOrder.company_id == company_id)
-        if start_date:
-            query = query.filter(WorkOrder.created_at >= start_date)
-        if end_date:
-            query = query.filter(WorkOrder.created_at <= end_date)
-        
-        # Get counts by status
-        total_leads = query.filter(WorkOrder.status == WorkOrderStatus.PENDING).count()
-        revision_requests = query.filter(WorkOrder.revision_requested == True).count()
-        completed_orders = query.filter(WorkOrder.status == WorkOrderStatus.COMPLETED).count()
-        active_orders = query.filter(WorkOrder.status == WorkOrderStatus.IN_PROGRESS).count()
-        
-        # Get pending payments amount
-        pending_payments_query = self.db.query(func.coalesce(func.sum(Payment.amount), 0)).filter(
-            Payment.status == PaymentStatus.PENDING
-        )
-        if company_id:
-            pending_payments_query = pending_payments_query.join(WorkOrder).filter(
-                WorkOrder.company_id == company_id
-            )
-        
-        pending_payments = Decimal(str(pending_payments_query.scalar() or 0))
-        
-        return WorkOrderMetrics(
-            total_leads=total_leads,
-            revision_requests=revision_requests,
-            completed_orders=completed_orders,
-            pending_payments=pending_payments,
-            active_orders=active_orders
-        )
-    
-    def get_revenue_by_period(
-        self,
-        period_type: str,  # 'week', 'month', 'quarter', 'year'
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
-        company_id: Optional[str] = None
-    ) -> List[RevenueByPeriod]:
-        """Calculate revenue statistics by period"""
-        
-        if not start_date or not end_date:
-            # Default to current year
-            now = datetime.now()
-            if period_type == 'year':
-                start_date = datetime(now.year, 1, 1)
-                end_date = datetime(now.year, 12, 31)
-            elif period_type == 'quarter':
-                quarter = (now.month - 1) // 3 + 1
-                start_date = datetime(now.year, (quarter - 1) * 3 + 1, 1)
-                end_date = datetime(now.year, quarter * 3, 
-                                 calendar.monthrange(now.year, quarter * 3)[1])
-            elif period_type == 'month':
-                start_date = datetime(now.year, now.month, 1)
-                end_date = datetime(now.year, now.month, 
-                                 calendar.monthrange(now.year, now.month)[1])
-            else:  # week
-                days_since_monday = now.weekday()
-                start_date = now - timedelta(days=days_since_monday)
-                end_date = start_date + timedelta(days=6)
-        
-        # Query completed work orders with their document types and pricing
-        query = self.db.query(
-            WorkOrder,
-            func.coalesce(DocType.base_price, 0).label('base_price')
-        ).outerjoin(
-            DocType, WorkOrder.document_type == DocType.name
-        ).filter(
-            and_(
-                WorkOrder.status == WorkOrderStatus.COMPLETED,
-                WorkOrder.actual_end_date >= start_date,
-                WorkOrder.actual_end_date <= end_date,
-                WorkOrder.is_active == True
-            )
-        )
-        
-        if company_id:
-            query = query.filter(WorkOrder.company_id == company_id)
-        
-        work_orders = query.all()
-        
-        # Calculate revenue
-        total_revenue = Decimal('0')
-        document_counts = {}
-        
-        for work_order, base_price in work_orders:
-            # Use actual_cost if available, otherwise use base_price
-            order_revenue = Decimal('0')
-            if work_order.actual_cost:
-                try:
-                    order_revenue = Decimal(str(work_order.actual_cost))
-                except:
-                    order_revenue = Decimal(str(base_price or 0))
-            else:
-                order_revenue = Decimal(str(base_price or 0))
-            
-            total_revenue += order_revenue
-            
-            # Count document types
-            doc_type = work_order.document_type.value if work_order.document_type else 'unknown'
-            document_counts[doc_type] = document_counts.get(doc_type, 0) + 1
-        
-        # Calculate credit used in this period
-        credit_used_query = self.db.query(
-            func.coalesce(func.sum(CreditTransaction.amount), 0)
-        ).filter(
-            and_(
-                CreditTransaction.transaction_type == 'use',
-                CreditTransaction.created_at >= start_date,
-                CreditTransaction.created_at <= end_date
-            )
-        )
-        
-        if company_id:
-            credit_used_query = credit_used_query.join(CustomerCredit).filter(
-                CustomerCredit.company_id == company_id
-            )
-        
-        credit_used = Decimal(str(credit_used_query.scalar() or 0))
-        net_revenue = total_revenue - credit_used
-        
-        return [RevenueByPeriod(
-            period=period_type,
-            start_date=start_date,
-            end_date=end_date,
-            total_revenue=total_revenue,
-            document_counts=document_counts,
-            credit_used=credit_used,
-            net_revenue=net_revenue
-        )]
-    
-    def get_company_stats(self, limit: int = 10) -> List[CompanyStats]:
-        """Get top companies by revenue"""
-        
-        # Query companies with their work order counts and revenue
-        company_stats = self.db.query(
-            Company,
-            func.count(WorkOrder.id).label('total_orders'),
-            func.count(
-                func.nullif(WorkOrder.status != WorkOrderStatus.COMPLETED, True)
-            ).label('completed_orders'),
-            func.max(WorkOrder.created_at).label('last_order_date')
-        ).outerjoin(
-            WorkOrder, Company.id == WorkOrder.company_id
-        ).group_by(
-            Company.id
-        ).order_by(
-            func.count(WorkOrder.id).desc()
-        ).limit(limit).all()
-        
-        result = []
-        for company, total_orders, completed_orders, last_order_date in company_stats:
-            # Calculate total revenue for this company
-            revenue_query = self.db.query(
-                func.coalesce(func.sum(
-                    func.coalesce(
-                        func.cast(WorkOrder.actual_cost, func.numeric(10,2)), 
-                        DocType.base_price, 
-                        0
-                    )
-                ), 0)
-            ).outerjoin(
-                DocType, WorkOrder.document_type == DocType.name
-            ).filter(
-                and_(
-                    WorkOrder.company_id == company.id,
-                    WorkOrder.status == WorkOrderStatus.COMPLETED
-                )
-            )
-            
-            total_revenue = Decimal(str(revenue_query.scalar() or 0))
-            
-            # Get credit balance
-            credit_balance_query = self.db.query(
-                func.coalesce(func.sum(CustomerCredit.remaining_amount), 0)
-            ).filter(CustomerCredit.company_id == company.id)
-            
-            credit_balance = Decimal(str(credit_balance_query.scalar() or 0))
-            
-            result.append(CompanyStats(
-                company_id=str(company.id),
-                company_name=company.name,
-                total_orders=total_orders or 0,
-                completed_orders=completed_orders or 0,
-                total_revenue=total_revenue,
-                credit_balance=credit_balance,
-                last_order_date=last_order_date
-            ))
-        
-        return result
-    
-    def get_credit_usage_stats(self) -> CreditUsageStats:
-        """Get credit system usage statistics"""
-        
-        # Total credits allocated
-        total_allocated = self.db.query(
-            func.coalesce(func.sum(CustomerCredit.original_amount), 0)
-        ).scalar()
-        
-        # Total credits used
-        total_used = self.db.query(
-            func.coalesce(func.sum(CustomerCredit.used_amount), 0)
-        ).scalar()
-        
-        # Total remaining
-        total_remaining = self.db.query(
-            func.coalesce(func.sum(CustomerCredit.remaining_amount), 0)
-        ).scalar()
-        
-        # Credits by company
-        credits_by_company = self.db.query(
-            Company.name,
-            Company.id,
-            func.coalesce(func.sum(CustomerCredit.remaining_amount), 0).label('balance')
-        ).outerjoin(
-            CustomerCredit, Company.id == CustomerCredit.company_id
-        ).group_by(
-            Company.id, Company.name
-        ).order_by(
-            func.coalesce(func.sum(CustomerCredit.remaining_amount), 0).desc()
-        ).limit(10).all()
-        
-        # Recent transactions
-        recent_transactions = self.db.query(CreditTransaction).order_by(
-            CreditTransaction.created_at.desc()
-        ).limit(20).all()
-        
-        return CreditUsageStats(
-            total_credits_allocated=Decimal(str(total_allocated or 0)),
-            total_credits_used=Decimal(str(total_used or 0)),
-            total_credits_remaining=Decimal(str(total_remaining or 0)),
-            credits_by_company=[
-                {
-                    'company_name': name,
-                    'company_id': str(company_id),
-                    'balance': float(balance)
-                }
-                for name, company_id, balance in credits_by_company
-            ],
-            recent_transactions=[
-                {
-                    'id': str(tx.id),
-                    'type': tx.transaction_type,
-                    'amount': float(tx.amount),
-                    'date': tx.created_at,
-                    'company_id': str(tx.customer_credit.company_id) if tx.customer_credit else None
-                }
-                for tx in recent_transactions
-            ]
-        )
-    
-    def get_dashboard_overview(
-        self,
-        company_id: Optional[str] = None
-    ) -> DashboardOverview:
-        """Get complete dashboard overview"""
-        
-        # Current metrics
-        work_order_metrics = self.get_work_order_metrics(company_id=company_id)
-        
-        # Current month revenue
-        now = datetime.now()
-        current_month_start = datetime(now.year, now.month, 1)
-        current_month_end = datetime(now.year, now.month, 
-                                   calendar.monthrange(now.year, now.month)[1])
-        
-        current_revenue = self.get_revenue_by_period(
-            'month', current_month_start, current_month_end, company_id
-        )[0].net_revenue
-        
-        # Previous month revenue
-        if now.month == 1:
-            prev_month = 12
-            prev_year = now.year - 1
+        if hours_old >= 24:
+            return Priority.URGENT
+        elif hours_old >= 12:
+            return Priority.HIGH
+        elif hours_old >= 3:
+            return Priority.MEDIUM
         else:
-            prev_month = now.month - 1
-            prev_year = now.year
+            return Priority.LOW
+    
+    def get_time_period_dates(self, period: TimePeriod) -> tuple[date, date]:
+        """
+        Get start and end dates for a time period
+        Week: Monday-Sunday
+        Quarter: Calendar quarters
+        """
+        today = date.today()
         
-        prev_month_start = datetime(prev_year, prev_month, 1)
-        prev_month_end = datetime(prev_year, prev_month, 
-                                calendar.monthrange(prev_year, prev_month)[1])
+        if period == TimePeriod.WEEK:
+            # Get Monday of current week
+            days_since_monday = today.weekday()
+            start_date = today - timedelta(days=days_since_monday)
+            end_date = start_date + timedelta(days=6)
+            
+        elif period == TimePeriod.MONTH:
+            start_date = date(today.year, today.month, 1)
+            # Get last day of month
+            if today.month == 12:
+                end_date = date(today.year, 12, 31)
+            else:
+                end_date = date(today.year, today.month + 1, 1) - timedelta(days=1)
+                
+        elif period == TimePeriod.QUARTER:
+            # Calendar quarters: Q1 (Jan-Mar), Q2 (Apr-Jun), Q3 (Jul-Sep), Q4 (Oct-Dec)
+            quarter = (today.month - 1) // 3
+            start_month = quarter * 3 + 1
+            end_month = start_month + 2
+            start_date = date(today.year, start_month, 1)
+            if end_month == 12:
+                end_date = date(today.year, 12, 31)
+            else:
+                end_date = date(today.year, end_month + 1, 1) - timedelta(days=1)
+                
+        elif period == TimePeriod.YEAR:
+            start_date = date(today.year, 1, 1)
+            end_date = date(today.year, 12, 31)
         
-        prev_revenue = self.get_revenue_by_period(
-            'month', prev_month_start, prev_month_end, company_id
-        )[0].net_revenue
+        return start_date, end_date
+    
+    def get_work_order_assignments(self, staff_id: str) -> List[Dict[str, Any]]:
+        """Get work orders assigned to a specific staff member"""
+        try:
+            # Get work orders where staff is assigned
+            with self.database.get_session() as session:
+                # Query work_order_staff_assignments table
+                query = """
+                    SELECT DISTINCT wo.* 
+                    FROM work_orders wo
+                    JOIN work_order_staff_assignments wosa ON wo.id = wosa.work_order_id
+                    WHERE wosa.staff_id = :staff_id 
+                    AND wosa.is_active = true
+                    AND wo.is_active = true
+                    ORDER BY wo.created_at ASC
+                """
+                # For SQLite/development, we'll use the simpler approach
+                # In production with proper junction table, use the above query
+                
+                # Fallback to using assigned_to_staff_id for now
+                work_orders = self.work_order_service.get_all()
+                assigned_orders = [
+                    wo for wo in work_orders 
+                    if wo.get('assigned_to_staff_id') == staff_id
+                ]
+                return assigned_orders
+                
+        except Exception as e:
+            logger.error(f"Error getting work order assignments: {e}")
+            return []
+    
+    def get_document_completions(self, staff_id: Optional[str], period: TimePeriod) -> List[DocumentCompletionStats]:
+        """Get document completion statistics for a time period"""
+        start_date, end_date = self.get_time_period_dates(period)
+        stats_by_type = {}
         
-        # Growth percentage
-        growth_percentage = 0.0
-        if prev_revenue > 0:
-            growth_percentage = float((current_revenue - prev_revenue) / prev_revenue * 100)
+        try:
+            # Get invoices
+            invoices = self.invoice_service.get_all()
+            for invoice in invoices:
+                # Check if in date range
+                invoice_date = invoice.get('created_at', '')
+                if isinstance(invoice_date, str):
+                    invoice_date = datetime.fromisoformat(invoice_date.replace('Z', '+00:00'))
+                
+                if start_date <= invoice_date.date() <= end_date:
+                    status = invoice.get('status', '')
+                    if status in ['completed', 'paid']:
+                        if 'invoice' not in stats_by_type:
+                            stats_by_type['invoice'] = {
+                                'document_type': 'invoice',
+                                'completed_count': 0,
+                                'paid_count': 0,
+                                'total_amount': 0.0,
+                                'average_completion_time_hours': None
+                            }
+                        
+                        stats_by_type['invoice']['completed_count'] += 1
+                        if status == 'paid':
+                            stats_by_type['invoice']['paid_count'] += 1
+                        stats_by_type['invoice']['total_amount'] += float(invoice.get('total_amount', 0))
+            
+            # Get estimates
+            estimates = self.estimate_service.get_all()
+            for estimate in estimates:
+                # Check if in date range
+                estimate_date = estimate.get('created_at', '')
+                if isinstance(estimate_date, str):
+                    estimate_date = datetime.fromisoformat(estimate_date.replace('Z', '+00:00'))
+                
+                if start_date <= estimate_date.date() <= end_date:
+                    status = estimate.get('status', '')
+                    if status in ['completed', 'approved']:
+                        if 'estimate' not in stats_by_type:
+                            stats_by_type['estimate'] = {
+                                'document_type': 'estimate',
+                                'completed_count': 0,
+                                'paid_count': 0,
+                                'total_amount': 0.0,
+                                'average_completion_time_hours': None
+                            }
+                        
+                        stats_by_type['estimate']['completed_count'] += 1
+                        stats_by_type['estimate']['total_amount'] += float(estimate.get('total_amount', 0))
+            
+            return [DocumentCompletionStats(**stats) for stats in stats_by_type.values()]
+            
+        except Exception as e:
+            logger.error(f"Error getting document completions: {e}")
+            return []
+    
+    def get_documents_requiring_revision(self, staff_id: Optional[str]) -> List[RevisionRequiredDocument]:
+        """Get documents that require revision"""
+        revision_docs = []
         
-        # Top companies
-        top_companies = self.get_company_stats(limit=5)
+        try:
+            # Check work orders with revision_requested flag
+            work_orders = self.work_order_service.get_all()
+            for wo in work_orders:
+                if wo.get('revision_requested'):
+                    # Check if assigned to this staff member (if staff_id provided)
+                    if staff_id and wo.get('assigned_to_staff_id') != staff_id:
+                        continue
+                    
+                    revision_date = wo.get('last_revision_date') or wo.get('updated_at')
+                    if isinstance(revision_date, str):
+                        revision_date = datetime.fromisoformat(revision_date.replace('Z', '+00:00'))
+                    
+                    days_pending = (datetime.utcnow() - revision_date).days
+                    
+                    revision_docs.append(RevisionRequiredDocument(
+                        id=wo['id'],
+                        document_type=wo.get('document_type', 'work_order'),
+                        document_number=wo.get('work_order_number', ''),
+                        client_name=wo.get('client_name', ''),
+                        revision_requested_date=revision_date,
+                        revision_notes=wo.get('internal_notes'),
+                        assigned_to=wo.get('assigned_to_staff_id'),
+                        days_pending=days_pending
+                    ))
+            
+            return revision_docs
+            
+        except Exception as e:
+            logger.error(f"Error getting documents requiring revision: {e}")
+            return []
+    
+    def get_user_dashboard(self, staff_id: str, filters: DashboardFilterParams) -> UserDashboardData:
+        """Get dashboard data for a regular user"""
+        # Get assigned work orders
+        work_orders = self.get_work_order_assignments(staff_id)
         
-        # Recent activities (recent work orders)
-        recent_activities_query = self.db.query(WorkOrder).order_by(
-            WorkOrder.updated_at.desc()
-        ).limit(10)
+        # Categorize by priority
+        urgent_orders = []
+        high_orders = []
+        medium_orders = []
+        low_orders = []
+        overdue_orders = []
         
-        if company_id:
-            recent_activities_query = recent_activities_query.filter(
-                WorkOrder.company_id == company_id
+        now = datetime.utcnow()
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())  # Monday
+        
+        completed_today = 0
+        completed_this_week = 0
+        
+        for wo in work_orders:
+            # Calculate priority based on creation time
+            created_at = wo.get('created_at')
+            if isinstance(created_at, str):
+                created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+            
+            priority = self.calculate_priority(created_at)
+            days_old = (now - created_at).days
+            
+            # Check if overdue
+            scheduled_end = wo.get('scheduled_end_date')
+            is_overdue = False
+            if scheduled_end:
+                if isinstance(scheduled_end, str):
+                    scheduled_end = datetime.fromisoformat(scheduled_end.replace('Z', '+00:00'))
+                is_overdue = scheduled_end < now
+            
+            # Get assigned staff info (for multi-staff support)
+            assigned_staff = []
+            if wo.get('assigned_to_staff_id'):
+                staff = self.staff_service.get_by_id(wo['assigned_to_staff_id'])
+                if staff:
+                    assigned_staff.append({
+                        'id': staff['id'],
+                        'name': staff.get('name', ''),
+                        'role': staff.get('role', '')
+                    })
+            
+            wo_summary = WorkOrderSummary(
+                id=wo['id'],
+                work_order_number=wo.get('work_order_number', ''),
+                client_name=wo.get('client_name', ''),
+                document_type=wo.get('document_type', ''),
+                status=wo.get('status', ''),
+                priority=priority,
+                created_at=created_at,
+                scheduled_start_date=wo.get('scheduled_start_date'),
+                scheduled_end_date=wo.get('scheduled_end_date'),
+                assigned_staff=assigned_staff,
+                days_old=days_old,
+                is_overdue=is_overdue,
+                revision_requested=wo.get('revision_requested', False),
+                revision_count=wo.get('revision_count', 0)
             )
+            
+            # Count completions
+            if wo.get('status') == 'completed':
+                completed_date = wo.get('actual_end_date') or wo.get('updated_at')
+                if isinstance(completed_date, str):
+                    completed_date = datetime.fromisoformat(completed_date.replace('Z', '+00:00'))
+                
+                if completed_date.date() == today:
+                    completed_today += 1
+                if completed_date.date() >= week_start:
+                    completed_this_week += 1
+            
+            # Categorize by priority
+            if is_overdue:
+                overdue_orders.append(wo_summary)
+            elif priority == Priority.URGENT:
+                urgent_orders.append(wo_summary)
+            elif priority == Priority.HIGH:
+                high_orders.append(wo_summary)
+            elif priority == Priority.MEDIUM:
+                medium_orders.append(wo_summary)
+            else:
+                low_orders.append(wo_summary)
         
-        recent_work_orders = recent_activities_query.all()
-        recent_activities = [
-            {
-                'id': str(wo.id),
-                'type': 'work_order',
-                'description': f"Work Order #{wo.work_order_number} - {wo.client_name}",
-                'status': wo.status.value,
-                'date': wo.updated_at,
-                'company_name': wo.company_id  # This would need a join for actual name
-            }
-            for wo in recent_work_orders
-        ]
+        # Get document completions for the period
+        document_completions = self.get_document_completions(staff_id, filters.time_period)
         
-        return DashboardOverview(
-            work_order_metrics=work_order_metrics,
-            revenue_current_month=current_revenue,
-            revenue_previous_month=prev_revenue,
-            revenue_growth_percentage=growth_percentage,
-            top_companies=top_companies,
-            recent_activities=recent_activities
+        # Get documents requiring revision
+        documents_requiring_revision = self.get_documents_requiring_revision(staff_id)
+        
+        return UserDashboardData(
+            urgent_work_orders=urgent_orders,
+            high_priority_work_orders=high_orders,
+            medium_priority_work_orders=medium_orders,
+            low_priority_work_orders=low_orders,
+            overdue_work_orders=overdue_orders,
+            total_assigned=len(work_orders),
+            completed_today=completed_today,
+            completed_this_week=completed_this_week,
+            pending_revisions=len(documents_requiring_revision),
+            document_completions=document_completions,
+            documents_requiring_revision=documents_requiring_revision,
+            time_period=filters.time_period
+        )
+    
+    def get_manager_dashboard(self, staff_id: str, filters: DashboardFilterParams) -> ManagerDashboardData:
+        """Get dashboard data for a manager (includes team data)"""
+        # Get user dashboard data first
+        user_data = self.get_user_dashboard(staff_id, filters)
+        
+        # Get team members
+        all_staff = self.staff_service.get_all()
+        team_members = []
+        team_stats = {
+            'total_assigned': 0,
+            'completed_today': 0,
+            'completed_this_week': 0,
+            'pending_revisions': 0
+        }
+        work_distribution = {}
+        
+        for staff in all_staff:
+            # Get stats for each team member
+            member_work_orders = self.get_work_order_assignments(staff['id'])
+            member_revisions = self.get_documents_requiring_revision(staff['id'])
+            
+            # Count completions
+            today = date.today()
+            week_start = today - timedelta(days=today.weekday())
+            member_completed_today = 0
+            member_completed_week = 0
+            
+            for wo in member_work_orders:
+                if wo.get('status') == 'completed':
+                    completed_date = wo.get('actual_end_date') or wo.get('updated_at')
+                    if isinstance(completed_date, str):
+                        completed_date = datetime.fromisoformat(completed_date.replace('Z', '+00:00'))
+                    
+                    if completed_date.date() == today:
+                        member_completed_today += 1
+                    if completed_date.date() >= week_start:
+                        member_completed_week += 1
+            
+            team_members.append(TeamMemberStats(
+                staff_id=str(staff['id']),  # Convert UUID to string
+                staff_name=staff.get('name', '') or f"{staff.get('first_name', '')} {staff.get('last_name', '')}".strip(),
+                email=staff.get('email', ''),
+                role=staff.get('role', ''),
+                assigned_work_orders=len(member_work_orders),
+                completed_today=member_completed_today,
+                completed_this_week=member_completed_week,
+                pending_revisions=len(member_revisions),
+                average_completion_time_hours=None  # TODO: Calculate this
+            ))
+            
+            # Update team totals
+            team_stats['total_assigned'] += len(member_work_orders)
+            team_stats['completed_today'] += member_completed_today
+            team_stats['completed_this_week'] += member_completed_week
+            team_stats['pending_revisions'] += len(member_revisions)
+            
+            # Work distribution
+            work_distribution[str(staff['id'])] = len(member_work_orders)
+        
+        return ManagerDashboardData(
+            **user_data.dict(),
+            team_members=team_members,
+            team_total_assigned=team_stats['total_assigned'],
+            team_completed_today=team_stats['completed_today'],
+            team_completed_this_week=team_stats['completed_this_week'],
+            team_pending_revisions=team_stats['pending_revisions'],
+            work_distribution=work_distribution
+        )
+    
+    def get_admin_dashboard(self, staff_id: str, filters: DashboardFilterParams) -> AdminDashboardData:
+        """Get dashboard data for admin (includes all system data)"""
+        # Get manager dashboard data first
+        manager_data = self.get_manager_dashboard(staff_id, filters)
+        
+        # Get ALL work orders in the system
+        all_work_orders = self.work_order_service.get_all()
+        all_wo_summaries = []
+        
+        system_completed_today = 0
+        system_completed_week = 0
+        system_pending_revisions = 0
+        
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())
+        now = datetime.utcnow()
+        
+        for wo in all_work_orders:
+            created_at = wo.get('created_at')
+            if isinstance(created_at, str):
+                created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+            
+            priority = self.calculate_priority(created_at)
+            days_old = (now - created_at).days
+            
+            # Check if overdue
+            scheduled_end = wo.get('scheduled_end_date')
+            is_overdue = False
+            if scheduled_end:
+                if isinstance(scheduled_end, str):
+                    scheduled_end = datetime.fromisoformat(scheduled_end.replace('Z', '+00:00'))
+                is_overdue = scheduled_end < now
+            
+            # Get assigned staff
+            assigned_staff = []
+            if wo.get('assigned_to_staff_id'):
+                staff = self.staff_service.get_by_id(wo['assigned_to_staff_id'])
+                if staff:
+                    assigned_staff.append({
+                        'id': staff['id'],
+                        'name': staff.get('name', ''),
+                        'role': staff.get('role', '')
+                    })
+            
+            all_wo_summaries.append(WorkOrderSummary(
+                id=wo['id'],
+                work_order_number=wo.get('work_order_number', ''),
+                client_name=wo.get('client_name', ''),
+                document_type=wo.get('document_type', ''),
+                status=wo.get('status', ''),
+                priority=priority,
+                created_at=created_at,
+                scheduled_start_date=wo.get('scheduled_start_date'),
+                scheduled_end_date=wo.get('scheduled_end_date'),
+                assigned_staff=assigned_staff,
+                days_old=days_old,
+                is_overdue=is_overdue,
+                revision_requested=wo.get('revision_requested', False),
+                revision_count=wo.get('revision_count', 0)
+            ))
+            
+            # Count system-wide stats
+            if wo.get('status') == 'completed':
+                completed_date = wo.get('actual_end_date') or wo.get('updated_at')
+                if isinstance(completed_date, str):
+                    completed_date = datetime.fromisoformat(completed_date.replace('Z', '+00:00'))
+                
+                if completed_date.date() == today:
+                    system_completed_today += 1
+                if completed_date.date() >= week_start:
+                    system_completed_week += 1
+            
+            if wo.get('revision_requested'):
+                system_pending_revisions += 1
+        
+        # Get company count
+        from app.domains.company.service import CompanyService
+        company_service = CompanyService(self.database)
+        companies = company_service.get_all()
+        
+        # Calculate total revenue for the period
+        start_date, end_date = self.get_time_period_dates(filters.time_period)
+        total_revenue = 0.0
+        
+        # Sum invoice amounts in the period
+        invoices = self.invoice_service.get_all()
+        for invoice in invoices:
+            invoice_date = invoice.get('invoice_date') or invoice.get('created_at')
+            if isinstance(invoice_date, str):
+                invoice_date = datetime.fromisoformat(invoice_date.replace('Z', '+00:00'))
+            
+            if start_date <= invoice_date.date() <= end_date:
+                if invoice.get('status') == 'paid':
+                    total_revenue += float(invoice.get('total_amount', 0))
+        
+        return AdminDashboardData(
+            **manager_data.dict(),
+            all_work_orders=all_wo_summaries,
+            system_total_work_orders=len(all_work_orders),
+            system_completed_today=system_completed_today,
+            system_completed_this_week=system_completed_week,
+            system_pending_revisions=system_pending_revisions,
+            companies_count=len(companies),
+            total_revenue_this_period=total_revenue
         )

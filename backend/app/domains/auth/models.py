@@ -47,23 +47,4 @@ class UUID(TypeDecorator):
             return value
 
 
-class UserRole(str, enum.Enum):
-    ADMIN = "admin"
-    MANAGER = "manager"
-    USER = "user"
-
-
-class User(Base):
-    __tablename__ = "users"
-    
-    id = Column(UUID(), primary_key=True, default=uuid.uuid4)
-    username = Column(String(50), unique=True, nullable=False, index=True)
-    email = Column(String(100), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
-    full_name = Column(String(100))
-    role = Column(SQLEnum(UserRole), default=UserRole.USER, nullable=False)
-    is_active = Column(Boolean, default=True, nullable=False)
-    is_verified = Column(Boolean, default=False, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    last_login = Column(DateTime)
+# Legacy User model removed - use Staff model from app.domains.staff.models instead

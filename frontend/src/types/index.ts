@@ -10,6 +10,8 @@ export interface Company {
   email?: string;
   logo?: string; // Base64 encoded logo or URL
   company_code?: string; // 4-character unique code
+  payment_method?: string; // e.g., 'zelle', 'stripe'
+  payment_frequency?: string; // e.g., 'per_job', 'weekly'
   created_at?: string;
   updated_at?: string;
 }
@@ -24,6 +26,8 @@ export interface CompanyFormData {
   email?: string;
   logo?: string;
   company_code?: string;
+  payment_method?: string;
+  payment_frequency?: string;
 }
 
 export interface CompanyFilter {
@@ -175,4 +179,33 @@ export interface PaginatedResponse<T> {
   page: number;
   page_size: number;  // Changed from 'pageSize' to match backend
   total_pages: number;  // Added to match backend
+}
+
+// Payment Configuration Types
+export interface PaymentMethod {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  requires_account_info: boolean;
+  account_info_fields?: string;
+  display_order: number;
+  icon?: string;
+  is_active: boolean;
+  is_default: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface PaymentFrequency {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  days_interval?: number;
+  display_order: number;
+  is_active: boolean;
+  is_default: boolean;
+  created_at?: string;
+  updated_at?: string;
 }

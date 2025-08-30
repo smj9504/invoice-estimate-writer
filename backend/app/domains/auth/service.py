@@ -2,15 +2,16 @@
 Authentication service layer
 """
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Union
 from uuid import UUID
 import bcrypt
 import jwt
 from sqlalchemy.orm import Session
 from app.core.database_factory import DatabaseSession
 from sqlalchemy.exc import IntegrityError
+import uuid
 
-from .models import User, UserRole
+from app.domains.staff.models import Staff, StaffRole
 from . import schemas
 from app.core.config import settings
 
@@ -70,16 +71,19 @@ class AuthService:
         except jwt.JWTError:
             return None
     
-    def create_user(self, db, user_create: schemas.UserCreate) -> User:
-        """Create a new user"""
-        hashed_password = self.hash_password(user_create.password)
+    def create_staff(self, db, staff_create: schemas.StaffCreate) -> Staff:
+        """Create a new staff member"""
+        hashed_password = self.hash_password(staff_create.password)
         
-        db_user = User(
-            username=user_create.username,
-            email=user_create.email,
-            full_name=user_create.full_name,
-            hashed_password=hashed_password,
-            role=user_create.role
+        db_staff = Staff(
+            username=staff_create.username,
+            email=staff_create.email,
+            first_name=staff_create.first_name,
+            last_name=staff_create.last_name,
+            password_hash=hashed_password,
+            role=staff_create.role,
+            hire_date=staff_create.hire_date or datetime.utcnow(),
+            staff_number=staff_create.staff_number
         )
         
         try:
@@ -89,17 +93,17 @@ class AuthService:
             else:
                 session = db
             
-            session.add(db_user)
+            session.add(db_staff)
             session.commit()
-            session.refresh(db_user)
-            return db_user
+            session.refresh(db_staff)
+            return db_staff
         except IntegrityError:
             if hasattr(db, 'rollback'):
                 db.rollback()
             raise ValueError("Username or email already exists")
     
-    def authenticate_user(self, db, username: str, password: str) -> Optional[User]:
-        """Authenticate a user by username and password"""
+    def authenticate_staff(self, db, username: str, password: str) -> Optional[Staff]:
+        """Authenticate a staff member by username and password"""
         # Handle both raw Session and DatabaseSession wrapper
         if hasattr(db, '_session'):
             session = db._session
@@ -108,101 +112,166 @@ class AuthService:
         else:
             raise ValueError("Invalid database session type")
             
-        user = session.query(User).filter(
-            (User.username == username) | (User.email == username)
+        staff = session.query(Staff).filter(
+            (Staff.username == username) | (Staff.email == username)
         ).first()
         
-        if not user:
+        if not staff:
             return None
             
-        if not self.verify_password(password, user.hashed_password):
+        if not staff.can_login or not staff.is_active:
             return None
             
-        # Update last login
-        user.last_login = datetime.utcnow()
-        if hasattr(db, '_session'):
-            db._session.commit()
-        else:
-            db.commit()
+        if not self.verify_password(password, staff.password_hash):
+            return None
+            
+        # Update last login using a separate query to avoid session issues
+        try:
+            # Store the staff ID before any session operations
+            staff_id = staff.id
+            
+            # Use a direct update query instead of modifying the object
+            session.query(Staff).filter(Staff.id == staff_id).update(
+                {"last_login": datetime.utcnow()},
+                synchronize_session=False
+            )
+            
+            # Commit the change
+            if hasattr(db, 'commit'):
+                db.commit()
+            else:
+                session.commit()
+                
+            # Re-query the staff object to get fresh data
+            # This avoids the ObjectDeletedError from refresh
+            staff = session.query(Staff).filter(Staff.id == staff_id).first()
+        except Exception as e:
+            # Log the error but don't fail the login
+            print(f"Warning: Failed to update last_login: {e}")
+            # Rollback if needed
+            if hasattr(db, 'rollback'):
+                db.rollback()
+            elif hasattr(session, 'rollback'):
+                session.rollback()
+            # Re-query the staff object even if update failed
+            staff = session.query(Staff).filter(Staff.id == staff_id).first()
         
-        return user
+        return staff
     
-    def get_user_by_id(self, db, user_id: UUID) -> Optional[User]:
-        """Get a user by ID"""
+    def get_staff_by_id(self, db, staff_id: Union[str, UUID]) -> Optional[Staff]:
+        """Get a staff member by ID"""
         # Handle both raw Session and DatabaseSession wrapper
         if hasattr(db, '_session'):
             session = db._session
         elif hasattr(db, 'query'):
             session = db
         else:
-            return None
-            
-        return session.query(User).filter(User.id == user_id).first()
-    
-    def get_user_by_username(self, db, username: str) -> Optional[User]:
-        """Get a user by username"""
-        # Handle both raw Session and DatabaseSession wrapper
-        if hasattr(db, '_session'):
-            session = db._session
-        elif hasattr(db, 'query'):
-            session = db
-        else:
-            return None
-            
-        return session.query(User).filter(User.username == username).first()
-    
-    def get_user_by_email(self, db, email: str) -> Optional[User]:
-        """Get a user by email"""
-        # Handle both raw Session and DatabaseSession wrapper
-        if hasattr(db, '_session'):
-            session = db._session
-        elif hasattr(db, 'query'):
-            session = db
-        else:
-            return None
-            
-        return session.query(User).filter(User.email == email).first()
-    
-    def update_user(self, db, user_id: UUID, user_update: schemas.UserUpdate) -> Optional[User]:
-        """Update a user"""
-        user = self.get_user_by_id(db, user_id)
-        if not user:
             return None
         
-        update_data = user_update.dict(exclude_unset=True)
+        # Convert string to UUID if needed
+        if isinstance(staff_id, str):
+            try:
+                staff_id = uuid.UUID(staff_id)
+            except (ValueError, TypeError):
+                return None
+            
+        return session.query(Staff).filter(Staff.id == staff_id).first()
+    
+    def get_staff_by_username(self, db, username: str) -> Optional[Staff]:
+        """Get a staff member by username"""
+        # Handle both raw Session and DatabaseSession wrapper
+        if hasattr(db, '_session'):
+            session = db._session
+        elif hasattr(db, 'query'):
+            session = db
+        else:
+            return None
+            
+        return session.query(Staff).filter(Staff.username == username).first()
+    
+    def get_staff_by_email(self, db, email: str) -> Optional[Staff]:
+        """Get a staff member by email"""
+        # Handle both raw Session and DatabaseSession wrapper
+        if hasattr(db, '_session'):
+            session = db._session
+        elif hasattr(db, 'query'):
+            session = db
+        else:
+            return None
+            
+        return session.query(Staff).filter(Staff.email == email).first()
+    
+    def update_staff(self, db, staff_id: Union[str, UUID], staff_update: schemas.StaffUpdate) -> Optional[Staff]:
+        """Update a staff member"""
+        staff = self.get_staff_by_id(db, staff_id)
+        if not staff:
+            return None
+        
+        # Handle both raw Session and DatabaseSession wrapper
+        if hasattr(db, '_session'):
+            session = db._session
+        elif hasattr(db, 'query'):
+            session = db
+        else:
+            raise ValueError("Invalid database session type")
+        
+        update_data = staff_update.dict(exclude_unset=True)
         for field, value in update_data.items():
-            setattr(user, field, value)
+            setattr(staff, field, value)
         
-        user.updated_at = datetime.utcnow()
+        staff.updated_at = datetime.utcnow()
+        
+        # Use consistent session handling
         if hasattr(db, '_session'):
-            db._session.commit()
-            db._session.refresh(user)
+            # Ensure the staff object is merged into the session
+            staff = session.merge(staff)
+            session.flush()  # Flush to ensure the update is pending
+            db.commit()  # Use the wrapper's commit method
+            session.refresh(staff)
         else:
-            db.commit()
-            db.refresh(user)
+            # For raw sessions, use direct commit
+            session.flush()  # Flush to ensure the update is pending
+            session.commit()
+            session.refresh(staff)
         
-        return user
+        return staff
     
-    def change_password(self, db, user_id: UUID, current_password: str, new_password: str) -> bool:
-        """Change a user's password"""
-        user = self.get_user_by_id(db, user_id)
-        if not user:
+    def change_password(self, db, staff_id: Union[str, UUID], current_password: str, new_password: str) -> bool:
+        """Change a staff member's password"""
+        staff = self.get_staff_by_id(db, staff_id)
+        if not staff:
             return False
         
-        if not self.verify_password(current_password, user.hashed_password):
+        if not self.verify_password(current_password, staff.password_hash):
             return False
         
-        user.hashed_password = self.hash_password(new_password)
-        user.updated_at = datetime.utcnow()
+        # Handle both raw Session and DatabaseSession wrapper
         if hasattr(db, '_session'):
-            db._session.commit()
+            session = db._session
+        elif hasattr(db, 'query'):
+            session = db
         else:
-            db.commit()
+            raise ValueError("Invalid database session type")
+        
+        staff.password_hash = self.hash_password(new_password)
+        staff.updated_at = datetime.utcnow()
+        staff.must_change_password = False
+        
+        # Use consistent session handling
+        if hasattr(db, '_session'):
+            # Ensure the staff object is merged into the session
+            staff = session.merge(staff)
+            session.flush()  # Flush to ensure the update is pending
+            db.commit()  # Use the wrapper's commit method
+        else:
+            # For raw sessions, use direct commit
+            session.flush()  # Flush to ensure the update is pending
+            session.commit()
         
         return True
     
-    def create_initial_admin(self, db) -> Optional[User]:
-        """Create the initial admin user if none exists"""
+    def create_initial_admin(self, db) -> Optional[Staff]:
+        """Create the initial admin staff member if none exists"""
         # Handle both raw Session and DatabaseSession wrapper
         if hasattr(db, '_session'):
             session = db._session
@@ -211,16 +280,18 @@ class AuthService:
         else:
             return None
             
-        admin_exists = session.query(User).filter(User.role == UserRole.ADMIN).first()
+        admin_exists = session.query(Staff).filter(Staff.role == StaffRole.admin).first()
         if admin_exists:
             return None
         
-        admin_user = schemas.UserCreate(
+        admin_staff = schemas.StaffCreate(
             username="admin",
             email="admin@mjestimate.com",
             password="admin123",
-            full_name="System Administrator",
-            role=UserRole.ADMIN
+            first_name="System",
+            last_name="Administrator",
+            role=StaffRole.admin,
+            staff_number="ADMIN001"
         )
         
-        return self.create_user(db, admin_user)
+        return self.create_staff(db, admin_staff)

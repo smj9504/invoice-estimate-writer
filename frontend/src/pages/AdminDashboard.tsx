@@ -55,7 +55,7 @@ import RecentActivityFeed from '../components/dashboard/RecentActivityFeed';
 // Services
 import { 
   dashboardService, 
-  DashboardData,
+  AdminDashboardData,
   DashboardFilters 
 } from '../services/dashboardService';
 import { workOrderService } from '../services/workOrderService';
@@ -95,11 +95,7 @@ const AdminDashboard: React.FC = () => {
     refetch: refetchDashboard 
   } = useQuery({
     queryKey: ['dashboard', filters],
-    queryFn: () => dashboardService.getDashboardData({
-      company_id: selectedCompany || undefined,
-      date_from: dateRange[0].format('YYYY-MM-DD'),
-      date_to: dateRange[1].format('YYYY-MM-DD')
-    }),
+    queryFn: () => dashboardService.getAdminDashboard('month'),
     refetchInterval: autoRefresh ? refreshInterval * 1000 : false,
     staleTime: 60 * 1000, // 1 minute
   });
@@ -548,7 +544,7 @@ const AdminDashboard: React.FC = () => {
                     justifyContent: 'space-between', 
                     alignItems: 'center',
                     padding: '12px 0',
-                    borderBottom: index < dashboardData.document_type_distribution.length - 1 ? '1px solid #f0f0f0' : 'none'
+                    borderBottom: index < (dashboardData?.document_type_distribution?.length ?? 0) - 1 ? '1px solid #f0f0f0' : 'none'
                   }}
                 >
                   <div>
@@ -580,7 +576,7 @@ const AdminDashboard: React.FC = () => {
                     justifyContent: 'space-between', 
                     alignItems: 'center',
                     padding: '12px 0',
-                    borderBottom: index < dashboardData.trade_popularity.length - 1 ? '1px solid #f0f0f0' : 'none'
+                    borderBottom: index < (dashboardData?.trade_popularity?.length ?? 0) - 1 ? '1px solid #f0f0f0' : 'none'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>

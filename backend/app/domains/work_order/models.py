@@ -2,7 +2,7 @@
 Work Order database models
 """
 
-from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum, Integer, Index
+from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum, Integer, Index, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -96,6 +96,11 @@ class WorkOrder(Base):
     tools_required = Column(Text)
     permits_required = Column(Text)
     safety_notes = Column(Text)
+    
+    # Trades and Consultation
+    trades = Column(JSON)  # Store as JSON array of UUIDs
+    consultation_notes = Column(Text)
+    cost_override = Column(String(50))
     
     # Internal Notes
     internal_notes = Column(Text)

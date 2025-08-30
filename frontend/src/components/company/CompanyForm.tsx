@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   Input,
@@ -6,10 +6,15 @@ import {
   Row,
   Col,
   Space,
+  Tabs,
+  Select,
 } from 'antd';
 import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
-import { Company, CompanyFormData } from '../../types';
+import { Company, CompanyFormData, PaymentMethod, PaymentFrequency } from '../../types';
 import LogoUpload from './LogoUpload';
+import LicenseManager from './LicenseManager';
+import InsuranceManager from './InsuranceManager';
+import paymentConfigService from '../../services/paymentConfigService';
 
 interface CompanyFormProps {
   initialData?: Company;
@@ -25,8 +30,27 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   loading = false,
 }) => {
   const [form] = Form.useForm();
+  const [licenses, setLicenses] = useState<any[]>([]);
+  const [insurancePolicies, setInsurancePolicies] = useState<any[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [paymentFrequencies, setPaymentFrequencies] = useState<PaymentFrequency[]>([]);
 
   useEffect(() => {
+    // Load payment configurations
+    const loadPaymentConfigs = async () => {
+      try {
+        const [methods, frequencies] = await Promise.all([
+          paymentConfigService.getPaymentMethods(),
+          paymentConfigService.getPaymentFrequencies()
+        ]);
+        setPaymentMethods(methods);
+        setPaymentFrequencies(frequencies);
+      } catch (error) {
+        console.error('Failed to load payment configurations:', error);
+      }
+    };
+    loadPaymentConfigs();
+    
     if (initialData) {
       form.setFieldsValue({
         name: initialData.name,
@@ -37,28 +61,42 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         phone: initialData.phone,
         email: initialData.email,
         logo: initialData.logo,
+        payment_method: initialData.payment_method,
+        payment_frequency: initialData.payment_frequency,
       });
+      // Set licenses and insurance if they exist
+      setLicenses((initialData as any).licenses || []);
+      setInsurancePolicies((initialData as any).insurance_policies || []);
     } else {
       form.resetFields();
+      setLicenses([]);
+      setInsurancePolicies([]);
     }
   }, [initialData, form]);
 
   const handleSubmit = async (values: CompanyFormData) => {
     try {
-      await onSubmit(values);
+      // Include licenses and insurance in the submission
+      const dataToSubmit = {
+        ...values,
+        licenses,
+        insurance_policies: insurancePolicies,
+      };
+      await onSubmit(dataToSubmit as any);
       if (!initialData) {
         form.resetFields();
+        setLicenses([]);
+        setInsurancePolicies([]);
       }
-      // 메시지는 상위 컴포넌트에서 처리
     } catch (error) {
-      // 에러 메시지도 상위 컴포넌트에서 처리
+      // Error handling in parent component
     }
   };
 
   const validateMessages = {
-    required: '${label}을(를) 입력해주세요.', // eslint-disable-line no-template-curly-in-string
+    required: 'Please enter ${label}.', // eslint-disable-line no-template-curly-in-string
     types: {
-      email: '올바른 이메일 형식이 아닙니다.',
+      email: 'Please enter a valid email address.',
     },
   };
 
@@ -79,118 +117,173 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         logo: '',
       }}
     >
-      <Row gutter={[24, 0]}>
-        <Col xs={24}>
-          <h3>{initialData ? '회사 정보 수정' : '새 회사 등록'}</h3>
-        </Col>
-      </Row>
+      <Tabs defaultActiveKey="basic">
+        <Tabs.TabPane tab="Basic Information" key="basic">
+          <Row gutter={[24, 0]}>
+            <Col xs={24}>
+              <Form.Item
+                name="logo"
+                label="Company Logo"
+              >
+                <LogoUpload disabled={loading} />
+              </Form.Item>
+            </Col>
+          </Row>
 
-      <Row gutter={[24, 0]}>
-        <Col xs={24}>
-          <Form.Item
-            name="logo"
-            label="회사 로고"
-          >
-            <LogoUpload disabled={loading} />
-          </Form.Item>
-        </Col>
-      </Row>
+          <Row gutter={[16, 0]}>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="name"
+                label="Company Name"
+                rules={[{ required: true }]}
+              >
+                <Input
+                  placeholder="Enter company name"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="phone"
+                label="Phone Number"
+              >
+                <Input
+                  placeholder="Enter phone number"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
 
-      <Row gutter={[16, 0]}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="name"
-            label="회사명"
-            rules={[{ required: true }]}
-          >
-            <Input
-              placeholder="회사명을 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="phone"
-            label="전화번호"
-          >
-            <Input
-              placeholder="전화번호를 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+          <Row gutter={[16, 0]}>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[{ type: 'email' }]}
+              >
+                <Input
+                  placeholder="Enter email address"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="zipcode"
+                label="Zip Code"
+              >
+                <Input
+                  placeholder="Enter zip code"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
 
-      <Row gutter={[16, 0]}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="email"
-            label="이메일"
-            rules={[{ type: 'email' }]}
-          >
-            <Input
-              placeholder="이메일을 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="zipcode"
-            label="우편번호"
-          >
-            <Input
-              placeholder="우편번호를 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+          <Row gutter={[16, 0]}>
+            <Col xs={24}>
+              <Form.Item
+                name="address"
+                label="Address"
+                rules={[{ required: true }]}
+              >
+                <Input
+                  placeholder="Enter address"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
 
-      <Row gutter={[16, 0]}>
-        <Col xs={24}>
-          <Form.Item
-            name="address"
-            label="주소"
-            rules={[{ required: true }]}
-          >
-            <Input
-              placeholder="주소를 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+          <Row gutter={[16, 0]}>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="city"
+                label="City"
+                rules={[{ required: true }]}
+              >
+                <Input
+                  placeholder="Enter city"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="state"
+                label="State"
+                rules={[{ required: true }]}
+              >
+                <Input
+                  placeholder="Enter state"
+                  disabled={loading}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
 
-      <Row gutter={[16, 0]}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="city"
-            label="도시"
-            rules={[{ required: true }]}
-          >
-            <Input
-              placeholder="도시를 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="state"
-            label="주/도"
-            rules={[{ required: true }]}
-          >
-            <Input
-              placeholder="주/도를 입력하세요"
-              disabled={loading}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+          <Row gutter={[16, 0]}>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="payment_method"
+                label="Payment Method"
+              >
+                <Select
+                  placeholder="Select payment method"
+                  disabled={loading}
+                  allowClear
+                >
+                  {paymentMethods.map(method => (
+                    <Select.Option key={method.code} value={method.code}>
+                      {method.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} md={12}>
+              <Form.Item
+                name="payment_frequency"
+                label="Payment Frequency"
+              >
+                <Select
+                  placeholder="Select payment frequency"
+                  disabled={loading}
+                  allowClear
+                >
+                  {paymentFrequencies.map(freq => (
+                    <Select.Option key={freq.code} value={freq.code}>
+                      {freq.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Tabs.TabPane>
 
-      <Row gutter={[16, 16]}>
+        <Tabs.TabPane tab="Licenses" key="licenses">
+          <LicenseManager
+            companyId={initialData?.id}
+            licenses={licenses}
+            onChange={setLicenses}
+            disabled={loading}
+          />
+        </Tabs.TabPane>
+
+        <Tabs.TabPane tab="Insurance" key="insurance">
+          <InsuranceManager
+            companyId={initialData?.id}
+            insurancePolicies={insurancePolicies}
+            onChange={setInsurancePolicies}
+            disabled={loading}
+          />
+        </Tabs.TabPane>
+      </Tabs>
+
+      <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
         <Col xs={24}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button
@@ -198,7 +291,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
               disabled={loading}
             >
               <CloseOutlined />
-              취소
+              Cancel
             </Button>
             <Button
               type="primary"
@@ -206,7 +299,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
               loading={loading}
               icon={<SaveOutlined />}
             >
-              {initialData ? '수정' : '등록'}
+              {initialData ? 'Update' : 'Register'}
             </Button>
           </Space>
         </Col>

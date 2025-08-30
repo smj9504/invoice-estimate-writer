@@ -80,7 +80,6 @@ class DocumentType(Base):
     is_available_online = Column(Boolean, default=True)  # Can be ordered through self-service
     
     # Display Settings
-    display_order = Column(Integer, default=0)
     icon = Column(String(50))  # Icon class or emoji
     color = Column(String(7))  # Hex color code for UI
     
@@ -168,7 +167,6 @@ class Trade(Base):
     
     # Display Settings
     is_active = Column(Boolean, default=True)
-    display_order = Column(Integer, default=0)
     icon = Column(String(50))  # Icon class or emoji
     color = Column(String(7))  # Hex color code for UI
     

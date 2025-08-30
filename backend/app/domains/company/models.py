@@ -31,6 +31,10 @@ class Company(Base, BaseModel):
     license_number = Column(String(100))
     insurance_info = Column(Text)
     
+    # Payment information
+    payment_method = Column(String(50))  # e.g., 'zelle', 'stripe', 'check'
+    payment_frequency = Column(String(50))  # e.g., 'per_job', 'weekly', 'prepaid'
+    
     # Logo and branding
     logo = Column(Text)  # Base64 encoded logo
     
@@ -42,3 +46,6 @@ class Company(Base, BaseModel):
     invoices = relationship("Invoice", back_populates="company", cascade="all, delete-orphan")
     estimates = relationship("Estimate", back_populates="company", cascade="all, delete-orphan")
     plumber_reports = relationship("PlumberReport", back_populates="company", cascade="all, delete-orphan")
+    # TODO: Add these models when implementing license and insurance management
+    # licenses = relationship("CompanyLicense", back_populates="company", cascade="all, delete-orphan")
+    # insurance_policies = relationship("CompanyInsurance", back_populates="company", cascade="all, delete-orphan")

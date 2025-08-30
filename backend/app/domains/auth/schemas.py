@@ -6,36 +6,39 @@ from typing import Optional
 from datetime import datetime
 from uuid import UUID
 from enum import Enum
+from app.domains.staff.models import StaffRole
 
 
-class UserRole(str, Enum):
-    ADMIN = "admin"
-    MANAGER = "manager"
-    USER = "user"
-
-
-class UserBase(BaseModel):
+class StaffBase(BaseModel):
     username: str
     email: EmailStr
-    full_name: Optional[str] = None
-    role: UserRole = UserRole.USER
+    first_name: str
+    last_name: str
+    role: StaffRole = StaffRole.technician
+    staff_number: str
 
 
-class UserCreate(UserBase):
+class StaffCreate(StaffBase):
     password: str
+    hire_date: Optional[datetime] = None
 
 
-class UserUpdate(BaseModel):
+class StaffUpdate(BaseModel):
     email: Optional[EmailStr] = None
-    full_name: Optional[str] = None
-    role: Optional[UserRole] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    role: Optional[StaffRole] = None
     is_active: Optional[bool] = None
+    can_login: Optional[bool] = None
+    phone: Optional[str] = None
+    mobile_phone: Optional[str] = None
 
 
-class UserInDB(UserBase):
+class StaffInDB(StaffBase):
     id: UUID
     is_active: bool
-    is_verified: bool
+    can_login: bool
+    email_verified: bool
     created_at: datetime
     updated_at: datetime
     last_login: Optional[datetime] = None
@@ -44,10 +47,19 @@ class UserInDB(UserBase):
         from_attributes = True
 
 
-class UserResponse(UserBase):
+class StaffResponse(BaseModel):
     id: UUID
+    username: str
+    email: EmailStr
+    first_name: str
+    last_name: str
+    full_name: Optional[str] = None
+    role: StaffRole
+    staff_number: str
     is_active: bool
-    is_verified: bool
+    is_verified: Optional[bool] = None
+    can_login: bool
+    email_verified: bool
     created_at: datetime
     
     class Config:
@@ -57,7 +69,7 @@ class UserResponse(UserBase):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    user: UserResponse
+    user: StaffResponse  # Keep 'user' for backwards compatibility
 
 
 class TokenData(BaseModel):
@@ -74,3 +86,10 @@ class LoginRequest(BaseModel):
 class ChangePasswordRequest(BaseModel):
     current_password: str
     new_password: str
+
+
+# Backwards compatibility aliases
+UserCreate = StaffCreate
+UserUpdate = StaffUpdate
+UserResponse = StaffResponse
+UserInDB = StaffInDB

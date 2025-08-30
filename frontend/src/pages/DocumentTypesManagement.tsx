@@ -144,7 +144,6 @@ const DocumentTypesManagement: React.FC = () => {
         template_name: values.template_name,
         is_active: values.is_active !== undefined ? values.is_active : true,
         is_available_online: values.is_available_online !== undefined ? values.is_available_online : true,
-        display_order: values.display_order || 0,
       };
       
       saveMutation.mutate(submitData);
@@ -154,13 +153,6 @@ const DocumentTypesManagement: React.FC = () => {
   };
 
   const columns: ColumnsType<DocumentType> = [
-    {
-      title: 'No',
-      dataIndex: 'display_order',
-      key: 'display_order',
-      width: 100,
-      sorter: (a, b) => a.display_order - b.display_order,
-    },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -322,7 +314,6 @@ const DocumentTypesManagement: React.FC = () => {
           initialValues={{
             is_active: true,
             is_available_online: true,
-            display_order: 0,
             category: 'estimate',
           }}
         >
@@ -386,18 +377,6 @@ const DocumentTypesManagement: React.FC = () => {
                       step={5}
                       precision={2}
                       placeholder="0.00"
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item
-                    name="display_order"
-                    label="Display Order"
-                  >
-                    <InputNumber
-                      style={{ width: '100%' }}
-                      min={0}
-                      placeholder="0"
                     />
                   </Form.Item>
                 </Col>

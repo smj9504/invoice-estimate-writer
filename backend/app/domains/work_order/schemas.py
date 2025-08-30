@@ -11,7 +11,6 @@ from .models import WorkOrderStatus, DocumentType
 
 class WorkOrderBase(BaseModel):
     """Base work order schema"""
-    work_order_number: Optional[str] = None
     company_id: UUID
     
     # Client Information
@@ -53,6 +52,11 @@ class WorkOrderBase(BaseModel):
     permits_required: Optional[str] = None
     safety_notes: Optional[str] = None
     
+    # Trades and Consultation
+    trades: Optional[list[UUID]] = None
+    consultation_notes: Optional[str] = None
+    cost_override: Optional[str] = None
+    
     # Status Flags
     is_billable: Optional[bool] = True
     requires_permit: Optional[bool] = False
@@ -74,6 +78,7 @@ class WorkOrderBase(BaseModel):
 
 class WorkOrderCreate(WorkOrderBase):
     """Schema for creating a work order"""
+    work_order_number: Optional[str] = None
     created_by_staff_id: Optional[UUID] = None
 
 
@@ -125,6 +130,11 @@ class WorkOrderUpdate(BaseModel):
     tools_required: Optional[str] = None
     permits_required: Optional[str] = None
     safety_notes: Optional[str] = None
+    
+    # Trades and Consultation
+    trades: Optional[list[UUID]] = None
+    consultation_notes: Optional[str] = None
+    cost_override: Optional[str] = None
     
     # Internal Notes
     internal_notes: Optional[str] = None

@@ -23,6 +23,8 @@ class CompanyBase(BaseModel):
     company_code: Optional[str] = Field(None, max_length=10)
     license_number: Optional[str] = Field(None, max_length=100)
     insurance_info: Optional[str] = None
+    payment_method: Optional[str] = Field(None, max_length=50)  # e.g., 'zelle', 'stripe'
+    payment_frequency: Optional[str] = Field(None, max_length=50)  # e.g., 'per_job', 'weekly'
     logo: Optional[str] = None  # Base64 encoded logo
     is_active: bool = True
     is_default: bool = False
@@ -46,6 +48,8 @@ class CompanyUpdate(BaseModel):
     company_code: Optional[str] = Field(None, max_length=10)
     license_number: Optional[str] = Field(None, max_length=100)
     insurance_info: Optional[str] = None
+    payment_method: Optional[str] = Field(None, max_length=50)
+    payment_frequency: Optional[str] = Field(None, max_length=50)
     logo: Optional[str] = None
     is_active: Optional[bool] = None
     is_default: Optional[bool] = None

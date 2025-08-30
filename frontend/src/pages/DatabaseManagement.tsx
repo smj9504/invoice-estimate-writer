@@ -58,7 +58,7 @@ const DatabaseManagement: React.FC = () => {
     companies: {
       name: 'companies',
       displayName: 'Companies',
-      endpoint: '/api/companies',
+      endpoint: '/api/companies/',
       columns: [
         { title: 'ID', dataIndex: 'id', key: 'id', width: 200 },
         { title: 'Company Name', dataIndex: 'name', key: 'name' },

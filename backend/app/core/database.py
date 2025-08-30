@@ -48,7 +48,10 @@ class Database:
                 connect_args={"check_same_thread": False}
             )
             # Import models to ensure they're registered
-            from app.models.sqlalchemy_models import User, Company, WorkOrder, WorkOrderItem, Payment
+            from app.domains.staff.models import Staff
+            from app.domains.company.models import Company
+            from app.domains.work_order.models import WorkOrder
+            from app.domains.payment.models import Payment
             Base.metadata.create_all(bind=self._engine)
         return self._engine
     

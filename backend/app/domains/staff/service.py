@@ -12,6 +12,7 @@ import secrets
 from app.common.base_service import BaseService
 from .models import Staff, StaffPermission, StaffRole
 from .schemas import StaffCreate, StaffFilter, StaffPermissionUpdate, AuditLogFilter
+from .repository import get_staff_repository
 
 logger = logging.getLogger(__name__)
 
@@ -23,13 +24,12 @@ class StaffService(BaseService[Staff, UUID]):
     
     def get_repository(self):
         """Get the staff repository"""
-        # This would be implemented when we create the staff repository
-        pass
+        session = self.database.get_session()
+        return get_staff_repository(session)
     
     def _get_repository_instance(self, session):
         """Get repository instance with the given session"""
-        # This would be implemented when we create the staff repository
-        pass
+        return get_staff_repository(session)
     
     def generate_staff_number(self, company_id: UUID) -> str:
         """

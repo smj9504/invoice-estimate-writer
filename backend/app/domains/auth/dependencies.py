@@ -9,7 +9,7 @@ from uuid import UUID
 
 from app.core.database_factory import get_db_session as get_db
 from .service import AuthService
-from .models import User, UserRole
+from app.domains.staff.models import Staff, StaffRole
 from .schemas import TokenData
 
 
@@ -17,11 +17,11 @@ security = HTTPBearer()
 auth_service = AuthService()
 
 
-async def get_current_user(
+async def get_current_staff(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Any = Depends(get_db)
-) -> User:
-    """Get the current authenticated user"""
+) -> Staff:
+    """Get the current authenticated staff member"""
     token = credentials.credentials
     token_data = auth_service.decode_token(token)
     
@@ -32,56 +32,61 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    user = auth_service.get_user_by_id(db, UUID(token_data.user_id))
-    if user is None:
+    staff = auth_service.get_staff_by_id(db, UUID(token_data.user_id))
+    if staff is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
+            detail="Staff member not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    if not user.is_active:
+    if not staff.is_active or not staff.can_login:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="User is inactive"
+            detail="Staff member is inactive or not allowed to login"
         )
     
-    return user
+    return staff
 
 
-async def get_current_user_optional(
+async def get_current_staff_optional(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
     db: Any = Depends(get_db)
-) -> Optional[User]:
-    """Get the current user if authenticated, otherwise None"""
+) -> Optional[Staff]:
+    """Get the current staff member if authenticated, otherwise None"""
     if not credentials:
         return None
     
     try:
-        return await get_current_user(credentials, db)
+        return await get_current_staff(credentials, db)
     except HTTPException:
         return None
 
 
 async def require_admin(
-    current_user: User = Depends(get_current_user)
-) -> User:
-    """Require the current user to be an admin"""
-    if current_user.role != UserRole.ADMIN:
+    current_staff: Staff = Depends(get_current_staff)
+) -> Staff:
+    """Require the current staff member to be an admin"""
+    if current_staff.role not in [StaffRole.admin, StaffRole.super_admin]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required"
         )
-    return current_user
+    return current_staff
 
 
 async def require_manager_or_admin(
-    current_user: User = Depends(get_current_user)
-) -> User:
-    """Require the current user to be a manager or admin"""
-    if current_user.role not in [UserRole.ADMIN, UserRole.MANAGER]:
+    current_staff: Staff = Depends(get_current_staff)
+) -> Staff:
+    """Require the current staff member to be a manager or admin"""
+    if current_staff.role not in [StaffRole.admin, StaffRole.super_admin, StaffRole.manager, StaffRole.supervisor]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Manager or admin access required"
         )
-    return current_user
+    return current_staff
+
+
+# Backwards compatibility aliases
+get_current_user = get_current_staff
+get_current_user_optional = get_current_staff_optional

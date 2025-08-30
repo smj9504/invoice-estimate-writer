@@ -6,38 +6,38 @@ from typing import Any
 from typing import List
 
 from app.core.database_factory import get_db_session as get_db
-from .schemas import LoginRequest, UserCreate, UserResponse, Token, UserUpdate, ChangePasswordRequest
+from .schemas import LoginRequest, StaffCreate, StaffResponse, Token, StaffUpdate, ChangePasswordRequest
 from .service import AuthService
-from .dependencies import get_current_user, require_admin
-from .models import User
+from .dependencies import get_current_staff, require_admin
+from app.domains.staff.models import Staff
 
 
 router = APIRouter()
 auth_service = AuthService()
 
 
-@router.post("/register", response_model=UserResponse)
+@router.post("/register", response_model=StaffResponse)
 async def register(
-    user_create: UserCreate,
+    staff_create: StaffCreate,
     db: Any = Depends(get_db)
 ):
-    """Register a new user"""
-    # Check if user exists
-    if auth_service.get_user_by_username(db, user_create.username):
+    """Register a new staff member"""
+    # Check if staff exists
+    if auth_service.get_staff_by_username(db, staff_create.username):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already registered"
         )
     
-    if auth_service.get_user_by_email(db, user_create.email):
+    if auth_service.get_staff_by_email(db, staff_create.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
     
     try:
-        user = auth_service.create_user(db, user_create)
-        return user
+        staff = auth_service.create_staff(db, staff_create)
+        return staff
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -51,13 +51,13 @@ async def login(
     db: Any = Depends(get_db)
 ):
     """Login with username/email and password"""
-    user = auth_service.authenticate_user(
+    staff = auth_service.authenticate_staff(
         db, 
         login_request.username, 
         login_request.password
     )
     
-    if not user:
+    if not staff:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
@@ -67,56 +67,74 @@ async def login(
     # Create access token
     access_token = auth_service.create_access_token(
         data={
-            "sub": str(user.id),
-            "username": user.username,
-            "role": user.role
+            "sub": str(staff.id),
+            "username": staff.username,
+            "role": staff.role
         }
     )
     
-    return Token(
-        access_token=access_token,
-        user=UserResponse.from_orm(user)
-    )
+    # Create StaffResponse with additional fields for backwards compatibility
+    staff_dict = {
+        "id": str(staff.id),
+        "username": staff.username,
+        "email": staff.email,
+        "first_name": staff.first_name,
+        "last_name": staff.last_name,
+        "full_name": f"{staff.first_name} {staff.last_name}",
+        "role": staff.role,
+        "staff_number": staff.staff_number,
+        "is_active": staff.is_active if staff.is_active is not None else True,
+        "is_verified": staff.email_verified if staff.email_verified is not None else False,
+        "can_login": staff.can_login if staff.can_login is not None else True,
+        "email_verified": staff.email_verified if staff.email_verified is not None else False,
+        "created_at": staff.created_at
+    }
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": staff_dict
+    }
 
 
-@router.get("/me", response_model=UserResponse)
-async def get_current_user_info(
-    current_user: User = Depends(get_current_user)
+@router.get("/me", response_model=StaffResponse)
+async def get_current_staff_info(
+    current_staff: Staff = Depends(get_current_staff)
 ):
-    """Get current user information"""
-    return current_user
+    """Get current staff member information"""
+    return current_staff
 
 
-@router.put("/me", response_model=UserResponse)
-async def update_current_user(
-    user_update: UserUpdate,
-    current_user: User = Depends(get_current_user),
+@router.put("/me", response_model=StaffResponse)
+async def update_current_staff(
+    staff_update: StaffUpdate,
+    current_staff: Staff = Depends(get_current_staff),
     db: Any = Depends(get_db)
 ):
-    """Update current user information"""
-    # Users cannot change their own role
-    user_update.role = None
+    """Update current staff member information"""
+    # Staff cannot change their own role
+    staff_update.role = None
     
-    updated_user = auth_service.update_user(db, current_user.id, user_update)
-    if not updated_user:
+    updated_staff = auth_service.update_staff(db, current_staff.id, staff_update)
+    if not updated_staff:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            detail="Staff member not found"
         )
     
-    return updated_user
+    return updated_staff
 
 
 @router.post("/me/change-password", response_model=dict)
 async def change_password(
     password_change: ChangePasswordRequest,
-    current_user: User = Depends(get_current_user),
+    current_staff: Staff = Depends(get_current_staff),
     db: Any = Depends(get_db)
 ):
-    """Change current user's password"""
+    """Change current staff member's password"""
     success = auth_service.change_password(
         db,
-        current_user.id,
+        current_staff.id,
         password_change.current_password,
         password_change.new_password
     )
@@ -130,12 +148,12 @@ async def change_password(
     return {"message": "Password changed successfully"}
 
 
-@router.get("/users", response_model=List[UserResponse])
-async def get_users(
-    current_user: User = Depends(require_admin),
+@router.get("/staff", response_model=List[StaffResponse])
+async def get_staff(
+    current_staff: Staff = Depends(require_admin),
     db: Any = Depends(get_db)
 ):
-    """Get all users (admin only)"""
+    """Get all staff members (admin only)"""
     # Handle both raw Session and DatabaseSession wrapper
     if hasattr(db, '_session'):
         session = db._session
@@ -147,35 +165,45 @@ async def get_users(
             detail="Invalid database session"
         )
     
-    users = session.query(User).all()
-    return users
+    staff_members = session.query(Staff).all()
+    return staff_members
 
 
-@router.put("/users/{user_id}", response_model=UserResponse)
-async def update_user(
-    user_id: str,
-    user_update: UserUpdate,
-    current_user: User = Depends(require_admin),
+@router.put("/staff/{staff_id}", response_model=StaffResponse)
+async def update_staff_member(
+    staff_id: str,
+    staff_update: StaffUpdate,
+    current_staff: Staff = Depends(require_admin),
     db: Any = Depends(get_db)
 ):
-    """Update a user (admin only)"""
-    updated_user = auth_service.update_user(db, user_id, user_update)
-    if not updated_user:
+    """Update a staff member (admin only)"""
+    updated_staff = auth_service.update_staff(db, staff_id, staff_update)
+    if not updated_staff:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            detail="Staff member not found"
         )
     
-    return updated_user
+    return updated_staff
 
 
 @router.post("/init-admin", response_model=dict)
 async def initialize_admin(
     db: Any = Depends(get_db)
 ):
-    """Initialize the admin user (only works if no admin exists)"""
+    """Initialize the admin staff member (only works if no admin exists)"""
     admin = auth_service.create_initial_admin(db)
     if admin:
-        return {"message": "Admin user created successfully"}
+        return {"message": "Admin staff member created successfully"}
     else:
-        return {"message": "Admin user already exists"}
+        return {"message": "Admin staff member already exists"}
+
+
+# Backwards compatibility endpoints
+@router.get("/users", response_model=List[StaffResponse])
+async def get_users_compat(
+    current_staff: Staff = Depends(require_admin),
+    db: Any = Depends(get_db)
+):
+    """Get all users (backwards compatibility - redirects to staff)"""
+    return await get_staff(current_staff, db)

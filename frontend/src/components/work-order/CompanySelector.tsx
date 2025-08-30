@@ -1,6 +1,6 @@
 import React from 'react';
-import { Select, Card, Typography, Row, Col, Tag, Space, Divider } from 'antd';
-import { BankOutlined, CreditCardOutlined, CalendarOutlined } from '@ant-design/icons';
+import { Select, Card, Typography, Row, Col, Tag, Space } from 'antd';
+import { BankOutlined } from '@ant-design/icons';
 import { Company } from '../../types';
 
 const { Option } = Select;
@@ -107,26 +107,6 @@ const CompanySelector: React.FC<CompanySelectorProps> = ({
             </Col>
           </Row>
 
-          <Divider style={{ margin: '12px 0 8px 0' }} />
-          
-          <Row gutter={16} align="middle">
-            <Col xs={24} sm={12}>
-              <Space size="middle">
-                <Space>
-                  <CreditCardOutlined style={{ color: '#52c41a' }} />
-                  <Text style={{ fontSize: '12px' }}>
-                    Payment Period: <Text strong>Net 30</Text>
-                  </Text>
-                </Space>
-                <Space>
-                  <CalendarOutlined style={{ color: '#1890ff' }} />
-                  <Text style={{ fontSize: '12px' }}>
-                    Available Credits: <Text strong style={{ color: '#52c41a' }}>$0.00</Text>
-                  </Text>
-                </Space>
-              </Space>
-            </Col>
-          </Row>
         </Card>
       )}
     </div>

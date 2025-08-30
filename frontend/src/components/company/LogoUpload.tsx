@@ -60,13 +60,13 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
   const beforeUpload = (file: File) => {
     const isImage = file.type.startsWith('image/');
     if (!isImage) {
-      message.error('이미지 파일만 업로드 가능합니다!');
+      message.error('Only image files can be uploaded!');
       return false;
     }
 
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
-      message.error('이미지 크기는 5MB 이하여야 합니다!');
+      message.error('Image size must be less than 5MB!');
       return false;
     }
 
@@ -175,7 +175,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
       setCroppedImage(croppedDataUrl);
       onChange?.(croppedDataUrl);
       setCropModalVisible(false);
-      message.success('로고 설정이 완료되었습니다!');
+      message.success('Logo has been set successfully!');
     };
     img.src = originalImage;
   };
@@ -184,7 +184,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
     setCroppedImage(null);
     onChange?.(undefined);
     setFileList([]);
-    message.success('로고가 제거되었습니다.');
+    message.success('Logo has been removed.');
   };
 
   const uploadProps: UploadProps = {
@@ -243,13 +243,13 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
         <Col xs={24} md={16}>
           <Upload {...uploadProps}>
             <Button icon={<UploadOutlined />} disabled={disabled} block>
-              로고 이미지 업로드 (JPG, PNG)
+              Upload Logo Image (JPG, PNG)
             </Button>
           </Upload>
         </Col>
         <Col xs={24} md={8}>
           {croppedImage ? (
-            <Card size="small" title="현재 로고">
+            <Card size="small" title="Current Logo">
               <div style={{ textAlign: 'center' }}>
                 <Image
                   src={croppedImage}
@@ -268,7 +268,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
                     danger
                     size="small"
                   >
-                    제거
+                    Remove
                   </Button>
                 </div>
               </div>
@@ -287,51 +287,51 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
                 justifyContent: 'center',
               }}
             >
-              로고 없음
+              No Logo
             </div>
           )}
         </Col>
       </Row>
 
       <Modal
-        title="로고 크롭"
+        title="Logo Crop"
         open={cropModalVisible}
         onCancel={() => setCropModalVisible(false)}
         onOk={handleCrop}
         width={600}
-        okText="적용"
-        cancelText="취소"
+        okText="Apply"
+        cancelText="Cancel"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <div>
-            <strong>크롭 모드:</strong>
+            <strong>Crop Mode:</strong>
             <Radio.Group
               value={cropSettings.mode}
               onChange={(e) => setCropSettings(prev => ({ ...prev, mode: e.target.value }))}
               style={{ marginLeft: 8 }}
             >
-              <Radio value="auto">자동 (전체 이미지)</Radio>
-              <Radio value="manual">수동 크롭</Radio>
+              <Radio value="auto">Auto (Full Image)</Radio>
+              <Radio value="manual">Manual Crop</Radio>
             </Radio.Group>
           </div>
 
           {cropSettings.mode === 'manual' && (
             <>
               <div>
-                <strong>크롭 형태:</strong>
+                <strong>Crop Type:</strong>
                 <Radio.Group
                   value={cropSettings.type}
                   onChange={(e) => setCropSettings(prev => ({ ...prev, type: e.target.value }))}
                   style={{ marginLeft: 8 }}
                 >
-                  <Radio value="square">정사각형</Radio>
-                  <Radio value="rectangle">직사각형</Radio>
+                  <Radio value="square">Square</Radio>
+                  <Radio value="rectangle">Rectangle</Radio>
                 </Radio.Group>
               </div>
 
               {cropSettings.type === 'square' ? (
                 <div>
-                  <strong>크기:</strong>
+                  <strong>Size:</strong>
                   <Slider
                     min={50}
                     max={Math.min(imageSize.width, imageSize.height)}
@@ -351,7 +351,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
                 <Row gutter={16}>
                   <Col span={12}>
                     <div>
-                      <strong>너비:</strong>
+                      <strong>Width:</strong>
                       <InputNumber
                         min={50}
                         max={imageSize.width}
@@ -364,7 +364,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
                   </Col>
                   <Col span={12}>
                     <div>
-                      <strong>높이:</strong>
+                      <strong>Height:</strong>
                       <InputNumber
                         min={50}
                         max={imageSize.height}
@@ -381,7 +381,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
               <Row gutter={16}>
                 <Col span={12}>
                   <div>
-                    <strong>X 위치:</strong>
+                    <strong>X Position:</strong>
                     <InputNumber
                       min={0}
                       max={imageSize.width - (cropSettings.type === 'square' ? cropSettings.size : cropSettings.width)}
@@ -394,7 +394,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({
                 </Col>
                 <Col span={12}>
                   <div>
-                    <strong>Y 위치:</strong>
+                    <strong>Y Position:</strong>
                     <InputNumber
                       min={0}
                       max={imageSize.height - (cropSettings.type === 'square' ? cropSettings.size : cropSettings.height)}

@@ -17,7 +17,6 @@ import {
   Col,
   Typography,
   Alert,
-  InputNumber
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Key } from 'react';
@@ -122,13 +121,6 @@ const TradesManagement: React.FC = () => {
 
   const columns: ColumnsType<Trade> = [
     {
-      title: 'No',
-      dataIndex: 'display_order',
-      key: 'display_order',
-      width: 100,
-      sorter: (a, b) => a.display_order - b.display_order,
-    },
-    {
       title: 'Trade Name',
       dataIndex: 'name',
       key: 'name',
@@ -170,21 +162,6 @@ const TradesManagement: React.FC = () => {
       key: 'description',
       ellipsis: true,
       width: 300,
-    },
-    {
-      title: 'Requirements',
-      key: 'requirements',
-      width: 200,
-      render: (_, record) => (
-        <Space wrap>
-          {record.requires_license && (
-            <Tag color="orange">License Required</Tag>
-          )}
-          {record.requires_insurance && (
-            <Tag color="blue">Insurance Required</Tag>
-          )}
-        </Space>
-      ),
     },
     {
       title: 'Actions',
@@ -272,9 +249,6 @@ const TradesManagement: React.FC = () => {
           layout="vertical"
           initialValues={{
             is_active: true,
-            requires_insurance: true,
-            requires_license: false,
-            display_order: 0,
             category: 'construction',
           }}
         >
@@ -325,56 +299,14 @@ const TradesManagement: React.FC = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                name="display_order"
-                label="Display Order"
-              >
-                <InputNumber
-                  style={{ width: '100%' }}
-                  min={0}
-                  placeholder="0"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item
-                name="is_active"
-                label="Active"
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name="requires_license"
-                label="Requires License"
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name="requires_insurance"
-                label="Requires Insurance"
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-            </Col>
           </Row>
 
           <Form.Item
-            name="license_type"
-            label="License Type"
-            tooltip="Specify the type of license required if applicable"
+            name="is_active"
+            label="Active"
+            valuePropName="checked"
           >
-            <Input placeholder="e.g., General Contractor License" />
+            <Switch />  
           </Form.Item>
         </Form>
       </Modal>

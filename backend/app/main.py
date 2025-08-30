@@ -29,6 +29,7 @@ from app.domains.staff.api import router as staff_router
 from app.domains.document_types.api import router as document_types_router
 from app.domains.auth.api import router as auth_router
 from app.domains.dashboard.api import router as dashboard_router
+from app.domains.payment_config.api import router as payment_config_router
 from app.core.config import settings
 from app.core.database_factory import get_database, db_factory
 # Service factory removed - using direct service instantiation
@@ -250,17 +251,13 @@ app.include_router(credit_router, prefix="/api/credits", tags=["Credits & Discou
 app.include_router(staff_router, prefix="/api/staff", tags=["Staff Management"])
 
 # Dashboard and Analytics endpoints
-app.include_router(dashboard_router, tags=["Dashboard & Analytics"])
+app.include_router(dashboard_router, prefix="/api/dashboard", tags=["Dashboard & Analytics"])
 
 # Document Types and Trades endpoints
 app.include_router(document_types_router, prefix="/api", tags=["Document Types & Trades"])
 
-
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    """Simple health check endpoint"""
-    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+# Payment Configuration endpoints (internal use)
+app.include_router(payment_config_router, prefix="/api/payment-config", tags=["Payment Configuration"])
 
 
 # System information endpoints
@@ -416,25 +413,28 @@ if frontend_build_path.exists() and frontend_static_path.exists():
     
     # Serve index.html for all non-API routes (React Router support)
     # IMPORTANT: This catch-all route should be registered AFTER all API routes
-    # Temporarily commenting out to fix API routing issues
-    # @app.get("/{full_path:path}")
-    # async def serve_react_app(full_path: str):
-    #     """Serve React app for all non-API routes"""
-    #     # Don't serve React app for API routes
-    #     if full_path.startswith("api/"):
-    #         raise HTTPException(status_code=404, detail="API endpoint not found")
-    #     
-    #     # Check if it's a specific file request
-    #     file_path = frontend_build_path / full_path
-    #     if file_path.exists() and file_path.is_file():
-    #         return FileResponse(str(file_path))
-    #     
-    #     # For all other routes, serve index.html (React Router will handle it)
-    #     index_path = frontend_build_path / "index.html"
-    #     if index_path.exists():
-    #         return FileResponse(str(index_path))
-    #     else:
-    #         raise HTTPException(status_code=404, detail="React app not found")
+    @app.get("/{full_path:path}")
+    async def serve_react_app(full_path: str):
+        """Serve React app for all non-API routes"""
+        # Don't serve React app for API routes
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        # Don't serve React app for documentation routes
+        if full_path in ["docs", "redoc"]:
+            raise HTTPException(status_code=404, detail="Documentation route")
+        
+        # Check if it's a specific file request
+        file_path = frontend_build_path / full_path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(str(file_path))
+        
+        # For all other routes, serve index.html (React Router will handle it)
+        index_path = frontend_build_path / "index.html"
+        if index_path.exists():
+            return FileResponse(str(index_path))
+        else:
+            raise HTTPException(status_code=404, detail="React app not found")
 else:
     logger.info(f"Frontend build directory not found at {frontend_build_path}")
     logger.info("Running in API-only mode. To serve the React app from FastAPI, run 'npm run build' in the frontend directory")

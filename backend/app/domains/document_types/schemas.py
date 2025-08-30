@@ -42,7 +42,6 @@ class DocumentTypeBase(BaseModel):
     estimated_hours: Optional[Decimal] = None
     is_active: bool = True
     is_available_online: bool = True
-    display_order: int = 0
     icon: Optional[str] = None
     color: Optional[str] = None
 
@@ -70,7 +69,6 @@ class DocumentTypeUpdate(BaseModel):
     estimated_hours: Optional[Decimal] = None
     is_active: Optional[bool] = None
     is_available_online: Optional[bool] = None
-    display_order: Optional[int] = None
     icon: Optional[str] = None
     color: Optional[str] = None
 
@@ -102,7 +100,6 @@ class TradeBase(BaseModel):
     required_skills: Optional[List[str]] = Field(default_factory=list)
     required_tools: Optional[List[str]] = Field(default_factory=list)
     is_active: bool = True
-    display_order: int = 0
     icon: Optional[str] = None
     color: Optional[str] = None
 
@@ -127,7 +124,6 @@ class TradeUpdate(BaseModel):
     required_skills: Optional[List[str]] = None
     required_tools: Optional[List[str]] = None
     is_active: Optional[bool] = None
-    display_order: Optional[int] = None
     icon: Optional[str] = None
     color: Optional[str] = None
 

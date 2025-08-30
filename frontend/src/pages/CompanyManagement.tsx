@@ -46,7 +46,7 @@ const CompanyManagement: React.FC = () => {
       setSelectedCompany(null);
     },
     onError: (error: any) => {
-      message.error(error.message || '회사 등록에 실패했습니다.');
+      message.error(error.message || 'Failed to register company.');
     },
   });
 
@@ -57,14 +57,14 @@ const CompanyManagement: React.FC = () => {
       return companyService.updateCompany(data.id, data.company);
     },
     onSuccess: () => {
-      message.success('회사 정보가 성공적으로 수정되었습니다.');
+      message.success('Company information updated successfully.');
       queryClient.invalidateQueries({ queryKey: ['companies'] });
       setFormModalVisible(false);
       setSelectedCompany(null);
     },
     onError: (error: any) => {
       console.error('Update error:', error);
-      const errorMessage = error.response?.data?.detail || error.message || '회사 정보 수정에 실패했습니다.';
+      const errorMessage = error.response?.data?.detail || error.message || 'Failed to update company information.';
       message.error(errorMessage);
     },
   });
@@ -73,12 +73,12 @@ const CompanyManagement: React.FC = () => {
   const deleteMutation = useMutation({
     mutationFn: companyService.deleteCompany,
     onSuccess: () => {
-      message.success('회사가 성공적으로 삭제되었습니다.');
+      message.success('Company deleted successfully.');
       queryClient.invalidateQueries({ queryKey: ['companies'] });
     },
     onError: (error: any) => {
       console.error('Delete error:', error);
-      message.error(error.message || '회사 삭제에 실패했습니다.');
+      message.error(error.message || 'Failed to delete company.');
     },
   });
 
@@ -119,8 +119,8 @@ const CompanyManagement: React.FC = () => {
   if (error) {
     return (
       <Alert
-        message="오류"
-        description="회사 정보를 불러오는데 실패했습니다."
+        message="Error"
+        description="Failed to load company information."
         type="error"
         showIcon
         style={{ margin: '24px 0' }}
@@ -135,11 +135,11 @@ const CompanyManagement: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
           <TeamOutlined style={{ fontSize: 24, marginRight: 12, color: '#1890ff' }} />
           <Title level={2} style={{ margin: 0 }}>
-            회사 정보 관리
+            Company Management
           </Title>
         </div>
         <p style={{ margin: 0, color: '#666' }}>
-          견적서 및 인보이스 발행에 사용할 회사 정보를 관리합니다.
+          Manage company information for estimates and invoices.
         </p>
       </Card>
 
@@ -165,12 +165,12 @@ const CompanyManagement: React.FC = () => {
             {selectedCompany ? (
               <>
                 <TeamOutlined style={{ marginRight: 8 }} />
-                회사 정보 수정
+                Edit Company
               </>
             ) : (
               <>
                 <PlusOutlined style={{ marginRight: 8 }} />
-                새 회사 등록
+                Register New Company
               </>
             )}
           </div>

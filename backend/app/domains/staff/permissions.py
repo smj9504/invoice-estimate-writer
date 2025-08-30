@@ -98,12 +98,12 @@ class Permission(Enum):
 
 # Role-based permission mapping
 ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
-    StaffRole.SUPER_ADMIN: {
+    StaffRole.super_admin: {
         # Grant all permissions to super admin
         perm: True for perm in Permission
     },
     
-    StaffRole.ADMIN: {
+    StaffRole.admin: {
         # Work Orders
         Permission.WORK_ORDER_CREATE: True,
         Permission.WORK_ORDER_READ: True,
@@ -166,7 +166,7 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.AUDIT_LOGS: True,
     },
     
-    StaffRole.MANAGER: {
+    StaffRole.manager: {
         # Work Orders
         Permission.WORK_ORDER_CREATE: True,
         Permission.WORK_ORDER_READ: True,
@@ -209,7 +209,7 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.CUSTOMER_PII_ACCESS: True,
     },
     
-    StaffRole.SUPERVISOR: {
+    StaffRole.supervisor: {
         # Work Orders
         Permission.WORK_ORDER_CREATE: True,
         Permission.WORK_ORDER_READ: True,
@@ -240,7 +240,7 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.CUSTOMER_PII_ACCESS: True,
     },
     
-    StaffRole.TECHNICIAN: {
+    StaffRole.technician: {
         # Work Orders
         Permission.WORK_ORDER_READ: True,
         Permission.WORK_ORDER_UPDATE: True,
@@ -255,7 +255,20 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.COMPANY_READ: True,
     },
     
-    StaffRole.SALES: {
+    StaffRole.staff: {
+        # Regular staff - basic read permissions
+        # Work Orders
+        Permission.WORK_ORDER_READ: True,
+        
+        # Estimates & Invoices
+        Permission.ESTIMATE_READ: True,
+        Permission.INVOICE_READ: True,
+        
+        # Company
+        Permission.COMPANY_READ: True,
+    },
+    
+    StaffRole.sales: {
         # Work Orders
         Permission.WORK_ORDER_CREATE: True,
         Permission.WORK_ORDER_READ: True,
@@ -284,7 +297,7 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.CUSTOMER_PII_ACCESS: True,
     },
     
-    StaffRole.CUSTOMER_SERVICE: {
+    StaffRole.customer_service: {
         # Work Orders
         Permission.WORK_ORDER_READ: True,
         Permission.WORK_ORDER_UPDATE: True,
@@ -309,7 +322,7 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.CUSTOMER_PII_ACCESS: True,
     },
     
-    StaffRole.ACCOUNTANT: {
+    StaffRole.accountant: {
         # Estimates & Invoices
         Permission.INVOICE_READ: True,
         Permission.INVOICE_UPDATE: True,
@@ -342,7 +355,7 @@ ROLE_PERMISSIONS: Dict[StaffRole, Dict[Permission, bool]] = {
         Permission.EXPORT_DATA: True,
     },
     
-    StaffRole.VIEWER: {
+    StaffRole.viewer: {
         # Read-only access
         Permission.WORK_ORDER_READ: True,
         Permission.ESTIMATE_READ: True,

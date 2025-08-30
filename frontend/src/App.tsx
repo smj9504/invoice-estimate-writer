@@ -2,12 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider } from 'antd';
-import koKR from 'antd/locale/ko_KR';
+import enUS from 'antd/locale/en_US';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Layout from './components/common/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import RoleBasedDashboard from './pages/RoleBasedDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import DocumentList from './pages/DocumentList';
 import CompanyManagement from './pages/CompanyManagement';
@@ -35,7 +36,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider locale={koKR}>
+      <ConfigProvider locale={enUS}>
         <AuthProvider>
           <Router>
             <Routes>
@@ -54,7 +55,7 @@ function App() {
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <Layout>
-                    <Dashboard />
+                    <RoleBasedDashboard />
                   </Layout>
                 </ProtectedRoute>
               } />
