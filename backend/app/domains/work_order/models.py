@@ -15,6 +15,7 @@ class WorkOrderStatus(str, enum.Enum):
     """Work order status enumeration"""
     DRAFT = "draft"
     PENDING = "pending"
+    APPROVED = "approved"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     CANCELLED = "cancelled"

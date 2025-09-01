@@ -2,7 +2,7 @@
 Work Order API endpoints
 """
 
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from typing import List, Optional
 from uuid import UUID
 from datetime import datetime
@@ -258,7 +258,7 @@ async def delete_work_order(
 @router.patch("/{work_order_id}/status", response_model=WorkOrderResponse)
 async def update_work_order_status(
     work_order_id: UUID,
-    status: WorkOrderStatus,
+    status: WorkOrderStatus = Body(..., description="New status for the work order"),
     notes: Optional[str] = Query(None, description="Optional notes about the status change"),
     service: WorkOrderService = Depends(get_work_order_service),
     current_staff: Staff = Depends(get_current_staff)

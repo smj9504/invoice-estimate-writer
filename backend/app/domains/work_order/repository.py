@@ -25,6 +25,10 @@ class WorkOrderRepositoryMixin:
         """Get work orders for a specific customer"""
         return self.get_all(filters={'customer_id': customer_id}, order_by='created_at')
     
+    def get_by_company(self, company_id: str) -> List[Dict[str, Any]]:
+        """Get work orders for a specific company"""
+        return self.get_all(filters={'company_id': company_id}, order_by='created_at')
+    
     def get_active_orders(self) -> List[Dict[str, Any]]:
         """Get all active work orders (not completed or cancelled)"""
         # For SQLAlchemy, this would need a custom query

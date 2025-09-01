@@ -43,12 +43,35 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             session = self.database.get_session()
             try:
                 # Get company code
-                from app.domains.company.repository import get_company_repository
-                company_repo = get_company_repository(session)
-                company = company_repo.get_by_id(company_id)
+                from app.domains.company.repository import CompanyRepository
+                company_repo = CompanyRepository(session)
+                
+                # Convert company_id to string if it's a UUID object
+                company_id_str = str(company_id) if hasattr(company_id, 'hex') else company_id
+                
+                # Debug logging
+                logger.info(f"Generating work order number for company_id: {company_id_str} (type: {type(company_id)})")
+                
+                company = company_repo.get_by_id(company_id_str)
+                logger.info(f"Company data retrieved: {company}")
+                
                 company_code = "XX"  # Default if no company code
                 if company and company.get('company_code'):
                     company_code = company['company_code'].upper()
+                    logger.info(f"Using company_code from database: {company_code}")
+                elif company and company.get('name'):
+                    # If no company_code, try to generate from company name
+                    # Take first 2-3 characters of company name
+                    name_parts = company['name'].strip().upper().split()
+                    if len(name_parts) == 1:
+                        # Single word company name - take first 3 chars
+                        company_code = name_parts[0][:3] if len(name_parts[0]) >= 3 else name_parts[0]
+                    else:
+                        # Multiple words - take first letter of each word (up to 3)
+                        company_code = ''.join([part[0] for part in name_parts[:3]])
+                    logger.info(f"Generated company_code from name: {company_code}")
+                else:
+                    logger.warning(f"No company found or no company_code/name available for company_id: {company_id}")
                 
                 # Get current year
                 current_year = datetime.now().year
@@ -57,7 +80,7 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
                 # Find the highest existing number for this company and year
                 repository = self._get_repository_instance(session)
                 # Get work orders for this company to find the latest number
-                all_wos = repository.get_by_company(company_id)
+                all_wos = repository.get_by_company(company_id_str)
                 
                 next_number = 1
                 if all_wos:
@@ -77,6 +100,7 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
                 
                 # Format: WO-COMPANY_CODE-YY-NNNN
                 work_order_number = f"WO-{company_code}-{year_suffix}-{next_number:04d}"
+                logger.info(f"Generated work order number: {work_order_number}")
                 
                 # Ensure uniqueness
                 counter = 0
@@ -84,7 +108,9 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
                 while self.work_order_number_exists(work_order_number):
                     counter += 1
                     work_order_number = f"{base_number}-{counter}"
+                    logger.info(f"Work order number already exists, trying: {work_order_number}")
                 
+                logger.info(f"Final work order number: {work_order_number}")
                 return work_order_number
                 
             finally:
@@ -94,7 +120,8 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             logger.error(f"Error generating work order number: {e}")
             # Fallback to UUID-based number
             import uuid
-            return f"WO-XX-{datetime.now().year}-{str(uuid.uuid4())[:8].upper()}"
+            year_suffix = str(datetime.now().year)[2:]
+            return f"WO-XX-{year_suffix}-{str(uuid.uuid4())[:8].upper()}"
     
     def work_order_number_exists(self, work_order_number: str) -> bool:
         """

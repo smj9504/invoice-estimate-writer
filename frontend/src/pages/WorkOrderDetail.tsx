@@ -176,6 +176,12 @@ const WorkOrderDetail: React.FC = () => {
     enabled: !!workOrder?.company_id,
   });
 
+  // Fetch trades list to map IDs to names
+  const { data: trades = [] } = useQuery({
+    queryKey: ['trades'],
+    queryFn: () => workOrderService.getTrades(),
+  });
+
   // Status update mutation
   const statusMutation = useMutation({
     mutationFn: ({ status, comment }: { status: WorkOrder['status']; comment?: string }) =>
@@ -496,9 +502,14 @@ const WorkOrderDetail: React.FC = () => {
               </Descriptions.Item>
               <Descriptions.Item label="Selected Trades">
                 <Space wrap>
-                  {workOrder.trades.map((trade, index) => (
-                    <Tag key={index} color="green">{trade}</Tag>
-                  ))}
+                  {workOrder.trades.map((tradeId, index) => {
+                    const trade = trades.find(t => t.id === tradeId);
+                    return (
+                      <Tag key={index} color="green">
+                        {trade ? trade.name : tradeId}
+                      </Tag>
+                    );
+                  })}
                 </Space>
               </Descriptions.Item>
               {workOrder.work_description && (

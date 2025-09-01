@@ -116,11 +116,19 @@ export const workOrderService = {
 
   // Status updates
   async updateWorkOrderStatus(id: string, status: WorkOrder['status'], comment?: string): Promise<WorkOrder> {
-    const response = await api.patch(`/api/work-orders/${id}`, { 
-      status,
-      ...(comment && { status_change_comment: comment })
+    // Build URL with optional notes query parameter
+    let url = `/api/work-orders/${id}/status`;
+    if (comment) {
+      url += `?notes=${encodeURIComponent(comment)}`;
+    }
+    
+    // Send status in request body (as plain string, not object)
+    const response = await api.patch(url, `"${status}"`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    return response.data;
+    return response.data.data;
   },
 
   // Activity and comments
