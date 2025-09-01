@@ -10,6 +10,8 @@ import json
 import io
 
 from app.core.database_factory import get_db_session as get_db
+from app.domains.auth.dependencies import get_current_staff
+from app.domains.staff.models import Staff
 from app.domains.plumber_report.schemas import (
     PlumberReportCreate,
     PlumberReportUpdate,
@@ -27,14 +29,15 @@ router = APIRouter()
 @router.post("/", response_model=PlumberReportResponse)
 async def create_plumber_report(
     report: PlumberReportCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Create a new plumber report"""
     try:
         db_report = PlumberReportService.create_report(
             db=db,
             report_data=report,
-            created_by="current_user"  # TODO: Get from auth
+            created_by=str(current_staff.id)
         )
         return PlumberReportResponse.from_orm(db_report)
     except Exception as e:
@@ -90,14 +93,15 @@ async def get_plumber_report(
 async def update_plumber_report(
     report_id: UUID,
     report_update: PlumberReportUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Update a plumber report"""
     updated_report = PlumberReportService.update_report(
         db=db,
         report_id=report_id,
         report_update=report_update,
-        updated_by="current_user"  # TODO: Get from auth
+        updated_by=str(current_staff.id)
     )
     
     if not updated_report:
@@ -198,7 +202,8 @@ async def preview_pdf(
 @router.get("/{report_id}/duplicate")
 async def duplicate_report(
     report_id: UUID,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Duplicate an existing plumber report"""
     original_report = PlumberReportService.get_report(db, report_id)
@@ -220,7 +225,7 @@ async def duplicate_report(
     new_report = PlumberReportService.create_report(
         db=db,
         report_data=create_data,
-        created_by="current_user"  # TODO: Get from auth
+        created_by=str(current_staff.id)
     )
     
     return PlumberReportResponse.from_orm(new_report)

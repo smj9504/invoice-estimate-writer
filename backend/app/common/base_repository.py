@@ -54,13 +54,20 @@ class BaseRepository(Repository[T, ID]):
     
     def _prepare_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Prepare data for database insertion/update"""
+        from uuid import UUID
         prepared = {}
         for key, value in data.items():
             if value is not None:
+                # Handle UUID types
+                if isinstance(value, UUID):
+                    prepared[key] = str(value)
+                # Handle lists that might contain UUIDs
+                elif isinstance(value, list):
+                    prepared[key] = [str(item) if isinstance(item, UUID) else item for item in value]
                 # Handle different data types
-                if isinstance(value, (dict, list)):
+                elif isinstance(value, dict):
                     # Convert complex types to JSON for databases that support it
-                    prepared[key] = json.dumps(value) if isinstance(value, (dict, list)) else value
+                    prepared[key] = json.dumps(value)
                 else:
                     prepared[key] = value
         return prepared
@@ -89,6 +96,29 @@ class SQLAlchemyRepository(BaseRepository[T, ID]):
         super().__init__(session, model_class, model_class.__tablename__)
         self.db_session = session  # SQLAlchemy session
     
+    def _prepare_sqlalchemy_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Prepare data specifically for SQLAlchemy, keeping UUIDs as UUID objects"""
+        from uuid import UUID
+        import uuid as uuid_module
+        prepared = {}
+        for key, value in data.items():
+            if value is not None:
+                # Convert string UUIDs back to UUID objects for SQLAlchemy
+                if isinstance(value, str) and key.endswith('_id'):
+                    try:
+                        prepared[key] = UUID(value)
+                    except (ValueError, AttributeError):
+                        prepared[key] = value
+                # Handle lists (keep as-is for SQLAlchemy JSON fields)
+                elif isinstance(value, list):
+                    prepared[key] = value
+                # Handle dict (keep as-is for SQLAlchemy JSON fields)
+                elif isinstance(value, dict):
+                    prepared[key] = value
+                else:
+                    prepared[key] = value
+        return prepared
+    
     def create(self, entity_data: Dict[str, Any]) -> T:
         """Create a new entity using SQLAlchemy"""
         try:
@@ -97,10 +127,16 @@ class SQLAlchemyRepository(BaseRepository[T, ID]):
             # Add UUID if not provided
             if 'id' not in validated_data:
                 import uuid
-                validated_data['id'] = str(uuid.uuid4())
+                validated_data['id'] = uuid.uuid4()  # Keep as UUID object for SQLAlchemy
+            elif isinstance(validated_data.get('id'), str):
+                from uuid import UUID
+                validated_data['id'] = UUID(validated_data['id'])
+            
+            # Prepare data for SQLAlchemy (convert string UUIDs back to UUID objects)
+            sqlalchemy_data = self._prepare_sqlalchemy_data(validated_data)
             
             # Create model instance
-            entity = self.model_class(**validated_data)
+            entity = self.model_class(**sqlalchemy_data)
             
             # Add to session and commit
             self.db_session.add(entity)
@@ -177,6 +213,9 @@ class SQLAlchemyRepository(BaseRepository[T, ID]):
         try:
             validated_data = self._validate_data(update_data, "update")
             
+            # Prepare data for SQLAlchemy
+            sqlalchemy_data = self._prepare_sqlalchemy_data(validated_data)
+            
             # Find entity
             entity = self.db_session.query(self.model_class).filter(
                 self.model_class.id == entity_id
@@ -186,7 +225,7 @@ class SQLAlchemyRepository(BaseRepository[T, ID]):
                 return None
             
             # Update fields
-            for key, value in validated_data.items():
+            for key, value in sqlalchemy_data.items():
                 if hasattr(entity, key):
                     setattr(entity, key, value)
             

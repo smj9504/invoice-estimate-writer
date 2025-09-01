@@ -14,6 +14,8 @@ from .schemas import (
 from .service import WorkOrderService
 from .models import WorkOrderStatus, DocumentType
 from app.core.database_factory import get_database
+from app.domains.auth.dependencies import get_current_staff
+from app.domains.staff.models import Staff
 
 router = APIRouter()
 
@@ -111,10 +113,13 @@ async def get_work_order(
 @router.post("/", response_model=WorkOrderResponse)
 async def create_work_order(
     work_order: WorkOrderCreate, 
-    service: WorkOrderService = Depends(get_work_order_service)
+    service: WorkOrderService = Depends(get_work_order_service),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Create new work order"""
     try:
+        # Set the created_by_staff_id to the current authenticated staff
+        work_order.created_by_staff_id = str(current_staff.id)
         new_work_order = service.create_work_order(work_order)
         return WorkOrderResponse(
             data=new_work_order, 
@@ -129,7 +134,8 @@ async def create_work_order(
 async def update_work_order(
     work_order_id: UUID, 
     work_order: WorkOrderUpdate, 
-    service: WorkOrderService = Depends(get_work_order_service)
+    service: WorkOrderService = Depends(get_work_order_service),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Update work order"""
     try:
@@ -158,7 +164,8 @@ async def update_work_order(
 @router.delete("/{work_order_id}")
 async def delete_work_order(
     work_order_id: UUID, 
-    service: WorkOrderService = Depends(get_work_order_service)
+    service: WorkOrderService = Depends(get_work_order_service),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Delete work order"""
     try:
@@ -177,14 +184,14 @@ async def delete_work_order(
 async def update_work_order_status(
     work_order_id: UUID,
     status: WorkOrderStatus,
-    staff_id: UUID = Query(..., description="Staff member making the change"),
     notes: Optional[str] = Query(None, description="Optional notes about the status change"),
-    service: WorkOrderService = Depends(get_work_order_service)
+    service: WorkOrderService = Depends(get_work_order_service),
+    current_staff: Staff = Depends(get_current_staff)
 ):
     """Update work order status with timestamp tracking"""
     try:
         updated_work_order = service.update_work_order_status(
-            work_order_id, status, staff_id, notes
+            work_order_id, status, str(current_staff.id), notes
         )
         
         if not updated_work_order:

@@ -2,20 +2,15 @@
 Base models and mixins for all domain models
 """
 
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declared_attr
-import uuid
-
-
-def generate_uuid():
-    """Generate a new UUID string"""
-    return str(uuid.uuid4())
+from app.core.database_types import get_uuid_column, generate_uuid
 
 
 class UUIDMixin:
     """Mixin to add UUID primary key to models"""
-    id = Column(String, primary_key=True, default=generate_uuid)
+    id = Column(get_uuid_column(), primary_key=True, default=generate_uuid, index=True)
 
 
 class TimestampMixin:

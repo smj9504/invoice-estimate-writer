@@ -28,7 +28,7 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
         """Get repository instance with the given session"""
         return get_work_order_repository(session)
     
-    def generate_work_order_number(self, company_id: UUID) -> str:
+    def generate_work_order_number(self, company_id) -> str:
         """
         Generate unique work order number
         
@@ -123,9 +123,8 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             if not data.get('work_order_number'):
                 data['work_order_number'] = self.generate_work_order_number(data['company_id'])
             
-            # Set default created_by_staff_id if not provided (for demo purposes)
-            if not data.get('created_by_staff_id'):
-                data['created_by_staff_id'] = '00000000-0000-0000-0000-000000000001'
+            # created_by_staff_id should be provided by the API endpoint
+            # No default staff ID to avoid foreign key constraint errors
             
             # Set initial status
             data['status'] = WorkOrderStatus.DRAFT

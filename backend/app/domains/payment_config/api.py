@@ -7,7 +7,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.domains.auth.dependencies import get_current_user, require_admin
+from app.domains.auth.dependencies import get_current_staff, require_admin
 from .schemas import (
     PaymentMethodCreate, PaymentMethodUpdate, PaymentMethodResponse,
     PaymentFrequencyCreate, PaymentFrequencyUpdate, PaymentFrequencyResponse
@@ -46,7 +46,7 @@ async def get_payment_method(
 async def create_payment_method(
     method: PaymentMethodCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Create new payment method (Admin only)"""
     try:
@@ -60,7 +60,7 @@ async def update_payment_method(
     method_id: str,
     method: PaymentMethodUpdate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Update payment method (Admin only)"""
     updated_method = service.update_payment_method(db, method_id, method)
@@ -73,7 +73,7 @@ async def update_payment_method(
 async def delete_payment_method(
     method_id: str,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Delete payment method (Admin only)"""
     if not service.delete_payment_method(db, method_id):
@@ -109,7 +109,7 @@ async def get_payment_frequency(
 async def create_payment_frequency(
     frequency: PaymentFrequencyCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Create new payment frequency (Admin only)"""
     try:
@@ -123,7 +123,7 @@ async def update_payment_frequency(
     frequency_id: str,
     frequency: PaymentFrequencyUpdate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Update payment frequency (Admin only)"""
     updated_frequency = service.update_payment_frequency(db, frequency_id, frequency)
@@ -136,7 +136,7 @@ async def update_payment_frequency(
 async def delete_payment_frequency(
     frequency_id: str,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Delete payment frequency (Admin only)"""
     if not service.delete_payment_frequency(db, frequency_id):
@@ -147,7 +147,7 @@ async def delete_payment_frequency(
 @router.post("/payment-config/initialize")
 async def initialize_payment_config(
     db: Session = Depends(get_db),
-    current_user: dict = Depends(require_admin)
+    current_staff: dict = Depends(require_admin)
 ):
     """Initialize default payment configurations (Admin only)"""
     service.initialize_default_payment_configs(db)

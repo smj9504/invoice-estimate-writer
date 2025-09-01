@@ -3,13 +3,12 @@ Work Order database models
 """
 
 from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum, Integer, Index, JSON
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
-import uuid
 import enum
 
 from app.core.database_factory import Base
+from app.core.database_types import UUIDType, generate_uuid
 
 
 class WorkOrderStatus(str, enum.Enum):
@@ -39,7 +38,7 @@ class WorkOrder(Base):
         {'extend_existing': True}
     )
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(UUIDType(), primary_key=True, default=generate_uuid, index=True)
     
     # Work Order Information
     work_order_number = Column(String(50), nullable=False, index=True)
@@ -47,7 +46,7 @@ class WorkOrder(Base):
     is_latest = Column(Boolean, default=True, nullable=False)
     
     # Company relationship
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    company_id = Column(UUIDType(), ForeignKey("companies.id"), nullable=False)
     # company = relationship("Company", back_populates="work_orders")
     
     # Client Information
@@ -76,8 +75,8 @@ class WorkOrder(Base):
     priority = Column(String(20), default="medium")  # low, medium, high, urgent
     
     # Staff Assignment
-    created_by_staff_id = Column(UUID(as_uuid=True), nullable=False)
-    assigned_to_staff_id = Column(UUID(as_uuid=True))
+    created_by_staff_id = Column(UUIDType(), nullable=False)
+    assigned_to_staff_id = Column(UUIDType())
     
     # Scheduling
     scheduled_start_date = Column(DateTime)

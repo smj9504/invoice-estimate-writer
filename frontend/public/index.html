@@ -25,6 +25,20 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>MJ Estimate</title>
+    <!-- Suppress browser extension errors -->
+    <script type="text/javascript">
+      // Filter out browser extension errors from console
+      const originalError = console.error;
+      console.error = function(...args) {
+        const errorString = args.join(' ');
+        // Only block errors from browser extensions
+        if (!errorString.includes('chrome-extension://') && 
+            !errorString.includes('moz-extension://') &&
+            !errorString.includes('extension://')) {
+          originalError.apply(console, args);
+        }
+      };
+    </script>
     <!-- Start Single Page Apps for GitHub Pages -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
