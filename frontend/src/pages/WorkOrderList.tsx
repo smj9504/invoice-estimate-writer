@@ -244,12 +244,6 @@ const WorkOrderList: React.FC = () => {
       ),
     },
     {
-      title: 'Client Name',
-      dataIndex: 'client_name',
-      key: 'client_name',
-      width: 150,
-    },
-    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
@@ -274,7 +268,7 @@ const WorkOrderList: React.FC = () => {
       key: 'final_cost',
       width: 120,
       align: 'right',
-      render: (cost: number) => `$${cost.toLocaleString()}`,
+      render: (cost: number) => `$${(cost || 0).toLocaleString()}`,
     },
     {
       title: 'Created Date',

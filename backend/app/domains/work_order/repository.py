@@ -66,16 +66,20 @@ class WorkOrderSQLAlchemyRepository(SQLAlchemyRepository, WorkOrderRepositoryMix
             return []
     
     def search_orders(self, search_term: str) -> List[Dict[str, Any]]:
-        """Search work orders using SQL LIKE queries"""
+        """Search work orders using SQL LIKE queries (case-insensitive)"""
         try:
             search_pattern = f"%{search_term.lower()}%"
             
             entities = self.db_session.query(WorkOrder).filter(
                 (WorkOrder.work_order_number.ilike(search_pattern)) |
-                (WorkOrder.client_name.ilike(search_pattern)) |
-                (WorkOrder.client_email.ilike(search_pattern)) |
-                (WorkOrder.client_phone.ilike(search_pattern)) |
-                (WorkOrder.work_description.ilike(search_pattern))
+                (WorkOrder.client_address.ilike(search_pattern)) |
+                (WorkOrder.client_city.ilike(search_pattern)) |
+                (WorkOrder.client_state.ilike(search_pattern)) |
+                (WorkOrder.client_zipcode.ilike(search_pattern)) |
+                (WorkOrder.job_site_address.ilike(search_pattern)) |
+                (WorkOrder.job_site_city.ilike(search_pattern)) |
+                (WorkOrder.job_site_state.ilike(search_pattern)) |
+                (WorkOrder.job_site_zipcode.ilike(search_pattern))
             ).order_by(WorkOrder.created_at.desc()).all()
             
             return [self._convert_to_dict(entity) for entity in entities]
@@ -194,11 +198,10 @@ class WorkOrderSupabaseRepository(SupabaseRepository, WorkOrderRepositoryMixin):
         try:
             search_lower = search_term.lower()
             
-            # Supabase doesn't support OR in the same way, so we need multiple queries
-            # This is a simplified version - you might want to combine results
+            # Search in work order number and all address fields (case-insensitive)
             response = self.client.table(self.table_name)\
                 .select("*")\
-                .or_(f"order_number.ilike.%{search_lower}%,title.ilike.%{search_lower}%,description.ilike.%{search_lower}%,customer_name.ilike.%{search_lower}%")\
+                .or_(f"work_order_number.ilike.%{search_lower}%,client_address.ilike.%{search_lower}%,client_city.ilike.%{search_lower}%,client_state.ilike.%{search_lower}%,client_zipcode.ilike.%{search_lower}%,job_site_address.ilike.%{search_lower}%,job_site_city.ilike.%{search_lower}%,job_site_state.ilike.%{search_lower}%,job_site_zipcode.ilike.%{search_lower}%")\
                 .order('created_at', desc=True)\
                 .execute()
             

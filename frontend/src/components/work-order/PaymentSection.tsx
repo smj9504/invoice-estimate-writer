@@ -133,7 +133,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   }, [editingPayment, visible, form]);
 
-  const remainingAmount = workOrder.final_cost; // This would be calculated from existing payments
+  const remainingAmount = workOrder.final_cost || 0; // This would be calculated from existing payments
 
   return (
     <Modal
@@ -247,7 +247,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             <Col span={8}>
               <Text type="secondary">Total Cost:</Text>
               <br />
-              <Text strong>${workOrder.final_cost.toLocaleString()}</Text>
+              <Text strong>${(workOrder.final_cost || 0).toLocaleString()}</Text>
             </Col>
             <Col span={8}>
               <Text type="secondary">Existing Payments:</Text>
@@ -258,7 +258,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               <Text type="secondary">Remaining Amount:</Text>
               <br />
               <Text strong style={{ color: '#fa541c' }}>
-                ${remainingAmount.toLocaleString()}
+                ${(remainingAmount || 0).toLocaleString()}
               </Text>
             </Col>
           </Row>
@@ -303,9 +303,10 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
     .filter(p => p.status === 'completed')
     .reduce((sum, p) => sum + p.amount, 0);
   
-  const remainingAmount = Math.max(0, workOrder.final_cost - totalPaid);
-  const paymentProgress = workOrder.final_cost > 0 
-    ? Math.round((totalPaid / workOrder.final_cost) * 100) 
+  const finalCost = workOrder.final_cost || 0;
+  const remainingAmount = Math.max(0, finalCost - totalPaid);
+  const paymentProgress = finalCost > 0 
+    ? Math.round((totalPaid / finalCost) * 100) 
     : 0;
 
   const paymentColumns: ColumnsType<PaymentRecord> = [
@@ -415,7 +416,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
                 <Text type="secondary" style={{ fontSize: '12px' }}>Base Cost</Text>
                 <div>
                   <Text strong style={{ fontSize: '18px' }}>
-                    ${workOrder.base_cost.toLocaleString()}
+                    ${(workOrder.base_cost || 0).toLocaleString()}
                   </Text>
                 </div>
               </div>
@@ -428,7 +429,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
                 <Text type="secondary" style={{ fontSize: '12px' }}>Credits Applied</Text>
                 <div>
                   <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
-                    -${workOrder.credits_applied.toLocaleString()}
+                    -${(workOrder.credits_applied || 0).toLocaleString()}
                   </Text>
                 </div>
               </div>
@@ -441,7 +442,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
                 <Text type="secondary" style={{ fontSize: '12px' }}>Final Cost</Text>
                 <div>
                   <Text strong style={{ fontSize: '20px', color: '#fa541c' }}>
-                    ${workOrder.final_cost.toLocaleString()}
+                    ${(workOrder.final_cost || 0).toLocaleString()}
                   </Text>
                 </div>
               </div>
@@ -473,7 +474,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ workOrder }) => {
             <Space>
               <Text type="secondary">Remaining Amount:</Text>
               <Text strong style={{ color: remainingAmount > 0 ? '#fa541c' : '#52c41a' }}>
-                ${remainingAmount.toLocaleString()}
+                ${(remainingAmount || 0).toLocaleString()}
               </Text>
             </Space>
           </div>

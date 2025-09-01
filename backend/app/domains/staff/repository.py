@@ -52,11 +52,11 @@ class StaffSQLAlchemyRepository(SQLAlchemyRepository, StaffRepositoryMixin):
     def get_by_username(self, username: str) -> Optional[Dict[str, Any]]:
         """Get staff by username"""
         try:
-            query = self.session.query(self.model).filter(
-                self.model.username == username
+            query = self.db_session.query(self.model_class).filter(
+                self.model_class.username == username
             )
             result = query.first()
-            return self._to_dict(result) if result else None
+            return self._convert_to_dict(result) if result else None
         except Exception as e:
             logger.error(f"Error getting staff by username: {e}")
             return None
@@ -64,11 +64,11 @@ class StaffSQLAlchemyRepository(SQLAlchemyRepository, StaffRepositoryMixin):
     def get_by_email(self, email: str) -> Optional[Dict[str, Any]]:
         """Get staff by email"""
         try:
-            query = self.session.query(self.model).filter(
-                self.model.email == email
+            query = self.db_session.query(self.model_class).filter(
+                self.model_class.email == email
             )
             result = query.first()
-            return self._to_dict(result) if result else None
+            return self._convert_to_dict(result) if result else None
         except Exception as e:
             logger.error(f"Error getting staff by email: {e}")
             return None
@@ -76,11 +76,11 @@ class StaffSQLAlchemyRepository(SQLAlchemyRepository, StaffRepositoryMixin):
     def get_by_staff_number(self, staff_number: str) -> Optional[Dict[str, Any]]:
         """Get staff by staff number"""
         try:
-            query = self.session.query(self.model).filter(
-                self.model.staff_number == staff_number
+            query = self.db_session.query(self.model_class).filter(
+                self.model_class.staff_number == staff_number
             )
             result = query.first()
-            return self._to_dict(result) if result else None
+            return self._convert_to_dict(result) if result else None
         except Exception as e:
             logger.error(f"Error getting staff by staff number: {e}")
             return None

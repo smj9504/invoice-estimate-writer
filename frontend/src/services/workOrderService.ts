@@ -8,7 +8,14 @@ export const workOrderService = {
       params: { page, page_size: pageSize }
     });
     // Backend returns WorkOrdersResponse with 'data' and 'total' fields
-    return response.data;
+    // Transform to match PaginatedResponse interface
+    return {
+      items: response.data.data || [],
+      total: response.data.total || 0,
+      page: page,
+      page_size: pageSize,
+      total_pages: Math.ceil((response.data.total || 0) / pageSize)
+    };
   },
 
   async getWorkOrder(id: string): Promise<WorkOrder> {
@@ -97,7 +104,14 @@ export const workOrderService = {
     page_size?: number;
   }): Promise<PaginatedResponse<WorkOrder>> {
     const response = await api.get('/api/work-orders/', { params });
-    return response.data;
+    // Transform backend response to match PaginatedResponse interface
+    return {
+      items: response.data.data || [],
+      total: response.data.total || 0,
+      page: params.page || 1,
+      page_size: params.page_size || 10,
+      total_pages: Math.ceil((response.data.total || 0) / (params.page_size || 10))
+    };
   },
 
   // Status updates

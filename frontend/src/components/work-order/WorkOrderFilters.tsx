@@ -136,7 +136,7 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
           <Col xs={24} sm={12} md={8} lg={6}>
             <Form.Item name="search" style={{ marginBottom: 0 }}>
               <Input
-                placeholder="Search by work order number or client name..."
+                placeholder="Search by work order number or address..."
                 prefix={<SearchOutlined />}
                 allowClear
                 onChange={(e) => {

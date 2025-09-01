@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def validate_work_order_number(work_order_number: str) -> bool:
     """
-    Validate work order number format (WO-YY-NNNN)
+    Validate work order number format: WO-[COMPANY_CODE]-YY-NNNN
     
     Args:
         work_order_number: Work order number to validate
@@ -23,7 +23,8 @@ def validate_work_order_number(work_order_number: str) -> bool:
     Returns:
         True if valid format, False otherwise
     """
-    pattern = r'^WO-\d{2}-\d{4}(-\d+)?$'
+    # Format: WO-COMPANY_CODE-YY-NNNN (e.g., WO-ABC-25-0001)
+    pattern = r'^WO-[A-Z0-9]{2,10}-\d{2}-\d{4}(-\d+)?$'
     return bool(re.match(pattern, work_order_number))
 
 

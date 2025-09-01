@@ -3,13 +3,12 @@ Staff user database models
 """
 
 from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
-import uuid
 import enum
 
 from app.core.database_factory import Base
+from app.core.database_types import UUIDType, generate_uuid
 
 
 class StaffRole(str, enum.Enum):
@@ -40,7 +39,7 @@ class Staff(Base):
     __tablename__ = "staff"
     __table_args__ = {'extend_existing': True}
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(UUIDType(), primary_key=True, default=generate_uuid, index=True)
     
     # Staff Information
     staff_number = Column(String(50), unique=True, nullable=False, index=True)
@@ -84,7 +83,7 @@ class Staff(Base):
     # Work Information
     hourly_rate = Column(String(20))
     salary = Column(String(20))
-    supervisor_id = Column(UUID(as_uuid=True), ForeignKey("staff.id"))
+    supervisor_id = Column(UUIDType(), ForeignKey("staff.id"))
     
     # Skills and Certifications
     skills = Column(Text)  # JSON list of skills
@@ -125,10 +124,10 @@ class StaffPermission(Base):
     __tablename__ = "staff_permissions"
     __table_args__ = {'extend_existing': True}
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(UUIDType(), primary_key=True, default=generate_uuid, index=True)
     
     # Relationships
-    staff_id = Column(UUID(as_uuid=True), ForeignKey("staff.id"), nullable=False)
+    staff_id = Column(UUIDType(), ForeignKey("staff.id"), nullable=False)
     
     # Permission Categories
     # Work Orders
@@ -194,13 +193,13 @@ class StaffSession(Base):
     __tablename__ = "staff_sessions"
     __table_args__ = {'extend_existing': True}
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(UUIDType(), primary_key=True, default=generate_uuid, index=True)
     
     # Session Information
     session_token = Column(String(255), unique=True, nullable=False, index=True)
     
     # Relationships
-    staff_id = Column(UUID(as_uuid=True), ForeignKey("staff.id"), nullable=False)
+    staff_id = Column(UUIDType(), ForeignKey("staff.id"), nullable=False)
     
     # Session Details
     ip_address = Column(String(45))  # IPv6 support
@@ -228,19 +227,19 @@ class AuditLog(Base):
     __tablename__ = "audit_logs"
     __table_args__ = {'extend_existing': True}
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(UUIDType(), primary_key=True, default=generate_uuid, index=True)
     
     # Action Information
     action = Column(String(100), nullable=False)
     entity_type = Column(String(100), nullable=False)
-    entity_id = Column(UUID(as_uuid=True))
+    entity_id = Column(UUIDType())
     
     # Staff Information
-    staff_id = Column(UUID(as_uuid=True), ForeignKey("staff.id"))
+    staff_id = Column(UUIDType(), ForeignKey("staff.id"))
     staff_name = Column(String(200))
     
     # Session Information
-    session_id = Column(UUID(as_uuid=True), ForeignKey("staff_sessions.id"))
+    session_id = Column(UUIDType(), ForeignKey("staff_sessions.id"))
     ip_address = Column(String(45))
     user_agent = Column(Text)
     

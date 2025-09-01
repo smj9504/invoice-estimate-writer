@@ -30,7 +30,8 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
     
     def generate_work_order_number(self, company_id) -> str:
         """
-        Generate unique work order number
+        Generate unique work order number with company code
+        Format: WO-[COMPANY_CODE]-YY-NNNN
         
         Args:
             company_id: Company UUID
@@ -41,30 +42,41 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
         try:
             session = self.database.get_session()
             try:
+                # Get company code
+                from app.domains.company.repository import get_company_repository
+                company_repo = get_company_repository(session)
+                company = company_repo.get_by_id(company_id)
+                company_code = "XX"  # Default if no company code
+                if company and company.get('company_code'):
+                    company_code = company['company_code'].upper()
+                
                 # Get current year
                 current_year = datetime.now().year
                 year_suffix = str(current_year)[2:]  # Last 2 digits
                 
-                # Find the highest existing number for this year
+                # Find the highest existing number for this company and year
                 repository = self._get_repository_instance(session)
-                latest_wo = repository.get_latest_work_order_by_year(current_year)
+                # Get work orders for this company to find the latest number
+                all_wos = repository.get_by_company(company_id)
                 
-                if latest_wo:
-                    # Extract number from work order number (assuming format WO-YY-NNNN)
-                    parts = latest_wo.get('work_order_number', '').split('-')
-                    if len(parts) >= 3:
-                        try:
-                            last_number = int(parts[2])
-                            next_number = last_number + 1
-                        except (ValueError, IndexError):
-                            next_number = 1
-                    else:
-                        next_number = 1
-                else:
-                    next_number = 1
+                next_number = 1
+                if all_wos:
+                    # Filter work orders for current year and extract highest number
+                    for wo in all_wos:
+                        wo_num = wo.get('work_order_number', '')
+                        # Parse format: WO-COMPANY_CODE-YY-NNNN
+                        parts = wo_num.split('-')
+                        if len(parts) >= 4:
+                            try:
+                                # Check if it's from the current year and same company code
+                                if parts[1] == company_code and parts[2] == year_suffix:
+                                    num = int(parts[3])
+                                    next_number = max(next_number, num + 1)
+                            except (ValueError, IndexError):
+                                pass
                 
-                # Format: WO-YY-NNNN
-                work_order_number = f"WO-{year_suffix}-{next_number:04d}"
+                # Format: WO-COMPANY_CODE-YY-NNNN
+                work_order_number = f"WO-{company_code}-{year_suffix}-{next_number:04d}"
                 
                 # Ensure uniqueness
                 counter = 0
@@ -82,7 +94,7 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             logger.error(f"Error generating work order number: {e}")
             # Fallback to UUID-based number
             import uuid
-            return f"WO-{datetime.now().year}-{str(uuid.uuid4())[:8].upper()}"
+            return f"WO-XX-{datetime.now().year}-{str(uuid.uuid4())[:8].upper()}"
     
     def work_order_number_exists(self, work_order_number: str) -> bool:
         """
@@ -255,6 +267,28 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             
         except Exception as e:
             logger.error(f"Error getting work orders by staff: {e}")
+            raise
+    
+    def search_work_orders(self, search_term: str) -> List[Dict[str, Any]]:
+        """
+        Search work orders by work order number or address fields
+        
+        Args:
+            search_term: Search term to match against work order number and address fields
+            
+        Returns:
+            List of matching work order dictionaries
+        """
+        try:
+            session = self.database.get_session()
+            try:
+                repository = self._get_repository_instance(session)
+                return repository.search_orders(search_term)
+            finally:
+                session.close()
+                
+        except Exception as e:
+            logger.error(f"Error searching work orders: {e}")
             raise
     
     def get_dashboard_stats(self, company_id: Optional[UUID] = None) -> Dict[str, Any]:

@@ -89,7 +89,8 @@ class BaseService(Generic[T, ID], ServiceInterface):
                 session.close()
         except Exception as e:
             logger.error(f"Error getting {self.__class__.__name__} by ID {entity_id}: {e}")
-            raise
+            # Return None instead of raising to allow graceful handling
+            return None
     
     def create(self, entity_data: Dict[str, Any]) -> Dict[str, Any]:
         """

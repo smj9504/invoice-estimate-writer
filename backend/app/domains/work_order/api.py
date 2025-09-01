@@ -16,6 +16,7 @@ from .models import WorkOrderStatus, DocumentType
 from app.core.database_factory import get_database
 from app.domains.auth.dependencies import get_current_staff
 from app.domains.staff.models import Staff
+from app.domains.staff.service import StaffService
 
 router = APIRouter()
 
@@ -23,6 +24,61 @@ router = APIRouter()
 def get_work_order_service():
     """Dependency to get work order service"""
     return WorkOrderService(get_database())
+
+
+def get_staff_service():
+    """Dependency to get staff service"""
+    return StaffService(get_database())
+
+
+def populate_staff_names(work_orders: List[dict], staff_service: StaffService) -> List[dict]:
+    """Populate staff names in work orders"""
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    # Get unique staff IDs (they're already strings from UUIDType)
+    staff_ids = set()
+    for wo in work_orders:
+        if wo.get('created_by_staff_id'):
+            staff_ids.add(wo['created_by_staff_id'])
+        if wo.get('assigned_to_staff_id'):
+            staff_ids.add(wo['assigned_to_staff_id'])
+    
+    logger.info(f"Found {len(staff_ids)} unique staff IDs to fetch: {staff_ids}")
+    
+    # Fetch staff data
+    staff_map = {}
+    for staff_id in staff_ids:
+        try:
+            # staff_id is already a string from UUIDType, pass it directly
+            staff = staff_service.get_by_id(staff_id)
+            logger.info(f"Fetched staff {staff_id}: {staff}")
+            
+            if staff:
+                # Try to get name field or construct from first/last name
+                name = staff.get('name')
+                if not name:
+                    first = staff.get('first_name', '')
+                    last = staff.get('last_name', '')
+                    name = f"{first} {last}".strip() if first or last else staff.get('username', 'Unknown')
+                staff_map[staff_id] = name
+                logger.info(f"Staff {staff_id} name: {name}")
+        except Exception as e:
+            # Log error but continue processing
+            logger.error(f"Error fetching staff {staff_id}: {e}")
+    
+    # Populate names in work orders
+    for wo in work_orders:
+        created_by = wo.get('created_by_staff_id')
+        assigned_to = wo.get('assigned_to_staff_id')
+        
+        wo['created_by_staff_name'] = staff_map.get(created_by) if created_by else None
+        wo['assigned_to_staff_name'] = staff_map.get(assigned_to) if assigned_to else None
+    
+    logger.info(f"Populated staff names for {len(work_orders)} work orders")
+    
+    return work_orders
 
 
 @router.get("/", response_model=WorkOrdersResponse)
@@ -39,7 +95,8 @@ async def get_work_orders(
     is_active: Optional[bool] = Query(None, description="Filter by active status"),
     date_from: Optional[datetime] = Query(None, description="Filter from date"),
     date_to: Optional[datetime] = Query(None, description="Filter to date"),
-    service: WorkOrderService = Depends(get_work_order_service)
+    service: WorkOrderService = Depends(get_work_order_service),
+    staff_service: StaffService = Depends(get_staff_service)
 ):
     """Get all work orders with optional filters"""
     try:
@@ -70,9 +127,10 @@ async def get_work_orders(
         # Get work orders from service with pagination
         if search:
             # Use search method if search term provided
-            # TODO: Implement search in service
-            work_orders = []
-            total = 0
+            work_orders = service.search_work_orders(search)
+            total = len(work_orders)
+            # Apply pagination to search results
+            work_orders = work_orders[offset:offset + page_size]
         else:
             # Regular filtering
             work_orders = service.get_all(
@@ -86,6 +144,9 @@ async def get_work_orders(
             all_work_orders = service.get_all(filters=filters)
             total = len(all_work_orders)
         
+        # Populate staff names
+        work_orders = populate_staff_names(work_orders, staff_service)
+        
         return WorkOrdersResponse(data=work_orders, total=total)
         
     except Exception as e:
@@ -95,14 +156,19 @@ async def get_work_orders(
 @router.get("/{work_order_id}", response_model=WorkOrderResponse)
 async def get_work_order(
     work_order_id: UUID, 
-    service: WorkOrderService = Depends(get_work_order_service)
+    service: WorkOrderService = Depends(get_work_order_service),
+    staff_service: StaffService = Depends(get_staff_service)
 ):
     """Get single work order by ID"""
     try:
         work_order = service.get_by_id(work_order_id)
         if not work_order:
             raise HTTPException(status_code=404, detail="Work order not found")
-        return WorkOrderResponse(data=work_order)
+        
+        # Populate staff names for single work order
+        work_orders = populate_staff_names([work_order], staff_service)
+        
+        return WorkOrderResponse(data=work_orders[0])
         
     except HTTPException:
         raise
@@ -114,15 +180,20 @@ async def get_work_order(
 async def create_work_order(
     work_order: WorkOrderCreate, 
     service: WorkOrderService = Depends(get_work_order_service),
-    current_staff: Staff = Depends(get_current_staff)
+    current_staff: Staff = Depends(get_current_staff),
+    staff_service: StaffService = Depends(get_staff_service)
 ):
     """Create new work order"""
     try:
         # Set the created_by_staff_id to the current authenticated staff
         work_order.created_by_staff_id = str(current_staff.id)
         new_work_order = service.create_work_order(work_order)
+        
+        # Populate staff names for the newly created work order
+        work_orders = populate_staff_names([new_work_order], staff_service)
+        
         return WorkOrderResponse(
-            data=new_work_order, 
+            data=work_orders[0], 
             message="Work order created successfully"
         )
         
@@ -135,7 +206,8 @@ async def update_work_order(
     work_order_id: UUID, 
     work_order: WorkOrderUpdate, 
     service: WorkOrderService = Depends(get_work_order_service),
-    current_staff: Staff = Depends(get_current_staff)
+    current_staff: Staff = Depends(get_current_staff),
+    staff_service: StaffService = Depends(get_staff_service)
 ):
     """Update work order"""
     try:
@@ -149,9 +221,12 @@ async def update_work_order(
         updated_work_order = service.update(work_order_id, update_data)
         if not updated_work_order:
             raise HTTPException(status_code=404, detail="Work order not found or update failed")
+        
+        # Populate staff names for the updated work order
+        work_orders = populate_staff_names([updated_work_order], staff_service)
             
         return WorkOrderResponse(
-            data=updated_work_order, 
+            data=work_orders[0], 
             message="Work order updated successfully"
         )
         

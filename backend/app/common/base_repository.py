@@ -27,17 +27,23 @@ class BaseRepository(Repository[T, ID]):
     
     def _convert_to_dict(self, entity: Any) -> Dict[str, Any]:
         """Convert entity to dictionary representation"""
+        from uuid import UUID
         if hasattr(entity, '__dict__'):
             result = {}
             for key, value in entity.__dict__.items():
                 if not key.startswith('_'):
                     # Handle special types
-                    if isinstance(value, Decimal):
+                    if isinstance(value, UUID):
+                        result[key] = str(value)
+                    elif isinstance(value, Decimal):
                         result[key] = float(value)
                     elif isinstance(value, datetime):
                         result[key] = value.isoformat()
                     elif value is None:
                         result[key] = None
+                    # For string UUIDs (already converted by UUIDType), keep as is
+                    elif isinstance(value, str) and key.endswith('_id'):
+                        result[key] = value
                     else:
                         result[key] = value
             

@@ -529,7 +529,7 @@ const WorkOrderDetail: React.FC = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text>Final Cost:</Text>
                 <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
-                  ${workOrder.final_cost.toLocaleString()}
+                  ${(workOrder.final_cost || 0).toLocaleString()}
                 </Text>
               </div>
               <Divider style={{ margin: '12px 0' }} />

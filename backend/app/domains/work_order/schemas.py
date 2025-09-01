@@ -149,8 +149,18 @@ class WorkOrderUpdate(BaseModel):
 class WorkOrder(WorkOrderBase):
     """Work order schema with all fields"""
     id: UUID
+    work_order_number: str
     status: WorkOrderStatus
     created_by_staff_id: UUID
+    
+    # Staff names (populated from joins)
+    created_by_staff_name: Optional[str] = None
+    assigned_to_staff_name: Optional[str] = None
+    
+    # Cost fields (calculated or default values for now)
+    base_cost: Optional[float] = 0.0
+    credits_applied: Optional[float] = 0.0
+    final_cost: Optional[float] = 0.0
     
     # Scheduling
     actual_start_date: Optional[datetime] = None
