@@ -374,3 +374,17 @@ async def get_priority_levels():
             {"value": "urgent", "label": "Urgent"}
         ]
     }
+
+
+@router.get("/{work_order_id}/activities")
+async def get_work_order_activities(
+    work_order_id: UUID,
+    service: WorkOrderService = Depends(get_work_order_service)
+):
+    """Get activities/history for a work order (placeholder for now)"""
+    # For now, return empty activities
+    # This can be expanded later to include actual activity tracking
+    return {
+        "activities": [],
+        "total": 0
+    }

@@ -22,7 +22,7 @@ import {
   ToolOutlined,
   DollarOutlined
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 
 import { companyService } from '../services/companyService';
@@ -41,6 +41,8 @@ const { Option } = Select;
 const WorkOrderCreation: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = Boolean(id);
   const [finalCost, setFinalCost] = useState(0);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [availableCredits, setAvailableCredits] = useState<Credit[]>([]);
@@ -62,21 +64,6 @@ const WorkOrderCreation: React.FC = () => {
     queryFn: () => companyService.getCompanies(),
   });
 
-  // Handle companies data
-  useEffect(() => {
-    if (companiesData) {
-      setCompanies(companiesData);
-    }
-  }, [companiesData]);
-
-  // Handle companies error
-  useEffect(() => {
-    if (companiesError) {
-      console.error('Failed to load companies:', companiesError);
-      message.error('Failed to load companies');
-    }
-  }, [companiesError]);
-
   // Load available trades from backend
   const { data: trades = [] } = useQuery({
     queryKey: ['trades'],
@@ -89,6 +76,85 @@ const WorkOrderCreation: React.FC = () => {
     queryFn: () => documentTypeService.getDocumentTypes(),
   });
 
+  // Load work order data when in edit mode
+  const { data: workOrderData, isLoading: workOrderLoading, error: workOrderError } = useQuery({
+    queryKey: ['workOrder', id],
+    queryFn: () => workOrderService.getWorkOrder(id!),
+    enabled: isEditMode,
+  });
+
+  // Handle companies data
+  useEffect(() => {
+    if (companiesData) {
+      setCompanies(companiesData);
+    }
+  }, [companiesData, setCompanies]);
+
+  // Handle companies error
+  useEffect(() => {
+    if (companiesError) {
+      console.error('Failed to load companies:', companiesError);
+      message.error('Failed to load companies');
+    }
+  }, [companiesError]);
+
+  // Handle work order error
+  useEffect(() => {
+    if (workOrderError) {
+      console.error('Failed to load work order:', workOrderError);
+      message.error('Failed to load work order');
+    }
+  }, [workOrderError]);
+
+  // Populate form when work order data is loaded (edit mode)
+  useEffect(() => {
+    if (workOrderData && companiesData && documentTypes && documentTypes.length > 0 && !workOrderLoading) {
+      // Find the company
+      const company = companiesData.find(c => c.id === workOrderData.company_id);
+      if (company) {
+        setSelectedCompany(company);
+      }
+
+      // Find the document type ID by matching the enum value
+      const documentType = documentTypes.find(dt => {
+        const name = dt.name.toLowerCase();
+        const workOrderDocType = workOrderData.document_type;
+        
+        if (workOrderDocType === 'insurance_estimate' && name.includes('insurance') && name.includes('estimate')) return true;
+        if (workOrderDocType === 'estimate' && name.includes('estimate') && !name.includes('insurance')) return true;
+        if (workOrderDocType === 'invoice' && name.includes('invoice')) return true;
+        if (workOrderDocType === 'plumber_report' && (name.includes('plumber') || name.includes('report'))) return true;
+        // work_order is the enum value for work order document type
+        if (workOrderDocType === 'work_order' && (name.includes('work') && name.includes('order'))) return true;
+        
+        return false;
+      });
+
+      // Set form values
+      const formValues = {
+        document_type: documentType?.id || '',
+        client_name: workOrderData.client_name,
+        client_phone: workOrderData.client_phone || '',
+        client_email: workOrderData.client_email || '',
+        client_address: workOrderData.client_address || '',
+        client_city: workOrderData.client_city || '',
+        client_state: workOrderData.client_state || '',
+        client_zipcode: workOrderData.client_zipcode || '',
+        trades: workOrderData.trades || [],
+        consultation_notes: workOrderData.consultation_notes || '',
+        cost_override: workOrderData.cost_override || undefined,
+      };
+
+      form.setFieldsValue(formValues);
+      
+      // Set other state
+      setWorkDescription(workOrderData.work_description || '');
+      setSelectedDocumentType(documentType?.id || '');
+      setSelectedTrades(workOrderData.trades || []);
+      setFinalCost(workOrderData.final_cost || 0);
+    }
+  }, [workOrderData, companiesData, documentTypes, workOrderLoading, form]);
+
   // Create work order mutation
   const createWorkOrderMutation = useMutation({
     mutationFn: (data: WorkOrderFormData) => workOrderService.createWorkOrder(data),
@@ -99,6 +165,19 @@ const WorkOrderCreation: React.FC = () => {
     onError: (error: any) => {
       console.error('Failed to create work order:', error);
       message.error(error.response?.data?.message || 'Failed to create work order');
+    }
+  });
+
+  // Update work order mutation
+  const updateWorkOrderMutation = useMutation({
+    mutationFn: (data: Partial<WorkOrderFormData>) => workOrderService.updateWorkOrder(id!, data),
+    onSuccess: (response) => {
+      message.success('Work order updated successfully!');
+      navigate(`/work-orders/${response.id}`);
+    },
+    onError: (error: any) => {
+      console.error('Failed to update work order:', error);
+      message.error(error.response?.data?.message || 'Failed to update work order');
     }
   });
 
@@ -154,7 +233,7 @@ const WorkOrderCreation: React.FC = () => {
         return 'estimate'; // default fallback
       })();
 
-      const workOrderData: any = {
+      const workOrderFormData: any = {
         company_id: selectedCompany.id,
         document_type: documentTypeEnum,
         client_name: values.client_name,
@@ -167,11 +246,20 @@ const WorkOrderCreation: React.FC = () => {
         trades: values.trades || [],
         work_description: workDescription,
         consultation_notes: values.consultation_notes,
-        cost_override: values.cost_override
+        cost_override: values.cost_override,
+        // In edit mode, preserve current status unless explicitly changing to pending
+        // In create mode, use the status parameter (draft or pending)
+        status: isEditMode 
+          ? (status === 'pending' ? 'pending' : (workOrderData?.status || 'draft'))
+          : status
         // work_order_number and created_by_staff_id will be auto-generated by backend
       };
 
-      createWorkOrderMutation.mutate(workOrderData);
+      if (isEditMode) {
+        updateWorkOrderMutation.mutate(workOrderFormData);
+      } else {
+        createWorkOrderMutation.mutate(workOrderFormData);
+      }
     } catch (error) {
       console.error('Validation failed:', error);
       message.error('Please fill in all required fields');
@@ -183,11 +271,20 @@ const WorkOrderCreation: React.FC = () => {
     message.info('PDF preview functionality will be implemented');
   };
 
+  // Show loading spinner when in edit mode and loading work order data
+  if (isEditMode && (workOrderLoading || !workOrderData)) {
+    return (
+      <div style={{ padding: '24px', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+        <Spin size="large" tip="Loading work order..." />
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: '24px' }}>
       <Title level={2}>
         <FileTextOutlined style={{ marginRight: 8 }} />
-        Create Work Order
+        {isEditMode ? 'Edit Work Order' : 'Create Work Order'}
       </Title>
 
       <Form
@@ -415,9 +512,9 @@ const WorkOrderCreation: React.FC = () => {
                   size="large"
                   icon={<SaveOutlined />}
                   onClick={() => handleSave('draft')}
-                  loading={createWorkOrderMutation.isPending}
+                  loading={createWorkOrderMutation.isPending || updateWorkOrderMutation.isPending}
                 >
-                  Save as Draft
+                  {isEditMode ? 'Save Changes' : 'Save as Draft'}
                 </Button>
               </Space>
             </Col>
@@ -436,10 +533,10 @@ const WorkOrderCreation: React.FC = () => {
                   size="large"
                   icon={<SendOutlined />}
                   htmlType="submit"
-                  loading={createWorkOrderMutation.isPending}
+                  loading={createWorkOrderMutation.isPending || updateWorkOrderMutation.isPending}
                   disabled={!selectedCompany}
                 >
-                  Create & Send Work Order
+                  {isEditMode ? 'Update & Send Work Order' : 'Create & Send Work Order'}
                 </Button>
               </Space>
             </Col>

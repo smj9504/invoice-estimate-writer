@@ -31,7 +31,7 @@ export const workOrderService = {
   },
 
   async updateWorkOrder(id: string, workOrderData: Partial<WorkOrderFormData>): Promise<WorkOrder> {
-    const response = await api.patch(`/api/work-orders/${id}`, workOrderData);
+    const response = await api.put(`/api/work-orders/${id}`, workOrderData);
     // Backend returns WorkOrderResponse with 'data' field
     return response.data.data;
   },
@@ -126,7 +126,8 @@ export const workOrderService = {
   // Activity and comments
   async getWorkOrderActivities(workOrderId: string): Promise<any[]> {
     const response = await api.get(`/api/work-orders/${workOrderId}/activities`);
-    return response.data;
+    // Backend returns { activities: [], total: 0 }, extract the activities array
+    return response.data.activities || [];
   },
 
   async addComment(workOrderId: string, comment: string): Promise<any> {

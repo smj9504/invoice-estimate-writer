@@ -134,11 +134,12 @@ const DocumentList: React.FC = () => {
       key: 'type',
       width: 100,
       render: (type: DocumentType) => {
-        const typeMap = {
+        const typeMap: Record<DocumentType, string> = {
           estimate: 'Estimate',
           invoice: 'Invoice',
           insurance_estimate: 'Insurance Estimate',
           plumber_report: 'Plumber Report',
+          work_order: 'Work Order',
         };
         return typeMap[type] || type;
       },

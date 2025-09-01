@@ -100,6 +100,7 @@ const documentTypeLabels: Record<DocumentType, string> = {
   invoice: 'Invoice',
   insurance_estimate: 'Insurance Estimate',
   plumber_report: 'Plumber Report',
+  work_order: 'Work Order',
 };
 
 interface CommentModalProps {

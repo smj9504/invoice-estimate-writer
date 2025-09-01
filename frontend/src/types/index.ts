@@ -37,7 +37,7 @@ export interface CompanyFilter {
 }
 
 // Document Types
-export type DocumentType = 'estimate' | 'invoice' | 'insurance_estimate' | 'plumber_report';
+export type DocumentType = 'estimate' | 'invoice' | 'insurance_estimate' | 'plumber_report' | 'work_order';
 export type DocumentStatus = 'draft' | 'sent' | 'paid' | 'cancelled';
 
 export interface Document {
