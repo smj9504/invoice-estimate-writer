@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Layout as AntLayout, Menu, Avatar, Dropdown, Space } from 'antd';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Layout as AntLayout, Menu, Avatar, Dropdown, Space, Button } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   DashboardOutlined,
@@ -13,9 +13,12 @@ import {
   BarChartOutlined,
   ToolOutlined,
   DatabaseOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
 } from '@ant-design/icons';
 import { useStore } from '../../store/useStore';
 import { useAuth } from '../../contexts/AuthContext';
+import './Layout.css';
 
 const { Header, Sider, Content } = AntLayout;
 
@@ -28,6 +31,42 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const { selectedCompany } = useStore();
   const { user, logout, isAdmin, isManager } = useAuth();
+
+  // State for sidebar collapse with localStorage persistence
+  const [collapsed, setCollapsed] = useState(() => {
+    const saved = localStorage.getItem('siderCollapsed');
+    // On mobile devices, default to collapsed
+    const isMobile = window.innerWidth <= 768;
+    return saved !== null ? JSON.parse(saved) : isMobile;
+  });
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Handle window resize for responsive behavior
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      // Auto-collapse on mobile, but preserve user preference on desktop
+      if (mobile && !collapsed) {
+        setCollapsed(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [collapsed]);
+
+  // Save collapse state to localStorage (only for non-mobile)
+  useEffect(() => {
+    if (!isMobile) {
+      localStorage.setItem('siderCollapsed', JSON.stringify(collapsed));
+    }
+  }, [collapsed, isMobile]);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
 
   const menuItems = useMemo(() => {
     const items = [
@@ -174,9 +213,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <AntLayout style={{ minHeight: '100vh' }}>
+      {/* Mobile overlay */}
+      {isMobile && !collapsed && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.45)',
+            zIndex: 999,
+            transition: 'opacity 0.3s ease',
+          }}
+          onClick={toggleCollapsed}
+          aria-label="Close sidebar"
+        />
+      )}
       <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
         breakpoint="lg"
-        collapsedWidth="0"
+        collapsedWidth={isMobile ? 0 : 80}
+        width={280}
         style={{
           overflow: 'auto',
           height: '100vh',
@@ -184,18 +244,26 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           left: 0,
           top: 0,
           bottom: 0,
+          transition: 'all 0.3s ease',
+          zIndex: isMobile ? 1000 : 'auto',
         }}
+        trigger={null} // Disable default trigger to use custom buttons
       >
-        <div style={{ 
-          height: 64, 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '20px',
-          fontWeight: 'bold',
+        <div className="sidebar-logo" style={{ 
+          justifyContent: collapsed ? 'center' : 'space-between',
+          padding: collapsed ? '0' : '0 16px',
+          fontSize: collapsed ? '16px' : '20px',
         }}>
-          MJ Estimate
+          {collapsed ? 'MJ' : 'MJ Estimate'}
+          {!collapsed && (
+            <Button
+              type="text"
+              icon={<MenuFoldOutlined />}
+              onClick={toggleCollapsed}
+              className="sidebar-toggle-btn"
+              aria-label="Collapse sidebar"
+            />
+          )}
         </div>
         <Menu
           theme="dark"
@@ -203,18 +271,44 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           selectedKeys={[location.pathname]}
           items={menuItems}
           onClick={handleMenuClick}
+          style={{
+            border: 'none',
+            height: 'calc(100vh - 64px)',
+            overflowY: 'auto',
+          }}
+          inlineCollapsed={collapsed}
         />
       </Sider>
-      <AntLayout style={{ marginLeft: 200 }}>
+      <AntLayout 
+        className="main-content" 
+        style={{ 
+          marginLeft: isMobile ? 0 : (collapsed ? 80 : 280),
+          transition: 'margin-left 0.3s ease',
+        }}
+      >
         <Header style={{ 
           padding: '0 24px', 
           background: '#fff',
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: collapsed ? 'space-between' : 'space-between',
           alignItems: 'center',
           boxShadow: '0 1px 4px rgba(0,21,41,.08)',
         }}>
-          <div>
+          {collapsed && (
+            <Button
+              type="text"
+              icon={<MenuUnfoldOutlined />}
+              onClick={toggleCollapsed}
+              className="header-toggle-btn"
+              style={{
+                fontSize: '16px',
+                width: 40,
+                height: 40,
+              }}
+              aria-label="Expand sidebar"
+            />
+          )}
+          <div style={{ flex: 1, paddingLeft: collapsed ? '16px' : '0' }}>
             {selectedCompany && (
               <Space>
                 <span>Current Company:</span>
@@ -229,7 +323,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Space>
           </Dropdown>
         </Header>
-        <Content style={{ margin: '24px', minHeight: 280 }}>
+        <Content style={{ 
+          margin: '24px', 
+          minHeight: 'calc(100vh - 112px)',
+          padding: '24px',
+          background: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+        }}>
           {children}
         </Content>
       </AntLayout>

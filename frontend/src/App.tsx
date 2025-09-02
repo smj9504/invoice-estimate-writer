@@ -21,6 +21,7 @@ import DocumentTypesManagement from './pages/DocumentTypesManagement';
 import TradesManagement from './pages/TradesManagement';
 import DatabaseManagement from './pages/DatabaseManagement';
 import AdminConfig from './pages/AdminConfig';
+import NotFound from './pages/NotFound';
 import 'antd/dist/reset.css';
 
 // Create a client with optimized cache strategy
@@ -225,6 +226,9 @@ function App() {
                   </Layout>
                 </ProtectedRoute>
               } />
+              
+              {/* 404 Not Found - catch all undefined routes */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
         </AuthProvider>
