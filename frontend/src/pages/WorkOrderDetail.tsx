@@ -42,13 +42,11 @@ import {
   ClockCircleOutlined,
   ExclamationCircleOutlined,
   FileAddOutlined,
-  CreditCardOutlined,
 } from '@ant-design/icons';
 import { WorkOrder, DocumentType } from '../types';
 import { workOrderService } from '../services/workOrderService';
 import { companyService } from '../services/companyService';
 import ActivityTimeline from '../components/work-order/ActivityTimeline';
-import PaymentSection from '../components/work-order/PaymentSection';
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -94,14 +92,8 @@ const statusConfig = {
   },
 } as const;
 
-// Document type labels
-const documentTypeLabels: Record<DocumentType, string> = {
-  estimate: 'Estimate',
-  invoice: 'Invoice',
-  insurance_estimate: 'Insurance Estimate',
-  plumber_report: 'Plumber Report',
-  work_order: 'Work Order',
-};
+// Document type labels - removed hardcoded mapping
+// Now using document_type_name from backend
 
 interface CommentModalProps {
   visible: boolean;
@@ -158,15 +150,25 @@ const WorkOrderDetail: React.FC = () => {
   const [newStatus, setNewStatus] = useState<WorkOrder['status']>('draft');
   const [commentModalVisible, setCommentModalVisible] = useState(false);
 
-  // Fetch work order details
+  // Fetch work order details with longer cache for detail view
   const {
     data: workOrder,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<WorkOrder>({
     queryKey: ['work-order', id],
-    queryFn: () => workOrderService.getWorkOrder(id!),
+    queryFn: async () => {
+      const data = await workOrderService.getWorkOrder(id!);
+      console.log('Work Order Data:', data);
+      console.log('Base Cost:', data?.base_cost, 'Type:', typeof data?.base_cost);
+      console.log('Final Cost:', data?.final_cost, 'Type:', typeof data?.final_cost);
+      console.log('Trades:', data?.trades);
+      console.log('Additional Costs:', data?.additional_costs);
+      return data;
+    },
     enabled: !!id,
+    staleTime: 2 * 60 * 1000, // 2 minutes for detail data
+    gcTime: 10 * 60 * 1000, // 10 minutes in cache
   });
 
   // Fetch company details
@@ -182,17 +184,38 @@ const WorkOrderDetail: React.FC = () => {
     queryFn: () => workOrderService.getTrades(),
   });
 
-  // Status update mutation
+  // Status update mutation with optimistic update
   const statusMutation = useMutation({
     mutationFn: ({ status, comment }: { status: WorkOrder['status']; comment?: string }) =>
       workOrderService.updateWorkOrderStatus(id!, status, comment),
+    onMutate: async ({ status }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['work-order', id] });
+      
+      // Snapshot the previous value
+      const previousWorkOrder = queryClient.getQueryData(['work-order', id]);
+      
+      // Optimistically update
+      queryClient.setQueryData(['work-order', id], (old: any) => {
+        if (!old) return old;
+        return { ...old, status };
+      });
+      
+      return { previousWorkOrder };
+    },
+    onError: (error: any, variables, context) => {
+      // Rollback on error
+      if (context?.previousWorkOrder) {
+        queryClient.setQueryData(['work-order', id], context.previousWorkOrder);
+      }
+      message.error(error.message || 'Failed to update status.');
+    },
     onSuccess: () => {
       message.success('Status has been updated.');
-      queryClient.invalidateQueries({ queryKey: ['work-order', id] });
       setStatusChangeVisible(false);
-    },
-    onError: (error: any) => {
-      message.error(error.message || 'Failed to update status.');
+      // Invalidate both detail and list queries
+      queryClient.invalidateQueries({ queryKey: ['work-order', id] });
+      queryClient.invalidateQueries({ queryKey: ['work-orders'] });
     },
   });
 
@@ -208,14 +231,21 @@ const WorkOrderDetail: React.FC = () => {
     },
   });
 
-  // Add comment mutation
+  // Add comment mutation with selective invalidation
   const commentMutation = useMutation({
     mutationFn: (comment: string) =>
       workOrderService.addComment(id!, comment),
     onSuccess: () => {
       message.success('Comment has been added.');
-      queryClient.invalidateQueries({ queryKey: ['work-order', id] });
-      queryClient.invalidateQueries({ queryKey: ['work-order-activities', id] });
+      // Only invalidate necessary queries
+      queryClient.invalidateQueries({ 
+        queryKey: ['work-order', id],
+        exact: true 
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['work-order-activities', id],
+        exact: true 
+      });
       setCommentModalVisible(false);
     },
     onError: (error: any) => {
@@ -498,7 +528,9 @@ const WorkOrderDetail: React.FC = () => {
           <Card title="Work Details" style={{ marginBottom: 24 }}>
             <Descriptions column={1} size="small">
               <Descriptions.Item label="Document Type">
-                <Tag color="blue">{documentTypeLabels[workOrder.document_type]}</Tag>
+                <Tag color="blue">
+                  {workOrder.document_type_name || workOrder.document_type}
+                </Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Selected Trades">
                 <Space wrap>
@@ -529,8 +561,6 @@ const WorkOrderDetail: React.FC = () => {
             </Descriptions>
           </Card>
 
-          {/* Payment Section */}
-          <PaymentSection workOrder={workOrder} />
         </Col>
 
         {/* Right Column */}
@@ -538,8 +568,44 @@ const WorkOrderDetail: React.FC = () => {
           {/* Quick Info */}
           <Card title="Summary Information" style={{ marginBottom: 24 }}>
             <Space direction="vertical" style={{ width: '100%' }}>
+              {/* Cost Breakdown */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>Final Cost:</Text>
+                <Text>Base Cost:</Text>
+                <Text>${(workOrder.base_cost || 0).toLocaleString()}</Text>
+              </div>
+              
+              {/* Additional Costs */}
+              {workOrder.additional_costs && workOrder.additional_costs.length > 0 && (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Text>Additional Costs:</Text>
+                    <Text style={{ color: '#fa8c16' }}>
+                      ${workOrder.additional_costs.reduce((sum: number, cost: any) => sum + (cost.amount || 0), 0).toFixed(2)}
+                    </Text>
+                  </div>
+                  {/* Detailed breakdown in smaller text */}
+                  <div style={{ paddingLeft: '16px' }}>
+                    {workOrder.additional_costs.map((cost: any, index: number) => (
+                      <div 
+                        key={index} 
+                        style={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          alignItems: 'center',
+                          marginTop: '2px'
+                        }}
+                      >
+                        <Text type="secondary" style={{ fontSize: '12px' }}>{cost.name}</Text>
+                        <Text type="secondary" style={{ fontSize: '12px' }}>${(cost.amount || 0).toFixed(2)}</Text>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+              
+              <Divider style={{ margin: '12px 0' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text strong>Final Cost:</Text>
                 <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
                   ${(workOrder.final_cost || 0).toLocaleString()}
                 </Text>

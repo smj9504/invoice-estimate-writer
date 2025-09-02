@@ -142,13 +142,3 @@ async def delete_payment_frequency(
     if not service.delete_payment_frequency(db, frequency_id):
         raise HTTPException(status_code=404, detail="Payment frequency not found")
     return {"message": "Payment frequency deleted successfully"}
-
-
-@router.post("/payment-config/initialize")
-async def initialize_payment_config(
-    db: Session = Depends(get_db),
-    current_staff: dict = Depends(require_admin)
-):
-    """Initialize default payment configurations (Admin only)"""
-    service.initialize_default_payment_configs(db)
-    return {"message": "Payment configurations initialized successfully"}

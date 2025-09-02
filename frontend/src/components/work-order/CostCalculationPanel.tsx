@@ -31,7 +31,11 @@ interface CostCalculationPanelProps {
   selectedTrades: string[];
   availableCredits: Credit[];
   companyId: string;
+  additionalCostsTotal?: number;
   onCostChange: (cost: number) => void;
+  onTaxSettingsChange?: (applyTax: boolean, taxRate: number) => void;
+  initialApplyTax?: boolean;
+  initialTaxRate?: number;
   loading?: boolean;
 }
 
@@ -40,7 +44,11 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
   selectedTrades,
   availableCredits,
   companyId,
+  additionalCostsTotal = 0,
   onCostChange,
+  onTaxSettingsChange,
+  initialApplyTax = false,
+  initialTaxRate = 0,
   loading = false
 }) => {
   const [costBreakdown, setCostBreakdown] = useState<CostBreakdown>({
@@ -52,6 +60,15 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
   const [manualOverride, setManualOverride] = useState(false);
   const [overrideCost, setOverrideCost] = useState<number>(0);
   const [calculating, setCalculating] = useState(false);
+  const [taxEnabled, setTaxEnabled] = useState(initialApplyTax);
+  const [taxRate, setTaxRate] = useState<number>(initialTaxRate);
+  
+  // Notify parent when tax settings change
+  useEffect(() => {
+    if (onTaxSettingsChange) {
+      onTaxSettingsChange(taxEnabled, taxRate);
+    }
+  }, [taxEnabled, taxRate, onTaxSettingsChange]);
 
   // Load document types from backend
   const { data: documentTypes = [] } = useQuery({
@@ -87,15 +104,22 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
       
       const totalBaseCost = baseDocumentCost + tradesCost;
       
+      // Add additional costs to subtotal
+      const subtotal = totalBaseCost + additionalCostsTotal;
+      
+      // Calculate tax only if enabled
+      const taxAmount = taxEnabled ? (subtotal * (taxRate / 100)) : 0;
+      
       // Calculate credits
       const totalAvailableCredits = availableCredits.reduce((sum, credit) => 
         credit.is_active ? sum + credit.amount : sum, 0
       );
       
-      // Calculate applied credits (for now, just use available credits up to base cost)
-      const appliedCredits = Math.min(totalAvailableCredits, totalBaseCost * 0.8); // Max 80% of base cost
+      // Calculate applied credits (for now, just use available credits up to subtotal)
+      const appliedCredits = Math.min(totalAvailableCredits, subtotal * 0.8); // Max 80% of subtotal
       
-      const finalCalculatedCost = Math.max(0, totalBaseCost - appliedCredits);
+      // Final cost = subtotal + tax - credits
+      const finalCalculatedCost = Math.max(0, subtotal + taxAmount - appliedCredits);
 
       const newBreakdown: CostBreakdown = {
         baseCost: totalBaseCost,
@@ -110,7 +134,7 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [documentType, selectedTrades, availableCredits, manualOverride, overrideCost, companyId, onCostChange, selectedDocumentType]);
+  }, [documentType, selectedTrades, availableCredits, manualOverride, overrideCost, companyId, onCostChange, selectedDocumentType, additionalCostsTotal, taxEnabled, taxRate]);
 
   const handleManualOverride = (enabled: boolean) => {
     setManualOverride(enabled);
@@ -189,18 +213,97 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
                     </Row>
                   ))}
                   
+                  {additionalCostsTotal > 0 && (
+                    <Row justify="space-between" style={{ marginBottom: 4 }}>
+                      <Col>
+                        <Text style={{ fontSize: '12px', color: '#fa8c16' }}>Additional Costs:</Text>
+                      </Col>
+                      <Col>
+                        <Text style={{ fontSize: '12px', color: '#fa8c16' }}>
+                          ${additionalCostsTotal.toFixed(2)}
+                        </Text>
+                      </Col>
+                    </Row>
+                  )}
+                  
+                  <Divider style={{ margin: '8px 0' }} />
+                  <Row justify="space-between" style={{ marginBottom: 4 }}>
+                    <Col>
+                      <Text>Subtotal:</Text>
+                    </Col>
+                    <Col>
+                      <Text>${(costBreakdown.baseCost + additionalCostsTotal).toFixed(2)}</Text>
+                    </Col>
+                  </Row>
+                  
+                  {taxEnabled && (
+                    <Row justify="space-between" style={{ marginBottom: 4 }}>
+                      <Col>
+                        <Text style={{ fontSize: '12px' }}>Tax ({taxRate}%):</Text>
+                      </Col>
+                      <Col>
+                        <Text style={{ fontSize: '12px' }}>
+                          ${((costBreakdown.baseCost + additionalCostsTotal) * (taxRate / 100)).toFixed(2)}
+                        </Text>
+                      </Col>
+                    </Row>
+                  )}
+                  
                   <Divider style={{ margin: '8px 0' }} />
                   <Row justify="space-between">
                     <Col>
-                      <Text strong>Base Cost:</Text>
+                      <Text strong>Total Before Credits:</Text>
                     </Col>
                     <Col>
-                      <Text strong>${costBreakdown.baseCost.toFixed(2)}</Text>
+                      <Text strong>
+                        ${((costBreakdown.baseCost + additionalCostsTotal) * (1 + (taxEnabled ? taxRate / 100 : 0))).toFixed(2)}
+                      </Text>
                     </Col>
                   </Row>
                 </div>
               </Col>
             </Row>
+          </div>
+
+          {/* Tax Section */}
+          <div>
+            <Row justify="space-between" align="middle" style={{ marginBottom: 8 }}>
+              <Col>
+                <Title level={5} style={{ margin: 0 }}>
+                  <CalculatorOutlined style={{ marginRight: 8, color: '#722ed1' }} />
+                  Tax Settings
+                </Title>
+              </Col>
+              <Col>
+                <Switch
+                  checked={taxEnabled}
+                  onChange={setTaxEnabled}
+                  checkedChildren="Enabled"
+                  unCheckedChildren="Disabled"
+                />
+              </Col>
+            </Row>
+            
+            {taxEnabled && (
+              <Row gutter={16} style={{ marginBottom: 8 }}>
+                <Col span={12}>
+                  <Text style={{ fontSize: '12px', color: '#666' }}>Tax Rate (%):</Text>
+                </Col>
+                <Col span={12}>
+                  <InputNumber
+                    style={{ width: '100%' }}
+                    value={taxRate}
+                    onChange={(value) => setTaxRate(value || 0)}
+                    min={0}
+                    max={100}
+                    precision={2}
+                    size="small"
+                    formatter={value => `${value}%`}
+                    parser={value => value!.replace('%', '') as any}
+                  />
+                </Col>
+              </Row>
+            )}
           </div>
 
           {/* Credits Section */}
@@ -282,7 +385,6 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
 
           {/* Final Cost */}
           <div>
-            <Divider />
             <Row 
               justify="space-between" 
               align="middle"
@@ -304,16 +406,6 @@ const CostCalculationPanel: React.FC<CostCalculationPanelProps> = ({
                 </Title>
               </Col>
             </Row>
-          </div>
-
-          {/* Cost Summary */}
-          <div style={{ fontSize: '11px', color: '#666' }}>
-            <Text type="secondary">
-              Base: ${costBreakdown.baseCost.toFixed(2)} • 
-              Credits: -${costBreakdown.creditsApplied.toFixed(2)} • 
-              Final: ${costBreakdown.finalCost.toFixed(2)}
-              {manualOverride && ' (Manual Override)'}
-            </Text>
           </div>
         </Space>
       </Spin>

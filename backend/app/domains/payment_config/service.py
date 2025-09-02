@@ -31,7 +31,7 @@ class PaymentConfigService:
         query = db.query(PaymentMethod)
         if active_only:
             query = query.filter(PaymentMethod.is_active == True)
-        return query.order_by(PaymentMethod.display_order, PaymentMethod.name).offset(skip).limit(limit).all()
+        return query.order_by(PaymentMethod.name).offset(skip).limit(limit).all()
     
     def get_payment_method(self, db: Session, method_id: str) -> Optional[PaymentMethod]:
         """Get payment method by ID"""
@@ -40,6 +40,10 @@ class PaymentConfigService:
     def get_payment_method_by_code(self, db: Session, code: str) -> Optional[PaymentMethod]:
         """Get payment method by code"""
         return db.query(PaymentMethod).filter(PaymentMethod.code == code).first()
+    
+    def get_by_code(self, db: Session, code: str) -> Optional[PaymentMethod]:
+        """Alias for get_payment_method_by_code for backward compatibility"""
+        return self.get_payment_method_by_code(db, code)
     
     def create_payment_method(self, db: Session, method: PaymentMethodCreate) -> PaymentMethod:
         """Create new payment method"""
@@ -109,7 +113,7 @@ class PaymentConfigService:
         query = db.query(PaymentFrequency)
         if active_only:
             query = query.filter(PaymentFrequency.is_active == True)
-        return query.order_by(PaymentFrequency.display_order, PaymentFrequency.name).offset(skip).limit(limit).all()
+        return query.order_by(PaymentFrequency.name).offset(skip).limit(limit).all()
     
     def get_payment_frequency(self, db: Session, frequency_id: str) -> Optional[PaymentFrequency]:
         """Get payment frequency by ID"""
@@ -118,6 +122,10 @@ class PaymentConfigService:
     def get_payment_frequency_by_code(self, db: Session, code: str) -> Optional[PaymentFrequency]:
         """Get payment frequency by code"""
         return db.query(PaymentFrequency).filter(PaymentFrequency.code == code).first()
+    
+    def get_frequency_by_code(self, db: Session, code: str) -> Optional[PaymentFrequency]:
+        """Alias for get_payment_frequency_by_code for backward compatibility"""
+        return self.get_payment_frequency_by_code(db, code)
     
     def create_payment_frequency(self, db: Session, frequency: PaymentFrequencyCreate) -> PaymentFrequency:
         """Create new payment frequency"""
@@ -174,41 +182,3 @@ class PaymentConfigService:
         db.commit()
         logger.info(f"Deleted payment frequency: {db_frequency.code}")
         return True
-    
-    def initialize_default_payment_configs(self, db: Session):
-        """Initialize default payment methods and frequencies"""
-        # Default payment methods
-        default_methods = [
-            {"code": "zelle", "name": "Zelle", "description": "Bank transfer via Zelle", "display_order": 1},
-            {"code": "stripe", "name": "Stripe", "description": "Credit/Debit card via Stripe", "display_order": 2},
-            {"code": "check", "name": "Check", "description": "Payment by check", "display_order": 3},
-            {"code": "cash", "name": "Cash", "description": "Cash payment", "display_order": 4},
-            {"code": "wire", "name": "Wire Transfer", "description": "Bank wire transfer", "display_order": 5},
-        ]
-        
-        for i, method_data in enumerate(default_methods):
-            if not self.get_payment_method_by_code(db, method_data["code"]):
-                method = PaymentMethodCreate(
-                    **method_data,
-                    is_default=(i == 0)  # First one is default
-                )
-                self.create_payment_method(db, method)
-        
-        # Default payment frequencies
-        default_frequencies = [
-            {"code": "per_job", "name": "Per Job", "description": "Payment upon job completion", "display_order": 1},
-            {"code": "weekly", "name": "Weekly", "description": "Weekly payment", "days_interval": 7, "display_order": 2},
-            {"code": "biweekly", "name": "Bi-Weekly", "description": "Payment every two weeks", "days_interval": 14, "display_order": 3},
-            {"code": "monthly", "name": "Monthly", "description": "Monthly payment", "days_interval": 30, "display_order": 4},
-            {"code": "prepaid", "name": "Prepaid", "description": "Payment in advance", "display_order": 5},
-        ]
-        
-        for i, freq_data in enumerate(default_frequencies):
-            if not self.get_payment_frequency_by_code(db, freq_data["code"]):
-                frequency = PaymentFrequencyCreate(
-                    **freq_data,
-                    is_default=(i == 0)  # First one is default
-                )
-                self.create_payment_frequency(db, frequency)
-        
-        logger.info("Initialized default payment configurations")

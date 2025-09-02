@@ -49,7 +49,8 @@ export const workOrderService = {
   // Trade operations
   async getTrades(): Promise<Trade[]> {
     const response = await api.get('/api/trades/');
-    return response.data;
+    // Backend returns {data: trades}
+    return response.data.data || response.data || [];
   },
 
   // Credit operations

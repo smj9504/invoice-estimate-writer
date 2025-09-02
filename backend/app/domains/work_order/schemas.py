@@ -6,7 +6,7 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import datetime
 from uuid import UUID
-from .models import WorkOrderStatus, DocumentType
+from .models import WorkOrderStatus
 
 
 class WorkOrderBase(BaseModel):
@@ -29,7 +29,7 @@ class WorkOrderBase(BaseModel):
     job_site_zipcode: Optional[str] = None
     
     # Work Details
-    document_type: DocumentType
+    document_type: str  # Document Type code from Document Types table
     work_description: Optional[str] = None
     scope_of_work: Optional[str] = None
     special_instructions: Optional[str] = None
@@ -57,6 +57,13 @@ class WorkOrderBase(BaseModel):
     consultation_notes: Optional[str] = None
     cost_override: Optional[str] = None
     
+    # Additional Costs (list of dicts with name, amount, description)
+    additional_costs: Optional[list[dict]] = None
+    
+    # Tax Settings
+    apply_tax: Optional[bool] = False
+    tax_rate: Optional[str] = "0"
+    
     # Status Flags
     is_billable: Optional[bool] = True
     requires_permit: Optional[bool] = False
@@ -80,6 +87,12 @@ class WorkOrderCreate(WorkOrderBase):
     """Schema for creating a work order"""
     work_order_number: Optional[str] = None
     created_by_staff_id: Optional[UUID] = None
+    base_cost: Optional[float] = None
+    discount_amount: Optional[float] = None
+    tax_amount: Optional[float] = None
+    final_cost: Optional[float] = None
+    apply_tax: Optional[bool] = False
+    tax_rate: Optional[str] = "0"
 
 
 class WorkOrderUpdate(BaseModel):
@@ -103,7 +116,7 @@ class WorkOrderUpdate(BaseModel):
     job_site_zipcode: Optional[str] = None
     
     # Work Details
-    document_type: Optional[DocumentType] = None
+    document_type: Optional[str] = None  # Document Type code from Document Types table
     work_description: Optional[str] = None
     scope_of_work: Optional[str] = None
     special_instructions: Optional[str] = None
@@ -136,9 +149,16 @@ class WorkOrderUpdate(BaseModel):
     consultation_notes: Optional[str] = None
     cost_override: Optional[str] = None
     
+    # Additional Costs (list of dicts with name, amount, description)
+    additional_costs: Optional[list[dict]] = None
+    
     # Internal Notes
     internal_notes: Optional[str] = None
     completion_notes: Optional[str] = None
+    
+    # Tax Settings
+    apply_tax: Optional[bool] = None
+    tax_rate: Optional[str] = None
     
     # Status Flags
     is_active: Optional[bool] = None
@@ -157,10 +177,16 @@ class WorkOrder(WorkOrderBase):
     created_by_staff_name: Optional[str] = None
     assigned_to_staff_name: Optional[str] = None
     
-    # Cost fields (calculated or default values for now)
-    base_cost: Optional[float] = 0.0
-    credits_applied: Optional[float] = 0.0
-    final_cost: Optional[float] = 0.0
+    # Cost fields (calculated, no defaults to preserve actual values)
+    base_cost: Optional[float] = None
+    credits_applied: Optional[float] = None
+    final_cost: Optional[float] = None
+    tax_amount: Optional[float] = None
+    discount_amount: Optional[float] = None
+    
+    # Tax Settings
+    apply_tax: Optional[bool] = False
+    tax_rate: Optional[str] = "0"
     
     # Scheduling
     actual_start_date: Optional[datetime] = None
@@ -205,7 +231,7 @@ class WorkOrderFilter(BaseModel):
     company_id: Optional[UUID] = None
     assigned_to_staff_id: Optional[UUID] = None
     created_by_staff_id: Optional[UUID] = None
-    document_type: Optional[DocumentType] = None
+    document_type: Optional[str] = None  # Document Type code from Document Types table
     priority: Optional[str] = None
     is_active: Optional[bool] = None
     date_from: Optional[datetime] = None

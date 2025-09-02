@@ -256,6 +256,8 @@ app.include_router(dashboard_router, prefix="/api/dashboard", tags=["Dashboard &
 # Document Types and Trades endpoints
 app.include_router(document_types_router, prefix="/api", tags=["Document Types & Trades"])
 
+# Trade endpoints
+
 # Payment Configuration endpoints (internal use)
 app.include_router(payment_config_router, prefix="/api/payment-config", tags=["Payment Configuration"])
 

@@ -5,6 +5,7 @@ Dashboard API endpoints
 from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import Optional
 from datetime import datetime
+import traceback
 from app.domains.dashboard.schemas import (
     UserDashboardData, ManagerDashboardData, AdminDashboardData,
     DashboardFilterParams, TimePeriod
@@ -20,6 +21,50 @@ router = APIRouter()
 async def test_dashboard():
     """Test endpoint to verify dashboard API is working"""
     return {"message": "Dashboard API is working", "timestamp": datetime.utcnow()}
+
+
+@router.get("/debug-simple")
+async def debug_simple():
+    """Simple debug endpoint"""
+    return {"status": "working", "timestamp": datetime.utcnow()}
+
+
+@router.get("/debug-admin-basic")
+async def debug_admin_basic():
+    """Test admin dashboard without authentication - basic version"""
+    try:
+        from app.domains.dashboard.service import DashboardService
+        from app.domains.dashboard.schemas import DashboardFilterParams, TimePeriod
+        
+        service = DashboardService()
+        
+        filters = DashboardFilterParams(
+            time_period=TimePeriod.WEEK,
+            include_completed=True,
+            include_draft=False
+        )
+        
+        # Use a dummy staff ID for debugging
+        dummy_staff_id = "00000000-0000-0000-0000-000000000000"
+        dashboard_data = service.get_admin_dashboard(dummy_staff_id, filters)
+        
+        return {
+            "status": "success",
+            "data": {
+                "urgent_work_orders_count": len(dashboard_data.urgent_work_orders),
+                "total_work_orders": dashboard_data.system_total_work_orders,
+                "companies_count": dashboard_data.companies_count,
+                "total_revenue": dashboard_data.total_revenue_this_period,
+                "team_members_count": len(dashboard_data.team_members)
+            },
+            "timestamp": datetime.utcnow()
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "traceback": traceback.format_exc(),
+            "timestamp": datetime.utcnow()
+        }
 
 
 @router.get("/user", response_model=UserDashboardData)

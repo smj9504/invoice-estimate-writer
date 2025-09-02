@@ -61,6 +61,10 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         phone: initialData.phone,
         email: initialData.email,
         logo: initialData.logo,
+        // Use new ID fields if available, fallback to legacy fields
+        payment_method_id: initialData.payment_method_id,
+        payment_frequency_id: initialData.payment_frequency_id,
+        // Legacy fields for backward compatibility
         payment_method: initialData.payment_method,
         payment_frequency: initialData.payment_frequency,
       });
@@ -227,17 +231,24 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
           <Row gutter={[16, 0]}>
             <Col xs={24} md={12}>
               <Form.Item
-                name="payment_method"
+                name="payment_method_id"
                 label="Payment Method"
               >
                 <Select
                   placeholder="Select payment method"
                   disabled={loading}
                   allowClear
+                  showSearch
+                  optionFilterProp="children"
                 >
                   {paymentMethods.map(method => (
-                    <Select.Option key={method.code} value={method.code}>
+                    <Select.Option key={method.id} value={method.id}>
                       {method.name}
+                      {method.description && (
+                        <span style={{ color: '#888', fontSize: '12px', marginLeft: '8px' }}>
+                          ({method.description})
+                        </span>
+                      )}
                     </Select.Option>
                   ))}
                 </Select>
@@ -245,17 +256,24 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
             </Col>
             <Col xs={24} md={12}>
               <Form.Item
-                name="payment_frequency"
+                name="payment_frequency_id"
                 label="Payment Frequency"
               >
                 <Select
                   placeholder="Select payment frequency"
                   disabled={loading}
                   allowClear
+                  showSearch
+                  optionFilterProp="children"
                 >
                   {paymentFrequencies.map(freq => (
-                    <Select.Option key={freq.code} value={freq.code}>
+                    <Select.Option key={freq.id} value={freq.id}>
                       {freq.name}
+                      {freq.days_interval && (
+                        <span style={{ color: '#888', fontSize: '12px', marginLeft: '8px' }}>
+                          (Every {freq.days_interval} days)
+                        </span>
+                      )}
                     </Select.Option>
                   ))}
                 </Select>

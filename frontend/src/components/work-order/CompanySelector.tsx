@@ -54,7 +54,7 @@ const CompanySelector: React.FC<CompanySelectorProps> = ({
         <Card 
           size="small" 
           style={{ marginTop: 16 }}
-          bodyStyle={{ padding: '12px 16px' }}
+          styles={{ body: { padding: '12px 16px' } }}
         >
           <Row gutter={[16, 8]} align="middle">
             <Col xs={24} sm={12} md={8}>

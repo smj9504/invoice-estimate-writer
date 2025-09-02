@@ -20,11 +20,6 @@ class PaymentMethod(Base, BaseModel):
     
     # Configuration
     requires_account_info = Column(Boolean, default=False)  # If true, requires additional setup
-    account_info_fields = Column(Text)  # JSON string of required fields
-    
-    # Display
-    display_order = Column(Integer, default=0)
-    icon = Column(String(50))  # Icon name or class
     
     # Status
     is_active = Column(Boolean, default=True)
@@ -42,9 +37,6 @@ class PaymentFrequency(Base, BaseModel):
     
     # Configuration
     days_interval = Column(Integer)  # Number of days between payments (null for per_job)
-    
-    # Display
-    display_order = Column(Integer, default=0)
     
     # Status
     is_active = Column(Boolean, default=True)

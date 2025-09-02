@@ -23,16 +23,18 @@ import {
   DollarOutlined
 } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { companyService } from '../services/companyService';
 import { workOrderService } from '../services/workOrderService';
 import documentTypeService from '../services/documentTypeService';
 import CompanySelector from '../components/work-order/CompanySelector';
 import CostCalculationPanel from '../components/work-order/CostCalculationPanel';
+import AdditionalCosts from '../components/work-order/AdditionalCosts';
 import RichTextEditor from '../components/editor/RichTextEditor';
 import { useStore } from '../store/useStore';
 import { Company, WorkOrderFormData, Credit } from '../types';
+import { AdditionalCost } from '../components/work-order/AdditionalCosts';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -41,6 +43,7 @@ const { Option } = Select;
 const WorkOrderCreation: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
   const isEditMode = Boolean(id);
   const [finalCost, setFinalCost] = useState(0);
@@ -49,6 +52,10 @@ const WorkOrderCreation: React.FC = () => {
   const [workDescription, setWorkDescription] = useState('');
   const [selectedDocumentType, setSelectedDocumentType] = useState<string>('');
   const [selectedTrades, setSelectedTrades] = useState<string[]>([]);
+  const [additionalCosts, setAdditionalCosts] = useState<AdditionalCost[]>([]);
+  const [additionalCostsTotal, setAdditionalCostsTotal] = useState(0);
+  const [applyTax, setApplyTax] = useState(false);
+  const [taxRate, setTaxRate] = useState(0);
   
   const {
     companies,
@@ -106,6 +113,12 @@ const WorkOrderCreation: React.FC = () => {
     }
   }, [workOrderError]);
 
+  // Calculate additional costs total whenever additional costs change
+  useEffect(() => {
+    const total = additionalCosts.reduce((sum, cost) => sum + (cost.amount || 0), 0);
+    setAdditionalCostsTotal(total);
+  }, [additionalCosts]);
+
   // Populate form when work order data is loaded (edit mode)
   useEffect(() => {
     if (workOrderData && companiesData && documentTypes && documentTypes.length > 0 && !workOrderLoading) {
@@ -115,19 +128,10 @@ const WorkOrderCreation: React.FC = () => {
         setSelectedCompany(company);
       }
 
-      // Find the document type ID by matching the enum value
+      // Find the document type ID by matching the code
       const documentType = documentTypes.find(dt => {
-        const name = dt.name.toLowerCase();
-        const workOrderDocType = workOrderData.document_type;
-        
-        if (workOrderDocType === 'insurance_estimate' && name.includes('insurance') && name.includes('estimate')) return true;
-        if (workOrderDocType === 'estimate' && name.includes('estimate') && !name.includes('insurance')) return true;
-        if (workOrderDocType === 'invoice' && name.includes('invoice')) return true;
-        if (workOrderDocType === 'plumber_report' && (name.includes('plumber') || name.includes('report'))) return true;
-        // work_order is the enum value for work order document type
-        if (workOrderDocType === 'work_order' && (name.includes('work') && name.includes('order'))) return true;
-        
-        return false;
+        // Match by code (case-insensitive)
+        return dt.code && dt.code.toUpperCase() === workOrderData.document_type?.toUpperCase();
       });
 
       // Set form values
@@ -152,14 +156,39 @@ const WorkOrderCreation: React.FC = () => {
       setSelectedDocumentType(documentType?.id || '');
       setSelectedTrades(workOrderData.trades || []);
       setFinalCost(workOrderData.final_cost || 0);
+      
+      // Set tax settings
+      setApplyTax(workOrderData.apply_tax || false);
+      if (workOrderData.tax_rate) {
+        const rate = typeof workOrderData.tax_rate === 'string' 
+          ? parseFloat(workOrderData.tax_rate) * 100  // Convert from decimal to percentage
+          : workOrderData.tax_rate * 100;
+        setTaxRate(rate);
+      }
+      
+      // Set additional costs if they exist
+      if (workOrderData.additional_costs && Array.isArray(workOrderData.additional_costs)) {
+        setAdditionalCosts(workOrderData.additional_costs.map((cost: any, index: number) => ({
+          id: cost.id || `loaded_${index}`,
+          name: cost.name || '',
+          amount: cost.amount || 0,
+          description: cost.description || '',
+          type: cost.type || 'custom',
+          isTemplate: false
+        })));
+      }
     }
   }, [workOrderData, companiesData, documentTypes, workOrderLoading, form]);
 
-  // Create work order mutation
+  // Create work order mutation with cache invalidation
   const createWorkOrderMutation = useMutation({
     mutationFn: (data: WorkOrderFormData) => workOrderService.createWorkOrder(data),
     onSuccess: (response) => {
       message.success('Work order created successfully!');
+      // Invalidate list query to show new work order
+      queryClient.invalidateQueries({ queryKey: ['work-orders'] });
+      // Prefetch the new work order data for smooth transition
+      queryClient.setQueryData(['work-order', response.id], response);
       navigate(`/work-orders/${response.id}`);
     },
     onError: (error: any) => {
@@ -168,16 +197,38 @@ const WorkOrderCreation: React.FC = () => {
     }
   });
 
-  // Update work order mutation
+  // Update work order mutation with optimistic update
   const updateWorkOrderMutation = useMutation({
     mutationFn: (data: Partial<WorkOrderFormData>) => workOrderService.updateWorkOrder(id!, data),
-    onSuccess: (response) => {
-      message.success('Work order updated successfully!');
-      navigate(`/work-orders/${response.id}`);
+    onMutate: async (newData) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['work-order', id] });
+      
+      // Snapshot the previous value
+      const previousWorkOrder = queryClient.getQueryData(['work-order', id]);
+      
+      // Optimistically update
+      queryClient.setQueryData(['work-order', id], (old: any) => {
+        if (!old) return old;
+        return { ...old, ...newData };
+      });
+      
+      return { previousWorkOrder };
     },
-    onError: (error: any) => {
+    onError: (error: any, variables, context) => {
+      // Rollback on error
+      if (context?.previousWorkOrder) {
+        queryClient.setQueryData(['work-order', id], context.previousWorkOrder);
+      }
       console.error('Failed to update work order:', error);
       message.error(error.response?.data?.message || 'Failed to update work order');
+    },
+    onSuccess: (response) => {
+      message.success('Work order updated successfully!');
+      // Invalidate queries to sync
+      queryClient.invalidateQueries({ queryKey: ['work-order', id] });
+      queryClient.invalidateQueries({ queryKey: ['work-orders'] });
+      navigate(`/work-orders/${response.id}`);
     }
   });
 
@@ -213,29 +264,16 @@ const WorkOrderCreation: React.FC = () => {
         return;
       }
 
-      // Find selected document type to get enum value
+      // Find selected document type to get code
       const selectedDocType = documentTypes.find(dt => dt.id === values.document_type);
       if (!selectedDocType) {
         message.error('Please select a valid document type');
         return;
       }
 
-      // Map document type names to enum values
-      const documentTypeEnum = (() => {
-        const name = selectedDocType.name.toLowerCase();
-        if (name.includes('estimate')) {
-          if (name.includes('insurance')) return 'insurance_estimate';
-          return 'estimate';
-        }
-        if (name.includes('invoice')) return 'invoice';
-        if (name.includes('plumber') || name.includes('report')) return 'plumber_report';
-        if (name.includes('work') || name.includes('order')) return 'work_order';
-        return 'estimate'; // default fallback
-      })();
-
       const workOrderFormData: any = {
         company_id: selectedCompany.id,
-        document_type: documentTypeEnum,
+        document_type: selectedDocType.code,  // Use the actual code from Document Types Management
         client_name: values.client_name,
         client_phone: values.client_phone,
         client_email: values.client_email,
@@ -247,6 +285,9 @@ const WorkOrderCreation: React.FC = () => {
         work_description: workDescription,
         consultation_notes: values.consultation_notes,
         cost_override: values.cost_override,
+        additional_costs: additionalCosts,
+        apply_tax: applyTax,
+        tax_rate: taxRate.toString(),
         // In edit mode, preserve current status unless explicitly changing to pending
         // In create mode, use the status parameter (draft or pending)
         status: isEditMode 
@@ -395,6 +436,13 @@ const WorkOrderCreation: React.FC = () => {
                     ))}
                 </Select>
               </Form.Item>
+
+              {/* Additional Costs Section - moved inside Work Order Details */}
+              <Divider style={{ margin: '16px 0' }} />
+              <AdditionalCosts
+                costs={additionalCosts}
+                onChange={setAdditionalCosts}
+              />
             </Card>
           </Col>
 
@@ -405,9 +453,17 @@ const WorkOrderCreation: React.FC = () => {
               selectedTrades={selectedTrades}
               availableCredits={availableCredits}
               companyId={selectedCompany?.id || ''}
+              additionalCostsTotal={additionalCostsTotal}
               onCostChange={setFinalCost}
+              onTaxSettingsChange={(applyTax, taxRate) => {
+                setApplyTax(applyTax);
+                setTaxRate(taxRate);
+              }}
+              initialApplyTax={applyTax}
+              initialTaxRate={taxRate}
             />
           </Col>
+
 
           {/* Client Information */}
           <Col xs={24}>

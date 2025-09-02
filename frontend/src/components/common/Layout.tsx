@@ -113,6 +113,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             label: 'Trade Management',
           },
           {
+            key: '/admin/config',
+            label: 'System Configuration',
+          },
+          {
             key: '/admin/users',
             label: 'User Management',
           },

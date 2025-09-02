@@ -28,7 +28,7 @@ import {
   MoreOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { WorkOrder, DocumentType } from '../types';
+import { WorkOrder, DocumentType, PaginatedResponse } from '../types';
 import { workOrderService } from '../services/workOrderService';
 import { companyService } from '../services/companyService';
 import WorkOrderFilters from '../components/work-order/WorkOrderFilters';
@@ -50,14 +50,8 @@ const statusConfig = {
   cancelled: { color: 'error', label: 'Cancelled' },
 } as const;
 
-// Document type labels
-const documentTypeLabels: Record<DocumentType, string> = {
-  estimate: 'Estimate',
-  invoice: 'Invoice',
-  insurance_estimate: 'Insurance Estimate',
-  plumber_report: 'Plumber Report',
-  work_order: 'Work Order',
-};
+// Document type labels - removed hardcoded mapping
+// Now using document_type_name from backend
 
 interface WorkOrderListFilters {
   search?: string;
@@ -80,15 +74,17 @@ const WorkOrderList: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Fetch work orders
+  // Fetch work orders with optimized caching
   const {
     data: workOrdersData,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<PaginatedResponse<WorkOrder>>({
     queryKey: ['work-orders', filters],
     queryFn: () => workOrderService.searchWorkOrders(filters),
-    placeholderData: (previousData) => previousData,
+    placeholderData: (previousData: PaginatedResponse<WorkOrder> | undefined) => previousData,
+    staleTime: 30 * 1000, // 30 seconds for list data
+    gcTime: 5 * 60 * 1000, // 5 minutes in cache
   });
 
   // Fetch companies for company names
@@ -97,29 +93,86 @@ const WorkOrderList: React.FC = () => {
     queryFn: () => companyService.getCompanies(),
   });
 
-  // Delete work order mutation
+  // Delete work order mutation with optimistic update
   const deleteMutation = useMutation({
     mutationFn: workOrderService.deleteWorkOrder,
+    onMutate: async (id: string) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['work-orders'] });
+      
+      // Snapshot the previous value
+      const previousWorkOrders = queryClient.getQueryData(['work-orders', filters]);
+      
+      // Optimistically remove from the cache
+      queryClient.setQueryData(['work-orders', filters], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          items: old.items.filter((item: WorkOrder) => item.id !== id),
+          total: old.total - 1,
+        };
+      });
+      
+      // Return a context with the previous value
+      return { previousWorkOrders };
+    },
+    onError: (error: any, variables, context) => {
+      // Rollback on error
+      if (context?.previousWorkOrders) {
+        queryClient.setQueryData(['work-orders', filters], context.previousWorkOrders);
+      }
+      message.error(error.message || 'Failed to delete.');
+    },
     onSuccess: () => {
       message.success('Work order has been deleted.');
-      queryClient.invalidateQueries({ queryKey: ['work-orders'] });
       setSelectedRowKeys([]);
-    },
-    onError: (error: any) => {
-      message.error(error.message || 'Failed to delete.');
+      // Invalidate in background to sync with server
+      queryClient.invalidateQueries({ 
+        queryKey: ['work-orders'],
+        refetchType: 'active'
+      });
     },
   });
 
-  // Update status mutation
+  // Update status mutation with optimistic update
   const statusMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: WorkOrder['status'] }) =>
       workOrderService.updateWorkOrderStatus(id, status),
+    onMutate: async ({ id, status }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['work-orders'] });
+      
+      // Snapshot the previous value
+      const previousWorkOrders = queryClient.getQueryData(['work-orders', filters]);
+      
+      // Optimistically update the cache
+      queryClient.setQueryData(['work-orders', filters], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          items: old.items.map((item: WorkOrder) =>
+            item.id === id ? { ...item, status } : item
+          ),
+        };
+      });
+      
+      // Return a context with the previous value
+      return { previousWorkOrders };
+    },
+    onError: (error: any, variables, context) => {
+      // Rollback on error
+      if (context?.previousWorkOrders) {
+        queryClient.setQueryData(['work-orders', filters], context.previousWorkOrders);
+      }
+      message.error(error.message || 'Failed to update status.');
+    },
     onSuccess: () => {
       message.success('Status has been updated.');
-      queryClient.invalidateQueries({ queryKey: ['work-orders'] });
-    },
-    onError: (error: any) => {
-      message.error(error.message || 'Failed to update status.');
+      // Invalidate in background to sync with server
+      queryClient.invalidateQueries({ 
+        queryKey: ['work-orders'],
+        refetchType: 'active' // Only refetch if the query is currently being used
+      });
     },
   });
 
@@ -177,12 +230,12 @@ const WorkOrderList: React.FC = () => {
       return;
     }
 
-    const exportData = workOrders.map(order => ({
+    const exportData = workOrders.map((order: WorkOrder) => ({
       'Work Order Number': order.work_order_number,
       'Company Name': getCompanyName(order.company_id),
-      'Document Type': documentTypeLabels[order.document_type],
+      'Document Type': order.document_type_name || order.document_type,
       'Client Name': order.client_name,
-      'Status': statusConfig[order.status].label,
+      'Status': statusConfig[order.status as keyof typeof statusConfig].label,
       'Final Cost': order.final_cost,
       'Created Date': new Date(order.created_at).toLocaleDateString('en-US'),
       'Created By': order.created_by_staff_name || '-',
@@ -240,8 +293,10 @@ const WorkOrderList: React.FC = () => {
       dataIndex: 'document_type',
       key: 'document_type',
       width: 120,
-      render: (type: DocumentType) => (
-        <Tag color="blue">{documentTypeLabels[type]}</Tag>
+      render: (type: DocumentType, record: WorkOrder) => (
+        <Tag color="blue">
+          {record.document_type_name || type}
+        </Tag>
       ),
     },
     {
@@ -269,7 +324,10 @@ const WorkOrderList: React.FC = () => {
       key: 'final_cost',
       width: 120,
       align: 'right',
-      render: (cost: number) => `$${(cost || 0).toLocaleString()}`,
+      render: (cost: string | number) => {
+        const numCost = typeof cost === 'string' ? parseFloat(cost) || 0 : cost || 0;
+        return `$${numCost.toLocaleString()}`;
+      },
     },
     {
       title: 'Created Date',

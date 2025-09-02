@@ -165,12 +165,13 @@ const DocumentTypesManagement: React.FC = () => {
         </Space>
       ),
     },
-    {
-      title: 'Code',
-      dataIndex: 'code',
-      key: 'code',
-      width: 120,
-    },
+    // Code column hidden - only used internally
+    // {
+    //   title: 'Code',
+    //   dataIndex: 'code',
+    //   key: 'code',
+    //   width: 120,
+    // },
     {
       title: 'Category',
       dataIndex: 'category',

@@ -44,6 +44,12 @@ class BaseRepository(Repository[T, ID]):
                     # For string UUIDs (already converted by UUIDType), keep as is
                     elif isinstance(value, str) and key.endswith('_id'):
                         result[key] = value
+                    # Convert cost string fields to float for API response
+                    elif isinstance(value, str) and key in ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'estimated_cost', 'actual_cost']:
+                        try:
+                            result[key] = float(value) if value else 0.0
+                        except (ValueError, TypeError):
+                            result[key] = 0.0
                     else:
                         result[key] = value
             
@@ -321,8 +327,26 @@ class SupabaseRepository(BaseRepository[T, ID]):
             if not response.data:
                 raise DatabaseException("No data returned from insert operation")
             
+            # Convert cost strings to floats for specific fields
+            data = response.data[0]
+            for key in ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'estimated_cost', 'actual_cost']:
+                if key in data and isinstance(data[key], str):
+                    try:
+                        data[key] = float(data[key]) if data[key] else 0.0
+                    except (ValueError, TypeError):
+                        data[key] = 0.0
+            
+            # Parse JSON fields if they are strings
+            for key in ['trades', 'additional_costs', 'items']:
+                if key in data and isinstance(data[key], str):
+                    try:
+                        data[key] = json.loads(data[key])
+                    except (json.JSONDecodeError, TypeError):
+                        logger.warning(f"Failed to parse JSON field {key} for {self.table_name}")
+                        data[key] = [] if key in ['trades', 'items'] else None
+            
             logger.info(f"Created {self.table_name} with ID: {validated_data['id']}")
-            return response.data[0]
+            return data
             
         except Exception as e:
             logger.error(f"Error creating {self.table_name}: {e}")
@@ -333,7 +357,27 @@ class SupabaseRepository(BaseRepository[T, ID]):
         try:
             response = self.client.table(self.table_name).select("*").eq("id", entity_id).execute()
             
-            return response.data[0] if response.data else None
+            if response.data:
+                # Convert cost strings to floats for specific fields
+                data = response.data[0]
+                for key in ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'estimated_cost', 'actual_cost']:
+                    if key in data and isinstance(data[key], str):
+                        try:
+                            data[key] = float(data[key]) if data[key] else 0.0
+                        except (ValueError, TypeError):
+                            data[key] = 0.0
+                
+                # Parse JSON fields if they are strings
+                for key in ['trades', 'additional_costs', 'items']:
+                    if key in data and isinstance(data[key], str):
+                        try:
+                            data[key] = json.loads(data[key])
+                        except (json.JSONDecodeError, TypeError):
+                            logger.warning(f"Failed to parse JSON field {key} for {self.table_name} {entity_id}")
+                            data[key] = [] if key in ['trades', 'items'] else None
+                
+                return data
+            return None
             
         except Exception as e:
             logger.error(f"Error getting {self.table_name} by ID {entity_id}: {e}")
@@ -375,6 +419,26 @@ class SupabaseRepository(BaseRepository[T, ID]):
                 query = query.offset(offset)
             
             response = query.execute()
+            
+            # Convert cost strings to floats and parse JSON fields for each item
+            if response.data:
+                for item in response.data:
+                    for key in ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'estimated_cost', 'actual_cost']:
+                        if key in item and isinstance(item[key], str):
+                            try:
+                                item[key] = float(item[key]) if item[key] else 0.0
+                            except (ValueError, TypeError):
+                                item[key] = 0.0
+                    
+                    # Parse JSON fields if they are strings
+                    for key in ['trades', 'additional_costs', 'items']:
+                        if key in item and isinstance(item[key], str):
+                            try:
+                                item[key] = json.loads(item[key])
+                            except (json.JSONDecodeError, TypeError):
+                                logger.warning(f"Failed to parse JSON field {key} for {self.table_name}")
+                                item[key] = [] if key in ['trades', 'items'] else None
+            
             return response.data if response.data else []
             
         except Exception as e:
@@ -394,8 +458,26 @@ class SupabaseRepository(BaseRepository[T, ID]):
             if not response.data:
                 return None
             
+            # Convert cost strings to floats for specific fields
+            data = response.data[0]
+            for key in ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'estimated_cost', 'actual_cost']:
+                if key in data and isinstance(data[key], str):
+                    try:
+                        data[key] = float(data[key]) if data[key] else 0.0
+                    except (ValueError, TypeError):
+                        data[key] = 0.0
+            
+            # Parse JSON fields if they are strings
+            for key in ['trades', 'additional_costs', 'items']:
+                if key in data and isinstance(data[key], str):
+                    try:
+                        data[key] = json.loads(data[key])
+                    except (json.JSONDecodeError, TypeError):
+                        logger.warning(f"Failed to parse JSON field {key} for {self.table_name} {entity_id}")
+                        data[key] = [] if key in ['trades', 'items'] else None
+            
             logger.info(f"Updated {self.table_name} with ID: {entity_id}")
-            return response.data[0]
+            return data
             
         except Exception as e:
             logger.error(f"Error updating {self.table_name} {entity_id}: {e}")

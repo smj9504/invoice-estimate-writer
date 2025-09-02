@@ -20,15 +20,18 @@ import WorkOrderDetail from './pages/WorkOrderDetail';
 import DocumentTypesManagement from './pages/DocumentTypesManagement';
 import TradesManagement from './pages/TradesManagement';
 import DatabaseManagement from './pages/DatabaseManagement';
+import AdminConfig from './pages/AdminConfig';
 import 'antd/dist/reset.css';
 
-// Create a client
+// Create a client with optimized cache strategy
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
       retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 30 * 1000, // 30 seconds for lists (will be overridden per query)
+      gcTime: 10 * 60 * 1000, // 10 minutes in memory (formerly cacheTime in v4)
+      refetchOnMount: 'always', // Always check for fresh data on mount
     },
   },
 });
@@ -89,6 +92,14 @@ function App() {
                 <ProtectedRoute requiredRole="admin">
                   <Layout>
                     <DatabaseManagement />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/admin/config" element={
+                <ProtectedRoute requiredRole="admin">
+                  <Layout>
+                    <AdminConfig />
                   </Layout>
                 </ProtectedRoute>
               } />

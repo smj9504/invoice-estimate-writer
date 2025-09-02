@@ -4,8 +4,10 @@ Work Order database models
 
 from sqlalchemy import Column, String, Text, DateTime, Boolean, ForeignKey, Enum, Integer, Index, JSON
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 import enum
+import uuid
 
 from app.core.database_factory import Base
 from app.core.database_types import UUIDType, generate_uuid
@@ -20,15 +22,6 @@ class WorkOrderStatus(str, enum.Enum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
     ON_HOLD = "on_hold"
-
-
-class DocumentType(str, enum.Enum):
-    """Document type enumeration"""
-    ESTIMATE = "estimate"
-    INVOICE = "invoice"
-    INSURANCE_ESTIMATE = "insurance_estimate"
-    PLUMBER_REPORT = "plumber_report"
-    WORK_ORDER = "work_order"
 
 
 class WorkOrder(Base):
@@ -66,7 +59,7 @@ class WorkOrder(Base):
     job_site_zipcode = Column(String(20))
     
     # Work Details
-    document_type = Column(Enum(DocumentType), nullable=False)
+    document_type = Column(String(50), nullable=False)  # Stores Document Type code from Document Types table
     work_description = Column(Text)
     scope_of_work = Column(Text)
     special_instructions = Column(Text)
@@ -91,6 +84,16 @@ class WorkOrder(Base):
     actual_hours = Column(String(20))
     actual_cost = Column(String(50))
     
+    # Calculated Cost Fields
+    base_cost = Column(String(50))  # Base cost from selected trades
+    final_cost = Column(String(50))  # Total cost including base + additional costs + tax
+    tax_amount = Column(String(50))  # Tax amount
+    discount_amount = Column(String(50))  # Discount amount if any
+    
+    # Tax Settings
+    apply_tax = Column(Boolean, default=False)  # Whether to apply tax to this work order
+    tax_rate = Column(String(20), default="0")  # Tax rate if applicable (default 0)
+    
     # Additional Information
     materials_required = Column(Text)
     tools_required = Column(Text)
@@ -101,6 +104,9 @@ class WorkOrder(Base):
     trades = Column(JSON)  # Store as JSON array of UUIDs
     consultation_notes = Column(Text)
     cost_override = Column(String(50))
+    
+    # Additional Costs (e.g., Roofing report, Siding report, etc.)
+    additional_costs = Column(JSON)  # Store as JSON array of {name, amount, description, type?: optional}
     
     # Internal Notes
     internal_notes = Column(Text)
@@ -125,3 +131,29 @@ class WorkOrder(Base):
     
     def __repr__(self):
         return f"<WorkOrder(id={self.id}, number={self.work_order_number}, status={self.status})>"
+
+
+class WorkOrderStaffAssignment(Base):
+    """Junction table for work order to staff many-to-many relationship"""
+    __tablename__ = "work_order_staff_assignments"
+    __table_args__ = (
+        Index('ix_work_order_staff', 'work_order_id', 'staff_id'),
+        {'extend_existing': True}
+    )
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    
+    # Foreign Keys
+    work_order_id = Column(UUID(as_uuid=True), ForeignKey("work_orders.id"), nullable=False)
+    staff_id = Column(UUID(as_uuid=True), ForeignKey("staff.id"), nullable=False)
+    
+    # Assignment Details
+    assigned_role = Column(String(50))  # primary, secondary, reviewer, etc.
+    is_active = Column(Boolean, default=True)
+    
+    # Timestamps
+    assigned_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime)
+    
+    def __repr__(self):
+        return f"<WorkOrderStaffAssignment(work_order_id={self.work_order_id}, staff_id={self.staff_id})>"

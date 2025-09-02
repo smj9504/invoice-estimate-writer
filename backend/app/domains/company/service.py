@@ -28,7 +28,7 @@ class CompanyService(BaseService[Dict[str, Any], str]):
     
     def get_repository(self):
         """Get the company repository - implemented by base class"""
-        pass
+        return CompanyRepository
     
     def _get_repository_instance(self, session):
         """Get company repository instance with the given session"""

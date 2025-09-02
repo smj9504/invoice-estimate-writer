@@ -9,7 +9,10 @@ from app.core.database_factory import get_database
 from .schemas import (
     CompanyCreate, 
     CompanyUpdate, 
-    CompanyResponse, 
+    CompanyResponse,
+    CompanyDetailResponse,
+    PaymentMethodInfo,
+    PaymentFrequencyInfo,
     CompanyFilter,
     CompanyPaginatedResponse
 )
@@ -69,16 +72,43 @@ async def get_companies(
     )
 
 
-@router.get("/{company_id}", response_model=CompanyResponse)
+@router.get("/{company_id}", response_model=CompanyDetailResponse)
 async def get_company(
     company_id: str, 
     service: CompanyService = Depends(get_company_service)
 ):
-    """Get single company by ID"""
+    """Get single company by ID with payment configuration details"""
     company = service.get_by_id(company_id)
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
-    return CompanyResponse(**company)
+    
+    # Create response with payment configuration details
+    response_data = {**company}
+    
+    # Add payment method details if available
+    if company.get('payment_method_ref'):
+        method_ref = company['payment_method_ref']
+        response_data['payment_method_details'] = PaymentMethodInfo(
+            id=method_ref.get('id'),
+            code=method_ref.get('code'),
+            name=method_ref.get('name'),
+            description=method_ref.get('description'),
+            requires_account_info=method_ref.get('requires_account_info', False),
+            icon=method_ref.get('icon')
+        )
+    
+    # Add payment frequency details if available
+    if company.get('payment_frequency_ref'):
+        freq_ref = company['payment_frequency_ref']
+        response_data['payment_frequency_details'] = PaymentFrequencyInfo(
+            id=freq_ref.get('id'),
+            code=freq_ref.get('code'),
+            name=freq_ref.get('name'),
+            description=freq_ref.get('description'),
+            days_interval=freq_ref.get('days_interval')
+        )
+    
+    return CompanyDetailResponse(**response_data)
 
 
 @router.post("/", response_model=CompanyResponse, status_code=201)

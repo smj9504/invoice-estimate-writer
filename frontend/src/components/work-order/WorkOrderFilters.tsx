@@ -158,7 +158,9 @@ const WorkOrderFilters: React.FC<WorkOrderFiltersProps> = ({
               <Select
                 placeholder="Select status"
                 allowClear
-                onChange={() => form.submit()}
+                onChange={(value) => {
+                  onFilterChange({ ...filters, status: value || undefined });
+                }}
               >
                 {statusOptions.map(option => (
                   <Option key={option.value} value={option.value}>

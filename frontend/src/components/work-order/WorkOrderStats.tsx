@@ -20,6 +20,9 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
   const stats = useMemo(() => {
     const now = new Date();
     const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const currentYear = now.getFullYear();
+    const yearStart = new Date(currentYear, 0, 1);
+    const yearEnd = new Date(currentYear, 11, 31, 23, 59, 59);
     
     // Total work orders
     const total = workOrders.length;
@@ -36,11 +39,28 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
     // Total revenue (completed orders only)
     const totalRevenue = workOrders
       .filter(wo => wo.status === 'completed')
-      .reduce((sum, wo) => sum + wo.final_cost, 0);
+      .reduce((sum, wo) => {
+        // Handle final_cost as string or number
+        const cost = typeof wo.final_cost === 'string' 
+          ? parseFloat(wo.final_cost) || 0 
+          : wo.final_cost || 0;
+        return sum + cost;
+      }, 0);
     
-    // Status distribution
-    const statusCounts = workOrders.reduce((acc, wo) => {
-      acc[wo.status] = (acc[wo.status] || 0) + 1;
+    // Status distribution with date filtering for completed/cancelled
+    const allStatuses = ['draft', 'pending', 'approved', 'in_progress', 'completed', 'cancelled'];
+    const statusCounts = allStatuses.reduce((acc, status) => {
+      if (status === 'completed' || status === 'cancelled') {
+        // Filter completed and cancelled by current year
+        acc[status] = workOrders.filter(wo => {
+          if (wo.status !== status) return false;
+          const updatedAt = new Date(wo.updated_at);
+          return updatedAt >= yearStart && updatedAt <= yearEnd;
+        }).length;
+      } else {
+        // Show all other statuses regardless of date
+        acc[status] = workOrders.filter(wo => wo.status === status).length;
+      }
       return acc;
     }, {} as Record<string, number>);
     
@@ -49,9 +69,6 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
       wo.status === 'pending' || wo.status === 'approved'
     ).length;
     
-    // Average order value
-    const avgOrderValue = total > 0 ? totalRevenue / total : 0;
-    
     return {
       total,
       pendingCount,
@@ -59,7 +76,7 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
       totalRevenue,
       statusCounts,
       highPriorityCount,
-      avgOrderValue,
+      currentYear,
     };
   }, [workOrders]);
 
@@ -145,96 +162,104 @@ const WorkOrderStats: React.FC<WorkOrderStatsProps> = ({ workOrders }) => {
         </Card>
       </Col>
 
-      {/* Status Distribution */}
+      {/* Status Distribution and Metrics Row */}
       <Col xs={24}>
-        <Card title="Status Distribution" size="small">
-          <Row gutter={8}>
-            {Object.entries(stats.statusCounts).map(([status, count]) => {
-              const statusLabels = {
-                draft: 'Draft',
-                pending: 'Pending',
-                approved: 'Approved',
-                in_progress: 'In Progress',
-                completed: 'Completed',
-                cancelled: 'Cancelled',
-              };
+        <Row gutter={16} style={{ marginTop: 24 }}>
+          {/* Status Distribution - 2 columns */}
+          <Col xs={24} lg={12}>
+            <Card 
+              title={`Status Distribution (${stats.currentYear})`} 
+              size="small"
+              extra={
+                <Text type="secondary" style={{ fontSize: '12px' }}>
+                  * Completed/Cancelled filtered by year
+                </Text>
+              }
+              style={{ height: '100%' }}
+            >
+              <Row gutter={[8, 8]} justify="space-between" align="middle" style={{ height: '100%' }}>
+                {['draft', 'pending', 'approved', 'in_progress', 'completed', 'cancelled'].map((status) => {
+                  const statusLabels = {
+                    draft: 'Draft',
+                    pending: 'Pending',
+                    approved: 'Approved',
+                    in_progress: 'In Progress',
+                    completed: 'Completed',
+                    cancelled: 'Cancelled',
+                  };
 
-              return (
-                <Col key={status} flex="1" style={{ minWidth: '120px' }}>
-                  <div
-                    style={{
-                      padding: '12px',
-                      backgroundColor: getStatusColor(status),
-                      borderRadius: '6px',
-                      textAlign: 'center',
-                      color: status === 'draft' ? '#000' : '#fff',
-                    }}
-                  >
-                    <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                      {count}
-                    </div>
-                    <div style={{ fontSize: '12px', opacity: 0.9 }}>
-                      {statusLabels[status as keyof typeof statusLabels]}
-                    </div>
-                  </div>
-                </Col>
-              );
-            })}
-          </Row>
-        </Card>
-      </Col>
+                  const count = stats.statusCounts[status] || 0;
 
-      {/* Additional Metrics */}
-      <Col xs={24}>
-        <Row gutter={16}>
-          {/* Average Order Value */}
-          <Col xs={24} sm={8}>
-            <Card size="small">
-              <Statistic
-                title="Average Order Value"
-                value={stats.avgOrderValue}
-                prefix="$"
-                precision={0}
-                valueStyle={{ fontSize: '16px' }}
-              />
+                  return (
+                    <Col key={status} span={4} style={{ display: 'flex', justifyContent: 'center' }}>
+                      <div
+                        style={{
+                          padding: '8px 4px',
+                          backgroundColor: getStatusColor(status),
+                          borderRadius: '6px',
+                          textAlign: 'center',
+                          color: status === 'draft' ? '#000' : '#fff',
+                          opacity: count === 0 ? 0.6 : 1,
+                          width: '100%',
+                          minWidth: '60px',
+                          maxWidth: '80px',
+                        }}
+                      >
+                        <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                          {count}
+                        </div>
+                        <div style={{ fontSize: '11px', opacity: 0.9 }}>
+                          {statusLabels[status as keyof typeof statusLabels]}
+                        </div>
+                      </div>
+                    </Col>
+                  );
+                })}
+              </Row>
             </Card>
           </Col>
 
-          {/* Completion Rate */}
-          <Col xs={24} sm={8}>
-            <Card size="small">
-              <Statistic
-                title="Completion Rate"
-                value={
-                  stats.total > 0
-                    ? ((stats.statusCounts.completed || 0) / stats.total) * 100
-                    : 0
-                }
-                suffix="%"
-                precision={1}
-                valueStyle={{ fontSize: '16px', color: '#52c41a' }}
-                prefix={<CheckCircleOutlined />}
-              />
-            </Card>
-          </Col>
+          {/* Metrics - 2 columns */}
+          <Col xs={24} lg={12}>
+            <Row gutter={16} style={{ height: '100%' }}>
+              {/* Completion Rate */}
+              <Col xs={24} sm={12}>
+                <Card size="small" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <Statistic
+                    title="Completion Rate"
+                    value={
+                      stats.total > 0
+                        ? ((stats.statusCounts.completed || 0) / stats.total) * 100
+                        : 0
+                    }
+                    suffix="%"
+                    precision={1}
+                    valueStyle={{ fontSize: '20px', color: '#52c41a' }}
+                    prefix={<CheckCircleOutlined />}
+                  />
+                </Card>
+              </Col>
 
-          {/* Active Orders */}
-          <Col xs={24} sm={8}>
-            <Card size="small">
-              <Statistic
-                title="Active Orders"
-                value={
-                  (stats.statusCounts.approved || 0) + 
-                  (stats.statusCounts.in_progress || 0)
-                }
-                suffix=" items"
-                valueStyle={{ fontSize: '16px', color: '#1890ff' }}
-                prefix={<ExclamationCircleOutlined />}
-              />
-            </Card>
+              {/* Active Orders */}
+              <Col xs={24} sm={12}>
+                <Card size="small" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <Statistic
+                    title="Active Orders"
+                    value={
+                      (stats.statusCounts.approved || 0) + 
+                      (stats.statusCounts.in_progress || 0)
+                    }
+                    suffix=" items"
+                    valueStyle={{ fontSize: '20px', color: '#1890ff' }}
+                    prefix={<ExclamationCircleOutlined />}
+                  />
+                </Card>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Col>
+
     </Row>
   );
 };

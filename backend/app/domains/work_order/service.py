@@ -168,6 +168,38 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             # Set initial status
             data['status'] = WorkOrderStatus.DRAFT
             
+            # Calculate costs if trades are provided
+            if data.get('trades'):
+                # Get tax settings from data, default to False
+                apply_tax = data.get('apply_tax', False)
+                tax_rate = None
+                if data.get('tax_rate'):
+                    try:
+                        tax_rate = float(data['tax_rate'])
+                    except (ValueError, TypeError):
+                        tax_rate = None
+                
+                cost_breakdown = self.calculate_cost(
+                    data.get('document_type'),
+                    data.get('trades', []),
+                    data['company_id'],
+                    data.get('additional_costs', []),
+                    apply_tax=apply_tax,
+                    tax_rate=tax_rate
+                )
+                
+                # Store calculated costs
+                data['base_cost'] = str(cost_breakdown['base_cost'])
+                data['final_cost'] = str(cost_breakdown['final_cost'])
+                data['tax_amount'] = str(cost_breakdown['tax_amount'])
+                data['discount_amount'] = str(cost_breakdown['discount_amount'])
+            else:
+                # Set default values if no trades
+                data['base_cost'] = '0.0'
+                data['final_cost'] = '0.0'
+                data['tax_amount'] = '0.0'
+                data['discount_amount'] = '0.0'
+            
             # Create the work order
             return self.create(data)
             
@@ -296,6 +328,155 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
             logger.error(f"Error getting work orders by staff: {e}")
             raise
     
+    def calculate_cost(self, document_type: str, trade_ids: List[str], company_id: str, 
+                      additional_costs: List[Dict[str, Any]] = None, apply_tax: bool = False, tax_rate: Optional[float] = None) -> Dict[str, Any]:
+        """
+        Calculate work order cost based on document type, trades, and additional costs
+        
+        Args:
+            document_type: Type of document
+            trade_ids: List of trade IDs
+            company_id: Company ID
+            additional_costs: List of additional cost items
+            
+        Returns:
+            Cost breakdown dictionary
+        """
+        logger.info(f"calculate_cost called with trade_ids: {trade_ids}, company_id: {company_id}")
+        try:
+            session = self.database.get_session()
+            try:
+                base_cost = 0.0
+                trade_costs = []
+                
+                # Get base cost from document type
+                if document_type:
+                    from app.domains.document_types import service as dt_service
+                    
+                    # Get all document types and find the matching one
+                    document_types = dt_service.get_document_types(session, active_only=True)
+                    for doc_type in document_types:
+                        # Match by code (e.g., 'work_order', 'estimate', etc.)
+                        if hasattr(doc_type, 'code') and doc_type.code == document_type:
+                            if hasattr(doc_type, 'base_price') and doc_type.base_price is not None:
+                                try:
+                                    base_cost = float(doc_type.base_price)
+                                    logger.info(f"Document type {document_type} base_price: {base_cost}")
+                                except (ValueError, TypeError):
+                                    base_cost = 0.0
+                            break
+                        # Also try matching by name
+                        elif hasattr(doc_type, 'name') and doc_type.name.lower().replace(' ', '_') == document_type:
+                            if hasattr(doc_type, 'base_price') and doc_type.base_price is not None:
+                                try:
+                                    base_cost = float(doc_type.base_price)
+                                    logger.info(f"Document type {document_type} base_price: {base_cost}")
+                                except (ValueError, TypeError):
+                                    base_cost = 0.0
+                            break
+                    
+                    if base_cost == 0.0:
+                        logger.warning(f"No base_price found for document type: {document_type}")
+                
+                # Get trades (for information only, not for cost calculation)
+                if trade_ids:
+                    if 'dt_service' not in locals():
+                        from app.domains.document_types import service as dt_service
+                    from uuid import UUID as uuid_UUID
+                    
+                    for trade_id in trade_ids:
+                        logger.info(f"Fetching trade with ID: {trade_id}")
+                        # Convert string to UUID object if needed
+                        if isinstance(trade_id, str):
+                            try:
+                                trade_uuid = uuid_UUID(trade_id)
+                            except ValueError:
+                                logger.error(f"Invalid UUID format: {trade_id}")
+                                continue
+                        else:
+                            trade_uuid = trade_id
+                        
+                        trade = dt_service.get_trade(session, trade_uuid)
+                        logger.info(f"Trade data: {trade}")
+                        if trade:
+                            trade_name = trade.name if hasattr(trade, 'name') else 'Unknown'
+                            logger.info(f"Trade {trade_uuid} ({trade_name}) added to list")
+                            trade_costs.append({
+                                'id': str(trade_uuid),
+                                'name': trade_name,
+                                'cost': 0  # Cost comes from document type, not trade
+                            })
+                        else:
+                            logger.warning(f"Trade not found with ID: {trade_uuid}")
+                
+                # Calculate additional costs
+                additional_costs_total = 0.0
+                additional_costs_detail = []
+                if additional_costs:
+                    for cost in additional_costs:
+                        cost_amount = float(cost.get('amount', 0))
+                        additional_costs_total += cost_amount
+                        detail_item = {
+                            'name': cost.get('name', 'Unknown'),
+                            'amount': cost_amount,
+                            'description': cost.get('description', '')
+                        }
+                        # Only add type if it exists (for template items)
+                        if cost.get('type'):
+                            detail_item['type'] = cost['type']
+                        additional_costs_detail.append(detail_item)
+                
+                # Calculate subtotal (trades + additional costs)
+                subtotal = base_cost + additional_costs_total
+                
+                # Calculate tax only if apply_tax is True
+                if apply_tax:
+                    # Use provided tax_rate or default to 8.1%
+                    actual_tax_rate = tax_rate if tax_rate is not None else 0.081
+                    tax_amount = subtotal * actual_tax_rate
+                else:
+                    actual_tax_rate = 0.0
+                    tax_amount = 0.0
+                
+                # Calculate final cost
+                final_cost = subtotal + tax_amount
+                
+                logger.info(f"Cost calculation summary:")
+                logger.info(f"  - Base cost (from trades): ${base_cost}")
+                logger.info(f"  - Additional costs total: ${additional_costs_total}")
+                logger.info(f"  - Subtotal: ${subtotal}")
+                logger.info(f"  - Tax amount ({actual_tax_rate * 100}%): ${tax_amount}")
+                logger.info(f"  - Final cost: ${final_cost}")
+                
+                return {
+                    'base_cost': base_cost,
+                    'additional_costs': additional_costs_detail,
+                    'additional_costs_total': additional_costs_total,
+                    'subtotal': subtotal,
+                    'tax_amount': tax_amount,
+                    'tax_rate': actual_tax_rate,
+                    'discount_amount': 0.0,
+                    'final_cost': final_cost,
+                    'trade_costs': trade_costs,
+                    'currency': 'USD'
+                }
+                
+            finally:
+                session.close()
+                
+        except Exception as e:
+            logger.error(f"Error calculating cost: {e}")
+            # Return default cost breakdown on error
+            return {
+                'base_cost': 0.0,
+                'tax_amount': 0.0,
+                'tax_rate': 0.081,
+                'discount_amount': 0.0,
+                'final_cost': 0.0,
+                'trade_costs': [],
+                'currency': 'USD'
+            }
+    
     def search_work_orders(self, search_term: str) -> List[Dict[str, Any]]:
         """
         Search work orders by work order number or address fields
@@ -339,6 +520,204 @@ class WorkOrderService(BaseService[WorkOrder, UUID]):
         except Exception as e:
             logger.error(f"Error getting dashboard stats: {e}")
             raise
+    
+    def get_all(self, filters: Optional[Dict[str, Any]] = None, 
+                order_by: Optional[str] = None, 
+                limit: Optional[int] = None, 
+                offset: Optional[int] = None) -> List[Dict[str, Any]]:
+        """
+        Get all work orders with document type names enriched
+        
+        Args:
+            filters: Optional filter criteria
+            order_by: Optional ordering
+            limit: Optional result limit
+            offset: Optional result offset
+            
+        Returns:
+            List of work order dictionaries with document_type_name field
+        """
+        try:
+            # Get work orders from parent class
+            work_orders = super().get_all(filters=filters, order_by=order_by, limit=limit, offset=offset)
+            
+            # Enrich each work order with document type name
+            for work_order in work_orders:
+                self.enrich_document_type_name(work_order)
+                # Also ensure cost fields
+                self.ensure_cost_fields(work_order)
+            
+            return work_orders
+            
+        except Exception as e:
+            logger.error(f"Error getting all work orders: {e}")
+            raise
+    
+    def get_by_id(self, entity_id) -> Optional[Dict[str, Any]]:
+        """
+        Get work order by ID with cost fields ensured
+        
+        Args:
+            entity_id: Work order ID
+            
+        Returns:
+            Work order dictionary with calculated costs or None if not found
+        """
+        try:
+            work_order = super().get_by_id(entity_id)
+            if work_order:
+                # Always ensure cost fields are calculated
+                work_order = self.ensure_cost_fields(work_order)
+                # Add document type name
+                work_order = self.enrich_document_type_name(work_order)
+            return work_order
+        except Exception as e:
+            logger.error(f"Error getting work order by ID {entity_id}: {e}")
+            return None
+    
+    def enrich_document_type_name(self, work_order: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enrich work order with document type name from document types table
+        
+        Args:
+            work_order: Work order dictionary
+            
+        Returns:
+            Work order with document_type_name field added
+        """
+        try:
+            if work_order and work_order.get('document_type'):
+                doc_type_code = work_order['document_type']
+                logger.info(f"Looking up document type with code: {doc_type_code}")
+                
+                session = self.database.get_session()
+                try:
+                    from app.domains.document_types import service as dt_service
+                    
+                    # Get all document types (including inactive) and find the matching one by code
+                    document_types = dt_service.get_document_types(session, active_only=False)
+                    logger.info(f"Found {len(document_types)} document types in database")
+                    
+                    found = False
+                    for doc_type in document_types:
+                        if hasattr(doc_type, 'code'):
+                            logger.debug(f"Comparing '{doc_type.code}' with '{doc_type_code}'")
+                            # Case-insensitive comparison for better matching
+                            if doc_type.code.upper() == doc_type_code.upper():
+                                work_order['document_type_name'] = doc_type.name
+                                logger.info(f"Found document type name: {doc_type.name} for code: {doc_type_code}")
+                                found = True
+                                break
+                    
+                    # If no match found, use the code as the name
+                    if not found:
+                        logger.warning(f"No document type found for code: {doc_type_code}")
+                        work_order['document_type_name'] = work_order['document_type']
+                        
+                finally:
+                    session.close()
+                    
+        except Exception as e:
+            logger.error(f"Error enriching document type name: {e}")
+            # On error, use the code as the name
+            if work_order and work_order.get('document_type'):
+                work_order['document_type_name'] = work_order['document_type']
+                
+        return work_order
+    
+    def ensure_cost_fields(self, work_order: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Ensure work order has cost fields calculated
+        
+        Args:
+            work_order: Work order dictionary
+            
+        Returns:
+            Work order with cost fields
+        """
+        logger.info(f"ensure_cost_fields called for work order {work_order.get('id')}")
+        logger.info(f"Trades: {work_order.get('trades')}")
+        logger.info(f"Initial base_cost: {work_order.get('base_cost')} (type: {type(work_order.get('base_cost'))})")
+        logger.info(f"Initial final_cost: {work_order.get('final_cost')} (type: {type(work_order.get('final_cost'))})")
+        
+        # Convert cost fields to float first for proper comparison
+        base_cost_value = 0.0
+        final_cost_value = 0.0
+        
+        if work_order.get('base_cost') is not None:
+            try:
+                if isinstance(work_order['base_cost'], str):
+                    base_cost_value = float(work_order['base_cost'])
+                else:
+                    base_cost_value = float(work_order['base_cost'] or 0.0)
+            except (ValueError, TypeError):
+                base_cost_value = 0.0
+        
+        if work_order.get('final_cost') is not None:
+            try:
+                if isinstance(work_order['final_cost'], str):
+                    final_cost_value = float(work_order['final_cost'])
+                else:
+                    final_cost_value = float(work_order['final_cost'] or 0.0)
+            except (ValueError, TypeError):
+                final_cost_value = 0.0
+        
+        logger.info(f"Converted base_cost_value: {base_cost_value}, final_cost_value: {final_cost_value}")
+        
+        # Always recalculate if trades exist to ensure accuracy
+        if work_order.get('trades'):
+            logger.info(f"Recalculating costs for work order {work_order.get('id')} with trades: {work_order.get('trades')}")
+            
+            # Get tax settings from work order
+            apply_tax = work_order.get('apply_tax', False)
+            tax_rate = None
+            if work_order.get('tax_rate'):
+                try:
+                    tax_rate = float(work_order['tax_rate'])
+                except (ValueError, TypeError):
+                    tax_rate = None
+            
+            cost_breakdown = self.calculate_cost(
+                work_order.get('document_type'),
+                work_order.get('trades', []),
+                work_order.get('company_id'),
+                work_order.get('additional_costs', []),
+                apply_tax=apply_tax,
+                tax_rate=tax_rate
+            )
+            logger.info(f"Calculated cost breakdown: {cost_breakdown}")
+            
+            work_order['base_cost'] = cost_breakdown['base_cost']
+            work_order['final_cost'] = cost_breakdown['final_cost']
+            work_order['tax_amount'] = cost_breakdown['tax_amount']
+            work_order['discount_amount'] = cost_breakdown['discount_amount']
+        else:
+            # No trades, ensure fields exist with 0 values
+            work_order['base_cost'] = 0.0
+            work_order['final_cost'] = 0.0
+            work_order['tax_amount'] = 0.0
+            work_order['discount_amount'] = 0.0
+        
+        # Ensure all cost fields are numeric (not strings)
+        for field in ['base_cost', 'final_cost', 'tax_amount', 'discount_amount']:
+            if field not in work_order or work_order[field] is None:
+                work_order[field] = 0.0
+            elif isinstance(work_order[field], str):
+                try:
+                    work_order[field] = float(work_order[field])
+                except (ValueError, TypeError):
+                    work_order[field] = 0.0
+            else:
+                # Ensure it's a float, not Decimal or other type
+                try:
+                    work_order[field] = float(work_order[field])
+                except (ValueError, TypeError):
+                    work_order[field] = 0.0
+        
+        logger.info(f"Final base_cost: {work_order.get('base_cost')} (type: {type(work_order.get('base_cost'))})")
+        logger.info(f"Final final_cost: {work_order.get('final_cost')} (type: {type(work_order.get('final_cost'))})")
+        
+        return work_order
     
     def _validate_create_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Validate work order creation data"""

@@ -10,8 +10,12 @@ export interface Company {
   email?: string;
   logo?: string; // Base64 encoded logo or URL
   company_code?: string; // 4-character unique code
-  payment_method?: string; // e.g., 'zelle', 'stripe'
-  payment_frequency?: string; // e.g., 'per_job', 'weekly'
+  payment_method?: string; // Legacy field
+  payment_frequency?: string; // Legacy field
+  payment_method_id?: string; // Reference to payment_methods table
+  payment_frequency_id?: string; // Reference to payment_frequencies table
+  payment_method_details?: PaymentMethod; // Populated when fetching single company
+  payment_frequency_details?: PaymentFrequency; // Populated when fetching single company
   created_at?: string;
   updated_at?: string;
 }
@@ -26,8 +30,10 @@ export interface CompanyFormData {
   email?: string;
   logo?: string;
   company_code?: string;
-  payment_method?: string;
-  payment_frequency?: string;
+  payment_method?: string; // Legacy field
+  payment_frequency?: string; // Legacy field
+  payment_method_id?: string;
+  payment_frequency_id?: string;
 }
 
 export interface CompanyFilter {
@@ -102,6 +108,7 @@ export interface WorkOrder {
   work_order_number: string;
   company_id: string;
   document_type: DocumentType;
+  document_type_name?: string;  // Added to display the actual name from database
   client_name: string;
   client_phone?: string;
   client_email?: string;
@@ -116,6 +123,10 @@ export interface WorkOrder {
   credits_applied: number;
   final_cost: number;
   cost_override?: number;
+  additional_costs?: any[];
+  apply_tax?: boolean;
+  tax_amount?: number;
+  tax_rate?: number;
   status: 'draft' | 'pending' | 'approved' | 'in_progress' | 'completed' | 'cancelled';
   created_by_staff_id?: string;
   created_by_staff_name?: string;
@@ -140,6 +151,9 @@ export interface WorkOrderFormData {
   work_description?: string;
   consultation_notes?: string;
   cost_override?: number;
+  additional_costs?: any[];
+  apply_tax?: boolean;
+  tax_rate?: number;
 }
 
 export interface Trade {
@@ -166,6 +180,28 @@ export interface CostBreakdown {
   availableCredits: number;
 }
 
+// Additional Cost Types
+export interface AdditionalCostTemplate {
+  id: string;
+  name: string;
+  category: string;
+  cost_type: 'fixed' | 'variable';
+  fixed_amount?: number;
+  description?: string;
+  is_active: boolean;
+  display_order: number;
+}
+
+export interface AdditionalCostItem {
+  id: string;
+  template_id?: string; // null for custom items
+  name: string;
+  category: string;
+  amount: number;
+  description?: string;
+  is_custom: boolean;
+}
+
 // API Response Types
 export interface ApiResponse<T> {
   data?: T;
@@ -188,9 +224,6 @@ export interface PaymentMethod {
   name: string;
   description?: string;
   requires_account_info: boolean;
-  account_info_fields?: string;
-  display_order: number;
-  icon?: string;
   is_active: boolean;
   is_default: boolean;
   created_at?: string;
@@ -203,7 +236,6 @@ export interface PaymentFrequency {
   name: string;
   description?: string;
   days_interval?: number;
-  display_order: number;
   is_active: boolean;
   is_default: boolean;
   created_at?: string;

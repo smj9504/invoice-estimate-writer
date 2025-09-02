@@ -6,19 +6,21 @@ from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from typing import List, Optional
 from uuid import UUID
 from datetime import datetime
+import logging
 
 from .schemas import (
     WorkOrder, WorkOrderCreate, WorkOrderUpdate, WorkOrderResponse, 
     WorkOrdersResponse, WorkOrderFilter
 )
 from .service import WorkOrderService
-from .models import WorkOrderStatus, DocumentType
+from .models import WorkOrderStatus
 from app.core.database_factory import get_database
 from app.domains.auth.dependencies import get_current_staff
 from app.domains.staff.models import Staff
 from app.domains.staff.service import StaffService
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 def get_work_order_service():
@@ -90,7 +92,7 @@ async def get_work_orders(
     company_id: Optional[UUID] = Query(None, description="Filter by company ID"),
     assigned_to_staff_id: Optional[UUID] = Query(None, description="Filter by assigned staff ID"),
     created_by_staff_id: Optional[UUID] = Query(None, description="Filter by creator staff ID"),
-    document_type: Optional[DocumentType] = Query(None, description="Filter by document type"),
+    document_type: Optional[str] = Query(None, description="Filter by document type code"),
     priority: Optional[str] = Query(None, description="Filter by priority (low, medium, high, urgent)"),
     is_active: Optional[bool] = Query(None, description="Filter by active status"),
     date_from: Optional[datetime] = Query(None, description="Filter from date"),
@@ -147,6 +149,21 @@ async def get_work_orders(
         # Populate staff names
         work_orders = populate_staff_names(work_orders, staff_service)
         
+        # Ensure cost fields are calculated for each work order
+        for wo in work_orders:
+            service.ensure_cost_fields(wo)
+            
+            # Ensure cost fields are numeric for serialization
+            cost_fields = ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'credits_applied']
+            for field in cost_fields:
+                if field not in wo or wo[field] is None:
+                    wo[field] = 0.0
+                elif isinstance(wo[field], str):
+                    try:
+                        wo[field] = float(wo[field])
+                    except (ValueError, TypeError):
+                        wo[field] = 0.0
+        
         return WorkOrdersResponse(data=work_orders, total=total)
         
     except Exception as e:
@@ -161,12 +178,62 @@ async def get_work_order(
 ):
     """Get single work order by ID"""
     try:
+        # get_by_id now automatically calls ensure_cost_fields
         work_order = service.get_by_id(work_order_id)
         if not work_order:
             raise HTTPException(status_code=404, detail="Work order not found")
         
+        logger.info(f"API: Work order {work_order_id} - base_cost: {work_order.get('base_cost')} (type: {type(work_order.get('base_cost'))})")
+        logger.info(f"API: Work order {work_order_id} - final_cost: {work_order.get('final_cost')} (type: {type(work_order.get('final_cost'))})")
+        logger.info(f"API: Work order {work_order_id} - trades: {work_order.get('trades')}")
+        logger.info(f"API: Work order {work_order_id} - additional_costs: {work_order.get('additional_costs')}")
+        
+        # Store cost fields before populate_staff_names
+        original_base_cost = work_order.get('base_cost')
+        original_final_cost = work_order.get('final_cost')
+        original_tax_amount = work_order.get('tax_amount')
+        original_discount_amount = work_order.get('discount_amount')
+        
+        logger.info(f"API: Before populate_staff_names - base_cost: {original_base_cost}, final_cost: {original_final_cost}")
+        
         # Populate staff names for single work order
         work_orders = populate_staff_names([work_order], staff_service)
+        
+        # Restore cost fields after populate_staff_names
+        if work_orders and work_orders[0]:
+            wo = work_orders[0]
+            
+            logger.info(f"API: After populate_staff_names - base_cost: {wo.get('base_cost')}, final_cost: {wo.get('final_cost')}")
+            
+            # Restore original cost values if they were lost
+            if original_base_cost is not None:
+                wo['base_cost'] = original_base_cost
+            if original_final_cost is not None:
+                wo['final_cost'] = original_final_cost
+            if original_tax_amount is not None:
+                wo['tax_amount'] = original_tax_amount
+            if original_discount_amount is not None:
+                wo['discount_amount'] = original_discount_amount
+            
+            # Ensure cost fields exist and are numeric
+            cost_fields = ['base_cost', 'final_cost', 'tax_amount', 'discount_amount', 'credits_applied']
+            for field in cost_fields:
+                if field not in wo or wo[field] is None:
+                    wo[field] = 0.0
+                elif isinstance(wo[field], str):
+                    try:
+                        wo[field] = float(wo[field])
+                    except (ValueError, TypeError):
+                        wo[field] = 0.0
+                else:
+                    # Ensure it's a float
+                    try:
+                        wo[field] = float(wo[field])
+                    except (ValueError, TypeError):
+                        wo[field] = 0.0
+            
+            logger.info(f"API: Final values - base_cost: {wo.get('base_cost')} (type: {type(wo.get('base_cost'))})")
+            logger.info(f"API: Final values - final_cost: {wo.get('final_cost')} (type: {type(wo.get('final_cost'))})")
         
         return WorkOrderResponse(data=work_orders[0])
         
@@ -217,6 +284,24 @@ async def update_work_order(
         protected_fields = ['id', 'created_at', 'created_by_staff_id']
         for field in protected_fields:
             update_data.pop(field, None)
+        
+        # Calculate costs if trades are being updated
+        if 'trades' in update_data or 'additional_costs' in update_data:
+            # Get current work order to get company_id and document_type
+            current_wo = service.get_by_id(work_order_id)
+            if current_wo:
+                cost_breakdown = service.calculate_cost(
+                    update_data.get('document_type', current_wo.get('document_type')),
+                    update_data.get('trades', current_wo.get('trades', [])),
+                    current_wo['company_id'],
+                    update_data.get('additional_costs', current_wo.get('additional_costs', []))
+                )
+                
+                # Update cost fields
+                update_data['base_cost'] = str(cost_breakdown['base_cost'])
+                update_data['final_cost'] = str(cost_breakdown['final_cost'])
+                update_data['tax_amount'] = str(cost_breakdown['tax_amount'])
+                update_data['discount_amount'] = str(cost_breakdown['discount_amount'])
         
         updated_work_order = service.update(work_order_id, update_data)
         if not updated_work_order:
@@ -353,14 +438,24 @@ async def get_work_order_statuses():
 
 
 @router.get("/document-types/list")
-async def get_document_types():
-    """Get list of available document types"""
-    return {
-        "document_types": [
-            {"value": doc_type.value, "label": doc_type.value.replace("_", " ").title()}
-            for doc_type in DocumentType
-        ]
-    }
+async def get_document_types(
+    db = Depends(get_database)
+):
+    """Get list of available document types from Document Types table"""
+    from app.domains.document_types import service as dt_service
+    
+    session = db.get_session()
+    try:
+        document_types = dt_service.get_document_types(session, active_only=True)
+        return {
+            "document_types": [
+                {"value": doc_type.code, "label": doc_type.name}
+                for doc_type in document_types
+                if hasattr(doc_type, 'code') and hasattr(doc_type, 'name')
+            ]
+        }
+    finally:
+        session.close()
 
 
 @router.get("/priorities/list")
@@ -388,3 +483,84 @@ async def get_work_order_activities(
         "activities": [],
         "total": 0
     }
+
+
+@router.post("/calculate-cost")
+async def calculate_work_order_cost(
+    data: dict = Body(..., description="Cost calculation parameters"),
+    service: WorkOrderService = Depends(get_work_order_service)
+):
+    """Calculate work order cost based on document type, trades, and additional costs"""
+    try:
+        # Extract parameters
+        document_type = data.get('document_type')
+        trades = data.get('trades', [])
+        company_id = data.get('company_id')
+        additional_costs = data.get('additional_costs', [])
+        
+        # Calculate cost
+        cost_breakdown = service.calculate_cost(document_type, trades, company_id, additional_costs)
+        
+        return cost_breakdown
+        
+    except Exception as e:
+        logger.error(f"Error calculating cost: {e}")
+        raise HTTPException(status_code=500, detail=f"Error calculating cost: {str(e)}")
+
+
+@router.get("/{work_order_id}/debug")
+async def debug_work_order(
+    work_order_id: UUID, 
+    service: WorkOrderService = Depends(get_work_order_service)
+):
+    """Debug endpoint to check work order data and cost calculation"""
+    try:
+        # Get raw work order data
+        work_order = service.get_by_id(work_order_id)
+        if not work_order:
+            raise HTTPException(status_code=404, detail="Work order not found")
+        
+        # Debug info
+        debug_info = {
+            "raw_work_order": {
+                "id": work_order.get('id'),
+                "trades": work_order.get('trades'),
+                "trades_type": str(type(work_order.get('trades'))),
+                "base_cost": work_order.get('base_cost'),
+                "base_cost_type": str(type(work_order.get('base_cost'))),
+                "final_cost": work_order.get('final_cost'),
+                "final_cost_type": str(type(work_order.get('final_cost'))),
+                "additional_costs": work_order.get('additional_costs'),
+                "company_id": work_order.get('company_id'),
+                "document_type": work_order.get('document_type')
+            }
+        }
+        
+        # Try to recalculate costs
+        if work_order.get('trades'):
+            try:
+                cost_breakdown = service.calculate_cost(
+                    work_order.get('document_type'),
+                    work_order.get('trades', []),
+                    work_order.get('company_id'),
+                    work_order.get('additional_costs', [])
+                )
+                debug_info['recalculated_costs'] = cost_breakdown
+            except Exception as calc_error:
+                debug_info['calculation_error'] = str(calc_error)
+        
+        # Apply ensure_cost_fields
+        work_order_with_costs = service.ensure_cost_fields(work_order.copy())
+        debug_info['after_ensure_cost_fields'] = {
+            "base_cost": work_order_with_costs.get('base_cost'),
+            "base_cost_type": str(type(work_order_with_costs.get('base_cost'))),
+            "final_cost": work_order_with_costs.get('final_cost'),
+            "final_cost_type": str(type(work_order_with_costs.get('final_cost')))
+        }
+        
+        return debug_info
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Debug error: {str(e)}")
