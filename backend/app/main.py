@@ -144,13 +144,18 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 @app.exception_handler(DatabaseException)
 async def database_exception_handler(request: Request, exc: DatabaseException):
     """Custom handler for database errors"""
+    import traceback
     logger.error(f"Database error on {request.url}: {exc}")
+    logger.error(f"Full traceback: {traceback.format_exc()}")
     
+    # Include the actual error message
     return JSONResponse(
         status_code=500,
         content={
             "message": "Database error occurred",
             "detail": str(exc),
+            "error_type": str(type(exc).__name__),
+            "traceback": traceback.format_exc(),
             "timestamp": datetime.utcnow().isoformat(),
             "type": "database_error"
         }

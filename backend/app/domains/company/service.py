@@ -133,7 +133,12 @@ class CompanyService(BaseService[Dict[str, Any], str]):
                     offset=offset
                 )
                 
-                total_count = repository.count()
+                # Try to get total count, fallback to length if count fails
+                try:
+                    total_count = repository.count()
+                except Exception as count_error:
+                    logger.warning(f"Failed to get total count, using companies length: {count_error}")
+                    total_count = len(companies)
                 
                 return {
                     'companies': companies,
@@ -365,4 +370,28 @@ class CompanyService(BaseService[Dict[str, Any], str]):
                 session.close()
         except Exception as e:
             logger.error(f"Error getting companies summary stats: {e}")
+            raise
+
+    def get_companies_paginated(self, filter_params: CompanyFilter, 
+                               limit: int, offset: int) -> tuple[List[Dict[str, Any]], int]:
+        """
+        Get companies with pagination and filters
+        
+        Args:
+            filter_params: Filter parameters
+            limit: Maximum number of results
+            offset: Number of results to skip
+            
+        Returns:
+            Tuple of (companies list, total count)
+        """
+        try:
+            result = self.get_companies_with_filters(
+                filter_params=filter_params,
+                limit=limit,
+                offset=offset
+            )
+            return result['companies'], result['total']
+        except Exception as e:
+            logger.error(f"Error getting companies paginated: {e}")
             raise

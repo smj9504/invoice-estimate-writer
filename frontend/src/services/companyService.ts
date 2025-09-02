@@ -1,4 +1,4 @@
-import api from './api';
+import { apiClient } from '../api/config';
 import { Company, CompanyFormData } from '../types';
 
 export const companyService = {
@@ -11,28 +11,28 @@ export const companyService = {
     
     const url = `/api/companies/?${params.toString()}`;
     console.log('Requesting companies from:', url);
-    const response = await api.get(url);
+    const response = await apiClient.get(url);
     // Backend returns PaginatedResponse with 'items' field
     return response.data.items || [];
   },
 
   // Get single company by ID
   getCompany: async (id: string): Promise<Company> => {
-    const response = await api.get(`/api/companies/${id}`);
+    const response = await apiClient.get(`/api/companies/${id}`);
     // Backend returns CompanyResponse directly
     return response.data;
   },
 
   // Create new company
   createCompany: async (data: CompanyFormData): Promise<Company> => {
-    const response = await api.post('/api/companies/', data);
+    const response = await apiClient.post('/api/companies/', data);
     // Backend returns CompanyResponse directly
     return response.data;
   },
 
   // Update existing company
   updateCompany: async (id: string, data: Partial<CompanyFormData>): Promise<Company> => {
-    const response = await api.put(`/api/companies/${id}`, data);
+    const response = await apiClient.put(`/api/companies/${id}`, data);
     // Backend returns CompanyResponse directly
     return response.data;
   },
@@ -40,7 +40,7 @@ export const companyService = {
   // Delete company
   deleteCompany: async (id: string): Promise<void> => {
     console.log('Deleting company with ID:', id);
-    const response = await api.delete(`/api/companies/${id}`);
+    const response = await apiClient.delete(`/api/companies/${id}`);
     console.log('Delete response:', response);
     return response.data;
   },
@@ -50,7 +50,7 @@ export const companyService = {
     const formData = new FormData();
     formData.append('file', file);
     
-    const response = await api.post(`/api/companies/${companyId}/logo`, formData, {
+    const response = await apiClient.post(`/api/companies/${companyId}/logo`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -73,19 +73,19 @@ export const companyService = {
     params.append('page', page.toString());
     params.append('per_page', perPage.toString());
     
-    const response = await api.get(`/api/companies/search?${params.toString()}`);
+    const response = await apiClient.get(`/api/companies/search?${params.toString()}`);
     return response.data;
   },
 
   // Get company by email
   getCompanyByEmail: async (email: string): Promise<Company> => {
-    const response = await api.get(`/api/companies/by-email/${encodeURIComponent(email)}`);
+    const response = await apiClient.get(`/api/companies/by-email/${encodeURIComponent(email)}`);
     return response.data;
   },
 
   // Get companies with statistics
   getCompaniesWithStats: async (): Promise<any[]> => {
-    const response = await api.get('/api/companies/stats');
+    const response = await apiClient.get('/api/companies/stats');
     return response.data;
   },
 
@@ -96,7 +96,7 @@ export const companyService = {
     inactive_companies: number;
     default_companies: number;
   }> => {
-    const response = await api.get('/api/companies/stats/summary');
+    const response = await apiClient.get('/api/companies/stats/summary');
     return response.data;
   },
 };

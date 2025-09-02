@@ -23,7 +23,7 @@ interface AuthContextType {
   token: string | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: (showMessage?: boolean) => void;
   register: (data: RegisterData) => Promise<void>;
   isAdmin: () => boolean;
   isManager: () => boolean;
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         })
         .catch(() => {
           // Token is invalid, clear auth
-          logout();
+          logout(false);
         });
     }
     
@@ -97,13 +97,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const logout = () => {
+  const logout = (showMessage: boolean = true) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
     authService.clearAuthToken();
-    message.info('로그아웃되었습니다.');
+    if (showMessage) {
+      message.info('로그아웃되었습니다.');
+    }
   };
 
   const register = async (data: RegisterData) => {

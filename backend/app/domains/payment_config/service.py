@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 import logging
 
-from .models import PaymentMethod, PaymentFrequency
+from .repository import PaymentMethodRepository, PaymentFrequencyRepository
 from .schemas import (
     PaymentMethodCreate, PaymentMethodUpdate,
     PaymentFrequencyCreate, PaymentFrequencyUpdate
@@ -26,80 +26,99 @@ class PaymentConfigService:
         skip: int = 0,
         limit: int = 100,
         active_only: bool = True
-    ) -> List[PaymentMethod]:
+    ) -> List[dict]:
         """Get all payment methods"""
-        query = db.query(PaymentMethod)
-        if active_only:
-            query = query.filter(PaymentMethod.is_active == True)
-        return query.order_by(PaymentMethod.name).offset(skip).limit(limit).all()
+        repo = PaymentMethodRepository(db)
+        return repo.get_all(active_only=active_only, limit=limit, offset=skip, order_by='name')
     
-    def get_payment_method(self, db: Session, method_id: str) -> Optional[PaymentMethod]:
+    def get_payment_method(self, db: Session, method_id: str) -> Optional[dict]:
         """Get payment method by ID"""
-        return db.query(PaymentMethod).filter(PaymentMethod.id == method_id).first()
+        repo = PaymentMethodRepository(db)
+        return repo.get_by_id(method_id)
     
-    def get_payment_method_by_code(self, db: Session, code: str) -> Optional[PaymentMethod]:
+    def get_payment_method_by_code(self, db: Session, code: str) -> Optional[dict]:
         """Get payment method by code"""
-        return db.query(PaymentMethod).filter(PaymentMethod.code == code).first()
+        repo = PaymentMethodRepository(db)
+        return repo.get_by_code(code)
     
-    def get_by_code(self, db: Session, code: str) -> Optional[PaymentMethod]:
+    def get_by_code(self, db: Session, code: str) -> Optional[dict]:
         """Alias for get_payment_method_by_code for backward compatibility"""
         return self.get_payment_method_by_code(db, code)
     
-    def create_payment_method(self, db: Session, method: PaymentMethodCreate) -> PaymentMethod:
+    def create_payment_method(self, db: Session, method: PaymentMethodCreate) -> dict:
         """Create new payment method"""
+        repo = PaymentMethodRepository(db)
+        
         # Check if code already exists
-        existing = self.get_payment_method_by_code(db, method.code)
+        existing = repo.get_by_code(method.code)
         if existing:
             raise ValueError(f"Payment method with code '{method.code}' already exists")
         
         # If setting as default, unset other defaults
         if method.is_default:
-            db.query(PaymentMethod).update({'is_default': False})
+            all_methods = repo.get_all(active_only=False)
+            for existing_method in all_methods:
+                if existing_method.get('is_default'):
+                    repo.update(existing_method['id'], {'is_default': False})
         
-        db_method = PaymentMethod(**method.dict())
-        db.add(db_method)
-        db.commit()
-        db.refresh(db_method)
+        result = repo.create(method.dict())
         logger.info(f"Created payment method: {method.code}")
-        return db_method
+        
+        # Commit if using SQLAlchemy
+        if hasattr(db, 'commit'):
+            db.commit()
+        
+        return result
     
     def update_payment_method(
         self,
         db: Session,
         method_id: str,
         method: PaymentMethodUpdate
-    ) -> Optional[PaymentMethod]:
+    ) -> Optional[dict]:
         """Update payment method"""
-        db_method = self.get_payment_method(db, method_id)
-        if not db_method:
+        repo = PaymentMethodRepository(db)
+        
+        existing_method = repo.get_by_id(method_id)
+        if not existing_method:
             return None
         
-        update_data = method.dict(exclude_unset=True)
+        update_data = method.dict(exclude_none=True)
+        logger.info(f"Update data for method {method_id}: {update_data}")
         
         # If setting as default, unset other defaults
         if update_data.get('is_default'):
-            db.query(PaymentMethod).filter(PaymentMethod.id != method_id).update({'is_default': False})
+            all_methods = repo.get_all(active_only=False)
+            for existing in all_methods:
+                if existing['id'] != method_id and existing.get('is_default'):
+                    repo.update(existing['id'], {'is_default': False})
         
-        update_data['updated_at'] = datetime.utcnow()
+        result = repo.update(method_id, update_data)
+        logger.info(f"Updated payment method: {existing_method.get('code')}")
         
-        for field, value in update_data.items():
-            setattr(db_method, field, value)
+        # Commit if using SQLAlchemy
+        if hasattr(db, 'commit'):
+            db.commit()
         
-        db.commit()
-        db.refresh(db_method)
-        logger.info(f"Updated payment method: {db_method.code}")
-        return db_method
+        return result
     
     def delete_payment_method(self, db: Session, method_id: str) -> bool:
         """Delete payment method"""
-        db_method = self.get_payment_method(db, method_id)
-        if not db_method:
+        repo = PaymentMethodRepository(db)
+        
+        existing_method = repo.get_by_id(method_id)
+        if not existing_method:
             return False
         
-        db.delete(db_method)
-        db.commit()
-        logger.info(f"Deleted payment method: {db_method.code}")
-        return True
+        success = repo.delete(method_id)
+        
+        if success:
+            logger.info(f"Deleted payment method: {existing_method.get('code')}")
+            # Commit if using SQLAlchemy
+            if hasattr(db, 'commit'):
+                db.commit()
+        
+        return success
     
     # Payment Frequency operations
     def get_payment_frequencies(
@@ -108,77 +127,96 @@ class PaymentConfigService:
         skip: int = 0,
         limit: int = 100,
         active_only: bool = True
-    ) -> List[PaymentFrequency]:
+    ) -> List[dict]:
         """Get all payment frequencies"""
-        query = db.query(PaymentFrequency)
-        if active_only:
-            query = query.filter(PaymentFrequency.is_active == True)
-        return query.order_by(PaymentFrequency.name).offset(skip).limit(limit).all()
+        repo = PaymentFrequencyRepository(db)
+        return repo.get_all(active_only=active_only, limit=limit, offset=skip, order_by='name')
     
-    def get_payment_frequency(self, db: Session, frequency_id: str) -> Optional[PaymentFrequency]:
+    def get_payment_frequency(self, db: Session, frequency_id: str) -> Optional[dict]:
         """Get payment frequency by ID"""
-        return db.query(PaymentFrequency).filter(PaymentFrequency.id == frequency_id).first()
+        repo = PaymentFrequencyRepository(db)
+        return repo.get_by_id(frequency_id)
     
-    def get_payment_frequency_by_code(self, db: Session, code: str) -> Optional[PaymentFrequency]:
+    def get_payment_frequency_by_code(self, db: Session, code: str) -> Optional[dict]:
         """Get payment frequency by code"""
-        return db.query(PaymentFrequency).filter(PaymentFrequency.code == code).first()
+        repo = PaymentFrequencyRepository(db)
+        return repo.get_by_code(code)
     
-    def get_frequency_by_code(self, db: Session, code: str) -> Optional[PaymentFrequency]:
+    def get_frequency_by_code(self, db: Session, code: str) -> Optional[dict]:
         """Alias for get_payment_frequency_by_code for backward compatibility"""
         return self.get_payment_frequency_by_code(db, code)
     
-    def create_payment_frequency(self, db: Session, frequency: PaymentFrequencyCreate) -> PaymentFrequency:
+    def create_payment_frequency(self, db: Session, frequency: PaymentFrequencyCreate) -> dict:
         """Create new payment frequency"""
+        repo = PaymentFrequencyRepository(db)
+        
         # Check if code already exists
-        existing = self.get_payment_frequency_by_code(db, frequency.code)
+        existing = repo.get_by_code(frequency.code)
         if existing:
             raise ValueError(f"Payment frequency with code '{frequency.code}' already exists")
         
         # If setting as default, unset other defaults
         if frequency.is_default:
-            db.query(PaymentFrequency).update({'is_default': False})
+            all_frequencies = repo.get_all(active_only=False)
+            for existing_freq in all_frequencies:
+                if existing_freq.get('is_default'):
+                    repo.update(existing_freq['id'], {'is_default': False})
         
-        db_frequency = PaymentFrequency(**frequency.dict())
-        db.add(db_frequency)
-        db.commit()
-        db.refresh(db_frequency)
+        result = repo.create(frequency.dict())
         logger.info(f"Created payment frequency: {frequency.code}")
-        return db_frequency
+        
+        # Commit if using SQLAlchemy
+        if hasattr(db, 'commit'):
+            db.commit()
+        
+        return result
     
     def update_payment_frequency(
         self,
         db: Session,
         frequency_id: str,
         frequency: PaymentFrequencyUpdate
-    ) -> Optional[PaymentFrequency]:
+    ) -> Optional[dict]:
         """Update payment frequency"""
-        db_frequency = self.get_payment_frequency(db, frequency_id)
-        if not db_frequency:
+        repo = PaymentFrequencyRepository(db)
+        
+        existing_frequency = repo.get_by_id(frequency_id)
+        if not existing_frequency:
             return None
         
         update_data = frequency.dict(exclude_unset=True)
+        logger.info(f"Update data for frequency {frequency_id}: {update_data}")
         
         # If setting as default, unset other defaults
         if update_data.get('is_default'):
-            db.query(PaymentFrequency).filter(PaymentFrequency.id != frequency_id).update({'is_default': False})
+            all_frequencies = repo.get_all(active_only=False)
+            for existing in all_frequencies:
+                if existing['id'] != frequency_id and existing.get('is_default'):
+                    repo.update(existing['id'], {'is_default': False})
         
-        update_data['updated_at'] = datetime.utcnow()
+        result = repo.update(frequency_id, update_data)
+        logger.info(f"Updated payment frequency: {existing_frequency.get('code')}")
         
-        for field, value in update_data.items():
-            setattr(db_frequency, field, value)
+        # Commit if using SQLAlchemy
+        if hasattr(db, 'commit'):
+            db.commit()
         
-        db.commit()
-        db.refresh(db_frequency)
-        logger.info(f"Updated payment frequency: {db_frequency.code}")
-        return db_frequency
+        return result
     
     def delete_payment_frequency(self, db: Session, frequency_id: str) -> bool:
         """Delete payment frequency"""
-        db_frequency = self.get_payment_frequency(db, frequency_id)
-        if not db_frequency:
+        repo = PaymentFrequencyRepository(db)
+        
+        existing_frequency = repo.get_by_id(frequency_id)
+        if not existing_frequency:
             return False
         
-        db.delete(db_frequency)
-        db.commit()
-        logger.info(f"Deleted payment frequency: {db_frequency.code}")
-        return True
+        success = repo.delete(frequency_id)
+        
+        if success:
+            logger.info(f"Deleted payment frequency: {existing_frequency.get('code')}")
+            # Commit if using SQLAlchemy
+            if hasattr(db, 'commit'):
+                db.commit()
+        
+        return success

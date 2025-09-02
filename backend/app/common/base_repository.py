@@ -89,8 +89,8 @@ class BaseRepository(Repository[T, ID]):
         if not data:
             raise ValueError(f"No data provided for {operation} operation")
         
-        # Remove None values if specified in settings
-        if getattr(settings, 'REMOVE_NONE_VALUES', True):
+        # Remove None values if specified in settings (but not for update operations)
+        if operation != "update" and getattr(settings, 'REMOVE_NONE_VALUES', True):
             data = {k: v for k, v in data.items() if v is not None}
         
         # Remove system fields that shouldn't be set manually
@@ -139,10 +139,10 @@ class SQLAlchemyRepository(BaseRepository[T, ID]):
             # Add UUID if not provided
             if 'id' not in validated_data:
                 import uuid
-                validated_data['id'] = uuid.uuid4()  # Keep as UUID object for SQLAlchemy
+                validated_data['id'] = str(uuid.uuid4())  # Convert to string for SQLite compatibility
             elif isinstance(validated_data.get('id'), str):
-                from uuid import UUID
-                validated_data['id'] = UUID(validated_data['id'])
+                # Keep as string for SQLite
+                pass
             
             # Prepare data for SQLAlchemy (convert string UUIDs back to UUID objects)
             sqlalchemy_data = self._prepare_sqlalchemy_data(validated_data)

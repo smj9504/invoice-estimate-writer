@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from uuid import UUID, uuid4
 
-from app.core.database import get_db
+from app.core.database_factory import get_db_session as get_db
 from . import models, schemas, service
 
 router = APIRouter()
@@ -44,9 +44,19 @@ async def create_document_type(
     db: Session = Depends(get_db)
 ):
     """Create a new document type"""
-    # Using a default user ID for now - in production, get from auth
-    user_id = uuid4()
-    return service.create_document_type(db, document_type, user_id)
+    try:
+        # Using a default user ID for now - in production, get from auth
+        user_id = uuid4()
+        return service.create_document_type(db, document_type, user_id)
+    except Exception as e:
+        # Check for unique constraint violation
+        if "UNIQUE constraint failed: document_types.code" in str(e):
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Document type with code '{document_type.code}' already exists"
+            )
+        else:
+            raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.put("/document-types/{document_type_id}", response_model=schemas.DocumentTypeResponse)
@@ -56,11 +66,21 @@ async def update_document_type(
     db: Session = Depends(get_db)
 ):
     """Update a document type"""
-    user_id = uuid4()
-    updated = service.update_document_type(db, document_type_id, document_type, user_id)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Document type not found")
-    return updated
+    try:
+        user_id = uuid4()
+        updated = service.update_document_type(db, document_type_id, document_type, user_id)
+        if not updated:
+            raise HTTPException(status_code=404, detail="Document type not found")
+        return updated
+    except Exception as e:
+        # Check for unique constraint violation
+        if "UNIQUE constraint failed: document_types.code" in str(e):
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Document type with code '{document_type.code}' already exists"
+            )
+        else:
+            raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.delete("/document-types/{document_type_id}")

@@ -113,6 +113,11 @@ class SQLAlchemySession(DatabaseSession):
         if not self._closed:
             self._session.delete(instance)
     
+    def refresh(self, instance):
+        """Refresh instance from database"""
+        if not self._closed:
+            self._session.refresh(instance)
+    
     @property
     def is_closed(self) -> bool:
         """Check if session is closed"""

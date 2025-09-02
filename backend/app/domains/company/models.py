@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 
 from app.core.database_factory import Base
 from app.core.base_models import BaseModel
+from app.core.database_types import UUIDType
 
 
 class Company(Base, BaseModel):
@@ -36,8 +37,8 @@ class Company(Base, BaseModel):
     payment_frequency = Column(String(50))  # e.g., 'per_job', 'weekly', 'prepaid'
     
     # Payment configuration references (new fields)
-    payment_method_id = Column(String(36), ForeignKey('payment_methods.id', ondelete='SET NULL'))
-    payment_frequency_id = Column(String(36), ForeignKey('payment_frequencies.id', ondelete='SET NULL'))
+    payment_method_id = Column(UUIDType(), ForeignKey('payment_methods.id', ondelete='SET NULL'), nullable=True)
+    payment_frequency_id = Column(UUIDType(), ForeignKey('payment_frequencies.id', ondelete='SET NULL'), nullable=True)
     
     # Logo and branding
     logo = Column(Text)  # Base64 encoded logo

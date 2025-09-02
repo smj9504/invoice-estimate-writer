@@ -22,6 +22,7 @@ class PaymentMethodCreate(PaymentMethodBase):
 
 
 class PaymentMethodUpdate(BaseModel):
+    code: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
     requires_account_info: Optional[bool] = None
@@ -31,7 +32,7 @@ class PaymentMethodUpdate(BaseModel):
 
 class PaymentMethodResponse(PaymentMethodBase):
     id: str
-    created_at: datetime
+    created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
     class Config:
@@ -53,6 +54,7 @@ class PaymentFrequencyCreate(PaymentFrequencyBase):
 
 
 class PaymentFrequencyUpdate(BaseModel):
+    code: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
     days_interval: Optional[int] = None
@@ -62,7 +64,7 @@ class PaymentFrequencyUpdate(BaseModel):
 
 class PaymentFrequencyResponse(PaymentFrequencyBase):
     id: str
-    created_at: datetime
+    created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
     class Config:

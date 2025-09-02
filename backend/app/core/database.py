@@ -1,5 +1,11 @@
 """
 Database connection and management
+
+DEPRECATED: This module is deprecated and replaced by database_factory.py
+All new code should use database_factory.py instead.
+
+This file is kept for potential backward compatibility but is no longer maintained.
+To be removed in future version.
 """
 
 from typing import Union, Generator

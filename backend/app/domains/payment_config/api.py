@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
-from app.core.database import get_db
+from app.core.database_factory import get_db_session as get_db
 from app.domains.auth.dependencies import get_current_staff, require_admin
 from .schemas import (
     PaymentMethodCreate, PaymentMethodUpdate, PaymentMethodResponse,
@@ -126,6 +126,12 @@ async def update_payment_frequency(
     current_staff: dict = Depends(require_admin)
 ):
     """Update payment frequency (Admin only)"""
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"Received update request for frequency {frequency_id}")
+    logger.info(f"Raw frequency data: {frequency}")
+    logger.info(f"Frequency dict: {frequency.dict()}")
+    logger.info(f"Frequency dict (exclude_unset): {frequency.dict(exclude_unset=True)}")
     updated_frequency = service.update_payment_frequency(db, frequency_id, frequency)
     if not updated_frequency:
         raise HTTPException(status_code=404, detail="Payment frequency not found")
